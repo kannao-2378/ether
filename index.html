@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THIR — 品牌体系作品集</title>
+  <meta name="description" content="品牌视觉经理作品集 — 品牌体系构建与落地。">
+  <meta name="theme-color" content="#0f141d">
+  <!-- MiSans 字体（设计稿指定）：导航 Regular=400 / 按钮 Bold=700 -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/misans@4.1.0/lib/Normal/MiSans-Regular.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/misans@4.1.0/lib/Normal/MiSans-Bold.min.css">
+  <link rel="stylesheet" href="style.css?v=13">
+</head>
+<body>
+
+  <!-- ===== 导航栏 rectangle1 =====
+       全宽黑底固定顶部；左 logo(ETHER 178×16) + 右 8 项菜单
+       MiSans-Regular 400 16px #9e9e9e -->
+  <header class="nav">
+    <img class="nav__logo" src="assets/svg/ms005ahp-06qi2rz.svg" alt="ETHER">
+    <nav class="nav__menu">
+      <span class="nav__item">能力定位</span>
+      <span class="nav__item">跨境案例</span>
+      <span class="nav__item">国内案例</span>
+      <span class="nav__item">管理工具</span>
+      <span class="nav__item">AI嵌入</span>
+      <span class="nav__item">渲染案例</span>
+      <span class="nav__item">动态表现</span>
+      <span class="nav__item">联系合作</span>
+    </nav>
+  </header>
+
+  <!-- ===== 首屏 rectangle2 =====
+       全宽深底 #0f141d，min-height 100vh；flex column 居中 -->
+  <section class="hero">
+    <div class="hero__media" aria-hidden="true">
+      <video class="hero__video" muted playsinline preload="auto">
+        <source src="assets/video/dji-air-3s-hero.mp4" type="video/mp4">
+      </video>
+    </div>
+    <p class="hero__eyebrow">Brand Portfolio</p>
+    <img class="hero__wordmark" src="assets/svg/ms005ahp-4aejo9c.svg" alt="重构品牌">
+    <a class="hero__cta" href="#role">了解更多</a>
+  </section>
+
+  <section class="ability" id="role" aria-labelledby="ability-title">
+    <div class="ability__panel">
+      <div class="ability__intro">
+        <div class="ability__heading-group">
+          <h2 class="ability__title" id="ability-title">负责品牌体系的<br>构建与落地</h2>
+          <div class="ability__subheading">
+            <span>角色诠释</span>
+            <span>品牌视觉经理——能力模型雷达图</span>
+          </div>
+        </div>
+
+        <label class="ability__role">
+          <span>将品牌视觉经理<br>与传统视觉管理比比看：</span>
+          <span class="ability__select-wrap">
+            <select class="ability__select" aria-label="选择对比角色">
+              <option value="director">视觉总监</option>
+              <option value="designer">资深设计师</option>
+              <option value="brand">品牌经理</option>
+            </select>
+          </span>
+        </label>
+      </div>
+
+      <div class="ability__cards">
+        <article class="ability-card ability-card--radar">
+          <div class="ability-radar" aria-hidden="true">
+            <img src="assets/svg/ability-polygon.svg" alt="">
+            <span style="--x: 50%; --y: 0%">流程优化</span>
+            <span style="--x: 100%; --y: 26%">视觉管理</span>
+            <span style="--x: 100%; --y: 69%">内容营销</span>
+            <span style="--x: 50%; --y: 100%">商业落地</span>
+            <span style="--x: 0%; --y: 69%">品牌视觉</span>
+            <span style="--x: 0%; --y: 26%">产品表达</span>
+          </div>
+          <h3>能力雷达</h3>
+        </article>
+
+        <article class="ability-card">
+          <h3>软件技能</h3>
+        </article>
+
+        <article class="ability-card">
+          <h3>平台</h3>
+        </article>
+      </div>
+
+      <div class="ability__conclusion">
+        <h3>不只是视觉</h3>
+        <p>而是通过品牌思维确保消费者与品牌、管理与执行、制度与流程、视觉与数据<br>形成完整的一致性</p>
+        <a href="#contact">了解你的组织是否需要品牌 <span aria-hidden="true">›</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="cross-border-case" id="cross-border-case" aria-labelledby="cross-border-title">
+    <div class="cross-border-case__stage">
+      <div class="cross-border-case__visual" aria-hidden="true">
+        <img
+          class="cross-border-case__image"
+          src="assets/images/cross-border-hero.jpg"
+          alt=""
+          width="3840"
+          height="2160"
+          loading="lazy"
+          decoding="async"
+        >
+      </div>
+      <div class="cross-border-case__copy">
+        <p class="cross-border-case__eyebrow">科学技术是第一生产力</p>
+        <h2 class="cross-border-case__title" id="cross-border-title">从未有过，真正的大一统</h2>
+      </div>
+    </div>
+    <div class="cross-border-case__exit-mask" aria-hidden="true"></div>
+  </section>
+
+  <script src="script.js?v=8"></script>
+</body>
+</html>
