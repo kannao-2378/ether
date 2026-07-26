@@ -1,0 +1,428 @@
+.case-showcase {
+  position: relative;
+  min-height: 1392px;
+  padding: 150px 24px 84px;
+  overflow: hidden;
+  background: #000;
+  color: #f5f5f7;
+}
+
+.case-showcase__heading,
+.case-showcase__media,
+.case-showcase__controls {
+  opacity: 0;
+  transform: translateY(var(--showcase-distance, 30px));
+  transition:
+    opacity var(--showcase-opacity-ms, 900ms) ease,
+    transform var(--showcase-move-ms, 700ms) cubic-bezier(.16, 1, .3, 1);
+}
+
+.case-showcase.is-visible .case-showcase__heading,
+.case-showcase.is-visible .case-showcase__media,
+.case-showcase.is-visible .case-showcase__controls {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.case-showcase.is-visible .case-showcase__media {
+  transition-delay: var(--showcase-stagger-ms, 150ms);
+}
+
+.case-showcase.is-visible .case-showcase__controls {
+  transition-delay: calc(var(--showcase-stagger-ms, 150ms) * 2);
+}
+
+.case-showcase__title {
+  width: fit-content;
+  margin: 0 auto;
+  color: transparent;
+  font: 700 64px/1.33 "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  letter-spacing: -.02em;
+  text-align: center;
+  background:
+    linear-gradient(117.19deg, #fec28a 4.97%, #ca4b09 76.02%),
+    linear-gradient(90deg, #c84809, #c84809);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.case-showcase__title span,
+.case-showcase__description span {
+  display: block;
+}
+
+.case-showcase__description {
+  width: min(100%, 520px);
+  margin: 57px auto 0;
+  color: #85858a;
+  font: 700 15px/1.22 "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  text-align: center;
+}
+
+.case-showcase__media {
+  position: relative;
+  width: min(1440px, calc(100% - 48px));
+  height: 586px;
+  margin: 83px auto 0;
+}
+
+.case-showcase__state {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  display: none;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.case-showcase__state.is-active {
+  z-index: 1;
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.case-showcase.is-visible .case-showcase__state.is-active {
+  animation: case-showcase-panel-in var(--showcase-panel-ms, 180ms) ease-out both;
+}
+
+@keyframes case-showcase-panel-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.case-showcase__comparison {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  width: 100%;
+  height: 100%;
+}
+
+.case-showcase__comparison span {
+  display: block;
+  border-radius: 30px;
+  background: #1d1d1f;
+}
+
+.case-showcase__scroll-pane {
+  position: relative;
+  min-width: 0;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  box-sizing: border-box;
+  border: 1px solid #000;
+  border-radius: 30px;
+  outline: none;
+  background: #000;
+  clip-path: inset(0 round 30px);
+  scrollbar-width: none;
+}
+
+.case-showcase__scroll-pane::-webkit-scrollbar {
+  display: none;
+}
+
+.case-showcase__scroll-pane:focus-visible {
+  box-shadow: inset 0 0 0 2px #2997f8;
+}
+
+.case-showcase__scroll-pane img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+.case-showcase__phones {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  width: min(610px, 100%);
+  height: 100%;
+  margin: 0 auto;
+}
+
+.case-showcase__phone {
+  position: relative;
+  flex: 0 1 285px;
+  width: 285px;
+  height: 100%;
+  aspect-ratio: 285 / 586;
+}
+
+.case-showcase__phone-screen {
+  position: absolute;
+  z-index: 0;
+  top: 1.5358%;
+  right: 3.1579%;
+  bottom: 1.3652%;
+  left: 3.5088%;
+  overflow: hidden;
+  border-radius: 15.4135% / 7.2056%;
+  background: #000;
+  clip-path: inset(0 round 15.4135% / 7.2056%);
+}
+
+.case-showcase__phone-screen--scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  outline: none;
+  scrollbar-width: none;
+}
+
+.case-showcase__phone-screen--scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.case-showcase__phone-screen--scroll:focus-visible {
+  box-shadow: inset 0 0 0 2px #2997f8;
+}
+
+.case-showcase__phone-screen--scroll img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+.case-showcase__phone-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+}
+
+.case-showcase__replay {
+  position: absolute;
+  z-index: 2;
+  bottom: 24px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, .22);
+  border-radius: 18px;
+  background: rgba(0, 0, 0, .72);
+  color: #fff;
+  font: 600 13px/36px "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, 6px);
+  pointer-events: none;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition:
+    opacity 200ms ease-out,
+    transform 200ms cubic-bezier(.16, 1, .3, 1),
+    background-color 160ms ease-out;
+}
+
+.case-showcase__replay.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+
+.case-showcase__replay:hover {
+  background: rgba(30, 30, 30, .88);
+}
+
+.case-showcase__replay:focus-visible {
+  outline: 2px solid #2997f8;
+  outline-offset: 2px;
+}
+
+.case-showcase__phone-frame {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  user-select: none;
+}
+
+.case-showcase__controls {
+  width: min(798px, calc(100% - 32px));
+  margin: 77px auto 0;
+  text-align: center;
+}
+
+.case-showcase__tabs {
+  position: relative;
+  display: flex;
+  gap: 14.5px;
+  width: 798px;
+  max-width: 100%;
+  height: 43px;
+  margin: 0 auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-radius: 21.5px;
+  background: #141414;
+  scrollbar-width: none;
+}
+
+.case-showcase__tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.case-showcase__indicator {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  width: 148px;
+  height: 43px;
+  border-radius: 21.5px;
+  background: #fff;
+  transition:
+    left var(--showcase-indicator-ms, 320ms) ease-out,
+    width var(--showcase-indicator-ms, 320ms) ease-out;
+  will-change: left, width;
+}
+
+.case-showcase__tab {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 148px;
+  width: 148px;
+  height: 43px;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: rgba(255, 255, 255, .8);
+  font: 400 18px/43px "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 120ms ease-out;
+}
+
+.case-showcase__tab.is-active {
+  color: #000;
+  transition: color 160ms ease-in calc(var(--showcase-indicator-ms, 320ms) / 2);
+}
+
+.case-showcase__tab:focus-visible {
+  border-radius: 21.5px;
+  box-shadow: inset 0 0 0 2px #2997f8;
+}
+
+.case-showcase__hint,
+.case-showcase__copy {
+  margin-right: auto;
+  margin-left: auto;
+  color: #b5b5b5;
+  font: 600 16px/normal "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  text-align: center;
+}
+
+.case-showcase__hint {
+  margin-top: 31px;
+  margin-bottom: 0;
+}
+
+.case-showcase__copy {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+@media (max-width: 900px) {
+  .case-showcase {
+    min-height: 980px;
+    padding: 80px 16px 56px;
+  }
+
+  .case-showcase__title {
+    font-size: clamp(36px, 10.5vw, 52px);
+    line-height: 1.2;
+  }
+
+  .case-showcase__description {
+    margin-top: 32px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .case-showcase__media {
+    width: 100%;
+    height: min(337px, 86vw);
+    margin-top: 52px;
+  }
+
+  .case-showcase__comparison {
+    gap: 12px;
+  }
+
+  .case-showcase__comparison span {
+    border-radius: 20px;
+  }
+
+  .case-showcase__scroll-pane {
+    border-radius: 20px;
+    clip-path: inset(0 round 20px);
+  }
+
+  .case-showcase__phones {
+    gap: 16px;
+  }
+
+  .case-showcase__replay {
+    bottom: 14px;
+    height: 30px;
+    padding: 0 10px;
+    border-radius: 15px;
+    font-size: 11px;
+    line-height: 30px;
+  }
+
+  .case-showcase__controls {
+    width: 100%;
+    margin-top: 48px;
+  }
+
+  .case-showcase__tabs {
+    box-sizing: border-box;
+    justify-content: flex-start;
+    padding-right: calc((100% - 148px) / 2);
+    padding-left: calc((100% - 148px) / 2);
+  }
+
+  .case-showcase__hint,
+  .case-showcase__copy {
+    padding: 0 12px;
+    font-size: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case-showcase__heading,
+  .case-showcase__media,
+  .case-showcase__controls,
+  .case-showcase__state,
+  .case-showcase__indicator,
+  .case-showcase__replay {
+    animation: none;
+    transition: none;
+  }
+
+  .case-showcase__heading,
+  .case-showcase__media,
+  .case-showcase__controls {
+    opacity: 1;
+    transform: none;
+  }
+}

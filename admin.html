@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>页面配置中心 — THIR</title>
+  <meta name="theme-color" content="#09090b">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/misans@4.1.0/lib/Normal/MiSans-Regular.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/misans@4.1.0/lib/Normal/MiSans-Bold.min.css">
+  <link rel="stylesheet" href="admin/style.css?v=4">
+</head>
+<body>
+  <div class="admin-shell">
+    <header class="admin-header">
+      <div class="admin-brand">
+        <span class="admin-brand__mark">THIR</span>
+        <span class="admin-brand__divider"></span>
+        <span>页面配置中心</span>
+        <span class="admin-status" id="saveStatus">已载入线上配置</span>
+      </div>
+      <div class="admin-actions">
+        <label class="admin-secret">
+          <span>后台密钥</span>
+          <input id="adminSecret" type="password" autocomplete="current-password" placeholder="仅本次使用">
+        </label>
+        <button class="admin-button admin-button--quiet" id="resetButton" type="button">撤销修改</button>
+        <button class="admin-button admin-button--primary" id="saveButton" type="button">确认保存</button>
+      </div>
+    </header>
+
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar__heading">
+        <span>页面模块</span>
+        <span>01—07</span>
+      </div>
+      <nav class="module-list" id="moduleList" aria-label="页面模块"></nav>
+      <div class="publish-note">
+        <strong>确认保存即发布</strong>
+        <p>保存后配置会提交到 GitHub，并触发 Netlify 自动部署。未确认的修改只存在于当前页面，刷新后即撤销。</p>
+      </div>
+    </aside>
+
+    <main class="admin-preview">
+      <div class="preview-toolbar">
+        <div>
+          <strong id="previewTitle">实时预览</strong>
+          <span id="previewMeta">桌面 · 1280 × 720</span>
+        </div>
+        <div class="preview-toolbar__actions">
+          <div class="preview-size" aria-label="预览窗口尺寸">
+            <label><span>宽</span><input id="previewWidth" type="number" min="320" max="1920" step="1" value="1280"></label>
+            <span>×</span>
+            <label><span>高</span><input id="previewHeight" type="number" min="420" max="1200" step="1" value="720"></label>
+          </div>
+          <div class="device-switch" aria-label="预览尺寸">
+            <button class="device-switch__button is-active" type="button" data-device="desktop">桌面</button>
+            <button class="device-switch__button" type="button" data-device="mobile">手机</button>
+          </div>
+          <button class="admin-button admin-button--quiet" id="replayButton" type="button">重播动效</button>
+          <a class="admin-button admin-button--quiet" href="index.html" target="_blank" rel="noopener">新窗口打开</a>
+        </div>
+      </div>
+      <div class="preview-stage" id="previewStage">
+        <div class="preview-canvas" id="previewCanvas">
+          <iframe id="previewFrame" title="网站实时预览" src="index.html?preview=1"></iframe>
+          <span class="resize-handle resize-handle--n" data-resize="n" aria-hidden="true"></span>
+          <span class="resize-handle resize-handle--e" data-resize="e" aria-hidden="true"></span>
+          <span class="resize-handle resize-handle--s" data-resize="s" aria-hidden="true"></span>
+          <span class="resize-handle resize-handle--w" data-resize="w" aria-hidden="true"></span>
+          <span class="resize-handle resize-handle--ne" data-resize="ne" aria-hidden="true"></span>
+          <span class="resize-handle resize-handle--se" data-resize="se" aria-hidden="true"></span>
+          <span class="resize-handle resize-handle--sw" data-resize="sw" aria-hidden="true"></span>
+          <span class="resize-handle resize-handle--nw" data-resize="nw" aria-hidden="true"></span>
+        </div>
+      </div>
+    </main>
+
+    <aside class="admin-inspector">
+      <div class="inspector-heading">
+        <p class="inspector-heading__index" id="moduleIndex">01</p>
+        <h1 id="moduleTitle">导航</h1>
+        <p id="moduleDescription">顶部导航文字与反馈时间</p>
+      </div>
+
+      <section class="field-section">
+        <div class="field-section__title">
+          <h2>文字内容</h2>
+          <span>实时更新</span>
+        </div>
+        <div class="field-list" id="contentFields"></div>
+      </section>
+
+      <section class="field-section">
+        <div class="field-section__title">
+          <h2>动效参数</h2>
+          <span>按模块独立</span>
+        </div>
+        <div class="field-list" id="motionFields"></div>
+      </section>
+    </aside>
+  </div>
+
+  <div class="admin-toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="admin/script.js?v=7"></script>
+</body>
+</html>

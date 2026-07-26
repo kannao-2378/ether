@@ -1,0 +1,64 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --portfolio-text: #f5f5f7;
+  --portfolio-orange: #fe9349;
+  --portfolio-blue: #0071e3;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  background: #000;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background: #0f141d;
+  color: var(--portfolio-text);
+  font-family: "SF Pro", "MiSans", "PingFang SC", "Hiragino Sans GB",
+               "Microsoft YaHei", SimHei, Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+[data-section].config-motion-disabled *,
+[data-section].config-motion-disabled *::before,
+[data-section].config-motion-disabled *::after {
+  animation: none !important;
+  transition-duration: 0ms !important;
+  transition-delay: 0ms !important;
+}
+
+img {
+  display: block;
+  max-width: none;
+}
+
+button,
+select,
+input,
+textarea {
+  font: inherit;
+}
+
+.section-load-error {
+  min-height: 100vh;
+  margin: 0;
+  padding: 120px 24px;
+  background: #000;
+  color: #f5f5f7;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "version": 4,
+  "preview": {
+    "width": 1832,
+    "height": 1078
+  },
+  "modules": {
+    "01-navigation": {
+      "visible": true,
+      "content": {
+        "ability": "能力定位",
+        "crossBorder": "跨境案例",
+        "domestic": "国内案例",
+        "management": "管理工具",
+        "ai": "AI嵌入",
+        "render": "渲染案例",
+        "motion": "动态表现",
+        "contact": "联系合作"
+      },
+      "motion": {
+        "enabled": true,
+        "feedbackMs": 250
+      }
+    },
+    "02-hero": {
+      "visible": true,
+      "content": {
+        "eyebrow": "Brand Portfolio",
+        "cta": "了解更多"
+      },
+      "motion": {
+        "enabled": true,
+        "opacityMs": 900,
+        "moveMs": 700,
+        "staggerMs": 150,
+        "distancePx": 30,
+        "videoFadeMs": 400
+      }
+    },
+    "03-ability": {
+      "visible": true,
+      "content": {
+        "title": "负责品牌体系的\n构建与落地",
+        "subheadingPrimary": "角色诠释",
+        "subheadingSecondary": "品牌视觉——能力模型雷达图",
+        "rolePrompt": "将品牌视觉经理\n与传统视觉管理比较看：",
+        "optionDirector": "视觉总监",
+        "optionDesigner": "资深设计师",
+        "optionBrand": "品牌经理",
+        "radarFlow": "流程优化",
+        "radarVisual": "视觉管理",
+        "radarContent": "内容营销",
+        "radarBusiness": "商业落地",
+        "radarBrand": "品牌视觉",
+        "radarProduct": "产品表达",
+        "conclusionTitle": "不只是视觉",
+        "conclusionIntro": "而是通过品牌思维确保",
+        "conclusionKey1": "消费者与品牌",
+        "conclusionKey2": "管理与执行",
+        "conclusionKey3": "制度与流程",
+        "conclusionKey4": "视觉与数据",
+        "conclusionEnding": "形成完整的一致性",
+        "conclusionLink": "了解你的组织是否需要品牌"
+      },
+      "motion": {
+        "enabled": true,
+        "opacityMs": 900,
+        "moveMs": 700,
+        "staggerMs": 150,
+        "distancePx": 30
+      }
+    },
+    "04-cross-border-hero": {
+      "visible": true,
+      "content": {
+        "eyebrow": "科学技术是第一生产力",
+        "title": "从未有过，真正的大一统"
+      },
+      "motion": {
+        "enabled": true,
+        "scrollHeightVh": 180,
+        "mobileScrollHeightVh": 165,
+        "copyStart": 0.44,
+        "copySpan": 0.24,
+        "smoothing": 0.16
+      }
+    },
+    "05-case-showcase": {
+      "visible": true,
+      "content": {
+        "title": "年入2亿美金的\n跨境巨头品牌之路",
+        "description": "这是一家具有xxxx，然后xxx，他们历经了千辛万苦，\n从内部执行、管理层培训xxxx\n让我们来看看他们的品牌重塑过程经历了什么样子的变化",
+        "materialTab": "物料升级",
+        "appTab": "APP升级",
+        "websiteTab": "网站升级",
+        "mobileTab": "M端升级",
+        "socialTab": "社媒升级",
+        "hint": "*上下滑动可同步对比内容",
+        "copy": "可实时、精准显示料量，用多少加多少，有效避免浪费。"
+      },
+      "motion": {
+        "enabled": true,
+        "opacityMs": 900,
+        "moveMs": 700,
+        "staggerMs": 150,
+        "distancePx": 30,
+        "panelFadeMs": 180,
+        "indicatorMs": 320
+      }
+    },
+    "06-organization-result": {
+      "visible": true,
+      "content": {
+        "eyebrow": "Cameras",
+        "title": "组织结果呈现",
+        "stat1Value": "8x",
+        "stat1Prefix": "Up to",
+        "stat1Label": "组织流程效率",
+        "stat2Value": "48MP",
+        "stat2Prefix": "Up to",
+        "stat2Label": "产出质量",
+        "stat3Value": "48MP",
+        "stat3Prefix": "Up to",
+        "stat3Label": "视觉成本降低",
+        "cta": "了解更多组织提升内容"
+      },
+      "motion": {
+        "enabled": true,
+        "opacityMs": 900,
+        "moveMs": 700,
+        "staggerMs": 150,
+        "distancePx": 30
+      }
+    },
+    "07-data-result": {
+      "visible": true,
+      "content": {
+        "title": "数据结果呈现",
+        "beforeState": "重构前",
+        "afterState": "重构后",
+        "group1Title": "免费流量占比-对比",
+        "group1Before": "~5% 不到",
+        "group1After": "~60% 左右",
+        "group2Title": "转化率-对比",
+        "group2Before": "~0.1% 不到",
+        "group2After": "~1.5% 左右",
+        "group3Title": "销售额-对比",
+        "group3Before": "200W 美元/季度",
+        "group3After": "510W 美元/季度"
+      },
+      "motion": {
+        "enabled": true,
+        "opacityMs": 900,
+        "moveMs": 700,
+        "staggerMs": 150,
+        "distancePx": 30,
+        "barMs": 900
+      }
+    }
+  }
+}
