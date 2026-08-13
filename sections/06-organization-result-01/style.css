@@ -1,0 +1,276 @@
+.org-v2 {
+  position: relative;
+  height: calc(200vh + 40px);
+  background: #000;
+  color: #f5f5f7;
+}
+
+/* sticky pin：滚动时视口锁定，图片和文字在框内做缩放+左移，动画结束后才正常滚动 */
+.org-v2__sticky {
+  position: sticky;
+  top: 0;
+  height: calc(100vh + 40px);
+  overflow: hidden;
+}
+
+/* 图片：自然尺寸 3840×2560（4K），居中定位，中心缩放 */
+.org-v2__visual {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3840px;
+  height: 2560px;
+  margin-top: -1280px;
+  margin-left: -1920px;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.org-v2__visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -webkit-user-drag: none;
+}
+
+/* 文字内容：初始隐藏，由 JS 淡入 + 左移 */
+.org-v2__content {
+  position: absolute;
+  z-index: 2;
+  top: 294px;
+  left: 902px;
+  width: 630px;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.org-v2__eyebrow {
+  margin: 0;
+  font: 630 20px/60px "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: linear-gradient(120.12deg, #fec28a 5.55%, #ca4b09 77.78%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.org-v2__title {
+  margin: 15px 0 0;
+  font: 630 70px/90px "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  letter-spacing: -.02em;
+  color: #f5f5f7;
+}
+
+/* 数据指标 */
+.org-v2__stats {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-width: 694px;
+  margin-top: 179px;
+}
+
+.org-v2__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0;
+}
+
+.org-v2__stat:nth-child(2),
+.org-v2__stat:nth-child(3) {
+  margin-top: 5px;
+}
+
+.org-v2__stat-prefix {
+  margin: 0 0 4px;
+  font: 630 18px/1 "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: #86868b;
+}
+
+.org-v2__stat-value {
+  display: block;
+  font: 630 50px/60px "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: linear-gradient(129.91deg, #fec28a 7.89%, #ca4b09 84.9%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.org-v2__stat-label {
+  margin: 5px 0 0;
+  font: 630 18px/60px "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: #86868b;
+}
+
+/* CTA 按钮：水平绝对居中，垂直位置由 JS 根据图片底部动态计算（top 内联）。
+   CSS top 仅作 fallback。 */
+.org-v2__cta {
+  position: absolute;
+  top: 75%;
+  left: 50%;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 344px;
+  height: 56px;
+  padding: 0 10px 0 37px;
+  border-radius: 29px;
+  background: #222224;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateX(-50%) scale(0.6);
+  will-change: transform, opacity;
+  transition: background-color 250ms ease;
+}
+
+.org-v2__cta:hover {
+  background: #303033;
+}
+
+.org-v2__cta-text {
+  font: 630 18px/1 "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: #f5f5f7;
+  white-space: nowrap;
+}
+
+.org-v2__cta-btn {
+  position: relative;
+  flex: 0 0 37px;
+  width: 37px;
+  height: 37px;
+  border-radius: 50%;
+  background: #0071e3;
+}
+
+.org-v2__cta-btn::before,
+.org-v2__cta-btn::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 3px;
+  border-radius: 5px;
+  background: #cce3f9;
+  transform: translate(-50%, -50%);
+}
+
+.org-v2__cta-btn::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+/* 移动端：不滚动动画，直接显示最终布局 */
+@media (max-width: 900px) {
+  .org-v2 {
+    height: auto;
+    padding: 84px 20px 72px;
+  }
+
+  .org-v2__sticky {
+    position: relative;
+    top: auto;
+    height: auto;
+  }
+
+  .org-v2__visual {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    aspect-ratio: 3840 / 2560;
+    transform: none !important;
+  }
+
+  .org-v2__content {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    margin-top: 48px;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .org-v2__eyebrow {
+    font-size: 16px;
+    line-height: 32px;
+  }
+
+  .org-v2__title {
+    margin-top: 10px;
+    font-size: clamp(40px, 12vw, 58px);
+    line-height: 1.1;
+  }
+
+  .org-v2__stats {
+    min-width: 0;
+    margin-top: 54px;
+  }
+
+  .org-v2__stat:nth-child(2),
+  .org-v2__stat:nth-child(3) {
+    margin-top: 0;
+  }
+
+  .org-v2__stat-prefix,
+  .org-v2__stat-label {
+    font-size: 15px;
+    line-height: 34px;
+  }
+
+  .org-v2__stat-value {
+    font-size: 38px;
+    line-height: 48px;
+  }
+
+  .org-v2__cta {
+    position: relative;
+    top: auto;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    opacity: 1;
+    margin: 40px auto 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .org-v2 {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .org-v2__sticky {
+    height: auto;
+  }
+
+  .org-v2__visual {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    max-width: 1292px;
+    height: auto;
+    margin: 0;
+    aspect-ratio: 3840 / 2560;
+    transform: none !important;
+  }
+
+  .org-v2__content {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .org-v2__cta {
+    position: relative;
+    top: auto;
+    left: auto;
+    opacity: 1 !important;
+    transform: none !important;
+    margin: 40px auto 0;
+  }
+}

@@ -1,21 +1,21 @@
 {
-  "version": 4,
+  "version": 6,
   "preview": {
-    "width": 1832,
-    "height": 1078
+    "width": 1698,
+    "height": 1012
   },
   "modules": {
     "01-navigation": {
       "visible": true,
       "content": {
-        "ability": "zhanwei",
-        "crossBorder": "zhanwei",
-        "domestic": "zhanwei",
-        "management": "zhanwei",
-        "ai": "zhanwei",
-        "render": "zhanwei",
-        "motion": "zhanwei",
-        "contact": "zhanwei"
+        "ability": "能力定位",
+        "crossBorder": "跨境案例",
+        "domestic": "其他案例",
+        "management": "管理工具",
+        "ai": "AI嵌入",
+        "render": "渲染案例",
+        "motion": "动态表现",
+        "contact": "联系合作"
       },
       "motion": {
         "enabled": true,
@@ -26,7 +26,7 @@
       "visible": true,
       "content": {
         "eyebrow": "Brand Portfolio",
-        "cta": "lelelleee"
+        "cta": "了解更多"
       },
       "motion": {
         "enabled": true,
@@ -40,27 +40,27 @@
     "03-ability": {
       "visible": true,
       "content": {
-        "title": "pinpaiweidu\nskkkke",
-        "subheadingPrimary": "jiaoje",
-        "subheadingSecondary": "kiko sc——sooos",
-        "rolePrompt": "让我们一起来比比看\n谁更帅",
-        "optionDirector": "芜湖与会",
+        "title": "负责品牌体系的\n构建与落地",
+        "subheadingPrimary": "角色诠释",
+        "subheadingSecondary": "品牌视觉经理——能力模型雷达图",
+        "rolePrompt": "将品牌视觉经理\n与传统视觉管理比比看：",
+        "optionDirector": "视觉总监",
         "optionDesigner": "资深设计师",
         "optionBrand": "品牌经理",
         "radarFlow": "流程优化",
-        "radarVisual": "AEEE",
-        "radarContent": "内容是的",
-        "radarBusiness": "四顿饭",
-        "radarBrand": "三顿半",
+        "radarVisual": "视觉管理",
+        "radarContent": "内容营销",
+        "radarBusiness": "商业落地",
+        "radarBrand": "品牌视觉",
         "radarProduct": "产品表达",
-        "conclusionTitle": "四顿饭",
+        "conclusionTitle": "不只是视觉",
         "conclusionIntro": "而是通过品牌思维确保",
         "conclusionKey1": "消费者与品牌",
         "conclusionKey2": "管理与执行",
         "conclusionKey3": "制度与流程",
         "conclusionKey4": "视觉与数据",
         "conclusionEnding": "形成完整的一致性",
-        "conclusionLink": "了解你是否需要aks"
+        "conclusionLink": "了解你的组织是否需要品牌"
       },
       "motion": {
         "enabled": true,
@@ -73,12 +73,12 @@
     "04-cross-border-hero": {
       "visible": true,
       "content": {
-        "eyebrow": "科学技术是第一生产力",
-        "title": "从未有过，真正的大一统"
+        "eyebrow": "QREATE · 跨境品牌重塑",
+        "title": "真正的大一统"
       },
       "motion": {
         "enabled": true,
-        "scrollHeightVh": 180,
+        "scrollHeightVh": 200,
         "mobileScrollHeightVh": 165,
         "copyStart": 0.44,
         "copySpan": 0.24,
@@ -88,15 +88,15 @@
     "05-case-showcase": {
       "visible": true,
       "content": {
-        "title": "十分急了办不成事，\n越急就越办不成，不如缓一点，\n波浪式地向前发展。\n这同人走路一样，走一阵要休息一下。",
-        "description": "学习的敌人是自己的满足，要认真学习一点东西，必须从不自满开始。对自己，“学而不厌”，对人家，“诲人不倦”，我们应取这种态度。",
+        "title": "年入2亿美金的\n跨境巨头品牌之路",
+        "description": "面对多市场、多渠道与多团队协作等多重叠加困境，\nQREATE 需要的不是一次视觉更新，而是一套从品牌认知到执行落地的系统重构。\n我们重新梳理品牌定位与视觉标准，并对官网、APP、移动端、社交媒体和营销物料进行系统升级。",
         "materialTab": "物料升级",
         "appTab": "APP升级",
         "websiteTab": "网站升级",
         "mobileTab": "M端升级",
         "socialTab": "社媒升级",
-        "hint": "*上下滑动可同步对比内容",
-        "copy": "墙上芦苇，头重脚轻根底浅；山间竹笋，嘴尖皮厚腹中空。"
+        "hint": "操作提示：上下滑动，同步查看重构前后",
+        "copy": "网站升级：统一品牌表达，提升信息传递与转化效率。"
       },
       "motion": {
         "enabled": true,
@@ -111,18 +111,18 @@
     "06-organization-result": {
       "visible": true,
       "content": {
-        "eyebrow": "Cameras",
-        "title": "改造我们的学习",
-        "stat1Value": "8x",
-        "stat1Prefix": "Up to",
+        "eyebrow": "组织优化结果呈现",
+        "title": "优化组织结构，结果\n令人耳目一新",
+        "stat1Value": "65%",
+        "stat1Prefix": "Up by",
         "stat1Label": "组织流程效率",
-        "stat2Value": "48MP",
-        "stat2Prefix": "Up to",
+        "stat2Value": "40%",
+        "stat2Prefix": "Up by",
         "stat2Label": "产出质量",
-        "stat3Value": "48MP",
-        "stat3Prefix": "Up to",
+        "stat3Value": "35%",
+        "stat3Prefix": "Down by",
         "stat3Label": "视觉成本降低",
-        "cta": "了解更多组织提升内容"
+        "cta": "点击查看组织协作如何被重构"
       },
       "motion": {
         "enabled": true,
@@ -135,18 +135,20 @@
     "07-data-result": {
       "visible": true,
       "content": {
-        "title": "数据结果对比",
+        "eyebrow": "商业结果呈现",
+        "title": "好看是基本条件\n卖掉是王道",
         "beforeState": "重构前",
         "afterState": "重构后",
-        "group1Title": "免费流量占比-对比",
+        "group1Title": "自然流量占比-对比",
         "group1Before": "~5% 不到",
         "group1After": "~60% 左右",
         "group2Title": "转化率-对比",
         "group2Before": "~0.1% 不到",
         "group2After": "~1.5% 左右",
-        "group3Title": "销售额-对比",
+        "group3Title": "季度销售额-对比",
         "group3Before": "200W 美元/季度",
-        "group3After": "510W 美元/季度"
+        "group3After": "510W 美元/季度",
+        "note": "*数据来自项目方统计，前后数据采用同周期业务口径。"
       },
       "motion": {
         "enabled": true,
@@ -155,6 +157,155 @@
         "staggerMs": 150,
         "distancePx": 30,
         "barMs": 900
+      }
+    },
+    "08-brand-result": {
+      "visible": true,
+      "content": {
+        "eyebrow": "品牌结果呈现",
+        "title": "核心只为占据用户心智\n卖货是第二步",
+        "path": "品牌重构 → 扩大曝光 → 建立信任 → 促进购买 → 评价种草 → 提升销售",
+        "description": "品牌重塑不光让页面更好看，更为了让每一次品牌曝光都产生商业价值。\n统一的视觉标准，让用户在不同渠道中快速识别并记住品牌；持续一致的内容输出，扩大有效触达\n减少用户理解品牌的成本；更清晰的产品与价值表达，让用户更容易建立信任并完成购买。\n购买后的正向体验进一步转化为评价、推荐和口碑传播，带来更多自然流量、复购与转介绍，最终推动\n转化率和销售额持续增长"
+      },
+      "motion": {
+        "enabled": true,
+        "smoothing": 0.5
+      }
+    },
+    "09-brand-method": {
+      "visible": true,
+      "content": {
+        "introLine1": "品牌重塑是表象",
+        "introLine3": "它可落地、可重复",
+        "eyebrow": "方法论目标略解",
+        "title": "品牌管理方法论",
+        "description": "为组织与个体、管理与执行、品牌与客户、制度与文化\n建立起一套：内外一致、上下协同、知行合一的管理系统",
+        "principle1Title": "上下协同",
+        "principle1Copy": "通过制度与文化让组织与个体、管理与执行在市场上始终一致",
+        "principle2Title": "内外一致",
+        "principle2Copy": "让企业的品牌表达\n与客户认知体验保持一致",
+        "principle3Title": "知行合一",
+        "principle3Copy": "在每一次的社会实践中，沉淀出可复用可迁移的底层系统思维",
+        "cta": "点击了解管理方法论如何落地"
+      },
+      "motion": {
+        "enabled": true,
+        "smoothing": 1
+      }
+    },
+    "10-other-cases": {
+      "visible": true,
+      "content": {
+        "title": "不是个例\n已在多品牌重复落地",
+        "description": "从不同企业、不同品类到不同发展阶段\nETHER方法论都能根据实际问题进行迁移，并完成从品牌梳理到执行落地。",
+        "hint": "*点击案例，可查看完整过程"
+      }
+    },
+    "11-management-tools": {
+      "visible": true,
+      "content": {
+        "eyebrow": "配套管理工具",
+        "title": "方法论不是口号\n每一步都有成熟工具支撑",
+        "card1Title": "流程管理",
+        "card1Copy": "把复杂项目拆解为清晰阶段，明确负责人、时间节点、协作关系与交付标准。减少等待、返工与沟通损耗，让每项工作有序推进。",
+        "card2Title": "文化配套",
+        "card2Copy": "把品牌理念转化为团队共同语言，通过培训、共识机制与行为准则，让管理层与执行层在目标、标准和行动上始终保持一致。",
+        "card3Title": "制度配套",
+        "card3Copy": "把品牌标准写进管理制度，明确决策权限、执行边界、审核机制与验收规则。让团队有章可循，让品牌要求进入日常工作。",
+        "summary": "一套成熟的品牌系统，不只规定品牌应该是什么样。它还通过流程、制度与文化，把品牌要求转化为组织每天都能执行的工作方式。让战略能够向下传递、标准能够持续落地、结果能够被检查，并形成可复制、可迭代的组织能力。"
+      }
+    },
+    "12-ai-workflow": {
+      "visible": true,
+      "content": {
+        "eyebrow": "AI 品牌工作流",
+        "title": "AI时代真正可落地的\n降本增效工作流"
+      }
+    },
+    "13-render-cases": {
+      "visible": true,
+      "content": {
+        "eyebrow": "视觉渲染",
+        "title": "渲染不仅仅是为了好看\n更是还原产品本身"
+      }
+    },
+    "14-motion-cases": {
+      "visible": true,
+      "content": {
+        "title": "精准而高效的表达\n更能直击人心",
+        "description": "动态表达不是装饰，是让复杂功能一眼看懂，通过动画拆解产品结构、功能逻辑与使用过程\n将静态图片难以说明的卖点，转化为直观、易懂、可传播的内容。",
+        "hint1": "点击按钮，查看动态表现案例",
+        "hint2": "把看不见的产品逻辑，转化为看得懂的商业价值。",
+        "cta": "点击了解卖点表现的可视化逻辑"
+      },
+      "layout": {
+        "cardHeight": 504,
+        "gap": 20,
+        "cards": [
+          {
+            "src": "assets/modules-251-390/motion-structure.gif",
+            "alt": "结构拆解动态演示",
+            "caption": "",
+            "description": "",
+            "sizeMode": "fixed",
+            "materialScale": 1
+          },
+          {
+            "src": "assets/modules-251-390/motion-feature.gif",
+            "alt": "功能演示动态演示",
+            "caption": "",
+            "description": "",
+            "sizeMode": "fixed",
+            "materialScale": 1
+          },
+          {
+            "src": "assets/modules-251-390/motion-operation.gif",
+            "alt": "操作流程动态演示",
+            "caption": "",
+            "description": "",
+            "sizeMode": "fixed",
+            "materialScale": 1
+          },
+          {
+            "src": "assets/modules-251-390/motion-video-4.mp4",
+            "alt": "",
+            "caption": "",
+            "description": "",
+            "sizeMode": "free",
+            "materialScale": 2.35,
+            "cardWidth": 688,
+            "offsetX": 86,
+            "offsetY": 95
+          },
+          {
+            "src": "assets/modules-251-390/motion-video-5.mp4",
+            "alt": "",
+            "caption": "",
+            "description": "",
+            "sizeMode": "fixed",
+            "materialScale": 1
+          },
+          {
+            "src": "assets/modules-251-390/motion-video-6.mp4",
+            "alt": "",
+            "caption": "",
+            "description": "",
+            "sizeMode": "free",
+            "materialScale": 2.7,
+            "cardWidth": 775,
+            "offsetX": 55,
+            "offsetY": -32
+          }
+        ]
+      }
+    },
+    "15-contact": {
+      "visible": true,
+      "content": {
+        "title": "如果您有更好的建议\n请联系我",
+        "email": "470588922@qq.com",
+        "wechat": "U-53-S73",
+        "phone": "15657062308"
       }
     }
   }

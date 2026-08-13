@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/misans@4.1.0/lib/Normal/MiSans-Regular.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/misans@4.1.0/lib/Normal/MiSans-Bold.min.css">
-  <link rel="stylesheet" href="admin/style.css?v=4">
+  <link rel="stylesheet" href="admin/style.css?v=6">
 </head>
 <body>
   <div class="admin-shell">
@@ -32,7 +32,7 @@
     <aside class="admin-sidebar">
       <div class="admin-sidebar__heading">
         <span>页面模块</span>
-        <span>01—07</span>
+        <span>01—09</span>
       </div>
       <nav class="module-list" id="moduleList" aria-label="页面模块"></nav>
       <div class="publish-note">
@@ -91,17 +91,25 @@
         <div class="field-list" id="contentFields"></div>
       </section>
 
-      <section class="field-section">
+      <section class="field-section" id="motionSection" hidden>
         <div class="field-section__title">
           <h2>动效参数</h2>
-          <span>按模块独立</span>
+          <span>实时更新</span>
         </div>
         <div class="field-list" id="motionFields"></div>
+      </section>
+
+      <section class="field-section" id="layoutSection" hidden>
+        <div class="field-section__title">
+          <h2>布局参数</h2>
+          <span>卡片画廊</span>
+        </div>
+        <div class="field-list" id="layoutFields"></div>
       </section>
     </aside>
   </div>
 
   <div class="admin-toast" id="toast" role="status" aria-live="polite"></div>
-  <script type="module" src="admin/script.js?v=7"></script>
+  <script type="module" src="admin/script.js?v=14"></script>
 </body>
 </html>

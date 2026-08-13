@@ -201,7 +201,111 @@ export function init(root) {
       if (!entries[0].isIntersecting) return;
       reveal();
       observer.disconnect();
-    }, { threshold: 0.15 });
+    }, { threshold: 0, rootMargin: '-10% 0px -35% 0px' });
     observer.observe(root);
+  }
+
+  /* APP 轮播 — 6 张整屏截图自动循环切换，同步显示手指点击涟漪 */
+  const carousel = root.querySelector('[data-app-carousel]');
+  if (carousel) {
+    const TAP_MS = 720;       /* 涟漪动画时长 */
+    const SLIDE_MS = 520;    /* 切换过渡时长 */
+    const HOLD_MS = 1500;    /* 每张图停留总时长 */
+    const TOTAL = 6;
+
+    /* 每张图对应一个点击位置（百分比，模拟真实操作热区） */
+    const tapPositions = [
+      { x: 50, y: 68 },
+      { x: 50, y: 55 },
+      { x: 50, y: 72 },
+      { x: 50, y: 48 },
+      { x: 50, y: 62 },
+      { x: 50, y: 58 }
+    ];
+
+    const tracks = Array.from(carousel.querySelectorAll('[data-carousel-track]'));
+    const taps = Array.from(carousel.querySelectorAll('[data-tap]'));
+    let index = 0;
+    let advanceTimer = null;
+    let loopTimer = null;
+
+    /* 初始化：第一张设为 current */
+    tracks.forEach((track) => {
+      const imgs = track.querySelectorAll('img');
+      imgs.forEach((img, i) => {
+        img.classList.toggle('is-current', i === 0);
+      });
+    });
+
+    function showTap(pos) {
+      taps.forEach((tap) => {
+        tap.style.left = pos.x + '%';
+        tap.style.top = pos.y + '%';
+        tap.classList.remove('is-tapping');
+        void tap.offsetWidth;
+        tap.classList.add('is-tapping');
+      });
+    }
+
+    function advance() {
+      const next = (index + 1) % TOTAL;
+      tracks.forEach((track) => {
+        const imgs = track.querySelectorAll('img');
+        imgs[index]?.classList.remove('is-current');
+        imgs[next]?.classList.add('is-current');
+      });
+      index = next;
+    }
+
+    function tick() {
+      showTap(tapPositions[index]);
+      if (advanceTimer) clearTimeout(advanceTimer);
+      advanceTimer = setTimeout(advance, TAP_MS);
+    }
+
+    function start() {
+      if (reduceMotion) return;
+      stop();
+      tick();
+      loopTimer = setInterval(tick, HOLD_MS);
+    }
+
+    function stop() {
+      if (advanceTimer) { clearTimeout(advanceTimer); advanceTimer = null; }
+      if (loopTimer) { clearInterval(loopTimer); loopTimer = null; }
+      taps.forEach((tap) => tap.classList.remove('is-tapping'));
+    }
+
+    function reset() {
+      stop();
+      index = 0;
+      tracks.forEach((track) => {
+        const imgs = track.querySelectorAll('img');
+        imgs.forEach((img, i) => img.classList.toggle('is-current', i === 0));
+      });
+    }
+
+    /* 监听 APP 面板激活状态 */
+    const appPanel = carousel.closest('[data-case-panel]');
+    if (appPanel) {
+      const mo = new MutationObserver(() => {
+        if (appPanel.classList.contains('is-active')) {
+          start();
+        } else {
+          reset();
+        }
+      });
+      mo.observe(appPanel, { attributes: true, attributeFilter: ['class'] });
+      if (appPanel.classList.contains('is-active')) start();
+    }
+
+    /* 页面不可见时暂停 */
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        stop();
+      } else if (appPanel?.classList.contains('is-active')) {
+        start();
+      }
+    });
   }
 }

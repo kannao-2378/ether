@@ -1,0 +1,73 @@
+.ai-workflow { --gallery-inset: max(20px,calc((var(--stage-viewport-width,1920px) - 1260px)/2)); position: relative; overflow: hidden; background: #1d1d1f; color: #f5f5f7; }
+.ai-workflow .module-stage { position: absolute; top: 0; left: 50%; width: 1920px; height: 1708px; transform: translateX(-50%); transform-origin: top center; }
+.ai-workflow__eyebrow { position: absolute; top: 219px; left: 330px; margin: 0; font-size: 20px; font-weight: 630; background: linear-gradient(180deg,#fec28a,#ca4b09); background-clip: text; color: transparent; }
+.ai-workflow h2 { position: absolute; top: 273px; left: 330px; margin: 0; font-size: 60px; font-weight: 630; line-height: 1.2; }
+.ai-workflow__gallery { position: absolute; top: 573px; left: calc((1920px - var(--stage-viewport-width,1920px))/2); width: var(--stage-viewport-width,1920px); height: 694px; overflow: hidden; scroll-padding-left: var(--gallery-inset); scroll-snap-type: x mandatory; scrollbar-width: none; cursor: grab; touch-action: pan-y; }
+.ai-workflow__gallery::-webkit-scrollbar { display: none; }
+.ai-workflow__gallery:focus { outline: none; }
+.ai-workflow__gallery.is-dragging, .ai-workflow__gallery.is-animating { cursor: grabbing; scroll-snap-type: none; }
+.ai-workflow__track { display: flex; gap: 20px; width: max-content; padding-right: var(--gallery-inset); padding-left: var(--gallery-inset); will-change: transform; }
+.ai-workflow .gallery-card { flex: 0 0 1260px; width: 1260px; height: 694px; margin: 0; overflow: hidden; border-radius: 30px; background: #000; scroll-snap-align: start; cursor: pointer; }
+.ai-workflow .gallery-card img { display: block; width: 100%; height: 100%; object-fit: cover; -webkit-user-drag: none; user-select: none; }
+.ai-workflow__controls { position: absolute; top: 1408px; left: 50%; transform: translateX(-50%); }
+.ai-workflow [data-reveal] { opacity: 0; transform: translateY(30px); transition: opacity 900ms ease, transform 700ms cubic-bezier(.16,1,.3,1); }
+.ai-workflow [data-reveal].is-visible { opacity: 1; transform: none; }
+.ai-workflow h2[data-reveal] { transition-delay: 150ms; }
+.ai-workflow__gallery[data-reveal] { transition-delay: 300ms; }
+.ai-workflow__controls[data-reveal] { opacity: 1; transform: translate(-50%,180px); transition: transform 1000ms cubic-bezier(.16,1,.3,1); }
+.ai-workflow__controls[data-reveal].is-visible { transform: translateX(-50%); }
+
+.gallery-controls { display: flex; align-items: center; gap: 16px; height: 56px; }
+.gallery-controls__intro { position: absolute; z-index: 0; top: 0; left: 50%; width: 56px; height: 56px; border-radius: 28px; background: #2a2a2d; opacity: 0; transform: translateX(-50%) scale(1.3); pointer-events: none; }
+.gallery-pagination { position: relative; z-index: 1; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 16px; width: auto; min-width: 216px; height: 56px; padding: 0 24px; border-radius: 28px; background: transparent; }
+.gallery-pagination::before { content: ""; position: absolute; z-index: -1; inset: 0; border-radius: inherit; background: #2a2a2d; transform-origin: center; }
+.gallery-pagination button { position: relative; width: 8px; height: 8px; padding: 0; border: 0; border-radius: 10px; outline: none; background: rgba(245,245,247,.8); cursor: pointer; transition: width 250ms ease, background-color 250ms linear; }
+.gallery-pagination button:focus-visible::before { background: #fff; }
+.gallery-play:focus-visible { outline: none; background: #343438; }
+.gallery-pagination button::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: inherit; transition: background-color 250ms linear; }
+.gallery-pagination button.is-active { width: 48px; }
+.gallery-pagination button.is-active::before { background: #f5f5f7; }
+.gallery-pagination button::after { content: ""; position: absolute; inset: 0; width: 48px; height: 8px; border-radius: inherit; background: #f5f5f7; opacity: 0; transform: scaleX(0); transform-origin: left center; }
+.gallery-controls.is-playing .gallery-pagination button.is-active::before { background: rgba(245,245,247,.35); }
+.gallery-controls.is-playing.is-progressing .gallery-pagination button.is-active::after { opacity: 1; animation: gallery-progress 4000ms linear forwards; }
+.gallery-play { position: relative; z-index: 1; width: 56px; height: 56px; padding: 0; border: 0; border-radius: 50%; background: #2a2a2d; cursor: pointer; transition: background-color 100ms linear, transform 200ms ease-out; }
+.gallery-play:hover { background: #343438; transform: scale(1.02); }
+.gallery-play span::before { content: ""; position: absolute; top: 19px; left: 22px; border-top: 9px solid transparent; border-bottom: 9px solid transparent; border-left: 14px solid #f5f5f7; }
+.gallery-play.is-playing span::before, .gallery-play.is-playing span::after { content: ""; position: absolute; top: 19px; width: 5px; height: 18px; border: 0; border-radius: 1px; background: #f5f5f7; }
+.gallery-play.is-playing span::before { left: 21px; }
+.gallery-play.is-playing span::after { left: 31px; }
+
+.gallery-controls[data-reveal] .gallery-pagination::before { opacity: 0; transform: translateX(36px) scaleX(.26); }
+.gallery-controls[data-reveal] .gallery-pagination button { opacity: 0; }
+.gallery-controls[data-reveal] .gallery-play { opacity: 0; transform: scale(.5); }
+.gallery-controls[data-reveal].is-visible .gallery-controls__intro { animation: gallery-intro-in 740ms cubic-bezier(.16,1,.3,1) both; }
+.gallery-controls[data-reveal].is-visible .gallery-pagination::before { animation: gallery-pill-in 520ms cubic-bezier(.16,1,.3,1) 540ms both; }
+.gallery-controls[data-reveal].is-visible .gallery-pagination button { opacity: 1; transition: width 250ms ease, background-color 250ms linear, opacity 100ms ease-in 740ms; }
+.gallery-controls[data-reveal].is-visible .gallery-play { opacity: 1; transform: scale(1); transition: background-color 100ms linear, opacity 100ms ease-in 940ms, transform 200ms ease-out 940ms; }
+
+@keyframes gallery-intro-in { 0% { opacity: 1; transform: translateX(-50%) scale(1.3); } 55% { opacity: 1; transform: translateX(-50%) scale(.9); } 100% { opacity: 0; transform: translateX(-50%) scale(.8); } }
+@keyframes gallery-pill-in { 0% { opacity: 0; transform: translateX(36px) scaleX(.26); } 18% { opacity: 1; } 100% { opacity: 1; transform: none; } }
+@keyframes gallery-progress { to { transform: scaleX(1); } }
+
+@media (max-width: 900px) {
+  .ai-workflow { padding: 104px 0 88px; }
+  .ai-workflow .module-stage { position: relative; left: auto; width: auto; height: auto; transform: none !important; }
+  .ai-workflow__eyebrow, .ai-workflow h2, .ai-workflow__gallery, .ai-workflow__controls { position: relative; inset: auto; }
+  .ai-workflow__eyebrow, .ai-workflow h2 { margin-right: 20px; margin-left: 20px; }
+  .ai-workflow h2 { margin-top: 18px; font-size: clamp(40px,11vw,56px); }
+  .ai-workflow__gallery { width: 100%; height: auto; margin-top: 52px; padding: 0; overflow-x: auto; overflow-y: hidden; border-radius: 0; scroll-padding-left: 20px; touch-action: pan-x; }
+  .ai-workflow__track { gap: 14px; padding-right: 20px; padding-left: 20px; transform: none !important; transition: none !important; }
+  .ai-workflow .gallery-card { flex-basis: calc(100vw - 54px); width: calc(100vw - 54px); height: auto; aspect-ratio: 1260/694; border-radius: 20px; }
+  .ai-workflow__controls { justify-content: center; margin: 46px auto 0; transform: none; }
+  .ai-workflow__controls[data-reveal] { transform: translateY(30px); }
+  .ai-workflow__controls[data-reveal].is-visible { transform: none; }
+  .gallery-pagination { gap: 12px; min-width: 0; padding: 0 18px; }
+  .gallery-pagination button.is-active { width: 32px; }
+  .gallery-pagination button.is-active::before { width: 32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-workflow * { scroll-behavior: auto !important; transition: none !important; }
+  .gallery-controls__intro { display: none; }
+  .gallery-controls[data-reveal] .gallery-pagination::before, .gallery-controls[data-reveal] .gallery-pagination button, .gallery-controls[data-reveal] .gallery-play { animation: none !important; opacity: 1; transform: none; }
+}

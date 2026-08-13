@@ -1,0 +1,110 @@
+/* 14 · 动态展示 — Figma 251:394 坐标基准 (1920×1387) */
+.motion-cases { position: relative; overflow: hidden; background: #0b0c0d; color: #f5f5f7; }
+.motion-cases .module-stage { position: absolute; top: 0; left: 50%; width: 1920px; height: 1387px; transform: translateX(-50%); transform-origin: top center; }
+
+/* 标题 — 左对齐 (330, 170) */
+.motion-cases h2 {
+  position: absolute; top: 170px; left: 330px; margin: 0;
+  text-align: left;
+  font-size: 64px; font-weight: 630; line-height: 85px;
+  background: linear-gradient(147deg, #fec28a 4%, #ca4b09 100%);
+  background-clip: text; -webkit-background-clip: text; color: transparent;
+}
+
+/* 描述 — 左对齐 (330, 386) */
+.motion-cases__intro {
+  position: absolute; top: 386px; left: 330px; right: 330px; margin: 0;
+  text-align: left;
+  color: #85858a; font-size: 15px; font-weight: 630; line-height: 1.6;
+}
+
+/* 卡片画廊 — 脱离画布限制，宽度跟随 section（视窗）；用 transform 移动卡片轨道（GPU 合成，不触发重排） */
+.motion-cases__gallery {
+  position: absolute;
+  top: calc(511px * var(--motion-stage-scale, 1));
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  z-index: 1;
+  touch-action: pan-y;
+}
+.motion-cases__cards { display: flex; justify-content: flex-start; align-items: center; gap: var(--motion-gap, 20px); width: max-content; padding-left: var(--motion-align-x, 0px); padding-right: 100vw; }
+
+/* 单个卡片 — 默认固定高度，宽度由素材比例决定；高度跟随画布缩放。
+   不为每张卡片单独提升合成层（translateZ）；卡片统一绘制进 .motion-cases__cards 这一个 will-change 层，
+   GPU 只需位移单一图层，避免 4K 素材/视频形成十余个子层导致每帧合成卡顿。 */
+.motion-cases__card {
+  position: relative; height: calc(var(--motion-card-height, 504px) * var(--motion-stage-scale, 1)); flex-shrink: 0;
+  border-radius: 29px; overflow: hidden; background: #1d1d1f;
+  box-shadow: inset 0 0 0 4px #1d1d1f;
+  /* contain: paint 让每张卡片成为独立合成单元，限制重绘范围，避免 6 张动态卡片互相影响 */
+  contain: paint;
+  cursor: pointer;
+}
+/* 素材放大出血，覆盖 30px 圆角的抗锯齿过渡区。 */
+.motion-cases__card img,
+.motion-cases__card video { display: block; height: 100%; width: auto; -webkit-user-drag: none; transform: scale(1.04); transform-origin: center; }
+
+/* 空卡片占位符 */
+.motion-cases__card.is-empty { width: 300px; display: flex; align-items: center; justify-content: center; border: 2px dashed #3a3a3e; }
+.motion-cases__card-placeholder { color: #5f5f67; font-size: 14px; font-weight: 450; }
+
+/* 自由尺寸模式 — 素材按缩放比例和偏移显示（含 1.01 出血以消除圆角白边） */
+.motion-cases__card.is-free { overflow: hidden; }
+.motion-cases__card.is-free img,
+.motion-cases__card.is-free video {
+  transform: translate(var(--motion-offset-x, 0px), var(--motion-offset-y, 0px)) scale(calc(var(--motion-material-scale, 1) * 1.01));
+  transform-origin: center;
+}
+
+/* 卡片标题 — 默认显示。
+   caption 底部圆角 29px 比卡片 30px 小 1px，缩在圆角内侧，
+   避免渐变末端伸到卡片圆角弧线区透出素材浅色成白边。 */
+.motion-cases__card-caption {
+  position: absolute; bottom: 0; left: 0; right: 0; padding: 24px 28px;
+  border-radius: 0 0 29px 29px;
+  background: linear-gradient(transparent, rgba(0,0,0,.85));
+}
+.motion-cases__card-caption h3 { margin: 0 0 6px; font-size: 22px; font-weight: 630; color: #f5f5f7; }
+.motion-cases__card-caption p { margin: 0; font-size: 14px; color: #b5b5b5; line-height: 1.5; }
+
+/* 箭头导航 — 绝对定位右下 (1478/1545, 1060) */
+.motion-cases__nav {
+  position: absolute; top: 1060px; right: 330px; z-index: 10;
+  display: flex; gap: 22px; pointer-events: auto;
+  opacity: 0; transform: translateY(10px);
+  transition: opacity 300ms ease 740ms, transform 300ms ease 740ms;
+}
+.motion-cases__nav.is-visible { opacity: 1; transform: none; }
+.motion-cases__arrow {
+  display: flex; align-items: center; justify-content: center;
+  width: 45px; height: 45px; border: 0; border-radius: 50%;
+  background: rgba(255,255,255,.1); color: #f5f5f7; cursor: pointer;
+  transition: background 300ms, transform 300ms;
+}
+.motion-cases__arrow:hover:not(:disabled) { background: rgba(255,255,255,.2); transform: scale(1.05); }
+.motion-cases__arrow:disabled { opacity: .3; cursor: default; }
+.motion-cases__arrow svg { width: 20px; height: 20px; fill: currentColor; pointer-events: none; }
+
+/* 提示文字 */
+.motion-cases__hint { position: absolute; width: 100%; margin: 0; text-align: center; color: #b5b5b5; font-size: 16px; font-weight: 450; }
+.motion-cases__hint--one { top: 1240px; }
+.motion-cases__hint--two { top: 1268px; }
+
+/* CTA — (781, 1161) */
+.motion-cases__cta {
+  position: absolute; top: 1161px; left: 781px; width: 356px; height: 56px;
+  padding: 0 61px 0 25px; border: 0; border-radius: 29px; background: #222224;
+  color: #f5f5f7; font: 630 18px/56px "MiSans",sans-serif; white-space: nowrap;
+  cursor: pointer; transition: transform 300ms cubic-bezier(0,0,.5,1), background 300ms;
+}
+.motion-cases__cta img { position: absolute; top: 10px; right: 10px; width: 37px; height: 37px; }
+.motion-cases__cta:hover { transform: scale(1.02); background: #303034; }
+
+/* 入场动画 */
+.motion-cases [data-reveal] { opacity: 0; transform: translateY(30px); transition: opacity 900ms ease, transform 700ms cubic-bezier(.16,1,.3,1); }
+.motion-cases [data-reveal].is-visible { opacity: 1; transform: none; }
+.motion-cases__intro[data-reveal] { transition-delay: 150ms; }
+.motion-cases__gallery[data-reveal] { transition-delay: 300ms; }
+
+@media (prefers-reduced-motion: reduce) { .motion-cases * { transition: none !important; } }

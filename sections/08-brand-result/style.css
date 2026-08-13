@@ -1,0 +1,213 @@
+.brand-result {
+  --brand-progress: 0;
+  --brand-summary-progress: 0;
+  position: relative;
+  height: 1696px;
+  overflow: hidden;
+  background: #000;
+  color: #f5f5f7;
+}
+
+.brand-result__header {
+  position: absolute;
+  top: 133px;
+  left: 50%;
+  width: 700px;
+  text-align: center;
+  opacity: var(--brand-progress);
+  transform: translate3d(-50%, calc((1 - var(--brand-progress)) * 30px), 0);
+  will-change: transform, opacity;
+}
+
+.brand-result__eyebrow,
+.brand-result__title,
+.brand-result__path,
+.brand-result__description {
+  margin: 0;
+  font-family: "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+.brand-result__eyebrow {
+  height: 60px;
+  color: transparent;
+  font-size: 20px;
+  font-weight: 630;
+  line-height: 60px;
+  background: linear-gradient(108deg, #fec28a 4.97%, #ca4b09 76.02%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-result__title {
+  margin-top: 30px;
+  font-size: 70px;
+  font-weight: 630;
+  line-height: 90px;
+  letter-spacing: -.02em;
+}
+
+.brand-result__phones {
+  position: absolute;
+  top: 471px;
+  left: 50%;
+  width: 804px;
+  height: 640px;
+  transform: translateX(-50%);
+}
+
+.brand-result__phone {
+  position: absolute;
+  top: 0;
+  display: block;
+  height: 640px;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.brand-result__phone--left {
+  left: 0;
+  width: 242px;
+  transform: translate3d(calc((1 - var(--brand-progress)) * -100px), calc((1 - var(--brand-progress)) * 200px), 0);
+}
+
+.brand-result__phone--middle {
+  z-index: 2;
+  left: 230px;
+  width: 344px;
+  transform: translate3d(0, calc((1 - var(--brand-progress)) * 200px), 0) scale(calc(1 + (1 - var(--brand-progress)) * .4));
+}
+
+.brand-result__phone--right {
+  right: 0;
+  width: 242px;
+  transform: translate3d(calc((1 - var(--brand-progress)) * 100px), calc((1 - var(--brand-progress)) * 200px), 0);
+}
+
+.brand-result__summary {
+  position: absolute;
+  inset: 0;
+  opacity: var(--brand-summary-progress);
+  transform: translate3d(0, calc((1 - var(--brand-summary-progress)) * 30px), 0);
+  will-change: transform, opacity;
+}
+
+.brand-result__path {
+  position: absolute;
+  top: 1179px;
+  left: 50%;
+  width: 903px;
+  height: 60px;
+  font-size: 20px;
+  font-weight: 630;
+  line-height: 60px;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.brand-result__description {
+  position: absolute;
+  top: 1284px;
+  left: 50%;
+  width: 990px;
+  color: rgba(245, 245, 247, .7);
+  font-size: 20px;
+  font-weight: 330;
+  line-height: 35px;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+@media (max-width: 900px) {
+  .brand-result {
+    height: auto;
+    min-height: 1160px;
+    padding: 84px 16px 96px;
+  }
+
+  .brand-result__header,
+  .brand-result__phones,
+  .brand-result__summary,
+  .brand-result__path,
+  .brand-result__description {
+    position: relative;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+  }
+
+  .brand-result__header {
+    width: 100%;
+    transform: translate3d(0, calc((1 - var(--brand-progress)) * 30px), 0);
+  }
+
+  .brand-result__title {
+    margin-top: 20px;
+    font-size: clamp(42px, 12vw, 58px);
+    line-height: 1.12;
+  }
+
+  .brand-result__phones {
+    width: min(100%, 390px);
+    height: 420px;
+    margin: 64px auto 0;
+    transform: none;
+  }
+
+  .brand-result__phone {
+    height: 420px;
+  }
+
+  .brand-result__phone--left,
+  .brand-result__phone--right {
+    width: 159px;
+  }
+
+  .brand-result__phone--middle {
+    left: 50%;
+    width: 226px;
+    transform: translate3d(-50%, calc((1 - var(--brand-progress)) * 140px), 0) scale(calc(1 + (1 - var(--brand-progress)) * .25));
+  }
+
+  .brand-result__summary {
+    margin-top: 58px;
+  }
+
+  .brand-result__path,
+  .brand-result__description {
+    width: 100%;
+    height: auto;
+  }
+
+  .brand-result__path {
+    font-size: 17px;
+    line-height: 1.8;
+    transform: none;
+  }
+
+  .brand-result__description {
+    margin-top: 26px;
+    font-size: 16px;
+    line-height: 1.9;
+    text-align: left;
+    transform: none;
+  }
+
+  .brand-result__description br {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-result {
+    --brand-progress: 1;
+    --brand-summary-progress: 1;
+  }
+
+  .brand-result__header,
+  .brand-result__phone,
+  .brand-result__summary {
+    will-change: auto;
+  }
+}

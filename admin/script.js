@@ -1,4 +1,4 @@
-import { moduleSchema } from '../config/schema.js?v=2';
+import { moduleSchema } from '../config/schema.js?v=4';
 
 const elements = {
   moduleList: document.querySelector('#moduleList'),
@@ -7,6 +7,8 @@ const elements = {
   moduleDescription: document.querySelector('#moduleDescription'),
   contentFields: document.querySelector('#contentFields'),
   motionFields: document.querySelector('#motionFields'),
+  layoutSection: document.querySelector('#layoutSection'),
+  layoutFields: document.querySelector('#layoutFields'),
   saveStatus: document.querySelector('#saveStatus'),
   saveButton: document.querySelector('#saveButton'),
   resetButton: document.querySelector('#resetButton'),
@@ -73,13 +75,23 @@ function postToPreview(type, details = {}) {
   );
 }
 
+let syncPreviewRaf = 0;
 function syncPreview({ focus = false } = {}) {
-  postToPreview('portfolio-config-update', { config });
   if (focus) {
+    cancelAnimationFrame(syncPreviewRaf);
+    syncPreviewRaf = 0;
+    postToPreview('portfolio-config-update', { config });
     setTimeout(() => {
       postToPreview('portfolio-preview-focus', { moduleId: activeModuleId });
     }, 60);
+    return;
   }
+  // 用 rAF 合并连续滑块输入，避免每帧多次重建
+  if (syncPreviewRaf) return;
+  syncPreviewRaf = requestAnimationFrame(() => {
+    syncPreviewRaf = 0;
+    postToPreview('portfolio-config-update', { config });
+  });
 }
 
 function updateValue(section, key, value) {
@@ -104,6 +116,97 @@ function updateTypography(key, property, value) {
   }
 
   setDirty(true);
+  syncPreview();
+}
+
+function updateLayout(field, value) {
+  const moduleConfig = config.modules[activeModuleId];
+  moduleConfig.layout ||= {};
+  moduleConfig.layout[field] = value;
+  setDirty(true);
+  syncPreview();
+}
+
+function updateCardField(index, key, value) {
+  const moduleConfig = config.modules[activeModuleId];
+  const cards = moduleConfig.layout?.cards;
+  if (!Array.isArray(cards) || !cards[index]) return;
+  cards[index][key] = value;
+  setDirty(true);
+  syncPreview();
+}
+
+// 为指定卡片上传素材（仅上传文件，更新 src）
+async function uploadCardAsset(index) {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.gif,.png,.jpg,.jpeg,.webp,.mp4,.svg';
+  input.addEventListener('change', async () => {
+    const file = input.files?.[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append('file', file);
+    try {
+      const endpoint = localSaveEndpoint
+        ? new URL('/api/motion-cases/upload', localSaveEndpoint).href
+        : '/api/motion-cases/upload';
+      const response = await fetch(endpoint, { method: 'POST', body: formData });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || '上传失败');
+      updateCardField(index, 'src', result.path);
+      showToast('素材已上传');
+      renderInspector();
+    } catch (error) {
+      console.error(error);
+      showToast(error.message || '上传失败，请确认本地服务已启动');
+    }
+  });
+  input.click();
+}
+
+// 新增空卡片并立即在预览中显示
+function addCard() {
+  const moduleConfig = config.modules[activeModuleId];
+  moduleConfig.layout ||= { cardHeight: 504, gap: 20, cards: [] };
+  moduleConfig.layout.cards ||= [];
+  moduleConfig.layout.cards.push({
+    src: '', alt: '', caption: '', description: '',
+    sizeMode: 'fixed', materialScale: 1
+  });
+  setDirty(true);
+  renderInspector();
+  syncPreview();
+  showToast('已新增卡片，请上传素材');
+}
+
+async function deleteCardRemote(index) {
+  // 本地环境走接口同步磁盘文件
+  if (localSaveEndpoint) {
+    try {
+      const endpoint = new URL(`/api/motion-cases/card?index=${index}`, localSaveEndpoint).href;
+      const response = await fetch(endpoint, { method: 'DELETE' });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || '删除失败');
+      const moduleConfig = config.modules[activeModuleId];
+      if (moduleConfig.layout) {
+        moduleConfig.layout.cards = result.cards || [];
+      }
+      publishedConfig = clone(config);
+      setDirty(false, '卡片已删除');
+      renderInspector();
+      syncPreview();
+      return;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  // 回退：仅改内存
+  const moduleConfig = config.modules[activeModuleId];
+  const cards = moduleConfig.layout?.cards;
+  if (!Array.isArray(cards) || index < 0 || index >= cards.length) return;
+  cards.splice(index, 1);
+  setDirty(true);
+  renderInspector();
   syncPreview();
 }
 
@@ -263,6 +366,258 @@ function createNumberField(field, value) {
   return wrapper;
 }
 
+function createLayoutNumberField(field, value) {
+  const wrapper = document.createElement('label');
+  wrapper.className = 'field';
+
+  const header = document.createElement('span');
+  header.className = 'field__header';
+
+  const label = document.createElement('span');
+  label.className = 'field__label';
+  label.textContent = field.label;
+
+  const meta = document.createElement('span');
+  meta.className = 'field__meta';
+  meta.textContent = `${field.min}—${field.max}${field.unit || ''}`;
+  header.append(label, meta);
+
+  const control = document.createElement('span');
+  control.className = 'number-control';
+
+  const range = document.createElement('input');
+  range.type = 'range';
+  range.min = field.min;
+  range.max = field.max;
+  range.step = field.step;
+  range.value = value ?? field.min;
+
+  const number = document.createElement('input');
+  number.type = 'number';
+  number.min = field.min;
+  number.max = field.max;
+  number.step = field.step;
+  number.value = value ?? field.min;
+
+  function commit(rawValue) {
+    const parsed = Number(rawValue);
+    if (!Number.isFinite(parsed)) return;
+    const clamped = Math.min(field.max, Math.max(field.min, parsed));
+    range.value = clamped;
+    number.value = clamped;
+    updateLayout(field.key, clamped);
+  }
+
+  range.addEventListener('input', () => commit(range.value));
+  number.addEventListener('input', () => commit(number.value));
+  control.append(range, number);
+  wrapper.append(header, control);
+  return wrapper;
+}
+
+function createLayoutEditor(schema, moduleConfig) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'layout-editor';
+
+  const layout = schema.layout;
+  const layoutConfig = moduleConfig.layout || {};
+
+  // 全局数值字段（cardHeight / gap）
+  for (const field of layout.fields) {
+    wrapper.append(createLayoutNumberField(field, layoutConfig[field.key]));
+  }
+
+  // 卡片列表
+  const cardsLabel = document.createElement('div');
+  cardsLabel.className = 'layout-cards-label';
+  cardsLabel.innerHTML = '<span class="field__label">卡片列表</span>';
+  wrapper.append(cardsLabel);
+
+  const cards = Array.isArray(layoutConfig.cards) ? layoutConfig.cards : [];
+  cards.forEach((card, index) => {
+    wrapper.append(createCardEditor(card, index));
+  });
+
+  // 新增卡片按钮
+  const actions = document.createElement('div');
+  actions.className = 'layout-actions';
+  const addBtn = document.createElement('button');
+  addBtn.type = 'button';
+  addBtn.className = 'admin-button admin-button--quiet';
+  addBtn.textContent = '新增卡片';
+  addBtn.addEventListener('click', addCard);
+  actions.append(addBtn);
+  wrapper.append(actions);
+
+  return wrapper;
+}
+
+// 卡片滑块字段辅助函数
+function createCardSliderField({ label, min, max, step, unit, value, onChange }) {
+  const wrapper = document.createElement('label');
+  wrapper.className = 'field';
+  const header = document.createElement('span');
+  header.className = 'field__header';
+  const labelText = document.createElement('span');
+  labelText.className = 'field__label';
+  labelText.textContent = label;
+  const meta = document.createElement('span');
+  meta.className = 'field__meta';
+  meta.textContent = `${min}—${max}${unit}`;
+  header.append(labelText, meta);
+
+  const control = document.createElement('span');
+  control.className = 'number-control';
+  const range = document.createElement('input');
+  range.type = 'range';
+  range.min = String(min);
+  range.max = String(max);
+  range.step = String(step);
+  range.value = String(value);
+  const number = document.createElement('input');
+  number.type = 'number';
+  number.min = String(min);
+  number.max = String(max);
+  number.step = String(step);
+  number.value = value;
+  const apply = (val) => {
+    const parsed = Math.min(max, Math.max(min, Number(val)));
+    if (Number.isFinite(parsed)) onChange(parsed);
+  };
+  range.addEventListener('input', () => {
+    number.value = range.value;
+    apply(range.value);
+  });
+  number.addEventListener('input', () => {
+    range.value = number.value;
+    apply(number.value);
+  });
+  control.append(range, number);
+  wrapper.append(header, control);
+  return wrapper;
+}
+
+// 单张卡片的编辑器（含尺寸模式切换、素材上传、缩放调节）
+function createCardEditor(card, index) {
+  const cardEl = document.createElement('div');
+  cardEl.className = 'layout-card';
+
+  // 卡片头部：标题 + 尺寸模式切换 + 删除
+  const cardHeader = document.createElement('div');
+  cardHeader.className = 'layout-card__header';
+
+  const title = document.createElement('span');
+  title.textContent = `卡片 ${index + 1}`;
+  cardHeader.append(title);
+
+  const sizeModeSwitch = document.createElement('div');
+  sizeModeSwitch.className = 'device-switch layout-card__mode';
+  const sizeMode = card.sizeMode || 'fixed';
+  for (const option of ['fixed', 'free']) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'device-switch__button';
+    btn.classList.toggle('is-active', sizeMode === option);
+    btn.textContent = option === 'fixed' ? '固定高度' : '自由尺寸';
+    btn.addEventListener('click', () => {
+      updateCardField(index, 'sizeMode', option);
+      renderInspector();
+    });
+    sizeModeSwitch.append(btn);
+  }
+  cardHeader.append(sizeModeSwitch);
+
+  const deleteBtn = document.createElement('button');
+  deleteBtn.type = 'button';
+  deleteBtn.className = 'layout-card__delete';
+  deleteBtn.textContent = '删除';
+  deleteBtn.addEventListener('click', () => deleteCardRemote(index));
+  cardHeader.append(deleteBtn);
+
+  cardEl.append(cardHeader);
+
+  // 素材上传 + 预览
+  const uploadRow = document.createElement('div');
+  uploadRow.className = 'layout-card__upload';
+  const uploadBtn = document.createElement('button');
+  uploadBtn.type = 'button';
+  uploadBtn.className = 'admin-button admin-button--quiet';
+  uploadBtn.textContent = card.src ? '替换素材' : '上传素材';
+  uploadBtn.addEventListener('click', () => uploadCardAsset(index));
+  uploadRow.append(uploadBtn);
+  cardEl.append(uploadRow);
+
+  if (card.src) {
+    const preview = document.createElement('div');
+    preview.className = 'layout-card__preview';
+    const isVideo = /\.mp4$/i.test(card.src);
+    const media = document.createElement(isVideo ? 'video' : 'img');
+    media.src = card.src;
+    if (isVideo) {
+      media.muted = true;
+      media.loop = true;
+      media.autoplay = true;
+      media.playsInline = true;
+    }
+    media.alt = '';
+    preview.append(media);
+    cardEl.append(preview);
+  }
+
+  // 自由尺寸模式：显示卡片宽度 + 素材缩放 + 位置控件（高度始终跟随全局设置）
+  if (sizeMode === 'free') {
+    // 卡片宽度
+    cardEl.append(createCardSliderField({
+      label: '卡片宽度', min: 100, max: 1200, step: 1, unit: 'px',
+      value: Number.isFinite(card.cardWidth) ? card.cardWidth : 400,
+      onChange: (val) => updateCardField(index, 'cardWidth', val)
+    }));
+
+    // 素材缩放
+    cardEl.append(createCardSliderField({
+      label: '素材缩放', min: 0.5, max: 5, step: 0.05, unit: '',
+      value: Number.isFinite(card.materialScale) ? card.materialScale : 1,
+      onChange: (val) => updateCardField(index, 'materialScale', val)
+    }));
+
+    // 素材X偏移
+    cardEl.append(createCardSliderField({
+      label: '素材水平偏移', min: -400, max: 400, step: 1, unit: 'px',
+      value: Number.isFinite(card.offsetX) ? card.offsetX : 0,
+      onChange: (val) => updateCardField(index, 'offsetX', val)
+    }));
+
+    // 素材Y偏移
+    cardEl.append(createCardSliderField({
+      label: '素材垂直偏移', min: -400, max: 400, step: 1, unit: 'px',
+      value: Number.isFinite(card.offsetY) ? card.offsetY : 0,
+      onChange: (val) => updateCardField(index, 'offsetY', val)
+    }));
+  }
+
+  // 文本字段（alt / caption / description）— src 由上传按钮管理
+  const textFields = [
+    { key: 'alt', label: '替代文字' },
+    { key: 'caption', label: '卡片标题' },
+    { key: 'description', label: '卡片说明' }
+  ];
+  for (const field of textFields) {
+    const fieldWrapper = document.createElement('label');
+    fieldWrapper.className = 'field';
+    const fieldLabel = document.createElement('span');
+    fieldLabel.className = 'field__label';
+    fieldLabel.textContent = field.label;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = card[field.key] || '';
+    input.addEventListener('input', () => updateCardField(index, field.key, input.value));
+    fieldWrapper.append(fieldLabel, input);
+    cardEl.append(fieldWrapper);
+  }
+
+  return cardEl;
+}
+
 function renderModuleList() {
   elements.moduleList.replaceChildren();
 
@@ -320,12 +675,29 @@ function renderInspector() {
     elements.contentFields.append(createTextField(field, moduleConfig.content[field.key]));
   }
 
-  for (const field of schema.motion) {
-    elements.motionFields.append(
-      field.type === 'toggle'
-        ? createToggleField(field, moduleConfig.motion[field.key])
-        : createNumberField(field, moduleConfig.motion[field.key])
-    );
+  // 动效参数（仅 schema.motion 非空的模块）
+  const motionSection = document.querySelector('#motionSection');
+  if (schema.motion && schema.motion.length > 0) {
+    if (motionSection) motionSection.hidden = false;
+    moduleConfig.motion ||= {};
+    for (const field of schema.motion) {
+      elements.motionFields.append(
+        field.type === 'toggle'
+          ? createToggleField(field, moduleConfig.motion[field.key])
+          : createNumberField(field, moduleConfig.motion[field.key])
+      );
+    }
+  } else if (motionSection) {
+    motionSection.hidden = true;
+  }
+
+  // 布局编辑器（仅 schema.layout 存在的模块）
+  if (schema.layout && elements.layoutSection && elements.layoutFields) {
+    elements.layoutSection.hidden = false;
+    elements.layoutFields.replaceChildren(createLayoutEditor(schema, moduleConfig));
+  } else if (elements.layoutSection) {
+    elements.layoutSection.hidden = true;
+    elements.layoutFields.replaceChildren();
   }
 }
 
@@ -507,7 +879,7 @@ async function saveConfirmed() {
 }
 
 async function start() {
-  const response = await fetch('./config/site-config.json?v=5');
+  const response = await fetch('./config/site-config.json?v=10');
   if (!response.ok) throw new Error(`配置加载失败：${response.status}`);
 
   publishedConfig = await response.json();

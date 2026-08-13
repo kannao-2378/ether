@@ -1,0 +1,604 @@
+.brand-method {
+  --method-scale: 1;
+  --method-word-scale: 1;
+  --method-mask-opacity: 0;
+  --method-cover-opacity: 1;
+  --method-intro-opacity: 1;
+  --method-label-opacity: 1;
+  --method-large-opacity: 0;
+  --method-phone-progress: 0;
+  --method-scene-opacity: 1;
+  --method-final-phone-opacity: 0;
+  --method-detail-opacity: 0;
+  position: relative;
+  min-height: 0;
+  background: #000;
+  color: #f5f5f7;
+}
+
+.brand-method__motion {
+  position: relative;
+  height: 200vh;
+  min-height: 1440px;
+}
+
+.brand-method__sticky {
+  position: sticky;
+  z-index: 1;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+}
+
+.brand-method__canvas-shell {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1920px;
+  height: 1080px;
+  transform: translateX(-50%) scale(var(--method-scale));
+  transform-origin: top center;
+}
+
+.brand-method__canvas {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+}
+
+.brand-method__detail-shell {
+  position: relative;
+  z-index: 2;
+  height: calc(1025px * var(--method-scale));
+  /* detail-canvas 顶部与 final-phone 底部在画布坐标系恒定重叠 75px（Figma 基准）。
+     final-phone 底部在画布坐标 970px（top:134 + height:836）。
+     detail-shell 顶部相对于 sticky 顶部 = 100vh + margin-top。
+     令 100vh + margin-top = (970 - 75) × scale = 895 × scale，
+     得 margin-top = 895×scale - 100vh。
+     这样重叠量不再随窗口宽高比变化，跨浏览器一致。 */
+  margin-top: calc(895px * var(--method-scale) - 100vh + 50px);
+  overflow: hidden;
+  background: transparent;
+  opacity: var(--method-detail-opacity);
+}
+
+.brand-method__detail-canvas {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1920px;
+  height: 1025px;
+  transform: translateX(-50%) scale(var(--method-scale));
+  transform-origin: top center;
+}
+
+.brand-method__scene {
+  position: absolute;
+  z-index: 0;
+  inset: 0 auto auto 0;
+  display: block;
+  width: 1920px;
+  height: 1080px;
+  object-fit: fill;
+  opacity: var(--method-scene-opacity);
+  will-change: opacity;
+}
+
+.brand-method__intro-cover {
+  position: absolute;
+  z-index: 1;
+  inset: 0 auto auto 0;
+  width: 1920px;
+  height: 1080px;
+  background: #000;
+  opacity: var(--method-cover-opacity);
+  will-change: opacity;
+}
+
+.brand-method__reveal-mask {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+}
+
+.brand-method__mask-word,
+.brand-method__mask-label {
+  font-family: "Montserrat", "Arial Black", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.brand-method__mask-word {
+  font-size: 80px;
+  transform: scale(var(--method-word-scale));
+  transform-box: view-box;
+  transform-origin: 1040.5px 539px;
+  will-change: transform;
+}
+
+.brand-method__mask-media {
+  opacity: var(--method-mask-opacity);
+  will-change: opacity;
+}
+
+.brand-method__mask-label {
+  fill: #f5f5f7;
+  font-size: 80px;
+  opacity: var(--method-label-opacity);
+  will-change: opacity;
+}
+
+.brand-method__intro {
+  position: absolute;
+  z-index: 4;
+  top: 381px;
+  left: 477px;
+  width: 967px;
+  height: 318px;
+  margin: 0;
+  color: #f5f5f7;
+  font-family: "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 80px;
+  font-weight: 330;
+  line-height: 106px;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+.brand-method__intro > span {
+  display: block;
+  white-space: nowrap;
+}
+
+.brand-method__intro-line--first,
+.brand-method__intro-line--third,
+.brand-method__intro-copy {
+  opacity: var(--method-intro-opacity);
+  will-change: opacity;
+}
+
+.brand-method__intro-copy {
+  display: inline;
+}
+
+.brand-method__intro strong {
+  display: inline;
+  font-family: "Montserrat", "Arial Black", sans-serif;
+  font-size: inherit;
+  font-weight: 700;
+  opacity: 0;
+}
+
+/* 大显示器（883_66）：外框 2268×1935，内容 2167×1086 */
+.brand-method__large-phone {
+  position: absolute;
+  z-index: 3;
+  top: -111px;
+  left: -195px;
+  width: 2268px;
+  height: 1935px;
+  opacity: var(--method-large-opacity);
+  transform: translate3d(calc(var(--method-phone-progress) * 21px), calc(var(--method-phone-progress) * -304.5px), 0)
+    scale(calc(1 - var(--method-phone-progress) * .5679));
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+}
+
+.brand-method__large-phone-image,
+.brand-method__large-phone-frame,
+.brand-method__final-phone-image,
+.brand-method__final-phone-frame {
+  position: absolute;
+  display: block;
+  object-fit: fill;
+}
+
+.brand-method__large-phone-image {
+  z-index: 2;
+  top: 107px;
+  left: 51px;
+  width: 2167px;
+  height: 1086px;
+}
+
+.brand-method__large-phone-frame {
+  z-index: 1;
+  inset: 0;
+  width: 2268px;
+  height: 1935px;
+}
+
+/* 小显示器（449_162）：外框 980×836，内容 936×469 */
+.brand-method__final-phone {
+  position: absolute;
+  z-index: 4;
+  top: 134px;
+  left: 470px;
+  width: 980px;
+  height: 836px;
+  opacity: var(--method-final-phone-opacity);
+  will-change: opacity;
+}
+
+.brand-method__final-phone-image {
+  z-index: 2;
+  top: 46px;
+  left: 22px;
+  width: 936px;
+  height: 469px;
+}
+
+.brand-method__final-phone-frame {
+  z-index: 1;
+  inset: 0;
+  width: 980px;
+  height: 836px;
+}
+
+.brand-method__detail-copy,
+.brand-method__principle,
+.brand-method__cta { z-index: 5; }
+
+.brand-method [data-method-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 30px, 0);
+  transition: opacity 900ms ease, transform 700ms cubic-bezier(.16,1,.3,1);
+  will-change: transform, opacity;
+}
+
+.brand-method [data-method-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.brand-method__principle--center[data-method-reveal] { transition-delay: 150ms; }
+.brand-method__principle--right[data-method-reveal] { transition-delay: 300ms; }
+
+.brand-method__detail-copy {
+  position: absolute;
+  top: 95px;
+  left: 680px;
+  width: 560px;
+  text-align: center;
+}
+
+.brand-method__eyebrow,
+.brand-method__title,
+.brand-method__description,
+.brand-method__principle p {
+  margin: 0;
+  font-family: "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+.brand-method__eyebrow {
+  height: 32px;
+  color: transparent;
+  font-size: 24px;
+  font-weight: 450;
+  line-height: 32px;
+  background: linear-gradient(180deg, #fec28a 0%, #ca4b09 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-method__title {
+  height: 70px;
+  margin-top: 28px;
+  color: #f5f5f7;
+  font-size: 80px;
+  font-weight: 630;
+  line-height: 70px;
+  white-space: nowrap;
+}
+
+.brand-method__description {
+  width: 450px;
+  margin: 28px auto 0;
+  color: #86868b;
+  font-size: 18px;
+  font-weight: 330;
+  line-height: 28.8px;
+}
+
+.brand-method__principles {
+  position: absolute;
+  top: 420px;
+  left: 371px;
+  width: 1188px;
+  height: 270px;
+}
+
+.brand-method__principle {
+  position: absolute;
+  width: 267px;
+  text-align: center;
+}
+
+.brand-method__principle--left {
+  top: 1px;
+  left: 0;
+}
+
+.brand-method__principle--center {
+  top: 8px;
+  left: 456px;
+}
+
+.brand-method__principle--right {
+  top: -1px;
+  left: 921px;
+}
+
+.brand-method__principle-icon {
+  position: relative;
+  display: block;
+}
+
+.brand-method__principle-icon img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.brand-method__principle-icon--left {
+  left: 69px;
+  width: 129.64px;
+  height: 107px;
+  margin-bottom: 55px;
+}
+
+.brand-method__principle-icon--center {
+  left: 87px;
+  width: 93px;
+  height: 91px;
+  margin-bottom: 63px;
+}
+
+.brand-method__principle-icon--right {
+  left: 80px;
+  width: 107.31px;
+  height: 107.43px;
+  margin-bottom: 55px;
+}
+
+.brand-method__principle p {
+  width: 267px;
+  color: #b5b5b5;
+  font-size: 20px;
+  font-weight: 330;
+  line-height: 35.5px;
+}
+
+.brand-method__principle-title {
+  margin-right: .55em;
+  color: #f5f5f7;
+  font-weight: 630;
+}
+
+.brand-method__principle-copy {
+  color: #b5b5b5;
+}
+
+.brand-method__cta {
+  position: absolute;
+  top: 815px;
+  left: 788px;
+  width: 344px;
+  height: 60px;
+  padding: 0;
+  border: 0;
+  border-radius: 29px;
+  background: #222224;
+  color: #f5f5f7;
+  font-family: "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 18px;
+  font-weight: 630;
+  cursor: pointer;
+}
+
+.brand-method__cta > span {
+  position: absolute;
+  top: 0;
+  left: 37px;
+  line-height: 56px;
+}
+
+.brand-method__cta > img {
+  position: absolute;
+  top: 11px;
+  left: 297px;
+  width: 37px;
+  height: 37px;
+}
+
+.brand-method__cta:focus-visible {
+  outline: 3px solid rgba(0, 113, 227, .75);
+  outline-offset: 4px;
+}
+
+@media (hover: hover) {
+  .brand-method__cta:hover {
+    filter: brightness(1.1);
+  }
+}
+
+@media (max-width: 900px) {
+  .brand-method {
+    padding: 88px 20px 96px;
+    overflow: hidden;
+  }
+
+  .brand-method__motion {
+    height: auto;
+    min-height: 0;
+  }
+
+  .brand-method__sticky {
+    position: relative;
+    height: auto;
+    overflow: visible;
+  }
+
+  .brand-method__canvas-shell,
+  .brand-method__canvas,
+  .brand-method__detail-shell,
+  .brand-method__detail-canvas {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: auto;
+    transform: none;
+  }
+
+  .brand-method__detail-shell { margin-top: 0; overflow: visible; }
+
+  .brand-method__scene,
+  .brand-method__intro-cover,
+  .brand-method__reveal-mask {
+    display: none;
+  }
+
+  .brand-method__large-phone {
+    position: relative;
+    top: auto;
+    left: 50%;
+    width: min(112vw, 620px);
+    height: auto;
+    aspect-ratio: 2552 / 1236.13;
+    margin-top: 58px;
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+
+  .brand-method__large-phone-image {
+    top: 4.435%;
+    left: 1.953%;
+    width: 96.093%;
+    height: 91.129%;
+  }
+
+  .brand-method__large-phone-frame {
+    width: 100%;
+    height: 100%;
+  }
+
+  .brand-method__intro {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: auto;
+    font-size: clamp(36px, 10.8vw, 54px);
+    line-height: 1.22;
+    opacity: 1;
+  }
+
+  .brand-method__intro > span {
+    white-space: normal;
+  }
+
+  .brand-method__intro strong {
+    opacity: 1;
+    color: transparent;
+    background: linear-gradient(180deg, #fec28a, #ca4b09);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .brand-method__final-phone-image,
+  .brand-method__final-phone-frame {
+    display: none;
+  }
+
+  .brand-method__detail-copy,
+  .brand-method__principles,
+  .brand-method__principle,
+  .brand-method__cta {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    opacity: 1;
+    transform: none;
+  }
+
+  .brand-method__detail-copy {
+    margin-top: 82px;
+  }
+
+  .brand-method__eyebrow {
+    font-size: 20px;
+  }
+
+  .brand-method__title {
+    height: auto;
+    margin-top: 20px;
+    font-size: clamp(40px, 12vw, 58px);
+    line-height: 1.12;
+    white-space: normal;
+  }
+
+  .brand-method__description {
+    width: 100%;
+    margin-top: 24px;
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  .brand-method__description br {
+    display: none;
+  }
+
+  .brand-method__principles {
+    display: grid;
+    gap: 58px;
+    margin-top: 74px;
+  }
+
+  .brand-method__principle-icon--left,
+  .brand-method__principle-icon--center,
+  .brand-method__principle-icon--right {
+    left: auto;
+    margin-right: auto;
+    margin-bottom: 26px;
+    margin-left: auto;
+  }
+
+  .brand-method__principle p {
+    width: min(100%, 320px);
+    margin: 0 auto;
+    font-size: 17px;
+    line-height: 1.8;
+  }
+
+  .brand-method__cta {
+    width: min(100%, 344px);
+    margin: 74px auto 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-method__canvas,
+  .brand-method__scene,
+  .brand-method__intro-cover,
+  .brand-method__mask-word,
+  .brand-method__mask-media,
+  .brand-method__large-phone,
+  .brand-method__detail-copy,
+  .brand-method__principles,
+  .brand-method__cta {
+    will-change: auto;
+  }
+}

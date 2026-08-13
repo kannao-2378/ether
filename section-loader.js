@@ -2,7 +2,7 @@ import {
   applySiteConfig,
   installConfigPreviewBridge,
   loadSiteConfig
-} from './config/runtime.js?v=7';
+} from './config/runtime.js?v=22';
 
 const sectionManifest = [
   '01-navigation',
@@ -10,14 +10,22 @@ const sectionManifest = [
   '03-ability',
   '04-cross-border-hero',
   '05-case-showcase',
-  '06-organization-result',
-  '07-data-result'
+  '06-organization-result-01',
+  '07-data-result',
+  '08-brand-result',
+  '09-brand-method',
+  '10-other-cases',
+  '11-management-tools',
+  '12-ai-workflow',
+  '13-render-cases',
+  '14-motion-cases',
+  '15-contact'
 ];
 
 const mountPoint = document.querySelector('#portfolio-sections');
 
 async function loadSection(name) {
-  const response = await fetch(`sections/${name}/section.html?v=6`);
+  const response = await fetch(`sections/${name}/section.html?v=41`);
 
   if (!response.ok) {
     throw new Error(`${name} 加载失败：${response.status}`);
@@ -37,7 +45,7 @@ async function startPortfolio() {
     installConfigPreviewBridge(mountPoint);
 
     for (const name of sectionManifest) {
-      const module = await import(`./sections/${name}/script.js?v=7`);
+      const module = await import(`./sections/${name}/script.js?v=81`);
       const sectionRoot = mountPoint.querySelector(`[data-section="${name}"]`);
 
       if (typeof module.init === 'function' && sectionRoot) {

@@ -36,7 +36,7 @@
   width: fit-content;
   margin: 0 auto;
   color: transparent;
-  font: 700 64px/1.33 "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font: 630 64px/1.33 "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
   letter-spacing: -.02em;
   text-align: center;
   background:
@@ -53,10 +53,10 @@
 }
 
 .case-showcase__description {
-  width: min(100%, 520px);
+  width: min(100%, 663px);
   margin: 57px auto 0;
   color: #85858a;
-  font: 700 15px/1.22 "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font: 630 15px/20px "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
   text-align: center;
 }
 
@@ -104,6 +104,14 @@
   display: block;
   border-radius: 30px;
   background: #1d1d1f;
+  overflow: hidden;
+}
+
+.case-showcase__comparison span img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .case-showcase__scroll-pane {
@@ -149,10 +157,10 @@
 
 .case-showcase__phone {
   position: relative;
-  flex: 0 1 285px;
-  width: 285px;
+  flex: 0 1 278px;
+  width: 278px;
   height: 100%;
-  aspect-ratio: 285 / 586;
+  aspect-ratio: 278 / 579;
 }
 
 .case-showcase__phone-screen {
@@ -191,6 +199,110 @@
   user-select: none;
 }
 
+/* APP 轮播模式 — 自动切换整屏截图，模拟手指点击 */
+.case-showcase__phone-screen--carousel {
+  overflow: hidden;
+  background: #000;
+}
+
+.case-showcase__carousel-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.case-showcase__carousel-track img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  opacity: 0;
+  transform: scale(1.12);
+  filter: blur(8px);
+  transition:
+    opacity 560ms cubic-bezier(.32, .72, 0, 1),
+    transform 560ms cubic-bezier(.32, .72, 0, 1),
+    filter 560ms ease;
+  will-change: opacity, transform, filter;
+}
+
+.case-showcase__carousel-track img.is-current {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+/* 手指点击涟漪 — 圆点 + 扩散环 */
+.case-showcase__tap {
+  position: absolute;
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  /* 默认隐藏在屏幕外，由 JS 设置位置 */
+  left: 50%;
+  top: 50%;
+}
+
+.case-showcase__tap.is-tapping {
+  animation: case-showcase-tap 720ms ease-out forwards;
+}
+
+.case-showcase__tap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .55);
+  box-shadow: 0 0 12px rgba(255, 255, 255, .35);
+}
+
+.case-showcase__tap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, .6);
+  opacity: 0;
+}
+
+@keyframes case-showcase-tap {
+  0% {
+    opacity: 0;
+    transform: scale(.4);
+  }
+  18% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+
+@keyframes case-showcase-tap-ring {
+  0% {
+    opacity: .8;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.8);
+  }
+}
+
+.case-showcase__tap.is-tapping::after {
+  animation: case-showcase-tap-ring 720ms ease-out forwards;
+}
+
 .case-showcase__phone-video {
   display: block;
   width: 100%;
@@ -213,7 +325,7 @@
   border-radius: 18px;
   background: rgba(0, 0, 0, .72);
   color: #fff;
-  font: 600 13px/36px "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font: 630 13px/36px "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
   white-space: nowrap;
   opacity: 0;
   transform: translate(-50%, 6px);
@@ -304,7 +416,7 @@
   outline: none;
   background: transparent;
   color: rgba(255, 255, 255, .8);
-  font: 400 18px/43px "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font: 330 18px/43px "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
   text-align: center;
   white-space: nowrap;
   cursor: pointer;
@@ -326,7 +438,7 @@
   margin-right: auto;
   margin-left: auto;
   color: #b5b5b5;
-  font: 600 16px/normal "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font: 630 16px/normal "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
   text-align: center;
 }
 

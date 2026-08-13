@@ -11,7 +11,7 @@ export function init(root) {
     if (!entries[0].isIntersecting) return;
     root.classList.add('is-visible');
     observer.disconnect();
-  }, { threshold: 0.2 });
+  }, { threshold: 0, rootMargin: '-10% 0px -35% 0px' });
 
   observer.observe(root);
 }
