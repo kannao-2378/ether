@@ -2,13 +2,13 @@ export function init() {
   const navItems = Array.from(document.querySelectorAll('.nav__item'));
   if (navItems.length === 0) return;
 
-  // 建立 navItem -> section 映射（按 nav 顺序）
+  // 建立 navItem -> 锚点映射（按 nav 顺序）
+  // 只存 hash，不缓存元素引用：懒加载会用真实模块替换占位符，
+  // 缓存的引用会指向已脱离文档的占位 div，导致进度计算失效
   const entries = [];
   navItems.forEach((item) => {
     const hash = item.getAttribute('href') || '';
-    if (!hash.startsWith('#')) return;
-    const target = document.querySelector(hash);
-    if (target) entries.push({ target, item });
+    if (hash.startsWith('#')) entries.push({ hash, item });
   });
   if (entries.length === 0) return;
 
@@ -17,11 +17,18 @@ export function init() {
   function update() {
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
 
-    // 计算每个 navItem 对应 section 的绝对顶部位置
-    const tops = entries.map(({ target }) => {
-      const rect = target.getBoundingClientRect();
-      return rect.top + (window.scrollY || document.documentElement.scrollTop);
-    });
+    // 实时解析锚点元素：占位符与真实模块共用同一 id，
+    // 懒加载替换后这里的查询会自动指向新元素
+    const active = entries
+      .map((entry) => {
+        const target = document.querySelector(entry.hash);
+        if (!target) return null;
+        const rect = target.getBoundingClientRect();
+        return { item: entry.item, top: rect.top + scrollTop };
+      })
+      .filter(Boolean);
+
+    if (active.length === 0) return;
 
     // 每个 navItem 的进度范围 = [自己 top, 下一个 navItem top]
     // 最后一个到文档底部
@@ -31,9 +38,9 @@ export function init() {
     let current = null;
     let currentRatio = -1;
 
-    entries.forEach((entry, index) => {
-      const start = tops[index];
-      const end = index + 1 < entries.length ? tops[index + 1] : docBottom;
+    active.forEach((entry, index) => {
+      const start = entry.top;
+      const end = index + 1 < active.length ? active[index + 1].top : docBottom;
 
       let ratio = 0;
       if (end > start) {
@@ -49,7 +56,7 @@ export function init() {
     });
 
     // 只给当前 navItem 设进度，其他清空
-    entries.forEach(({ item }) => {
+    active.forEach(({ item }) => {
       if (item === current) {
         item.style.setProperty('--nav-item-progress', currentRatio.toFixed(4));
         item.classList.add('is-current');
