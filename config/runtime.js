@@ -82,8 +82,7 @@ function applyTextFieldToElement(element, field, value) {
 function applyModuleConfig(mountPoint, schema, moduleConfig = {}) {
   const root = mountPoint.querySelector(`[data-section="${schema.id}"]`);
 
-  // 跳过尚未加载的占位 div，等真实模块注入后再应用配置
-  if (!root || root.classList.contains('is-placeholder')) {
+  if (!root) {
     return;
   }
 
