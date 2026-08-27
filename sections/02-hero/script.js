@@ -84,9 +84,22 @@ export function init(root) {
     revealVideo();
     playOnce();
   } else {
-    video.preload = 'auto';
-    video.load();
-    playOnce();
+    // poster 已覆盖首屏，延迟 300ms 再加载视频，让 HTML/CSS 先渲染
+    const startVideoLoad = () => {
+      const source = video.querySelector('source[data-src]');
+      if (source) {
+        source.src = source.dataset.src;
+        delete source.dataset.src;
+      }
+      video.preload = 'auto';
+      video.load();
+      playOnce();
+    };
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(startVideoLoad, { timeout: 500 });
+    } else {
+      setTimeout(startVideoLoad, 300);
+    }
   }
 }
 
