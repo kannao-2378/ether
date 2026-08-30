@@ -234,7 +234,6 @@ function updateCardInPlace(cardEl, card) {
       media.style.webkitUserDrag = 'none';
       if (isVideo) {
         media.muted = true;
-        media.loop = true;
         media.autoplay = true;
         media.playsInline = true;
       }
