@@ -103,10 +103,15 @@ def sync_home_initial_content(page: dict[str, dict[str, str]]) -> None:
 
 def atomic_write(path: Path, data: bytes) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+    # mkstemp creates files as 0600. That is correct for authentication data,
+    # but replacing a public HTML/JSON/media file with that mode prevents the
+    # Nginx www-data user from reading it and turns the page into a 403.
+    target_mode = 0o600 if AUTH_FILE.parent in path.parents else 0o644
     handle, temp_name = tempfile.mkstemp(prefix=path.name + ".", dir=path.parent)
     try:
         with os.fdopen(handle, "wb") as temp_file:
             temp_file.write(data)
+        os.chmod(temp_name, target_mode)
         os.replace(temp_name, path)
     finally:
         if os.path.exists(temp_name):
