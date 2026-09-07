@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>作品集统一编辑后台</title>
+  <script src="/admin-login/auth-guard.js"></script>
+  <link rel="stylesheet" href="admin.css?v=20260906-1">
+</head>
+<body>
+  <header class="admin-bar">
+    <a class="admin-brand" href="../" target="_blank" rel="noopener">ETHER · 作品集后台</a>
+    <label>编辑页面
+      <select id="pageSelect" aria-label="选择要编辑的页面">
+        <option value="../index.html?portfolio-admin=1">新站 · 作品集主页</option>
+        <option value="../works/brand-cases/qreate/admin.html">品牌案例 · QREATE（高级编辑器）</option>
+        <option value="../works/brand-cases/yinweijia/index.html?portfolio-admin=1">品牌案例 · 因唯家</option>
+        <option value="../works/brand-cases/madashuai/index.html?portfolio-admin=1">品牌案例 · 马大帅</option>
+        <option value="../works/brand-cases/lingke-toys/index.html?portfolio-admin=1">品牌案例 · 伶可玩具</option>
+        <option value="../works/renders/index.html?portfolio-admin=1">素材案例 · 渲染</option>
+        <option value="../works/aigc/index.html?portfolio-admin=1">素材案例 · AIGC</option>
+        <option value="../works/motion/index.html?portfolio-admin=1">素材案例 · 动态</option>
+        <option value="../works/workflows/index.html?portfolio-admin=1">其它案例 · 流程与管理</option>
+        <option value="../works/workflows/baoxuan-onboarding/index.html?portfolio-admin=1">流程与管理 · 宝选培训手册</option>
+        <option value="../works/ecommerce/index.html?portfolio-admin=1">其它案例 · 电商</option>
+      </select>
+    </label>
+    <div class="admin-actions">
+      <button id="reloadButton" type="button">刷新预览</button>
+      <a id="openButton" href="../index.html?portfolio-admin=1" target="_blank" rel="noopener">新窗口打开</a>
+    </div>
+  </header>
+  <main class="admin-stage">
+    <iframe id="editorFrame" src="../index.html?portfolio-admin=1" title="作品集页面编辑区"></iframe>
+  </main>
+  <script src="admin.js?v=20260906-1"></script>
+</body>
+</html>

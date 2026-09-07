@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>看闹-探索世界的主入口 · 后台</title>
+  <script src="/admin-login/auth-guard.js"></script>
+  <link rel="stylesheet" href="admin.css?v=20260906-1">
+</head>
+<body>
+  <div class="admin" id="adminApp">
+    <header class="admin-header">
+      <strong>看闹-探索世界的主入口 · 后台</strong>
+      <div><a href="../" target="_blank" rel="noopener">打开前台</a><button id="saveButton" type="button">保存修改</button><button id="logoutButton" type="button">退出</button></div>
+    </header>
+    <main class="admin-layout">
+      <aside class="editor-panel">
+        <section>
+          <h2>页面信息</h2>
+          <label>网页名称<input data-field="siteTitle"></label>
+          <label>网页描述<textarea data-field="metaDescription"></textarea></label>
+          <label>导航身份<input data-field="navRole"></label>
+          <label>联系文字<input data-field="navContact"></label>
+        </section>
+        <section>
+          <h2>首屏文字</h2>
+          <label>眉题<input data-field="heroEyebrow"></label>
+          <label>主标题<textarea data-field="heroTitle"></textarea></label>
+          <div class="type-row"><label>主标题字号<input type="number" min="24" max="180" data-type="heroTitle.size"></label><label>字重<input type="number" min="100" max="900" step="100" data-type="heroTitle.weight"></label></div>
+          <label>副标题<textarea data-field="heroSubtitle"></textarea></label>
+          <div class="type-row"><label>副标题字号<input type="number" min="10" max="64" data-type="heroSubtitle.size"></label><label>字重<input type="number" min="100" max="900" step="100" data-type="heroSubtitle.weight"></label></div>
+          <label>入口区标题<input data-field="directoryTitle"></label>
+          <label>入口区说明<input data-field="directorySubtitle"></label>
+        </section>
+        <section>
+          <div class="section-heading"><h2>入口模块</h2><button id="addModuleButton" type="button">＋ 新增</button></div>
+          <div class="module-list" id="moduleList"></div>
+        </section>
+        <output class="save-status" id="saveStatus" aria-live="polite"></output>
+      </aside>
+      <section class="preview"><iframe id="previewFrame" src="../" title="Hub首页预览"></iframe></section>
+    </main>
+  </div>
+  <script src="admin.js?v=20260906-2"></script>
+</body>
+</html>

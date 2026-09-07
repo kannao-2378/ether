@@ -1,0 +1,107 @@
+{
+  "siteTitle": "看闹-探索世界的主入口",
+  "metaDescription": "看闹探索世界的主入口。",
+  "navRole": "主入口",
+  "navContact": "登录后台",
+  "heroEyebrow": "KAN NAO · PERSONAL HUB",
+  "heroTitle": "看闹-探索世界的主入口",
+  "heroSubtitle": "从这里进入我的作品、资讯、写作与更多数字空间。",
+  "directoryTitle": "探索",
+  "directorySubtitle": "选择一个入口",
+  "typography": {
+    "heroEyebrow": {
+      "size": 12,
+      "weight": 600
+    },
+    "heroTitle": {
+      "size": 88,
+      "weight": 600
+    },
+    "heroSubtitle": {
+      "size": 21,
+      "weight": 400
+    },
+    "directoryTitle": {
+      "size": 24,
+      "weight": 600
+    },
+    "directorySubtitle": {
+      "size": 14,
+      "weight": 400
+    }
+  },
+  "modules": [
+    {
+      "id": "portfolio",
+      "title": "作品集",
+      "subtitle": "Portfolio",
+      "href": "/portfolio/",
+      "enabled": true,
+      "kind": "portfolio-poster"
+    },
+    {
+      "id": "news",
+      "title": "新闻资讯",
+      "subtitle": "News & Insights",
+      "href": "",
+      "enabled": true,
+      "kind": "number"
+    },
+    {
+      "id": "stocks",
+      "title": "股票行情",
+      "subtitle": "Market Watch",
+      "href": "",
+      "enabled": true,
+      "kind": "number"
+    },
+    {
+      "id": "blog",
+      "title": "Blog",
+      "subtitle": "Coming soon",
+      "href": "",
+      "enabled": true,
+      "kind": "number"
+    },
+    {
+      "id": "writing",
+      "title": "写作",
+      "subtitle": "Coming soon",
+      "href": "",
+      "enabled": true,
+      "kind": "number"
+    },
+    {
+      "id": "apps",
+      "title": "App",
+      "subtitle": "Coming soon",
+      "href": "",
+      "enabled": true,
+      "kind": "number"
+    },
+    {
+      "id": "community",
+      "title": "社区",
+      "subtitle": "Coming soon",
+      "href": "",
+      "enabled": true,
+      "kind": "number"
+    },
+    {
+      "id": "module-1788706929223",
+      "title": "管理学",
+      "subtitle": "New section",
+      "href": "",
+      "enabled": true,
+      "kind": "number"
+    },
+    {
+      "id": "module-1788707231628",
+      "title": "品牌方法论",
+      "subtitle": "New section",
+      "href": "",
+      "enabled": true,
+      "kind": "number"
+    }
+  ]
+}
