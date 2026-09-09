@@ -8,6 +8,7 @@
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="/portfolio/shared.css?v=20260906-9">
 <link rel="stylesheet" href="refinements.css?v=20260907-1">
+<link rel="preload" as="image" href="/portfolio/uploads/home--poster.jpg?v=1788700365748" fetchpriority="high">
 <style>html.portfolio-content-pending body{visibility:hidden}</style>
 <script>document.documentElement.classList.add("portfolio-content-pending");setTimeout(function(){document.documentElement.classList.remove("portfolio-content-pending")},3000)</script>
 </head>
@@ -15,15 +16,15 @@
 <header class="portfolio-global-nav" aria-label="作品集导航">
   <a class="portfolio-global-nav__brand" href="/portfolio/" aria-label="返回作品集主页"><img src="/portfolio/works/brand-cases/qreate/assets/svg/ms005ahp-06qi2rz.svg" alt="ETHER"></a>
   <nav aria-label="页面章节">
-    <a href="#poster" hidden>海报</a>
-    <a href="#about">介绍</a>
+    <a href="#poster">海报</a>
+    <a href="#about" hidden>介绍</a>
     <a href="#works">作品</a>
     <a href="#contact">联系</a>
   </nav>
 </header>
 
 <main>
-  <section class="pv2-poster" id="poster" aria-labelledby="poster-title" hidden style="display: none !important;">
+  <section class="pv2-poster" id="poster" aria-labelledby="poster-title">
     <div class="pv2-shell">
       <article class="pv2-poster-feature motion-group has-uploaded-image" data-image-slot="poster" data-image-size="1920 × 1080 px（16:9）" tabindex="0" style="background-image: url('/portfolio/uploads/home--poster.jpg?v=1788700365748')">
         <p class="pv2-poster-feature__meta motion-item">IMAGE PLACEHOLDER · 16:9</p>
@@ -36,7 +37,7 @@
     </div>
   </section>
 
-  <section class="pv2-section pv2-about" id="about" aria-labelledby="about-title">
+  <section class="pv2-section pv2-about" id="about" aria-labelledby="about-title" hidden style="display: none !important;">
     <div class="pv2-shell">
       <header class="pv2-section-heading motion-group">
         <p class="pv2-eyebrow motion-item">02 / ABOUT</p>
