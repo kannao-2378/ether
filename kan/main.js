@@ -39,7 +39,7 @@
         visual.className = "hub-entry__visual";
         visual.setAttribute("aria-hidden", "true");
         var image = document.createElement("img");
-        image.src = "/portfolio/uploads/home--poster.jpg";
+        image.src = "/portfolio/uploads/home--poster-v2.jpg";
         image.alt = "";
         visual.appendChild(image);
       } else {

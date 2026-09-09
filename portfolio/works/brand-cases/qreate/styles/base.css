@@ -119,7 +119,7 @@ textarea {
 
 .section-retry:hover,
 .section-retry:focus-visible {
-  background: rgba(254, 147, 73, .14);
+  background: #fff;
   border-color: #fe9349;
   outline: none;
 }
