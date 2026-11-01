@@ -1,5 +1,5 @@
 import {AuthGate} from './AuthGate';
-import {useViewport,isMobileLayout} from './useViewport';
+import {useViewport} from './useViewport';
 import {requestId} from './requestId';
 import {LearningProfile} from './LearningProfile';
 import {Plan} from './Plan';
@@ -122,7 +122,6 @@ function App({onLogout}:{onLogout?:()=>void}){
   const token=`${q?.id}:${result?'result':hint?'hint':'learn'}`;
   if(text&&speech.auto&&speech.ready&&spokenQuestion.current!==token){spokenQuestion.current=token;speech.speak(text);}
  },[q?.id,q?.kind,page,!!result,!!hint,speech.auto,speech.ready]);
- useEffect(()=>{if(!isMobileLayout()&&page==='今日学习'&&q?.kind==='recall'&&!busy)document.querySelector<HTMLInputElement>('input[aria-label="英文搭配答案"]')?.focus({preventScroll:true});},[q?.question_id,page]);
  async function checkInput(value:string,force=false){
   latestCheckValue.current=value;
   if(checkLock.current||result||checked?.correct||composing.current)return;

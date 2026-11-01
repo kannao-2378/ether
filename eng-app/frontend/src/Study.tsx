@@ -2,17 +2,18 @@ import {KnowledgeContent} from './KnowledgeContent';
 import {MeaningLines} from './MeaningLines';
 import {RecentHistory} from './RecentHistory';
 import {useEffect,useRef,useState} from 'react';
-import {isMobileLayout} from './useViewport';
+import {isMobileLayout,hasDesktopInput} from './useViewport';
 
 export function Study(p:any){
  const input=useRef<HTMLInputElement>(null);
  const keyboardWasOpen=useRef(false),lastKeyboardTouch=useRef(0);
  const [inputFocused,setInputFocused]=useState(false);
  const [metadata,setMetadata]=useState<any>(null);
- useEffect(()=>{if(!isMobileLayout()&&p.q?.kind==='recall'&&!p.result&&!p.checked?.correct)input.current?.focus({preventScroll:true});setInputFocused(Boolean(input.current&&document.activeElement===input.current));},[p.q?.question_id,p.q?.kind]);
+
  const q=p.q;
  const revealed=q?.kind==='learn'||p.checked?.correct||p.hint||p.result;
  const item=p.current;
+ useEffect(()=>{if(hasDesktopInput()&&q?.kind==='recall'&&!revealed&&!p.busy)input.current?.focus({preventScroll:true});setInputFocused(Boolean(input.current&&document.activeElement===input.current));},[q?.question_id,q?.kind,!!revealed,p.busy]);
  const pronunciation=metadata&&metadata.id===q?.id?metadata.details:null;
  const english=q?.answer||p.checked?.answer||p.hint?.answer||p.result?.expected||item?.answer||'';
 

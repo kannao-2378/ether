@@ -1,6 +1,8 @@
 import {useEffect} from 'react';
 export const mobileLayout='(max-width:700px), (max-width:1000px) and (max-height:500px)';
 export function isMobileLayout(){return window.matchMedia(mobileLayout).matches;}
+// Layout width does not indicate whether typing uses a hardware keyboard.
+export function hasDesktopInput(){return window.matchMedia('(any-hover: hover) and (any-pointer: fine)').matches;}
 export function useViewport(){
  useEffect(()=>{
   const view=window.visualViewport,root=document.documentElement;
