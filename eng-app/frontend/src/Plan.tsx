@@ -1,3 +1,4 @@
+import {DailyOverview} from './DailyOverview';
 import {CourseUnit} from './CourseUnit';
 import {CourseSelection} from './CourseSelection';
 import {CurriculumOutline} from './CurriculumOutline';
@@ -8,7 +9,7 @@ export function Plan({start}:{start:()=>void}){
  const [data,setData]=useState<any>(null),[error,setError]=useState('');
  useEffect(()=>{const load=()=>learningFetch('/api/plan').then(r=>{if(!r.ok)throw Error('计划读取失败');return r.json();}).then(setData).catch(e=>setError(e.message));void load();window.addEventListener('settings-status',load);return()=>window.removeEventListener('settings-status',load);},[]);
  return <section className="panel"><DailyLimits/>{error&&<p role="alert">{error}</p>}{data&&<>
- <CourseSelection courses={data.curriculum||[]}/>
+ <DailyOverview planning/><CourseSelection courses={data.curriculum||[]}/>
  {data.packages?.map((pack:any)=><div className="course-pack-summary" key={pack.id}><strong>{pack.expression_count.toLocaleString()} 个表达</strong><span>{pack.sentence_count.toLocaleString()} 个双语例句 · {pack.word_count.toLocaleString()} 项词汇</span></div>)}
  <CurriculumOutline courses={data.curriculum||[]}/>
  {data.curriculum?.map((course:any)=><details className="curriculum" key={course.id} open={course.id==='foundation'}><summary><h3>{course.title}</h3><small>{course.units.length} / {course.total}</small></summary><p>{course.goal}</p>{course.units.map((u:any)=><CourseUnit key={u.id} unit={u}/>)}</details>)}

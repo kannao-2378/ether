@@ -356,3 +356,7 @@ html{scrollbar-gutter:stable}
 .memo-empty button.memo-rest{width:auto;padding:10px 20px;margin-top:12px;border:0;background:transparent;color:inherit;font-size:13px;opacity:.75}
 
 .study-family-label{font-size:11px;max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.8}@media(max-width:700px){.study-family-label{max-width:100px;font-size:10px}}
+
+.daily-overview{margin:16px 0 26px;min-width:0}.daily-title,.daily-entry,.daily-numbers{display:flex;align-items:center;justify-content:space-between;gap:12px}.daily-title h3{margin:8px 0}.daily-title input{font-size:13px;max-width:155px;padding:4px 6px}.daily-numbers{flex-wrap:wrap;justify-content:flex-start;font-size:13px;margin:10px 0;gap:12px}.daily-entry{padding:10px 0;border-bottom:1px solid var(--control-border,#dce2e9);font-size:13px}.daily-entry>div{min-width:0}.daily-entry strong{overflow-wrap:anywhere}.daily-entry small{display:block;opacity:.7;font-size:12px}.daily-entry>span:last-child{flex-shrink:0}.daily-list{margin:14px 0}.daily-list summary{font-size:14px;cursor:pointer}.daily-list p,.daily-result{font-size:13px}.daily-overview>.daily-entry{align-items:flex-start}
+
+.daily-entry>span:first-child{min-width:0;flex:1;overflow-wrap:anywhere;flex-shrink:1}

@@ -11,6 +11,7 @@ import lesson
 import transfer
 import combinations
 import context_engine
+import daily_activity
 import group_learning
 from learning_profile import familiarity,RULES
 import assessment
@@ -224,6 +225,17 @@ def learning_plan():
         admitted=group_learning.counts(c,now())
     with engine.connect() as c:curriculum=content.curriculum(c,include_items=False);packages=bulk_courses.summary(c)
     return dict(date=day,curriculum=curriculum,packages=packages,new_limit=s['daily-new-limit'],review_limit=s['daily-review-limit'],new_admitted=admitted.get('new',0),review_admitted=admitted.get('review',0),new_breakdown=d.get('new_breakdown',{}),cross_day_due=d['cross_day_due'],same_day_practice=d['same_day_practice'],today_count=d['today_count'],rules=[rule_profile(r) for r in RULES],weak=[dict(id=i['id'],answer=i['answer'],prompt=i['prompt'],familiarity=familiarity(i)[1]) for i in d['items'] if i['introduced'] and i['level']<3][:10])
+
+@app.get('/api/daily-activity')
+def daily_activity_report(day: str | None=None,planning: bool=False):
+    stamp=now();day=day or group_learning.day_of(stamp)
+    try:
+        parsed=datetime.strptime(day,'%Y-%m-%d').date()
+        if parsed.isoformat()!=day:raise ValueError()
+    except ValueError:raise HTTPException(400,'日期格式错误')
+    if day>group_learning.day_of(stamp):raise HTTPException(400,'不能查询未来记录')
+    settings=study_settings()
+    with engine.connect() as c:return daily_activity.build(c,stamp,day,settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course'],planning)
 
 @app.get('/api/profile')
 def learning_profile_summary():

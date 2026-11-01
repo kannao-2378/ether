@@ -1,3 +1,4 @@
+import {DailyOverview} from './DailyOverview';
 import {MemoryCurve} from './MemoryCurve';
 import {useEffect,useState} from 'react';
 import {learningFetch} from './testMode';
@@ -11,7 +12,7 @@ export function LearningProfile(){
  async function manage(action:string){if(busy)return;setBusy(true);setStatus('');try{const r=await learningFetch('/api/'+action,action==='backup'?{method:'POST'}:{});if(!r.ok)throw Error('操作失败，请重试。');const value=await r.json();if(action==='backup')setStatus('备份已保存：'+value.filename);else{const u=URL.createObjectURL(new Blob([JSON.stringify(value,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=u;a.download='english-learning.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);setStatus('学习数据已导出。');}}catch(e){setStatus((e as Error).message);}finally{setBusy(false);}}
  const s=data?.summary,max=data?Math.max(1,...data.trend.map((d:any)=>d.attempts)):1;
  return <section className="panel learning-profile"><div className="profile-title"><button onClick={()=>void load()}>刷新</button></div>{error&&<p role="alert">{error}</p>}{!data&&!error&&<p role="status">正在读取学习记录…</p>}{data&&<>
- <div className="profile-metrics">{[['累计学习天数',s.active_days,'完成过训练的自然日'],['连续学习',s.streak+' 天','允许今天尚未开始'],['已接触内容',s.touched+' 项','不等于已经掌握'],['累计完成训练',s.completed+' 次','同一题重复提交只计一次'],['独立通过率',percent(s.independent_rate),'无提示、无拼写失败且反馈认识'],['独立通过',s.independent+' 次','与最终写对分开统计']].map(([label,value,note])=><div key={label} title={String(note)}><small>{label}</small><strong>{value}</strong></div>)}</div>
+ <DailyOverview/><h3>累计学习</h3><div className="profile-metrics">{[['累计学习天数',s.active_days,'完成过训练的自然日'],['连续学习',s.streak+' 天','允许今天尚未开始'],['已接触内容',s.touched+' 项','不等于已经掌握'],['累计完成训练',s.completed+' 次','同一题重复提交只计一次'],['独立通过率',percent(s.independent_rate),'无提示、无拼写失败且反馈认识'],['独立通过',s.independent+' 次','与最终写对分开统计']].map(([label,value,note])=><div key={label} title={String(note)}><small>{label}</small><strong>{value}</strong></div>)}</div>
  {!s.completed&&<p className="profile-empty">暂无训练记录。</p>}
  <MemoryCurve data={data.memory_curve}/>
  <h3>掌握程度分布</h3><div className="profile-mastery">{data.mastery.map((m:any,i:number)=><div key={m.label}><i className={'mastery-color mastery-'+i}/><span>{m.label}</span><strong>{m.count}</strong></div>)}</div>
