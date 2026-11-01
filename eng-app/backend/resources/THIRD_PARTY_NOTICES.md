@@ -45,3 +45,7 @@ and topic assignments have not received item-by-item expert review.
 - spaCy `en_core_web_sm` is an offline build-time annotator, not an online teacher.
 - Source SHA-256 hashes and selection description are embedded in the compiled
   course manifest. Runtime installation requires no model API or network request.
+
+## Optional lookup reference
+
+`lookup-reference.sqlite3.gz` is a public, reproducible index of the ECDICT and Tatoeba snapshots described above. It is not user data or an automatically assigned course. ECDICT MIT text is included at `ecdict/LICENSE`; Tatoeba sentence/translation IDs are stored to support source attribution. Online supplemental examples retain their available author and license fields.

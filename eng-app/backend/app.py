@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+import json
 import random
 import re
 import uuid
@@ -11,6 +12,7 @@ import lesson
 import transfer
 import combinations
 import context_engine
+import word_lookup
 import focus_training
 import daily_activity
 import group_learning
@@ -136,6 +138,7 @@ def initialize(target,with_bulk=False):
                     c.execute(text('UPDATE review_queue SET due_at=:d WHERE knowledge_id=:k'),dict(k=old,d=due))
         content.install(c)
         if with_bulk:bulk_courses.install(c)
+        word_lookup.install(c)
         focus_training.install(c)
         group_learning.install(c)
 
@@ -274,6 +277,37 @@ def challenge(kid: str):
             c.execute(text('INSERT INTO questions VALUES(:q,:k,:t,0)'),dict(q=qid,k=kid,t=now().isoformat()))
         c.execute(text('UPDATE progress SET introduced=1 WHERE knowledge_id=:k'),dict(k=kid))
         return dict(kind='recall',question_id=qid,id=kid,prompt=item['prompt'],answer_length=len(normalize(item['answer'])),challenge=True)
+
+class LookupQuery(BaseModel):
+    word: str = Field(min_length=1,max_length=80)
+
+class LookupImport(BaseModel):
+    preview_id: str = Field(max_length=100)
+    selected: list[str] = Field(min_length=1,max_length=20)
+    train: bool = False
+
+@app.post('/api/word-lookup')
+def lookup_word(body: LookupQuery):
+    try:word=word_lookup.clean_word(body.word)
+    except ValueError as e:raise HTTPException(400,str(e))
+    stamp=now()
+    with engine.connect() as c:
+        row=c.execute(text('SELECT payload,created_at FROM lookup_previews WHERE word=:w'),dict(w=word)).mappings().first()
+        if row:
+            cached=json.loads(row['payload']);ttl=timedelta(minutes=5) if cached.get('warnings') else timedelta(hours=24)
+            if timedelta(0)<=stamp-datetime.fromisoformat(row['created_at'])<ttl:return dict(cached,cached=True)
+    payload=word_lookup.search(DATA if not testing.get() else DATA/'lookup-test-cache',word)
+    with engine.begin() as c:return word_lookup.save_preview(c,payload,stamp)
+
+@app.post('/api/word-lookup/import')
+def import_lookup(body: LookupImport):
+    with engine.begin() as c:
+        try:result=word_lookup.import_items(c,body.preview_id,body.selected,now())
+        except ValueError as e:raise HTTPException(400,str(e))
+        group_learning.install(c)
+        if body.train:result['focus']=focus_training.add(c,result['id'],now(),member_ids=result['imported_ids'])
+        result['items']=[dict(c.execute(text('SELECT k.*,p.*,COALESCE(l.stage,1) AS stage FROM knowledge k JOIN progress p ON p.knowledge_id=k.id LEFT JOIN course_links l ON l.knowledge_id=k.id WHERE k.id=:k'),dict(k=kid)).mappings().one()) for kid in result['imported_ids']]
+    return dict(saved=True,**result)
 
 @app.get('/api/focus/{kid}')
 def focus_info(kid: str):

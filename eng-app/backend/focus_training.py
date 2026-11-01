@@ -41,10 +41,22 @@ def candidates(c,kid):
  selected.sort(key=lambda r:(r['id']!=kid,{'word':0,'collocation':1,'phrase':2,'sentence':3}.get(r['entry_type'],4)))
  return dict(target=dict(target),items=selected,counts=counts)
 
-def add(c,kid,stamp):
+def add(c,kid,stamp,member_ids=None):
  existing=c.execute(text("SELECT id FROM focus_requests WHERE knowledge_id=:k AND status IN ('pending','active')"),dict(k=kid)).scalar()
- if existing:return dict(id=existing,saved=True,duplicate=True)
- info=candidates(c,kid);gid='focus-'+str(uuid.uuid4())
+ if existing:
+  if member_ids:
+   position=c.execute(text('SELECT COALESCE(MAX(position),0)+1 FROM group_members WHERE group_id=:g'),dict(g=existing)).scalar()
+   for i,mid in enumerate(member_ids):
+    kind=c.execute(text("SELECT COALESCE(json_extract(payload,'$.entry_type'),'word') FROM knowledge_details WHERE knowledge_id=:k"),dict(k=mid)).scalar()
+    c.execute(text('INSERT OR IGNORE INTO group_members VALUES(:g,:k,:r,:p)'),dict(g=existing,k=mid,r={'word':'word','collocation':'base','phrase':'phrase','sentence':'sentence'}.get(kind,'base'),p=position+i))
+  return dict(id=existing,saved=True,duplicate=True)
+ info=candidates(c,kid)
+ if member_ids:
+  info['items']=[]
+  for mid in member_ids:
+   row=c.execute(text("SELECT k.*,COALESCE(json_extract(d.payload,'$.entry_type'),'word') AS entry_type FROM knowledge k LEFT JOIN knowledge_details d ON d.knowledge_id=k.id WHERE k.id=:k"),dict(k=mid)).mappings().first()
+   if row:info['items'].append(dict(row))
+ gid='focus-'+str(uuid.uuid4())
  inserted=c.execute(text("INSERT OR IGNORE INTO focus_requests VALUES(:g,:k,:t,'pending',NULL)"),dict(g=gid,k=kid,t=stamp.isoformat()))
  if not inserted.rowcount:
   existing=c.execute(text("SELECT id FROM focus_requests WHERE knowledge_id=:k AND status IN ('pending','active')"),dict(k=kid)).scalar()

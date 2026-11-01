@@ -9,7 +9,7 @@ def package(target):
  if '/eng/assets/' not in (dist/'index.html').read_text(encoding='utf-8'):raise ValueError('Frontend must be built with --base=/eng/')
  paths=list((ROOT/'backend').glob('*.py'))
  paths=[p for p in paths if not p.name.startswith('test_')]
- paths+=[ROOT/'backend/requirements.txt',ROOT/'backend/requirements-production.txt',ROOT/'backend/resources/compiled_courses.json',ROOT/'backend/resources/THIRD_PARTY_NOTICES.md',ROOT/'scripts/create_auth_env.py']
+ paths+=[ROOT/'backend/requirements.txt',ROOT/'backend/requirements-production.txt',ROOT/'backend/resources/lookup-reference.sqlite3.gz',ROOT/'backend/resources/ecdict/LICENSE',ROOT/'backend/resources/compiled_courses.json',ROOT/'backend/resources/THIRD_PARTY_NOTICES.md',ROOT/'scripts/create_auth_env.py']
  paths+=list((ROOT/'deploy').glob('*'))
  paths+=[p for p in dist.rglob('*') if p.is_file()]
  target=Path(target);target.parent.mkdir(parents=True,exist_ok=True)

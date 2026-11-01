@@ -362,3 +362,5 @@ html{scrollbar-gutter:stable}
 .daily-entry>span:first-child{min-width:0;flex:1;overflow-wrap:anywhere;flex-shrink:1}
 
 .focus-training{padding:10px 0 16px;border-bottom:1px solid var(--control-border,#dce2e9)}.focus-training h4{margin:6px 0}.focus-training p,.focus-training small{font-size:12px}.focus-training .actions{flex-wrap:wrap}.focus-training button,.daily-overview .daily-entry button{font-size:12px;padding:6px 10px}
+
+.word-lookup{margin:12px 0;font-size:13px}.word-lookup>button,.word-lookup .actions button{font-size:12px;padding:6px 10px}.word-lookup h4{margin:12px 0}.lookup-option{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--control-border,#dce2e9)}.lookup-option input{width:18px;height:18px;flex-shrink:0}.lookup-option span{min-width:0;overflow-wrap:anywhere}.lookup-option small{display:block;font-size:12px;margin-top:4px}.lookup-note{font-size:12px;opacity:.75}.word-lookup .actions{flex-wrap:wrap}
