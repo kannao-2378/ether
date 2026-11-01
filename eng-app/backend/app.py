@@ -334,12 +334,13 @@ def save_settings(values: dict):
     return get_settings()
 
 @app.get('/api/dashboard')
-def dashboard():
+def dashboard(summary_only: bool = False):
     with engine.connect() as c:
-        items = [dict(r) for r in c.execute(text('SELECT k.*,p.*,COALESCE(l.stage,1) AS stage,l.parent_id,CASE WHEN l.parent_id IS NULL OR pp.level>=3 THEN 1 ELSE 0 END AS unlocked FROM knowledge k JOIN progress p ON k.id=p.knowledge_id LEFT JOIN course_links l ON l.knowledge_id=k.id LEFT JOIN progress pp ON pp.knowledge_id=l.parent_id')).mappings()]
-        answers = [dict(r) for r in c.execute(text('SELECT a.*,COALESCE((SELECT confidence FROM feedback_events f WHERE f.question_id=a.question_id ORDER BY f.rowid DESC LIMIT 1),a.confidence) AS effective_confidence,k.prompt,k.answer FROM answers a JOIN knowledge k ON k.id=a.knowledge_id ORDER BY a.created_at DESC LIMIT 100')).mappings()]
-        for answer in answers:
-            answer['confidence']=answer.pop('effective_confidence')
+        if not summary_only:
+            items = [dict(r) for r in c.execute(text('SELECT k.*,p.*,COALESCE(l.stage,1) AS stage,l.parent_id,CASE WHEN l.parent_id IS NULL OR pp.level>=3 THEN 1 ELSE 0 END AS unlocked FROM knowledge k JOIN progress p ON k.id=p.knowledge_id LEFT JOIN course_links l ON l.knowledge_id=k.id LEFT JOIN progress pp ON pp.knowledge_id=l.parent_id')).mappings()]
+            answers = [dict(r) for r in c.execute(text('SELECT a.*,COALESCE((SELECT confidence FROM feedback_events f WHERE f.question_id=a.question_id ORDER BY f.rowid DESC LIMIT 1),a.confidence) AS effective_confidence,k.prompt,k.answer FROM answers a JOIN knowledge k ON k.id=a.knowledge_id ORDER BY a.created_at DESC LIMIT 100')).mappings()]
+            for answer in answers:
+                answer['confidence']=answer.pop('effective_confidence')
         counts=c.execute(text("""SELECT
           SUM(CASE WHEN julianday(COALESCE(r.due_at,p.due_at))<=julianday(:t) AND COALESCE(r.due_at,p.due_at) IS NOT NULL THEN 1 ELSE 0 END) AS cross_day,
           SUM(CASE WHEN r.knowledge_id IS NOT NULL AND r.due_at IS NULL OR r.knowledge_id IS NULL AND p.due_at IS NULL THEN 1 ELSE 0 END) AS practice
@@ -348,7 +349,8 @@ def dashboard():
         today_count=c.execute(text('SELECT COUNT(*) FROM answers WHERE julianday(created_at)>=julianday(:t)'),dict(t=day_start)).scalar()
         admitted=dict(c.execute(text('SELECT kind,COUNT(*) FROM daily_tasks WHERE day=:day GROUP BY kind'),dict(day=now().astimezone(timezone(timedelta(hours=8))).date().isoformat())).all())
     today = now().date().isoformat()
-    return dict(items=items, history=answers, due=(counts['cross_day'] or 0)+(counts['practice'] or 0), cross_day_due=counts['cross_day'] or 0, same_day_practice=counts['practice'] or 0, today_count=today_count, today_new=admitted.get('new',0),today_review=admitted.get('review',0),scheduler_version=5)
+    summary = dict(due=(counts['cross_day'] or 0)+(counts['practice'] or 0), cross_day_due=counts['cross_day'] or 0, same_day_practice=counts['practice'] or 0, today_count=today_count, today_new=admitted.get('new',0),today_review=admitted.get('review',0),scheduler_version=5)
+    return summary if summary_only else dict(items=items, history=answers, **summary)
 
 @app.post('/api/next')
 def next_question():
