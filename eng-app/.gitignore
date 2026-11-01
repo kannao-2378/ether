@@ -1,0 +1,21 @@
+node_modules/
+dist/
+.venv/
+__pycache__/
+backend/data/
+*.pyc
+.env
+.tools/
+
+*.env
+*.pem
+
+# Private runtime state and generated artifacts
+*.db
+*.db-*
+*.sqlite*
+*.log
+*.key
+.env.*
+!.env.example
+*.zip

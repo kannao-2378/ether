@@ -1,0 +1,5 @@
+import {useState} from 'react';
+export function Reviews({data}:{data:any}){
+ const [tab,setTab]=useState('review');
+ return <section className="panel"><h2>复习与错题</h2><p>查看复习安排和需要纠正的内容，实际练习统一在今日学习进行。</p><div className="theme-options"><button aria-pressed={tab==='review'} onClick={()=>setTab('review')}>复习安排</button><button aria-pressed={tab==='errors'} onClick={()=>setTab('errors')}>错误记录</button></div>{tab==='review'?<>{data?.items.filter((i:any)=>i.introduced).map((i:any)=><div className="row" key={i.id}><div><strong>{i.answer}</strong><small>{i.prompt} · 练习 {i.attempts} 次 · 写对 {i.correct} 次</small></div><span>{i.due_at?new Date(i.due_at).toLocaleString():'当天按隔题数巩固'}</span></div>)}{data&&!data.items.some((i:any)=>i.introduced)&&<p>还没有已学习内容。</p>}</>:<>{data?.history.filter((a:any)=>!a.correct).map((a:any)=><div className="row" key={a.id}><div><strong>{a.prompt}</strong><small>你的答案：{a.raw_answer||'未填写'} · 正确表达：{a.answer}</small></div><span>{new Date(a.created_at).toLocaleString()}</span></div>)}{data&&!data.history.some((a:any)=>!a.correct)&&<p>暂无错误记录。</p>}</>}</section>;
+}

@@ -1,0 +1,583 @@
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+import random
+import re
+import uuid
+import os
+from contextvars import ContextVar
+from scheduler import rebuild, choose, select_next, update_coverage, install_memory, consolidation_count, CONSOLIDATION_LIMIT
+from courses import install
+import lesson
+import transfer
+import combinations
+import context_engine
+from learning_profile import familiarity,RULES
+import assessment
+import content
+import bulk_courses
+import oxford_audio
+import device_audio
+from private_auth import PrivateAuth
+import learning_stats as learning_profile_stats
+
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from pydantic import BaseModel, Field
+from sqlalchemy import create_engine, text
+
+DATA = Path(os.environ.get('PELS_DATA_DIR',str(Path(__file__).parent / 'data')))
+DATA.mkdir(parents=True,exist_ok=True)
+AUTH=PrivateAuth.from_env(DATA)
+real_engine=create_engine(f'sqlite:///{DATA / "learning.db"}')
+test_engine=create_engine(f'sqlite:///{DATA / "testing.db"}')
+testing=ContextVar('testing',default=False)
+class EngineRouter:
+    def __getattr__(self,name):return getattr(test_engine if testing.get() else real_engine,name)
+engine=EngineRouter()
+app = FastAPI(title='Personal English Learning System',docs_url=None if AUTH.enabled else '/docs',openapi_url=None if AUTH.enabled else '/openapi.json')
+app.add_middleware(CORSMiddleware, allow_origins=[AUTH.origin] if AUTH.enabled else ['http://localhost:5173', 'http://127.0.0.1:5173'], allow_credentials=AUTH.enabled,allow_methods=['*'], allow_headers=['*'])
+
+@app.get('/api/health')
+def health():return dict(status='ok')
+
+@app.get('/api/auth/status')
+def auth_status(request:Request):return AUTH.status(request)
+
+class LoginRequest(BaseModel):
+    password:str=Field(min_length=1,max_length=1024)
+
+@app.post('/api/auth/login')
+def auth_login(body:LoginRequest,request:Request):return AUTH.login(request,body.password)
+
+@app.post('/api/auth/logout')
+def auth_logout(request:Request):return AUTH.logout(request)
+
+@app.get('/api/pronunciation/oxford-us')
+def oxford_pronunciation(word: str):
+    try:path=oxford_audio.get_audio(word,DATA/'audio'/'oxford-us')
+    except ValueError as e:raise HTTPException(503,str(e))
+    return FileResponse(path,media_type='audio/mpeg',headers={'Cache-Control':'public,max-age=31536000'})
+
+@app.get('/api/pronunciation/device-us')
+def device_pronunciation(text_value: str):
+    if not text_value.strip() or len(text_value)>300:raise HTTPException(400,'发音内容长度无效')
+    # Do not expose an arbitrary public text-to-speech service.
+    with engine.connect() as c:
+        known=c.execute(text('SELECT 1 FROM knowledge WHERE answer=:value OR example=:value LIMIT 1'),dict(value=text_value)).first()
+    if not known:raise HTTPException(400,'只能播放课程中已有的英文内容')
+    try:path=device_audio.get_audio(text_value,DATA/'audio/device-us')
+    except ValueError as e:raise HTTPException(503,str(e))
+    return FileResponse(path,media_type='audio/wav',headers={'Cache-Control':'private,max-age=86400'})
+
+SEEDS = [
+ ('want-to', '想要做某事', 'want to', '后接动词原形', 'I want to drink water.'),
+ ('enjoy-doing', '喜欢做某事（享受这个过程）', 'enjoy doing', 'enjoy 后接 doing', 'I enjoy reading.'),
+ ('decide-to', '决定做某事', 'decide to', '后接动词原形', 'I decide to study.'),
+ ('like-doing', '喜欢做某事（用 doing 形式）', 'like doing', 'like 也可以接 to do；这一题练习 doing', 'I like reading.'),
+ ('listen-to', '听……', 'listen to', 'listen 后面接对象时使用 to', 'I listen to music.'),
+ ('look-at', '看……', 'look at', '表示把目光转向某个对象', 'I look at the picture.'),
+ ('wait-for', '等待……', 'wait for', '等待某人或某物时使用 for', 'I wait for the bus.'),
+ ('talk-to', '与……交谈（使用 to）', 'talk to', '这一题练习 talk to；talk with 也可以表达交谈', 'I talk to my friend.'),
+ ('ask-for', '请求得到……', 'ask for', '请求某物或帮助', 'I ask for help.'),
+]
+
+def now():
+    stamp=datetime.now(timezone.utc)
+    if testing.get():
+        with test_engine.connect() as c:
+            offset=c.execute(text('SELECT days FROM test_clock WHERE id=1')).scalar() or 0
+        stamp+=timedelta(days=offset)
+    return stamp
+
+def initialize(target,with_bulk=False):
+    with target.begin() as c:
+        c.execute(text('CREATE TABLE IF NOT EXISTS knowledge (id TEXT PRIMARY KEY, prompt TEXT, answer TEXT, explanation TEXT, example TEXT)'))
+        c.execute(text('CREATE TABLE IF NOT EXISTS progress (knowledge_id TEXT PRIMARY KEY, introduced INTEGER DEFAULT 0, attempts INTEGER DEFAULT 0, correct INTEGER DEFAULT 0, streak INTEGER DEFAULT 0, level INTEGER DEFAULT 0, interval_days REAL DEFAULT 0, due_at TEXT, last_at TEXT)'))
+        c.execute(text('CREATE TABLE IF NOT EXISTS questions (id TEXT PRIMARY KEY, knowledge_id TEXT, created_at TEXT, revealed INTEGER DEFAULT 0)'))
+        c.execute(text('CREATE TABLE IF NOT EXISTS answers (id TEXT PRIMARY KEY, question_id TEXT UNIQUE, knowledge_id TEXT, raw_answer TEXT, correct INTEGER, revealed INTEGER, confidence TEXT, created_at TEXT, due_at TEXT, feedback TEXT)'))
+        c.execute(text('CREATE TABLE IF NOT EXISTS spelling_checks (id TEXT PRIMARY KEY, question_id TEXT, raw_answer TEXT, correct INTEGER, created_at TEXT)'))
+        c.execute(text('CREATE TABLE IF NOT EXISTS app_settings (key TEXT PRIMARY KEY, value TEXT NOT NULL)'))
+        c.execute(text('CREATE TABLE IF NOT EXISTS feedback_events (id TEXT PRIMARY KEY, question_id TEXT, confidence TEXT, created_at TEXT)'))
+        c.execute(text('CREATE TABLE IF NOT EXISTS daily_coverage(day TEXT,knowledge_id TEXT,source_question_id TEXT,PRIMARY KEY(day,knowledge_id,source_question_id))'))
+        c.execute(text('CREATE TABLE IF NOT EXISTS daily_tasks (day TEXT,knowledge_id TEXT,kind TEXT,PRIMARY KEY(day,knowledge_id))'))
+        c.execute(text('CREATE TABLE IF NOT EXISTS review_queue (knowledge_id TEXT PRIMARY KEY, due_sequence INTEGER, due_at TEXT, gap INTEGER, version INTEGER)'))
+        c.execute(text('CREATE INDEX IF NOT EXISTS progress_due ON progress(introduced,due_at)'))
+        c.execute(text('CREATE INDEX IF NOT EXISTS queue_due ON review_queue(due_at,due_sequence)'))
+        c.execute(text('CREATE INDEX IF NOT EXISTS answers_time ON answers(created_at)'))
+        c.execute(text('CREATE INDEX IF NOT EXISTS answers_knowledge ON answers(knowledge_id)'))
+        c.execute(text('CREATE INDEX IF NOT EXISTS checks_question ON spelling_checks(question_id)'))
+        c.execute(text('CREATE INDEX IF NOT EXISTS feedback_question ON feedback_events(question_id)'))
+        for kid, prompt, answer, explanation, example in SEEDS:
+            c.execute(text('INSERT OR IGNORE INTO knowledge VALUES (:id,:p,:a,:e,:x)'), dict(id=kid,p=prompt,a=answer,e=explanation,x=example))
+            c.execute(text('INSERT OR IGNORE INTO progress (knowledge_id) VALUES (:id)'),dict(id=kid))
+        install(c,text)
+        lesson.install(c,text)
+        transfer.install(c,text)
+        combinations.install(c,text)
+        context_engine.install(c,text)
+        c.execute(text('CREATE TABLE IF NOT EXISTS rule_readings(rule_id TEXT PRIMARY KEY,read_at TEXT)'))
+        c.execute(text('CREATE TABLE IF NOT EXISTS test_skips(question_id TEXT PRIMARY KEY,created_at TEXT)'))
+        c.execute(text('CREATE TABLE IF NOT EXISTS daily_new_pacing(day TEXT PRIMARY KEY,last_sequence INTEGER NOT NULL)'))
+        install_memory(c)
+        assessment.install(c)
+        for old in c.execute(text('SELECT DISTINCT a.knowledge_id FROM answers a LEFT JOIN review_queue r ON r.knowledge_id=a.knowledge_id WHERE r.version IS NULL OR r.version<5')).scalars().all():
+            rebuild(c,old)
+            if not assessment.get(c,old)['stable']:
+                item=c.execute(text('SELECT interval_days,last_at FROM progress WHERE knowledge_id=:k'),dict(k=old)).mappings().one()
+                if item['interval_days']>7:
+                    due=(datetime.fromisoformat(item['last_at'])+timedelta(days=7)).isoformat()
+                    c.execute(text('UPDATE progress SET interval_days=7,due_at=:d WHERE knowledge_id=:k'),dict(k=old,d=due))
+                    c.execute(text('UPDATE review_queue SET due_at=:d WHERE knowledge_id=:k'),dict(k=old,d=due))
+        content.install(c)
+        if with_bulk:bulk_courses.install(c)
+
+initialize(real_engine,with_bulk=os.environ.get('PELS_SKIP_BULK')!='1')
+initialize(test_engine,with_bulk=not AUTH.enabled and os.environ.get('PELS_SKIP_BULK')!='1')
+with test_engine.begin() as c:
+    c.execute(text('CREATE TABLE IF NOT EXISTS test_clock(id INTEGER PRIMARY KEY,days INTEGER)'))
+    if 'stage' not in [row[1] for row in c.execute(text('PRAGMA table_info(test_clock)'))]:
+        c.execute(text('ALTER TABLE test_clock ADD COLUMN stage INTEGER DEFAULT 1'))
+    c.execute(text('INSERT OR IGNORE INTO test_clock(id,days,stage) VALUES(1,0,1)'))
+    c.execute(text('UPDATE progress SET level=0,introduced=0 WHERE attempts=0 AND level>=5 AND knowledge_id IN (SELECT material_id FROM transfer_materials)'))
+
+@app.middleware('http')
+async def database_mode(request,call_next):
+    blocked=AUTH.guard(request)
+    if blocked is not None:return blocked
+    token=testing.set(request.headers.get('X-Learning-Test')=='1')
+    try:
+        response=await call_next(request)
+        if AUTH.enabled:
+            response.headers['Cache-Control']='private, max-age=86400' if request.url.path.startswith('/api/pronunciation/') else 'no-store'
+        return response
+    finally:testing.reset(token)
+
+@app.get('/api/test/status')
+def test_status():
+    return dict(testing=testing.get(),time=now().isoformat())
+
+@app.post('/api/test/{action}')
+def test_action(action: str, data: dict):
+    if not testing.get():raise HTTPException(403,'仅允许在独立测试模式使用')
+    if action=='advance':
+        days=data.get('days')
+        if type(days) is not int or days not in (1,3,7):raise HTTPException(422,'请选择1、3或7天')
+        with test_engine.begin() as c:c.execute(text('UPDATE test_clock SET days=days+:d WHERE id=1'),dict(d=days))
+    elif action=='unlock':
+        with test_engine.begin() as c:
+            current=c.execute(text('SELECT stage FROM test_clock WHERE id=1')).scalar() or 1
+            target=data.get('stage',min(4,current+1))
+            if type(target) is not int or target not in (1,2,3,4):
+                raise HTTPException(422,'请选择搭配、短语、句子或中文情境阶段')
+            c.execute(text('UPDATE test_clock SET stage=:s WHERE id=1'),dict(s=target))
+            c.execute(text("UPDATE progress SET level=5 WHERE knowledge_id IN (SELECT p.knowledge_id FROM progress p LEFT JOIN course_links l ON l.knowledge_id=p.knowledge_id WHERE COALESCE(l.stage,1)<:s AND p.knowledge_id NOT IN (SELECT material_id FROM transfer_materials))"),dict(s=target))
+
+            # Stage test needs its own fresh daily slots; learning records stay intact.
+            c.execute(text('DELETE FROM daily_tasks'))
+    elif action in ('reset','prepare'):
+        with test_engine.begin() as c:
+            for table in ('answers','questions','spelling_checks','feedback_events','review_queue','memory_states','consolidation_slots','daily_new_pacing','daily_tasks','daily_coverage','lesson_attempts','context_round_items','context_rounds','composition_evidence','knowledge_assessments','test_skips'):
+                c.execute(text('DELETE FROM '+table))
+            c.execute(text('UPDATE test_clock SET days=0,stage=1 WHERE id=1'))
+            c.execute(text('UPDATE progress SET introduced=0,attempts=0,correct=0,streak=0,level=0,interval_days=0,due_at=NULL,last_at=NULL'))
+        if action=='prepare':
+            stamp=now()
+            with test_engine.begin() as c:
+                c.execute(text('UPDATE progress SET introduced=1,due_at=:d WHERE knowledge_id NOT IN (SELECT knowledge_id FROM course_links)'),dict(d=(stamp+timedelta(days=365)).isoformat()))
+                for n in range(3):
+                    qid=str(uuid.uuid4());at=(stamp-timedelta(seconds=120-n*30)).isoformat()
+                    c.execute(text('INSERT INTO questions VALUES(:q,:k,:t,0)'),dict(q=qid,k='want-to',t=at))
+                    c.execute(text("INSERT INTO answers VALUES(:id,:q,'want-to','want to',1,0,'clear',:t,NULL,'测试夹具：独立通过')"),dict(id=str(uuid.uuid4()),q=qid,t=at))
+                rebuild(c,'want-to')
+    else:raise HTTPException(404,'未知测试操作')
+    return test_status()
+
+def normalize(value):
+    return transfer.normalize(value)
+
+@app.get('/api/rules/{rule_id}')
+def rule_profile(rule_id: str):
+    if rule_id not in RULES:raise HTTPException(404,'该规则尚未制作')
+    with engine.connect() as c:
+        reading=c.execute(text('SELECT read_at FROM rule_readings WHERE rule_id=:r'),dict(r=rule_id)).scalar()
+        used=c.execute(text('''SELECT COUNT(*) FROM composition_evidence e JOIN answers a ON a.question_id=e.question_id WHERE e.structure_id=:r AND e.independent=1
+          AND COALESCE((SELECT f.confidence FROM feedback_events f WHERE f.question_id=e.question_id ORDER BY f.rowid DESC LIMIT 1),a.confidence)='clear' '''),dict(r=rule_id)).scalar()
+        level=c.execute(text('SELECT level FROM progress WHERE knowledge_id=:r'),dict(r=rule_id)).scalar() or 0
+    return dict(id=rule_id,**RULES[rule_id],read_at=reading,independent_uses=used,state='已在组合题中独立使用' if used else '搭配回忆通过，待验证规则运用' if level>=3 else '已看讲解，待练习验证' if reading else '尚未学习')
+
+@app.post('/api/rules/{rule_id}/read')
+def read_rule(rule_id: str):
+    if rule_id not in RULES:raise HTTPException(404,'规则不存在')
+    with engine.begin() as c:c.execute(text('INSERT INTO rule_readings VALUES(:r,:t) ON CONFLICT(rule_id) DO UPDATE SET read_at=excluded.read_at'),dict(r=rule_id,t=now().isoformat()))
+    return rule_profile(rule_id)
+
+@app.get('/api/plan')
+def learning_plan():
+    d=dashboard();s=get_settings();zone=timezone(timedelta(hours=8));day=now().astimezone(zone).date().isoformat()
+    with engine.connect() as c:
+        admitted=dict(c.execute(text('SELECT kind,COUNT(*) FROM daily_tasks dt WHERE day=:d GROUP BY kind'),dict(d=day)).all())
+    with engine.connect() as c:curriculum=content.curriculum(c,include_items=False);packages=bulk_courses.summary(c)
+    return dict(date=day,curriculum=curriculum,packages=packages,new_limit=s['daily-new-limit'],review_limit=s['daily-review-limit'],new_admitted=admitted.get('new',0),review_admitted=admitted.get('review',0),cross_day_due=d['cross_day_due'],same_day_practice=d['same_day_practice'],today_count=d['today_count'],rules=[rule_profile(r) for r in RULES],weak=[dict(id=i['id'],answer=i['answer'],prompt=i['prompt'],familiarity=familiarity(i)[1]) for i in d['items'] if i['introduced'] and i['level']<3][:10])
+
+@app.get('/api/profile')
+def learning_profile_summary():
+    with engine.connect() as c:return learning_profile_stats.build(c,now())
+
+@app.get('/api/curriculum/units/{unit_id}')
+def curriculum_unit(unit_id: str,page: int=1):
+    page=max(1,page)
+    with engine.connect() as c:
+        if not c.execute(text('SELECT 1 FROM course_units WHERE id=:u'),dict(u=unit_id)).first():raise HTTPException(404,'单元不存在')
+        total=c.execute(text('SELECT COUNT(*) FROM course_items WHERE unit_id=:u'),dict(u=unit_id)).scalar()
+        items=[dict(r) for r in c.execute(text('SELECT k.id,k.answer,k.prompt,p.introduced,p.level,COALESCE(l.stage,1) AS stage FROM course_items ci JOIN knowledge k ON k.id=ci.knowledge_id JOIN progress p ON p.knowledge_id=k.id LEFT JOIN course_links l ON l.knowledge_id=k.id WHERE ci.unit_id=:u ORDER BY ci.position,k.id LIMIT 100 OFFSET :o'),dict(u=unit_id,o=(page-1)*100)).mappings()]
+    return dict(items=items,total=total,page=page,page_size=100,total_pages=(total+99)//100)
+
+@app.get('/api/knowledge/{kid}')
+def knowledge_content(kid: str):
+    with engine.connect() as c:
+        row=c.execute(text('SELECT * FROM knowledge WHERE id=:k'),dict(k=kid)).mappings().first()
+        if not row:raise HTTPException(404,'知识内容不存在')
+        return dict(row,details=content.details(c,kid))
+
+@app.post('/api/challenge/{kid}')
+def challenge(kid: str):
+    with engine.begin() as c:
+        item=c.execute(text('SELECT k.*,l.parent_id FROM knowledge k LEFT JOIN course_links l ON l.knowledge_id=k.id WHERE k.id=:k'),dict(k=kid)).mappings().first()
+        if not item:raise HTTPException(404,'内容不存在')
+        if item['parent_id'] and not testing.get():
+            level=c.execute(text('SELECT level FROM progress WHERE knowledge_id=:k'),dict(k=item['parent_id'])).scalar() or 0
+            if level<3:raise HTTPException(409,'请先验证前置内容')
+        # Reuse an unanswered question so clicks do not create duplicate tasks.
+        qid=c.execute(text('SELECT q.id FROM questions q LEFT JOIN answers a ON a.question_id=q.id WHERE q.knowledge_id=:k AND a.id IS NULL ORDER BY q.rowid DESC LIMIT 1'),dict(k=kid)).scalar()
+        if not qid:
+            qid=str(uuid.uuid4())
+            c.execute(text('INSERT INTO questions VALUES(:q,:k,:t,0)'),dict(q=qid,k=kid,t=now().isoformat()))
+        c.execute(text('UPDATE progress SET introduced=1 WHERE knowledge_id=:k'),dict(k=kid))
+        return dict(kind='recall',question_id=qid,id=kid,prompt=item['prompt'],answer_length=len(normalize(item['answer'])),challenge=True)
+
+@app.get('/api/dictionary')
+def dictionary(q: str='',kind: str='all',status: str='all',page: int=1):
+    page=max(1,page)
+    with engine.connect() as c:
+        # Types are display metadata; mastery always comes from the shared progress row.
+        base="""FROM knowledge k JOIN progress p ON p.knowledge_id=k.id LEFT JOIN course_links l ON l.knowledge_id=k.id LEFT JOIN knowledge_details kd ON kd.knowledge_id=k.id
+          WHERE 1=1 AND (k.answer LIKE :q OR k.prompt LIKE :q)
+          AND (:kind='all' OR COALESCE(json_extract(kd.payload,'$.entry_type'),CASE WHEN COALESCE(l.stage,1)>=3 THEN 'sentence' WHEN k.id LIKE 'word-%' OR k.id='eat-a-meal' THEN 'word' WHEN l.stage=2 OR k.id IN (SELECT material_id FROM transfer_materials) THEN 'phrase' ELSE 'collocation' END)=:kind)
+          AND (:status='all' OR (:status='learned' AND p.introduced=1) OR (:status='unseen' AND p.introduced=0) OR (:status='recall' AND p.level>=3) OR (:status='delayed' AND p.level>=5))"""
+        params=dict(q='%'+q[:100]+'%',kind=kind,status=status,offset=(page-1)*30)
+        total=c.execute(text('SELECT COUNT(*) '+base),params).scalar()
+        total_all=c.execute(text('SELECT COUNT(*) FROM knowledge')).scalar()
+        rows=c.execute(text("SELECT k.*,p.*,COALESCE(json_extract(kd.payload,'$.entry_type'),CASE WHEN COALESCE(l.stage,1)>=3 THEN 'sentence' WHEN k.id LIKE 'word-%' OR k.id='eat-a-meal' THEN 'word' WHEN l.stage=2 OR k.id IN (SELECT material_id FROM transfer_materials) THEN 'phrase' ELSE 'collocation' END) AS entry_type "+base+' ORDER BY p.introduced DESC,k.rowid LIMIT 30 OFFSET :offset'),params).mappings().all()
+        items=[]
+        for row in rows:
+            item=dict(row);item['familiarity_level'],item['familiarity_label']=familiarity(item);item['assessment']=assessment.get(c,item['id']);items.append(item)
+        return dict(items=items,total=total,total_all=total_all,page=page,page_size=30,total_pages=(total+29)//30)
+
+@app.get('/api/lesson/want-01')
+def lesson_state():
+    with engine.connect() as c:return lesson.state(c,text)
+
+class LessonAnswer(BaseModel):
+    id: str
+    step: int = Field(ge=0,lt=len(lesson.STEPS))
+    answer: str = Field(max_length=500)
+    hinted: bool = False
+
+@app.post('/api/lesson/want-01/answer')
+def lesson_answer(body: LessonAnswer):
+    with engine.begin() as c:
+        prior=c.execute(text('SELECT correct FROM lesson_attempts WHERE id=:id'),dict(id=body.id)).first()
+        if prior:return dict(correct=bool(prior[0]),state=lesson.state(c,text))
+        if lesson.state(c,text)['step']!=body.step:raise HTTPException(409,'课程已更新，请重新打开课程')
+        question=lesson.STEPS[body.step]
+        correct=lesson.normalize(body.answer) in [lesson.normalize(a) for a in question['answers']]
+        c.execute(text("INSERT INTO lesson_attempts VALUES(:id,'want-01',:s,:a,:c,:h,:t)"),dict(id=body.id,s=body.step,a=body.answer,c=int(correct),h=int(body.hinted),t=now().isoformat()))
+        return dict(correct=correct,explanation=question['explanation'],state=lesson.state(c,text))
+
+@app.get('/api/settings')
+def get_settings():
+    import json
+    values={'interface-theme':'system','speech-auto':True,'speech-rate':0.85,'speech-voice':'','speech-source':'oxford','daily-review-limit':30,'daily-new-limit':10,'active-course':'all'}
+    values['keybindings']=dict(clear='1',hard='2',forgot='3',familiar='4',peek='Control',audio='Enter',submit='Enter',contextAudio='Alt+Enter')
+    with engine.connect() as c:
+        for key,value in c.execute(text('SELECT key,value FROM app_settings')):
+            values[key]=json.loads(value)
+    return values
+
+@app.post('/api/settings')
+def save_settings(values: dict):
+    import json
+    for key,value in values.items():
+        if key=='speech-source':
+            if value not in ('oxford','windows'):raise HTTPException(422,'朗读音源无效')
+            continue
+        if key=='active-course':
+            if not isinstance(value,str):raise HTTPException(422,'课程选择无效')
+            with engine.connect() as c:valid=value=='all' or bool(c.execute(text('SELECT 1 FROM learning_courses WHERE id=:c'),dict(c=value)).first())
+            if not valid:raise HTTPException(422,'课程不存在')
+            continue
+        if key=='keybindings':
+            required={'clear','hard','forgot','familiar','peek','audio','submit','contextAudio'}
+            allowed={'1','2','3','4','5','6','7','8','9','F2','F3','F4','F6','F7','F8','F9','Enter','Control','Alt+Enter'}
+            if not isinstance(value,dict) or set(value)!=required or any(v not in allowed for v in value.values()):raise HTTPException(422,'快捷键配置无效')
+            pairs=list(value.items())
+            for i,(a,v) in enumerate(pairs):
+                for b,w in pairs[i+1:]:
+                    if v==w and {a,b}!={'audio','submit'}:raise HTTPException(422,'快捷键重复')
+            continue
+        valid=(key in ('daily-review-limit','daily-new-limit') and type(value) is int and 0<=value<=300) or (key=='interface-theme' and value in ('system','light','dark')) or (key=='speech-auto' and isinstance(value,bool)) or (key=='speech-rate' and isinstance(value,(float,int)) and value in (0.7,0.85,1)) or (key=='speech-voice' and isinstance(value,str) and len(value)<500)
+        if not valid: raise HTTPException(422,'设置值无效')
+    with engine.begin() as c:
+        for key,value in values.items():
+            c.execute(text('INSERT INTO app_settings VALUES (:k,:v) ON CONFLICT(key) DO UPDATE SET value=excluded.value'),dict(k=key,v=json.dumps(value)))
+    return get_settings()
+
+@app.get('/api/dashboard')
+def dashboard():
+    with engine.connect() as c:
+        items = [dict(r) for r in c.execute(text('SELECT k.*,p.*,COALESCE(l.stage,1) AS stage,l.parent_id,CASE WHEN l.parent_id IS NULL OR pp.level>=3 THEN 1 ELSE 0 END AS unlocked FROM knowledge k JOIN progress p ON k.id=p.knowledge_id LEFT JOIN course_links l ON l.knowledge_id=k.id LEFT JOIN progress pp ON pp.knowledge_id=l.parent_id')).mappings()]
+        answers = [dict(r) for r in c.execute(text('SELECT a.*,COALESCE((SELECT confidence FROM feedback_events f WHERE f.question_id=a.question_id ORDER BY f.rowid DESC LIMIT 1),a.confidence) AS effective_confidence,k.prompt,k.answer FROM answers a JOIN knowledge k ON k.id=a.knowledge_id ORDER BY a.created_at DESC LIMIT 100')).mappings()]
+        for answer in answers:
+            answer['confidence']=answer.pop('effective_confidence')
+        counts=c.execute(text("""SELECT
+          SUM(CASE WHEN julianday(COALESCE(r.due_at,p.due_at))<=julianday(:t) AND COALESCE(r.due_at,p.due_at) IS NOT NULL THEN 1 ELSE 0 END) AS cross_day,
+          SUM(CASE WHEN r.knowledge_id IS NOT NULL AND r.due_at IS NULL OR r.knowledge_id IS NULL AND p.due_at IS NULL THEN 1 ELSE 0 END) AS practice
+          FROM progress p LEFT JOIN review_queue r ON r.knowledge_id=p.knowledge_id WHERE p.introduced=1 AND NOT EXISTS(SELECT 1 FROM daily_coverage cv WHERE cv.knowledge_id=p.knowledge_id AND cv.day=:day)"""),dict(t=now().isoformat(),day=now().astimezone(timezone(timedelta(hours=8))).date().isoformat())).mappings().one()
+        day_start=now().astimezone(timezone(timedelta(hours=8))).replace(hour=0,minute=0,second=0,microsecond=0).astimezone(timezone.utc).isoformat()
+        today_count=c.execute(text('SELECT COUNT(*) FROM answers WHERE julianday(created_at)>=julianday(:t)'),dict(t=day_start)).scalar()
+        admitted=dict(c.execute(text('SELECT kind,COUNT(*) FROM daily_tasks WHERE day=:day GROUP BY kind'),dict(day=now().astimezone(timezone(timedelta(hours=8))).date().isoformat())).all())
+    today = now().date().isoformat()
+    return dict(items=items, history=answers, due=(counts['cross_day'] or 0)+(counts['practice'] or 0), cross_day_due=counts['cross_day'] or 0, same_day_practice=counts['practice'] or 0, today_count=today_count, today_new=admitted.get('new',0),today_review=admitted.get('review',0),scheduler_version=5)
+
+@app.post('/api/next')
+def next_question():
+    with engine.begin() as c:
+        stage=c.execute(text('SELECT stage FROM test_clock WHERE id=1')).scalar() if testing.get() else None
+        stage_filter=(' AND COALESCE((SELECT stage FROM course_links l WHERE l.knowledge_id=k.id),1)=:stage' if stage else '')+" AND NOT EXISTS(SELECT 1 FROM daily_coverage cv WHERE cv.knowledge_id=k.id AND cv.day=:day)"
+        pending=c.execute(text('SELECT q.id AS question_id,k.* FROM questions q JOIN knowledge k ON q.knowledge_id=k.id LEFT JOIN answers a ON a.question_id=q.id WHERE a.id IS NULL'+stage_filter+' ORDER BY q.created_at LIMIT 1'),dict(stage=stage,day=now().astimezone(timezone(timedelta(hours=8))).date().isoformat())).mappings().first()
+        settings=get_settings()
+        def admit_pending(kid,kind):
+            day=now().astimezone(timezone(timedelta(hours=8))).date().isoformat()
+            if c.execute(text('SELECT 1 FROM daily_tasks WHERE day=:d AND knowledge_id=:k'),dict(d=day,k=kid)).first():return True
+            count=c.execute(text('SELECT COUNT(*) FROM daily_tasks WHERE day=:d AND kind=:v'),dict(d=day,v=kind)).scalar()
+            if count>=settings['daily-new-limit' if kind=='new' else 'daily-review-limit']:return False
+            c.execute(text('INSERT INTO daily_tasks VALUES(:d,:k,:v)'),dict(d=day,k=kid,v=kind))
+            return True
+        if pending and not testing.get():
+            full=consolidation_count(c,now())>=CONSOLIDATION_LIMIT
+            if full and not c.execute(text('SELECT 1 FROM consolidation_slots WHERE knowledge_id=:k'),dict(k=pending['id'])).first():pending=None
+        def material_question(material):
+            if not material['introduced']:
+                if not testing.get() and consolidation_count(c,now())>=CONSOLIDATION_LIMIT:
+                    return None
+                if not testing.get() and not admit_pending(material['id'],'new'):return None
+                return dict(kind='learn',**dict(material),supplement=True)
+            if not testing.get() and not admit_pending(material['id'],'review'):return None
+            existing=c.execute(text('SELECT q.id FROM questions q LEFT JOIN answers a ON a.question_id=q.id WHERE q.knowledge_id=:k AND a.id IS NULL LIMIT 1'),dict(k=material['id'])).scalar()
+            qid=existing or str(uuid.uuid4())
+            if not existing:c.execute(text('INSERT INTO questions(id,knowledge_id,created_at,revealed) VALUES(:q,:k,:t,0)'),dict(q=qid,k=material['id'],t=now().isoformat()))
+            return dict(kind='recall',question_id=qid,id=material['id'],prompt=material['prompt'],answer_length=len(normalize(material['answer'])),supplement=True)
+        if pending:
+            missing=None if testing.get() else transfer.missing_material(c,text,pending['id'])
+            if missing:
+                material=material_question(missing)
+                if material:return material
+            elif testing.get() or admit_pending(pending['id'],'review'):
+                return dict(kind='recall',question_id=pending['question_id'],id=pending['id'],prompt=pending['prompt'],answer_length=len(normalize(pending['answer'])))
+        if stage==4 and not bulk_courses.summary(c):
+            item,message=context_engine.pick(c,now(),test=True)
+            if item is None:return dict(kind='done',message=message,context_round_complete=True)
+            kind='recall'
+        else:
+            kind,item=select_next(c,now(),settings['daily-review-limit'],settings['daily-new-limit'],test_stage=stage,active_course=settings['active-course'])
+            if item and item['id'].startswith('compose-'):
+                candidate,message=context_engine.pick(c,now(),new_limit=settings['daily-new-limit'],review_limit=settings['daily-review-limit'])
+                if candidate:item=candidate;kind='recall'
+                else:
+                    # A context round ending must not hide the rest of today's work.
+                    kind,item=select_next(c,now(),settings['daily-review-limit'],settings['daily-new-limit'],test_stage=stage,active_course=settings['active-course'],exclude_context=True)
+        if item and item['id'].startswith('compose-'):c.execute(text('UPDATE progress SET introduced=1 WHERE knowledge_id=:k'),dict(k=item['id']))
+        if kind=='learn':
+            item_stage=c.execute(text('SELECT stage FROM course_links WHERE knowledge_id=:k'),dict(k=item['id'])).scalar()
+            if item_stage!=4:return dict(kind=kind,**item)
+            c.execute(text('UPDATE progress SET introduced=1 WHERE knowledge_id=:k'),dict(k=item['id']))
+        if kind=='done':return dict(kind='done',message='今日安排已完成或已达每日组数上限，剩余任务会保留。')
+        qid = str(uuid.uuid4())
+        c.execute(text('INSERT INTO questions (id,knowledge_id,created_at) VALUES (:q,:k,:t)'),dict(q=qid,k=item['id'],t=now().isoformat()))
+        return dict(kind='recall',question_id=qid,id=item['id'],prompt=item['prompt'],answer_length=len(normalize(item['answer'])))
+
+@app.post('/api/introduce/{kid}')
+def introduce(kid: str):
+    with engine.begin() as c:
+        result = c.execute(text('UPDATE progress SET introduced=1,due_at=:t WHERE knowledge_id=:k AND introduced=0'),dict(k=kid,t=now().isoformat()))
+        if not result.rowcount:
+            raise HTTPException(409,'内容不存在或已经学习')
+    return dict(saved=True)
+
+@app.post('/api/reveal/{qid}')
+def reveal(qid: str):
+    with engine.begin() as c:
+        row=c.execute(text('SELECT k.answer,k.explanation FROM questions q JOIN knowledge k ON q.knowledge_id=k.id WHERE q.id=:q'),dict(q=qid)).mappings().first()
+        if not row:
+            raise HTTPException(404,'题目不存在')
+        c.execute(text('UPDATE questions SET revealed=1 WHERE id=:q'),dict(q=qid))
+        return dict(row)
+
+class Submission(BaseModel):
+    question_id: str
+    answer: str = Field(max_length=1000)
+    confidence: str = Field(pattern='^(clear|hard|forgot)$')
+
+@app.post('/api/test/skip-question/{qid}')
+def skip_test_question(qid: str):
+    if not testing.get():raise HTTPException(403,'仅测试模式允许跳过')
+    with engine.connect() as c:
+        row=c.execute(text('SELECT k.answer FROM questions q JOIN knowledge k ON k.id=q.knowledge_id WHERE q.id=:q'),dict(q=qid)).first()
+    if not row:raise HTTPException(404,'题目不存在')
+    result=submit(Submission(question_id=qid,answer=row[0],confidence='clear'))
+    with test_engine.begin() as c:
+        c.execute(text('CREATE TABLE IF NOT EXISTS test_skips(question_id TEXT PRIMARY KEY,created_at TEXT)'))
+        c.execute(text('INSERT OR IGNORE INTO test_skips VALUES(:q,:t)'),dict(q=qid,t=now().isoformat()))
+        c.execute(text('UPDATE composition_evidence SET independent=0 WHERE question_id=:q'),dict(q=qid))
+        c.execute(text('UPDATE progress SET level=5 WHERE knowledge_id=(SELECT knowledge_id FROM questions WHERE id=:q)'),dict(q=qid))
+        kid=c.execute(text('SELECT knowledge_id FROM questions WHERE id=:q'),dict(q=qid)).scalar()
+        rebuild(c,kid)
+        c.execute(text('UPDATE progress SET level=5 WHERE knowledge_id=:k'),dict(k=kid))
+        update_coverage(c,kid,now())
+        assessment.refresh(c,kid)
+    return dict(saved=True,test_skip=True)
+
+class SpellingCheck(BaseModel):
+    id: str
+    question_id: str
+    answer: str = Field(max_length=1000)
+
+class Feedback(BaseModel):
+    question_id: str
+    confidence: str = Field(pattern='^(clear|hard|forgot)$')
+
+@app.post('/api/feedback')
+def feedback(body: Feedback):
+    with engine.begin() as c:
+        if not c.execute(text('SELECT id FROM answers WHERE question_id=:q'),dict(q=body.question_id)).first():
+            raise HTTPException(404,'没有可修改的已完成答题记录')
+        c.execute(text('INSERT INTO feedback_events VALUES (:id,:q,:v,:t)'),dict(id=str(uuid.uuid4()),q=body.question_id,v=body.confidence,t=now().isoformat()))
+        kid=c.execute(text('SELECT knowledge_id FROM questions WHERE id=:q'),dict(q=body.question_id)).scalar()
+        rebuild(c,kid)
+        update_coverage(c,kid,now())
+        c.execute(text('''UPDATE composition_evidence SET independent=(SELECT CASE WHEN a.correct=1 AND a.revealed=0
+          AND :confidence='clear' AND NOT EXISTS(SELECT 1 FROM spelling_checks sc WHERE sc.question_id=a.question_id AND sc.correct=0 AND julianday(sc.created_at)<=julianday(a.created_at))
+          AND NOT EXISTS(SELECT 1 FROM test_skips ts WHERE ts.question_id=a.question_id) THEN 1 ELSE 0 END
+          FROM answers a WHERE a.question_id=:q) WHERE question_id=:q'''),dict(q=body.question_id,confidence=body.confidence))
+        assessment.refresh(c,kid)
+        apply_retention_limit(c,kid)
+    return dict(saved=True)
+
+@app.post('/api/check')
+def check_spelling(body: SpellingCheck):
+    with engine.begin() as c:
+        row=c.execute(text('SELECT k.*,COALESCE(l.stage,1) AS stage FROM questions q JOIN knowledge k ON k.id=q.knowledge_id LEFT JOIN course_links l ON l.knowledge_id=k.id WHERE q.id=:q'),dict(q=body.question_id)).mappings().first()
+        if not row:
+            raise HTTPException(404,'题目不存在')
+        assessment=transfer.grade(row['id'],body.answer,row['answer'],(content.details(c,row['id']) or {}).get('accepted_answers'))
+        correct=assessment['correct']
+        c.execute(text('INSERT OR IGNORE INTO spelling_checks VALUES (:id,:q,:a,:c,:t)'),dict(id=body.id,q=body.question_id,a=body.answer,c=int(correct),t=now().isoformat()))
+        return dict(correct=correct,analysis=assessment['analysis'],notices=assessment['notices'],**(dict(answer=row['answer'],explanation=row['explanation'],example=row['example']) if correct else {}))
+
+@app.post('/api/answers')
+def submit(body: Submission):
+    with engine.begin() as c:
+        existing=c.execute(text('SELECT * FROM answers WHERE question_id=:q'),dict(q=body.question_id)).mappings().first()
+        if existing:
+            return dict(existing)
+        row=c.execute(text('SELECT q.*,k.answer,p.streak,p.interval_days,p.last_at,p.level FROM questions q JOIN knowledge k ON k.id=q.knowledge_id JOIN progress p ON p.knowledge_id=k.id WHERE q.id=:q'),dict(q=body.question_id)).mappings().first()
+        if not row:
+            raise HTTPException(404,'题目不存在')
+        correct=transfer.grade(row['knowledge_id'],body.answer,row['answer'],(content.details(c,row['knowledge_id']) or {}).get('accepted_answers'))['correct']
+        if not correct:raise HTTPException(422,'请先完成正确拼写，再提交记忆反馈')
+        due=now()
+        feedback='拼写结果与记忆反馈已保存。'
+        result=dict(id=str(uuid.uuid4()),question_id=body.question_id,knowledge_id=row['knowledge_id'],raw_answer=body.answer,correct=int(correct),revealed=row['revealed'],confidence=body.confidence,created_at=now().isoformat(),due_at=due.isoformat(),feedback=feedback)
+        inserted=c.execute(text('INSERT OR IGNORE INTO answers VALUES (:id,:question_id,:knowledge_id,:raw_answer,:correct,:revealed,:confidence,:created_at,:due_at,:feedback)'),result)
+        if not inserted.rowcount:
+            return dict(c.execute(text('SELECT * FROM answers WHERE question_id=:q'),dict(q=body.question_id)).mappings().one())
+        rebuild(c,row['knowledge_id'],incremental=True)
+        combination=c.execute(text('SELECT structure_id,material_id FROM sentence_combinations WHERE knowledge_id=:k'),dict(k=row['knowledge_id'])).mappings().first()
+        if combination:
+            errors=c.execute(text('SELECT COUNT(*) FROM spelling_checks WHERE question_id=:q AND correct=0'),dict(q=body.question_id)).scalar()
+            c.execute(text('INSERT OR IGNORE INTO composition_evidence VALUES(:q,:s,:m,:i,:t)'),dict(q=body.question_id,s=combination['structure_id'],m=combination['material_id'],i=int(correct and not row['revealed'] and not errors and body.confidence=='clear'),t=now().isoformat()))
+        update_coverage(c,row['knowledge_id'],now())
+        assessment.refresh(c,row['knowledge_id'])
+        apply_retention_limit(c,row['knowledge_id'])
+        scheduled=c.execute(text('SELECT due_at,due_sequence,gap FROM review_queue WHERE knowledge_id=:k'),dict(k=row['knowledge_id'])).mappings().first()
+        result['due_at']=scheduled['due_at']
+        c.execute(text('UPDATE answers SET due_at=:d WHERE question_id=:q'),dict(d=scheduled['due_at'],q=body.question_id))
+
+        return dict(**result,expected=row['answer'])
+
+@app.get('/api/export')
+def export():
+    tables=('knowledge','knowledge_details','learning_courses','course_units','course_items','progress','questions','answers','spelling_checks','feedback_events','review_queue','memory_states','consolidation_slots','daily_new_pacing','daily_tasks','daily_coverage','course_links','transfer_materials','sentence_combinations','composition_evidence','knowledge_assessments','rule_readings','lesson_attempts','context_rounds','context_round_items','app_settings','test_skips')
+    with engine.begin() as c:
+        tables=tables+tuple(name for name in ('content_packages','package_members','knowledge_components') if c.execute(text("SELECT 1 FROM sqlite_master WHERE name=:n AND type='table'"),dict(n=name)).first())
+        data={table:[dict(r) for r in c.execute(text('SELECT * FROM '+table)).mappings()] for table in tables}
+    return dict(format_version=1,mode='test' if testing.get() else 'real',exported_at=now().isoformat(),tables=data)
+
+def apply_retention_limit(c,kid):
+    profile=assessment.get(c,kid)
+    interval=c.execute(text('SELECT interval_days FROM progress WHERE knowledge_id=:k'),dict(k=kid)).scalar() or 0
+    if interval>7 and not profile['stable']:
+        last=c.execute(text('SELECT last_at FROM progress WHERE knowledge_id=:k'),dict(k=kid)).scalar()
+        capped=(datetime.fromisoformat(last)+timedelta(days=7)).isoformat()
+        c.execute(text('UPDATE progress SET interval_days=7,due_at=:t WHERE knowledge_id=:k'),dict(k=kid,t=capped))
+        c.execute(text('UPDATE review_queue SET due_at=:t WHERE knowledge_id=:k'),dict(k=kid,t=capped))
+
+@app.post('/api/context/new-round')
+def new_context_round():
+    with engine.begin() as c:
+        pending=c.execute(text("SELECT 1 FROM questions q LEFT JOIN answers a ON a.question_id=q.id WHERE q.knowledge_id LIKE 'compose-%' AND a.id IS NULL LIMIT 1")).first()
+        if pending:raise HTTPException(409,'请先完成当前情境题')
+        c.execute(text('INSERT INTO context_rounds(created_at) VALUES(:t)'),dict(t=now().isoformat()))
+    return dict(saved=True)
+
+@app.get('/api/memory-history/{kid}')
+def memory_history(kid: str):
+    zone=timezone(timedelta(hours=8))
+    with engine.connect() as c:
+        summary=c.execute(text('SELECT MIN(created_at) AS first,MAX(created_at) AS last,COUNT(*) AS count FROM answers WHERE knowledge_id=:k'),dict(k=kid)).mappings().one()
+        rows=c.execute(text("SELECT created_at,confidence FROM (SELECT a.created_at,COALESCE((SELECT confidence FROM feedback_events f WHERE f.question_id=a.question_id ORDER BY f.rowid DESC LIMIT 1),a.confidence) AS confidence, ROW_NUMBER() OVER(PARTITION BY date(a.created_at,'+8 hours') ORDER BY a.created_at DESC,a.rowid DESC) AS daily_rank FROM answers a WHERE a.knowledge_id=:k) WHERE daily_rank=1 ORDER BY created_at DESC LIMIT 3"),dict(k=kid)).mappings().all()
+        queue=c.execute(text('SELECT due_at,due_sequence FROM review_queue WHERE knowledge_id=:k'),dict(k=kid)).mappings().first()
+        progress=c.execute(text('SELECT due_at FROM progress WHERE knowledge_id=:k'),dict(k=kid)).mappings().first()
+        seq=c.execute(text('SELECT COALESCE(MAX(rowid),0) FROM answers')).scalar()
+    first=datetime.fromisoformat(summary['first']).astimezone(zone).date() if summary['first'] else None
+    tags=[dict(day=(datetime.fromisoformat(r['created_at']).astimezone(zone).date()-first).days+1,confidence=r['confidence'],time=r['created_at']) for r in reversed(rows)]
+    due=queue['due_at'] if queue else progress['due_at'] if progress else None
+    schedule_note='';remaining_questions=None
+    if due:
+        days=max(0,(datetime.fromisoformat(due).astimezone(zone).date()-now().astimezone(zone).date()).days)
+        local_due=datetime.fromisoformat(due).astimezone(zone)
+        plan=('已到期：' if datetime.fromisoformat(due)<=now() else '下次复习：')+local_due.strftime('%Y-%m-%d %H:%M')
+    elif queue:
+        remaining_questions=max(0,queue['due_sequence']-seq-1)
+        plan=f'当天巩固：再隔 {remaining_questions} 题' if remaining_questions else '当天巩固：已可再次出题'
+        schedule_note='这一轮按题数安排，没有固定时刻；完成当天巩固后，再确定跨天复习日期。'
+    else:plan='尚未形成复习计划'
+    return dict(first=summary['first'],last=summary['last'],count=summary['count'],tags=tags,plan=plan,due_at=due,schedule_note=schedule_note,remaining_questions=remaining_questions)
+
+@app.get('/api/history/{kid}')
+def recent_history(kid: str):
+    with engine.connect() as c:
+        rows=c.execute(text('''SELECT a.question_id,a.created_at,a.correct,a.revealed,
+          COALESCE((SELECT f.confidence FROM feedback_events f WHERE f.question_id=a.question_id ORDER BY f.rowid DESC LIMIT 1),a.confidence) AS confidence,
+          (SELECT COUNT(*) FROM spelling_checks s WHERE s.question_id=a.question_id AND s.correct=0 AND julianday(s.created_at)<=julianday(a.created_at)) AS errors
+          FROM answers a WHERE a.knowledge_id=:k ORDER BY a.rowid DESC LIMIT 3'''),dict(k=kid)).mappings().all()
+    return [dict(row) for row in rows]
+
+@app.post('/api/backup')
+def backup():
+    import sqlite3
+    target=DATA / ('backup-'+now().strftime('%Y%m%d-%H%M%S-%f')+'.db')
+    with sqlite3.connect(DATA/('testing.db' if testing.get() else 'learning.db')) as source, sqlite3.connect(target) as dest:
+        source.backup(dest)
+    return dict(filename=target.name)

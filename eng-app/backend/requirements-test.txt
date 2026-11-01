@@ -1,0 +1,3 @@
+-r requirements-production.txt
+httpx2==2.16.0
+trustme==1.2.1
