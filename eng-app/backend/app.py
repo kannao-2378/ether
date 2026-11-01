@@ -119,6 +119,8 @@ def initialize(target,with_bulk=False):
         c.execute(text('CREATE TABLE IF NOT EXISTS rule_readings(rule_id TEXT PRIMARY KEY,read_at TEXT)'))
         c.execute(text('CREATE TABLE IF NOT EXISTS test_skips(question_id TEXT PRIMARY KEY,created_at TEXT)'))
         c.execute(text('CREATE TABLE IF NOT EXISTS daily_new_pacing(day TEXT PRIMARY KEY,last_sequence INTEGER NOT NULL)'))
+        c.execute(text('CREATE TABLE IF NOT EXISTS daily_extensions(id TEXT PRIMARY KEY,day TEXT NOT NULL,requested_amount INTEGER NOT NULL,extra INTEGER NOT NULL,created_at TEXT NOT NULL)'))
+        c.execute(text('CREATE INDEX IF NOT EXISTS extensions_day ON daily_extensions(day)'))
         install_memory(c)
         assessment.install(c)
         for old in c.execute(text('SELECT DISTINCT a.knowledge_id FROM answers a LEFT JOIN review_queue r ON r.knowledge_id=a.knowledge_id WHERE r.version IS NULL OR r.version<5')).scalars().all():
@@ -177,7 +179,7 @@ def test_action(action: str, data: dict):
             c.execute(text('DELETE FROM daily_tasks'))
     elif action in ('reset','prepare'):
         with test_engine.begin() as c:
-            for table in ('answers','questions','spelling_checks','feedback_events','review_queue','memory_states','consolidation_slots','daily_new_pacing','daily_tasks','daily_coverage','lesson_attempts','context_round_items','context_rounds','composition_evidence','knowledge_assessments','test_skips'):
+            for table in ('answers','questions','spelling_checks','feedback_events','review_queue','memory_states','consolidation_slots','daily_new_pacing','daily_tasks','daily_coverage','lesson_attempts','context_round_items','context_rounds','composition_evidence','knowledge_assessments','test_skips','daily_extensions'):
                 c.execute(text('DELETE FROM '+table))
             c.execute(text('UPDATE test_clock SET days=0,stage=1 WHERE id=1'))
             c.execute(text('UPDATE progress SET introduced=0,attempts=0,correct=0,streak=0,level=0,interval_days=0,due_at=NULL,last_at=NULL'))
@@ -214,7 +216,7 @@ def read_rule(rule_id: str):
 
 @app.get('/api/plan')
 def learning_plan():
-    d=dashboard();s=get_settings();zone=timezone(timedelta(hours=8));day=now().astimezone(zone).date().isoformat()
+    d=dashboard();s=study_settings();zone=timezone(timedelta(hours=8));day=now().astimezone(zone).date().isoformat()
     with engine.connect() as c:
         admitted=dict(c.execute(text('SELECT kind,COUNT(*) FROM daily_tasks dt WHERE day=:d GROUP BY kind'),dict(d=day)).all())
     with engine.connect() as c:curriculum=content.curriculum(c,include_items=False);packages=bulk_courses.summary(c)
@@ -305,6 +307,39 @@ def get_settings():
             values[key]=json.loads(value)
     return values
 
+def study_settings(connection=None):
+    values=get_settings()
+    day=now().astimezone(timezone(timedelta(hours=8))).date().isoformat()
+    def bonus(c):return c.execute(text('SELECT COALESCE(SUM(extra),0) FROM daily_extensions WHERE day=:d'),dict(d=day)).scalar()
+    if connection is not None:extra=bonus(connection)
+    else:
+        with engine.connect() as c:extra=bonus(c)
+    values['daily-new-base']=values['daily-new-limit']
+    values['daily-new-limit']+=extra
+    return values
+
+class ExtraLearning(BaseModel):
+    id: str = Field(min_length=8,max_length=128)
+    amount: int = Field(strict=True)
+
+@app.post('/api/daily-extra')
+def add_daily_learning(body: ExtraLearning):
+    if body.amount not in (10,20,50):raise HTTPException(422,'请选择10、20或50组')
+    stamp=now();day=stamp.astimezone(timezone(timedelta(hours=8))).date().isoformat()
+    with engine.begin() as c:
+        existing=c.execute(text('SELECT * FROM daily_extensions WHERE id=:i'),dict(i=body.id)).mappings().first()
+        settings=study_settings(c)
+        if existing:
+            if existing['day']!=day or existing['requested_amount']!=body.amount:raise HTTPException(409,'加学请求已过期或参数不同，请重新选择')
+        else:
+            if consolidation_count(c,stamp)>=CONSOLIDATION_LIMIT:raise HTTPException(409,'还有12项待巩固，请先完成巩固，再增加新内容')
+            admitted=c.execute(text("SELECT COUNT(*) FROM daily_tasks WHERE day=:d AND kind='new'"),dict(d=day)).scalar()
+            if admitted<settings['daily-new-limit']:raise HTTPException(409,'今日仍有新学额度，无需追加；请先检查课程前置条件')
+            extra=body.amount+max(0,admitted-settings['daily-new-limit'])
+            c.execute(text('INSERT OR IGNORE INTO daily_extensions VALUES(:i,:d,:a,:e,:t)'),dict(i=body.id,d=day,a=body.amount,e=extra,t=stamp.isoformat()))
+        limit=study_settings(c)['daily-new-limit']
+    return dict(amount=body.amount,date=day,new_limit=limit)
+
 @app.post('/api/settings')
 def save_settings(values: dict):
     import json
@@ -358,7 +393,7 @@ def next_question():
         stage=c.execute(text('SELECT stage FROM test_clock WHERE id=1')).scalar() if testing.get() else None
         stage_filter=(' AND COALESCE((SELECT stage FROM course_links l WHERE l.knowledge_id=k.id),1)=:stage' if stage else '')+" AND NOT EXISTS(SELECT 1 FROM daily_coverage cv WHERE cv.knowledge_id=k.id AND cv.day=:day)"
         pending=c.execute(text('SELECT q.id AS question_id,k.* FROM questions q JOIN knowledge k ON q.knowledge_id=k.id LEFT JOIN answers a ON a.question_id=q.id WHERE a.id IS NULL'+stage_filter+' ORDER BY q.created_at LIMIT 1'),dict(stage=stage,day=now().astimezone(timezone(timedelta(hours=8))).date().isoformat())).mappings().first()
-        settings=get_settings()
+        settings=study_settings(c)
         def admit_pending(kid,kind):
             day=now().astimezone(timezone(timedelta(hours=8))).date().isoformat()
             if c.execute(text('SELECT 1 FROM daily_tasks WHERE day=:d AND knowledge_id=:k'),dict(d=day,k=kid)).first():return True
@@ -520,7 +555,7 @@ def submit(body: Submission):
 
 @app.get('/api/export')
 def export():
-    tables=('knowledge','knowledge_details','learning_courses','course_units','course_items','progress','questions','answers','spelling_checks','feedback_events','review_queue','memory_states','consolidation_slots','daily_new_pacing','daily_tasks','daily_coverage','course_links','transfer_materials','sentence_combinations','composition_evidence','knowledge_assessments','rule_readings','lesson_attempts','context_rounds','context_round_items','app_settings','test_skips')
+    tables=('knowledge','knowledge_details','learning_courses','course_units','course_items','progress','questions','answers','spelling_checks','feedback_events','review_queue','memory_states','consolidation_slots','daily_new_pacing','daily_tasks','daily_coverage','course_links','transfer_materials','sentence_combinations','composition_evidence','knowledge_assessments','rule_readings','lesson_attempts','context_rounds','context_round_items','app_settings','test_skips','daily_extensions')
     with engine.begin() as c:
         tables=tables+tuple(name for name in ('content_packages','package_members','knowledge_components') if c.execute(text("SELECT 1 FROM sqlite_master WHERE name=:n AND type='table'"),dict(n=name)).first())
         data={table:[dict(r) for r in c.execute(text('SELECT * FROM '+table)).mappings()] for table in tables}
