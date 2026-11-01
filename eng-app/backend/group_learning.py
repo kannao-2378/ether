@@ -6,7 +6,7 @@ from datetime import datetime,timedelta,timezone
 import json,re
 from sqlalchemy import text
 ZONE=timezone(timedelta(hours=8));VERSION='families-v6'
-TABLES=('learning_groups','group_members','group_primary','group_requirements','group_questions','daily_group_tasks','group_progress','group_usage','group_active_slots','group_install','group_migrations')
+TABLES=('focus_requests','learning_groups','group_members','group_primary','group_requirements','group_questions','daily_group_tasks','group_progress','group_usage','group_active_slots','group_install','group_migrations')
 CORE={'want-to':['want'],'enjoy-doing':['enjoy'],'decide-to':['decide'],'like-doing':['like'],
       'listen-to':['listen','music'],'look-at':['look','picture'],'wait-for':['wait','bus'],
       'talk-to':['talk','friend'],'ask-for':['ask','help']}
@@ -183,6 +183,9 @@ def requirements_met(c,kid):
 
 def step(c,gid,stamp,history=None):
  """One active step per group; no stable gate for early transfer."""
+ if gid.startswith('focus-'):
+  import focus_training
+  return focus_training.step(c,gid,stamp)
  rows=members(c,gid);history=events(c,gid,day_of(stamp)) if history is None else history
  kind=c.execute(text('SELECT kind FROM daily_group_tasks WHERE day=:d AND group_id=:g'),dict(d=day_of(stamp),g=gid)).scalar()
  if kind is None:
@@ -247,10 +250,10 @@ def active_groups(c,stamp):
  today=day_of(stamp)
  return c.execute(text("""SELECT DISTINCT p.group_id FROM progress s JOIN group_primary p ON p.knowledge_id=s.knowledge_id
  LEFT JOIN group_progress gp ON gp.group_id=p.group_id
- WHERE s.introduced=1 AND (gp.due_at IS NULL OR julianday(gp.due_at)<=julianday(:t))
+ WHERE p.group_id NOT LIKE 'focus-%' AND s.introduced=1 AND (gp.due_at IS NULL OR julianday(gp.due_at)<=julianday(:t))
  AND (s.due_at IS NULL OR julianday(s.due_at)<=julianday(:t))
  UNION SELECT d.group_id FROM daily_group_tasks d LEFT JOIN group_progress gp ON gp.group_id=d.group_id
- WHERE d.day<:day AND (gp.due_at IS NULL OR julianday(gp.due_at)<=julianday(:t))
+ WHERE d.group_id NOT LIKE 'focus-%' AND d.day<:day AND (gp.due_at IS NULL OR julianday(gp.due_at)<=julianday(:t))
  ORDER BY 1"""),dict(t=stamp.isoformat(),day=today)).scalars().all()
 
 def pool_count(c,stamp):
@@ -265,6 +268,9 @@ def acquire(c,gid,stamp):
 
 def refresh(c,kid,stamp,question_id=None):
  gid=c.execute(text('SELECT group_id FROM group_questions WHERE question_id=COALESCE(:q,(SELECT question_id FROM answers WHERE knowledge_id=:k ORDER BY rowid DESC LIMIT 1))'),dict(q=question_id,k=kid)).scalar() or family(c,kid)
+ if gid.startswith('focus-'):
+  import focus_training
+  focus_training.refresh(c,gid,stamp);return
  # Usage evidence is derived from qualified source answers; never updates target FSRS.
  c.execute(text('DELETE FROM group_usage WHERE question_id IN (SELECT a.question_id FROM answers a JOIN group_questions q ON q.question_id=a.question_id WHERE a.knowledge_id=:k AND q.group_id=:g)'),dict(k=kid,g=gid))
  for e in events(c,gid,day_of(stamp)):
@@ -288,6 +294,9 @@ def refresh(c,kid,stamp,question_id=None):
  c.execute(text('INSERT INTO group_progress VALUES(:g,:d,:t,:p) ON CONFLICT(group_id) DO UPDATE SET due_at=excluded.due_at,last_at=excluded.last_at,transfer_pending=excluded.transfer_pending'),dict(g=gid,d=due,t=stamp.isoformat(),p=int(pending)))
 
 def select(c,stamp,new_limit,review_limit,course='all'):
+ import focus_training
+ special=focus_training.select(c,stamp)
+ if special:return special
  day=day_of(stamp);seq=c.execute(text('SELECT COALESCE(MAX(rowid),0)+1 FROM answers')).scalar()
  # A persisted unfinished question always resumes before introducing anything else.
  pending_rows=c.execute(text('''SELECT k.*,q.id AS question_id,COALESCE(g.group_id,p.group_id) AS group_id,COALESCE(g.role,m.role,'base') AS role
@@ -295,6 +304,7 @@ def select(c,stamp,new_limit,review_limit,course='all'):
  JOIN group_primary p ON p.knowledge_id=k.id LEFT JOIN group_members m ON m.knowledge_id=k.id AND m.group_id=p.group_id
  LEFT JOIN answers a ON a.question_id=q.id WHERE a.id IS NULL ORDER BY q.rowid''')).mappings().all()
  for pending in pending_rows:
+  if pending['group_id'].startswith('focus-'):continue
   if pending['role'] in ('sentence','transfer'):
    if not requirements_met(c,pending['id']):continue
    roots=c.execute(text("SELECT p.level,k.id FROM group_members m JOIN progress p ON p.knowledge_id=m.knowledge_id JOIN knowledge k ON k.id=m.knowledge_id WHERE m.group_id=:g AND m.role='base'"),dict(g=pending['group_id'])).all()
@@ -311,7 +321,7 @@ def select(c,stamp,new_limit,review_limit,course='all'):
   resumed,_=step(c,gid,stamp)
   if resumed and acquire(c,gid,stamp):c.execute(text('UPDATE group_progress SET due_at=NULL WHERE group_id=:g'),dict(g=gid))
  current=c.execute(text("""SELECT t.group_id FROM daily_group_tasks t LEFT JOIN group_progress p ON p.group_id=t.group_id
- WHERE t.day=:d AND (p.due_at IS NULL OR julianday(p.due_at)<=julianday(:t)) ORDER BY t.rowid"""),dict(d=day,t=stamp.isoformat())).scalars().all()
+ WHERE t.day=:d AND t.group_id NOT LIKE 'focus-%' AND (p.due_at IS NULL OR julianday(p.due_at)<=julianday(:t)) ORDER BY t.rowid"""),dict(d=day,t=stamp.isoformat())).scalars().all()
  candidates=[]
  for gid in current[:12]:
   hist=events(c,gid,day)

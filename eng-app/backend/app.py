@@ -11,6 +11,7 @@ import lesson
 import transfer
 import combinations
 import context_engine
+import focus_training
 import daily_activity
 import group_learning
 from learning_profile import familiarity,RULES
@@ -135,6 +136,7 @@ def initialize(target,with_bulk=False):
                     c.execute(text('UPDATE review_queue SET due_at=:d WHERE knowledge_id=:k'),dict(k=old,d=due))
         content.install(c)
         if with_bulk:bulk_courses.install(c)
+        focus_training.install(c)
         group_learning.install(c)
 
 initialize(real_engine,with_bulk=os.environ.get('PELS_SKIP_BULK')!='1')
@@ -184,7 +186,7 @@ def test_action(action: str, data: dict):
         with test_engine.begin() as c:
             for table in ('answers','questions','spelling_checks','feedback_events','review_queue','memory_states','consolidation_slots','daily_new_pacing','daily_tasks','daily_coverage','lesson_attempts','context_round_items','context_rounds','composition_evidence','knowledge_assessments','test_skips','daily_extensions'):
                 c.execute(text('DELETE FROM '+table))
-            for table in ('group_questions','daily_group_tasks','group_progress','group_usage','group_active_slots'):c.execute(text('DELETE FROM '+table))
+            for table in ('focus_requests','group_questions','daily_group_tasks','group_progress','group_usage','group_active_slots'):c.execute(text('DELETE FROM '+table))
             c.execute(text('UPDATE test_clock SET days=0,stage=1 WHERE id=1'))
             c.execute(text('UPDATE progress SET introduced=0,attempts=0,correct=0,streak=0,level=0,interval_days=0,due_at=NULL,last_at=NULL'))
         if action=='prepare':
@@ -272,6 +274,26 @@ def challenge(kid: str):
             c.execute(text('INSERT INTO questions VALUES(:q,:k,:t,0)'),dict(q=qid,k=kid,t=now().isoformat()))
         c.execute(text('UPDATE progress SET introduced=1 WHERE knowledge_id=:k'),dict(k=kid))
         return dict(kind='recall',question_id=qid,id=kid,prompt=item['prompt'],answer_length=len(normalize(item['answer'])),challenge=True)
+
+@app.get('/api/focus/{kid}')
+def focus_info(kid: str):
+    with engine.connect() as c:
+        try:info=focus_training.candidates(c,kid)
+        except ValueError:raise HTTPException(404,'词条不存在')
+        info['requests']=[r for r in focus_training.listing(c,group_learning.day_of(now())) if c.execute(text('SELECT knowledge_id FROM focus_requests WHERE id=:g'),dict(g=r['id'])).scalar()==kid]
+        return info
+
+@app.post('/api/focus/{kid}')
+def add_focus(kid: str):
+    with engine.begin() as c:
+        try:return focus_training.add(c,kid,now())
+        except ValueError:raise HTTPException(404,'词条不存在')
+
+@app.post('/api/focus-cancel/{gid}')
+def cancel_focus(gid: str):
+    with engine.begin() as c:
+        if not focus_training.cancel(c,gid):raise HTTPException(409,'任务已经结束或不存在')
+    return dict(saved=True)
 
 @app.get('/api/dictionary')
 def dictionary(q: str='',kind: str='all',status: str='all',page: int=1):
@@ -404,9 +426,10 @@ def dashboard(summary_only: bool = False):
 def next_question():
     with engine.begin() as c:
         stage=c.execute(text('SELECT stage FROM test_clock WHERE id=1')).scalar() if testing.get() else None
-        if not testing.get():
+        special=focus_training.select(c,now())
+        if not testing.get() or special:
             settings=study_settings(c)
-            kind,item=group_learning.select(c,now(),settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course'])
+            kind,item=special if special else group_learning.select(c,now(),settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course'])
             if kind=='done':return dict(kind='done',message='今日可安排的学习组已完成或达到上限。')
             if kind=='learn':return dict(kind='learn',**item)
             qid=item.get('question_id') or str(uuid.uuid4())
@@ -533,7 +556,7 @@ def feedback(body: Feedback):
           FROM answers a WHERE a.question_id=:q) WHERE question_id=:q'''),dict(q=body.question_id,confidence=body.confidence))
         assessment.refresh(c,kid)
         apply_retention_limit(c,kid)
-        if not testing.get():group_learning.refresh(c,kid,now(),body.question_id)
+        if not testing.get() or c.execute(text("SELECT 1 FROM group_questions WHERE question_id=:q AND group_id LIKE 'focus-%'"),dict(q=body.question_id)).first():group_learning.refresh(c,kid,now(),body.question_id)
     return dict(saved=True)
 
 @app.post('/api/check')
@@ -574,7 +597,7 @@ def submit(body: Submission):
         update_coverage(c,row['knowledge_id'],now())
         assessment.refresh(c,row['knowledge_id'])
         apply_retention_limit(c,row['knowledge_id'])
-        if not testing.get():group_learning.refresh(c,row['knowledge_id'],now(),body.question_id)
+        if not testing.get() or c.execute(text("SELECT 1 FROM group_questions WHERE question_id=:q AND group_id LIKE 'focus-%'"),dict(q=body.question_id)).first():group_learning.refresh(c,row['knowledge_id'],now(),body.question_id)
         scheduled=c.execute(text('SELECT due_at,due_sequence,gap FROM review_queue WHERE knowledge_id=:k'),dict(k=row['knowledge_id'])).mappings().first()
         result['due_at']=scheduled['due_at']
         c.execute(text('UPDATE answers SET due_at=:d WHERE question_id=:q'),dict(d=scheduled['due_at'],q=body.question_id))

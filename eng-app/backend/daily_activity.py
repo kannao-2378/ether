@@ -2,6 +2,7 @@
 from datetime import datetime
 from sqlalchemy import text
 import group_learning as groups
+import focus_training
 
 def build(c,stamp,day,new_limit,review_limit,course='all',planning=False):
  today=groups.day_of(stamp)
@@ -25,6 +26,8 @@ def build(c,stamp,day,new_limit,review_limit,course='all',planning=False):
  result=dict(date=day,attempts=len(rows),items=list(items.values()),independent=independent,feedback=feedback,groups=booked,new=sum(b['kind']=='new' for b in booked),review=sum(b['kind']=='review' for b in booked),preview_new=[],preview_review=[])
  type_counts={kind:sum(i['entry_type']==kind for i in items.values()) for kind in ('word','collocation','phrase','sentence','rule')}
  result.update(type_counts=type_counts,studied_groups=len(practiced-{None}),studied_new=sum(b['kind']=='new' and b['id'] in practiced for b in booked),studied_review=sum(b['kind']=='review' and b['id'] in practiced for b in booked))
+ result['focus']=focus_training.listing(c,day) if planning and day==today else []
+ result['special']=sum(b['kind']=='special' and b['id'] in practiced for b in booked)
  if planning and day==today:
   seen={b['id'] for b in booked}
   for gid in groups.active_groups(c,stamp):
