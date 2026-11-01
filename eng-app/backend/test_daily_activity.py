@@ -20,7 +20,10 @@ class DailyActivityTests(unittest.TestCase):
   if q['kind']=='learn':app.introduce(q['id']);q=app.next_question()
   answer=app.knowledge_content(q['id'])['answer']
   app.submit(app.Submission(question_id=q['question_id'],answer=answer,confidence='hard'))
-  report=app.daily_activity_report();self.assertEqual(report['date'],'2026-11-02');self.assertEqual(report['attempts'],1);self.assertEqual(report['feedback']['hard'],1);self.assertEqual(report['items'][0]['english'],answer)
+  report=app.daily_activity_report();self.assertEqual(report['date'],'2026-11-02');self.assertEqual(report['attempts'],1);self.assertEqual(report['feedback']['hard'],1);self.assertEqual(report['items'][0]['english'],answer);self.assertEqual(sum(report['type_counts'].values()),1);self.assertEqual(report['studied_groups'],1)
+  q2=app.next_question()
+  if q2['kind']=='recall' and q2['id']==q['id']:
+   app.submit(app.Submission(question_id=q2['question_id'],answer=answer,confidence='hard'));again=app.daily_activity_report();self.assertEqual(sum(again['type_counts'].values()),1)
   self.assertEqual(app.daily_activity_report(day='2026-11-01')['attempts'],0)
   self.clock+=timedelta(days=1);self.assertEqual(app.daily_activity_report(day='2026-11-02')['attempts'],1)
  def test_invalid_dates(self):
