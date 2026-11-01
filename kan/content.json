@@ -40,6 +40,14 @@
       "kind": "portfolio-poster"
     },
     {
+      "id": "eng",
+      "title": "英语学习",
+      "subtitle": "English Learning",
+      "href": "/eng/",
+      "enabled": true,
+      "kind": "number"
+    },
+    {
       "id": "news",
       "title": "新闻资讯",
       "subtitle": "News & Insights",
