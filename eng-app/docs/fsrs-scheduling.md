@@ -1,3 +1,5 @@
+> Current grouped runtime: see ../项目说明/12-学习组与迁移训练.md. Item cards below remain valid, but normal daily budgets, short-term sequencing, and completion now use group_learning.py. Original item scheduler remains for stage preview and regression compatibility.
+
 # FSRS scheduling, version 5
 
 Uses py-fsrs 6.3.2 (FSRS-6), default parameters, target retention 0.90,

@@ -11,6 +11,7 @@ import lesson
 import transfer
 import combinations
 import context_engine
+import group_learning
 from learning_profile import familiarity,RULES
 import assessment
 import content
@@ -133,6 +134,7 @@ def initialize(target,with_bulk=False):
                     c.execute(text('UPDATE review_queue SET due_at=:d WHERE knowledge_id=:k'),dict(k=old,d=due))
         content.install(c)
         if with_bulk:bulk_courses.install(c)
+        group_learning.install(c)
 
 initialize(real_engine,with_bulk=os.environ.get('PELS_SKIP_BULK')!='1')
 initialize(test_engine,with_bulk=not AUTH.enabled and os.environ.get('PELS_SKIP_BULK')!='1')
@@ -181,6 +183,7 @@ def test_action(action: str, data: dict):
         with test_engine.begin() as c:
             for table in ('answers','questions','spelling_checks','feedback_events','review_queue','memory_states','consolidation_slots','daily_new_pacing','daily_tasks','daily_coverage','lesson_attempts','context_round_items','context_rounds','composition_evidence','knowledge_assessments','test_skips','daily_extensions'):
                 c.execute(text('DELETE FROM '+table))
+            for table in ('group_questions','daily_group_tasks','group_progress','group_usage','group_active_slots'):c.execute(text('DELETE FROM '+table))
             c.execute(text('UPDATE test_clock SET days=0,stage=1 WHERE id=1'))
             c.execute(text('UPDATE progress SET introduced=0,attempts=0,correct=0,streak=0,level=0,interval_days=0,due_at=NULL,last_at=NULL'))
         if action=='prepare':
@@ -218,9 +221,9 @@ def read_rule(rule_id: str):
 def learning_plan():
     d=dashboard();s=study_settings();zone=timezone(timedelta(hours=8));day=now().astimezone(zone).date().isoformat()
     with engine.connect() as c:
-        admitted=dict(c.execute(text('SELECT kind,COUNT(*) FROM daily_tasks dt WHERE day=:d GROUP BY kind'),dict(d=day)).all())
+        admitted=group_learning.counts(c,now())
     with engine.connect() as c:curriculum=content.curriculum(c,include_items=False);packages=bulk_courses.summary(c)
-    return dict(date=day,curriculum=curriculum,packages=packages,new_limit=s['daily-new-limit'],review_limit=s['daily-review-limit'],new_admitted=admitted.get('new',0),review_admitted=admitted.get('review',0),cross_day_due=d['cross_day_due'],same_day_practice=d['same_day_practice'],today_count=d['today_count'],rules=[rule_profile(r) for r in RULES],weak=[dict(id=i['id'],answer=i['answer'],prompt=i['prompt'],familiarity=familiarity(i)[1]) for i in d['items'] if i['introduced'] and i['level']<3][:10])
+    return dict(date=day,curriculum=curriculum,packages=packages,new_limit=s['daily-new-limit'],review_limit=s['daily-review-limit'],new_admitted=admitted.get('new',0),review_admitted=admitted.get('review',0),new_breakdown=d.get('new_breakdown',{}),cross_day_due=d['cross_day_due'],same_day_practice=d['same_day_practice'],today_count=d['today_count'],rules=[rule_profile(r) for r in RULES],weak=[dict(id=i['id'],answer=i['answer'],prompt=i['prompt'],familiarity=familiarity(i)[1]) for i in d['items'] if i['introduced'] and i['level']<3][:10])
 
 @app.get('/api/profile')
 def learning_profile_summary():
@@ -332,8 +335,8 @@ def add_daily_learning(body: ExtraLearning):
         if existing:
             if existing['day']!=day or existing['requested_amount']!=body.amount:raise HTTPException(409,'加学请求已过期或参数不同，请重新选择')
         else:
-            if consolidation_count(c,stamp)>=CONSOLIDATION_LIMIT:raise HTTPException(409,'还有12项待巩固，请先完成巩固，再增加新内容')
-            admitted=c.execute(text("SELECT COUNT(*) FROM daily_tasks WHERE day=:d AND kind='new'"),dict(d=day)).scalar()
+            if group_learning.pool_count(c,stamp)>=CONSOLIDATION_LIMIT:raise HTTPException(409,'还有12组待巩固，请先完成巩固，再增加新内容')
+            admitted=group_learning.counts(c,stamp).get('new',0)
             if admitted<settings['daily-new-limit']:raise HTTPException(409,'今日仍有新学额度，无需追加；请先检查课程前置条件')
             extra=body.amount+max(0,admitted-settings['daily-new-limit'])
             c.execute(text('INSERT OR IGNORE INTO daily_extensions VALUES(:i,:d,:a,:e,:t)'),dict(i=body.id,d=day,a=body.amount,e=extra,t=stamp.isoformat()))
@@ -376,21 +379,30 @@ def dashboard(summary_only: bool = False):
             answers = [dict(r) for r in c.execute(text('SELECT a.*,COALESCE((SELECT confidence FROM feedback_events f WHERE f.question_id=a.question_id ORDER BY f.rowid DESC LIMIT 1),a.confidence) AS effective_confidence,k.prompt,k.answer FROM answers a JOIN knowledge k ON k.id=a.knowledge_id ORDER BY a.created_at DESC LIMIT 100')).mappings()]
             for answer in answers:
                 answer['confidence']=answer.pop('effective_confidence')
-        counts=c.execute(text("""SELECT
-          SUM(CASE WHEN julianday(COALESCE(r.due_at,p.due_at))<=julianday(:t) AND COALESCE(r.due_at,p.due_at) IS NOT NULL THEN 1 ELSE 0 END) AS cross_day,
-          SUM(CASE WHEN r.knowledge_id IS NOT NULL AND r.due_at IS NULL OR r.knowledge_id IS NULL AND p.due_at IS NULL THEN 1 ELSE 0 END) AS practice
-          FROM progress p LEFT JOIN review_queue r ON r.knowledge_id=p.knowledge_id WHERE p.introduced=1 AND NOT EXISTS(SELECT 1 FROM daily_coverage cv WHERE cv.knowledge_id=p.knowledge_id AND cv.day=:day)"""),dict(t=now().isoformat(),day=now().astimezone(timezone(timedelta(hours=8))).date().isoformat())).mappings().one()
+        counts=group_learning.due_counts(c,now())
         day_start=now().astimezone(timezone(timedelta(hours=8))).replace(hour=0,minute=0,second=0,microsecond=0).astimezone(timezone.utc).isoformat()
         today_count=c.execute(text('SELECT COUNT(*) FROM answers WHERE julianday(created_at)>=julianday(:t)'),dict(t=day_start)).scalar()
-        admitted=dict(c.execute(text('SELECT kind,COUNT(*) FROM daily_tasks WHERE day=:day GROUP BY kind'),dict(day=now().astimezone(timezone(timedelta(hours=8))).date().isoformat())).all())
+        admitted=group_learning.counts(c,now())
+        new_breakdown=group_learning.breakdown(c,now())
     today = now().date().isoformat()
-    summary = dict(due=(counts['cross_day'] or 0)+(counts['practice'] or 0), cross_day_due=counts['cross_day'] or 0, same_day_practice=counts['practice'] or 0, today_count=today_count, today_new=admitted.get('new',0),today_review=admitted.get('review',0),scheduler_version=5)
+    summary = dict(due=(counts['cross_day'] or 0)+(counts['practice'] or 0), cross_day_due=counts['cross_day'] or 0, same_day_practice=counts['practice'] or 0, today_count=today_count, today_new=admitted.get('new',0),today_review=admitted.get('review',0),scheduler_version=5,new_breakdown=new_breakdown)
     return summary if summary_only else dict(items=items, history=answers, **summary)
 
 @app.post('/api/next')
 def next_question():
     with engine.begin() as c:
         stage=c.execute(text('SELECT stage FROM test_clock WHERE id=1')).scalar() if testing.get() else None
+        if not testing.get():
+            settings=study_settings(c)
+            kind,item=group_learning.select(c,now(),settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course'])
+            if kind=='done':return dict(kind='done',message='今日可安排的学习组已完成或达到上限。')
+            if kind=='learn':return dict(kind='learn',**item)
+            qid=item.get('question_id') or str(uuid.uuid4())
+            if not item.get('question_id'):
+                c.execute(text('INSERT INTO questions(id,knowledge_id,created_at,revealed) VALUES(:q,:k,:t,0)'),dict(q=qid,k=item['id'],t=now().isoformat()))
+                c.execute(text('INSERT INTO group_questions VALUES(:q,:g,:r)'),dict(q=qid,g=item['group_id'],r=item['role']))
+            return dict(kind='recall',question_id=qid,id=item['id'],prompt=item['prompt'],answer_length=len(normalize(item['answer'])),group_id=item['group_id'],group_title=item.get('group_title',''),group_role=item['role'])
+
         stage_filter=(' AND COALESCE((SELECT stage FROM course_links l WHERE l.knowledge_id=k.id),1)=:stage' if stage else '')+" AND NOT EXISTS(SELECT 1 FROM daily_coverage cv WHERE cv.knowledge_id=k.id AND cv.day=:day)"
         pending=c.execute(text('SELECT q.id AS question_id,k.* FROM questions q JOIN knowledge k ON q.knowledge_id=k.id LEFT JOIN answers a ON a.question_id=q.id WHERE a.id IS NULL'+stage_filter+' ORDER BY q.created_at LIMIT 1'),dict(stage=stage,day=now().astimezone(timezone(timedelta(hours=8))).date().isoformat())).mappings().first()
         settings=study_settings(c)
@@ -509,6 +521,7 @@ def feedback(body: Feedback):
           FROM answers a WHERE a.question_id=:q) WHERE question_id=:q'''),dict(q=body.question_id,confidence=body.confidence))
         assessment.refresh(c,kid)
         apply_retention_limit(c,kid)
+        if not testing.get():group_learning.refresh(c,kid,now(),body.question_id)
     return dict(saved=True)
 
 @app.post('/api/check')
@@ -531,6 +544,8 @@ def submit(body: Submission):
         row=c.execute(text('SELECT q.*,k.answer,p.streak,p.interval_days,p.last_at,p.level FROM questions q JOIN knowledge k ON k.id=q.knowledge_id JOIN progress p ON p.knowledge_id=k.id WHERE q.id=:q'),dict(q=body.question_id)).mappings().first()
         if not row:
             raise HTTPException(404,'题目不存在')
+        c.execute(text('''INSERT OR IGNORE INTO group_questions SELECT :q,p.group_id,m.role FROM group_primary p
+          JOIN group_members m ON m.group_id=p.group_id AND m.knowledge_id=p.knowledge_id WHERE p.knowledge_id=:k'''),dict(q=body.question_id,k=row['knowledge_id']))
         correct=transfer.grade(row['knowledge_id'],body.answer,row['answer'],(content.details(c,row['knowledge_id']) or {}).get('accepted_answers'))['correct']
         if not correct:raise HTTPException(422,'请先完成正确拼写，再提交记忆反馈')
         due=now()
@@ -547,6 +562,7 @@ def submit(body: Submission):
         update_coverage(c,row['knowledge_id'],now())
         assessment.refresh(c,row['knowledge_id'])
         apply_retention_limit(c,row['knowledge_id'])
+        if not testing.get():group_learning.refresh(c,row['knowledge_id'],now(),body.question_id)
         scheduled=c.execute(text('SELECT due_at,due_sequence,gap FROM review_queue WHERE knowledge_id=:k'),dict(k=row['knowledge_id'])).mappings().first()
         result['due_at']=scheduled['due_at']
         c.execute(text('UPDATE answers SET due_at=:d WHERE question_id=:q'),dict(d=scheduled['due_at'],q=body.question_id))
@@ -558,6 +574,7 @@ def export():
     tables=('knowledge','knowledge_details','learning_courses','course_units','course_items','progress','questions','answers','spelling_checks','feedback_events','review_queue','memory_states','consolidation_slots','daily_new_pacing','daily_tasks','daily_coverage','course_links','transfer_materials','sentence_combinations','composition_evidence','knowledge_assessments','rule_readings','lesson_attempts','context_rounds','context_round_items','app_settings','test_skips','daily_extensions')
     with engine.begin() as c:
         tables=tables+tuple(name for name in ('content_packages','package_members','knowledge_components') if c.execute(text("SELECT 1 FROM sqlite_master WHERE name=:n AND type='table'"),dict(n=name)).first())
+        tables+=tuple(t for t in group_learning.TABLES if t not in tables)
         data={table:[dict(r) for r in c.execute(text('SELECT * FROM '+table)).mappings()] for table in tables}
     return dict(format_version=1,mode='test' if testing.get() else 'real',exported_at=now().isoformat(),tables=data)
 
@@ -579,7 +596,7 @@ def new_context_round():
     return dict(saved=True)
 
 @app.get('/api/memory-history/{kid}')
-def memory_history(kid: str):
+def memory_history(kid: str, group_id: str | None = None):
     zone=timezone(timedelta(hours=8))
     with engine.connect() as c:
         summary=c.execute(text('SELECT MIN(created_at) AS first,MAX(created_at) AS last,COUNT(*) AS count FROM answers WHERE knowledge_id=:k'),dict(k=kid)).mappings().one()
@@ -587,6 +604,14 @@ def memory_history(kid: str):
         queue=c.execute(text('SELECT due_at,due_sequence FROM review_queue WHERE knowledge_id=:k'),dict(k=kid)).mappings().first()
         progress=c.execute(text('SELECT due_at FROM progress WHERE knowledge_id=:k'),dict(k=kid)).mappings().first()
         seq=c.execute(text('SELECT COALESCE(MAX(rowid),0) FROM answers')).scalar()
+        valid_group=group_id and c.execute(text('SELECT 1 FROM group_members WHERE group_id=:g AND knowledge_id=:k'),dict(g=group_id,k=kid)).first()
+        gid=group_id if valid_group else group_learning.family(c,kid)
+        group_schedule=c.execute(text('SELECT * FROM group_progress WHERE group_id=:g'),dict(g=gid)).mappings().first()
+        group_plan=None
+        if group_schedule:
+            if group_schedule['due_at']:
+                group_plan='本组下次复习：'+datetime.fromisoformat(group_schedule['due_at']).astimezone(zone).strftime('%Y-%m-%d %H:%M')
+            else:group_plan='本组仍在当天巩固'
     first=datetime.fromisoformat(summary['first']).astimezone(zone).date() if summary['first'] else None
     tags=[dict(day=(datetime.fromisoformat(r['created_at']).astimezone(zone).date()-first).days+1,confidence=r['confidence'],time=r['created_at']) for r in reversed(rows)]
     due=queue['due_at'] if queue else progress['due_at'] if progress else None
@@ -600,7 +625,7 @@ def memory_history(kid: str):
         plan=f'当天巩固：再隔 {remaining_questions} 题' if remaining_questions else '当天巩固：已可再次出题'
         schedule_note='这一轮按题数安排，没有固定时刻；完成当天巩固后，再确定跨天复习日期。'
     else:plan='尚未形成复习计划'
-    return dict(first=summary['first'],last=summary['last'],count=summary['count'],tags=tags,plan=plan,due_at=due,schedule_note=schedule_note,remaining_questions=remaining_questions)
+    return dict(first=summary['first'],last=summary['last'],count=summary['count'],tags=tags,plan=plan,due_at=due,schedule_note=schedule_note,remaining_questions=remaining_questions,group_plan=group_plan,group_due_at=group_schedule['due_at'] if group_schedule else None,transfer_pending=bool(group_schedule and group_schedule['transfer_pending']))
 
 @app.get('/api/history/{kid}')
 def recent_history(kid: str):

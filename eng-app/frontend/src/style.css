@@ -354,3 +354,5 @@ html{scrollbar-gutter:stable}
 .memo-empty .memo-extra-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;width:min(390px,100%);margin:16px 0 8px}
 .memo-empty .memo-extra-options button{width:100%;min-width:0;margin:0;padding:12px 6px;font-size:14px}
 .memo-empty button.memo-rest{width:auto;padding:10px 20px;margin-top:12px;border:0;background:transparent;color:inherit;font-size:13px;opacity:.75}
+
+.study-family-label{font-size:11px;max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.8}@media(max-width:700px){.study-family-label{max-width:100px;font-size:10px}}

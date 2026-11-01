@@ -37,7 +37,7 @@ class FullCourseTests(unittest.TestCase):
   app.save_settings({'active-course':'course-finance'})
   q=app.next_question()
   with self.engine.connect() as c:
-   self.assertTrue(c.execute(text("SELECT 1 FROM course_items ci JOIN course_units cu ON cu.id=ci.unit_id WHERE cu.course_id='course-finance' AND (ci.knowledge_id=:k OR ci.knowledge_id IN (SELECT knowledge_id FROM course_links WHERE parent_id=:k))"),dict(k=q['id'])).first())
+   self.assertTrue(c.execute(text("SELECT 1 FROM course_items ci JOIN course_units cu ON cu.id=ci.unit_id JOIN group_members gm ON gm.knowledge_id=ci.knowledge_id WHERE cu.course_id='course-finance' AND gm.group_id=:g"),dict(g=q['group_id'])).first())
  def test_reimport_preserves_answers_and_progress(self):
   with self.engine.begin() as c:c.execute(text("UPDATE progress SET attempts=12,level=3 WHERE knowledge_id='want-to'"))
   with self.engine.begin() as c:

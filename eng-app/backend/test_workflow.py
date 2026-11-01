@@ -60,19 +60,15 @@ class WorkflowTests(unittest.TestCase):
   with patch('app.now',return_value=app.now()+timedelta(days=4)):
    self.assertEqual(app.next_question()['id'],'want-to')
    with self.db.connect() as c:self.assertEqual(c.execute(text('SELECT COUNT(*) FROM answers')).scalar(),1)
- def test_composition_admission_only_counts_actual_question(self):
+ def test_future_group_cannot_spend_new_quota_on_unintroduced_variant(self):
+  # A future-due expression and its variants are one review group, not new units.
   future=(app.now()+timedelta(days=100)).isoformat()
   with self.db.begin() as c:
    c.execute(text('UPDATE progress SET introduced=1,level=5,due_at=:d'),dict(d=future))
    c.execute(text("UPDATE progress SET introduced=0,level=0,due_at=NULL WHERE knowledge_id LIKE 'compose-%'"))
   app.save_settings({'daily-new-limit':1,'daily-review-limit':0})
-  q=app.next_question();self.assertTrue(q['id'].startswith('compose-'))
-  with self.db.connect() as c:
-   slots=c.execute(text('SELECT knowledge_id FROM daily_tasks')).scalars().all()
-   self.assertEqual(slots,[q['id']])
-   answer=c.execute(text('SELECT answer FROM knowledge WHERE id=:k'),dict(k=q['id'])).scalar()
-  self.submit(q['question_id'],answer)
-  next_q=app.next_question();self.assertEqual(next_q['kind'],'done')
+  self.assertEqual(app.next_question()['kind'],'done')
+  with self.db.connect() as c:self.assertEqual(c.execute(text('SELECT COUNT(*) FROM daily_group_tasks')).scalar(),0)
  def test_skip_test_does_not_create_coverage_or_rule_mastery(self):
   previous=app.test_engine;app.test_engine=self.db;token=app.testing.set(True)
   try:
