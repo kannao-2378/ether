@@ -11,7 +11,7 @@ class ExtraLearningTests(unittest.TestCase):
   self.folder=tempfile.TemporaryDirectory();self.db=create_engine('sqlite:///'+str(Path(self.folder.name)/'extra.db'));app.initialize(self.db)
   self.engine_patch=patch.object(app,'real_engine',self.db);self.engine_patch.start()
   self.clock=datetime(2026,11,1,8,tzinfo=timezone.utc);self.clock_patch=patch('app.now',side_effect=lambda:self.clock);self.clock_patch.start()
-  self.client=TestClient(app.app);self.client.post('/api/settings',json={'daily-new-limit':50})
+  self.client=TestClient(app.app);self.client.post('/api/settings',json={'daily-new-limit':50,'daily-review-limit':0})
   with self.db.begin() as c:
    # The new budget counts families; create enough distinct units for a 50-unit case.
    for n in range(10):
@@ -19,11 +19,16 @@ class ExtraLearningTests(unittest.TestCase):
     c.execute(text('INSERT INTO progress(knowledge_id) VALUES(:k)'),dict(k='quota-word-'+str(n)))
    app.content.install(c);app.group_learning.install(c)
    for n in range(10):c.execute(text("INSERT OR IGNORE INTO course_items VALUES(:k,'materials',:p)"),dict(k='quota-word-'+str(n),p=1000+n))
+   # Publish synthetic quota targets into the same registry; dictionary presence alone is insufficient.
+   for n in range(10):
+    c.execute(text("INSERT OR REPLACE INTO curriculum_goals VALUES(:k,'quota fixture',1,'ready','test')"),dict(k='quota-word-'+str(n)))
+    c.execute(text("INSERT OR REPLACE INTO curriculum_paths VALUES('foundation','quota','quota','quota',999,:k,:n,1)"),dict(k='quota-word-'+str(n),n=n))
    units=c.execute(text('SELECT id,root_id FROM learning_groups LIMIT 50')).all()
    for gid,kid in units:
     c.execute(text("INSERT INTO daily_group_tasks VALUES('2026-11-01',:g,'new',:k)"),dict(g=gid,k=kid))
     c.execute(text("INSERT INTO daily_tasks VALUES('2026-11-01',:k,'new')"),dict(k=kid))
     c.execute(text('UPDATE progress SET introduced=1,level=5,due_at=:due WHERE knowledge_id=:k'),dict(k=kid,due=(self.clock+timedelta(days=10)).isoformat()))
+    c.execute(text('UPDATE progress SET introduced=1,level=5,due_at=:d WHERE knowledge_id IN (SELECT knowledge_id FROM group_members WHERE group_id=:g)'),dict(g=gid,d=(self.clock+timedelta(days=10)).isoformat()))
     c.execute(text('INSERT INTO group_progress VALUES(:g,:d,:t,0)'),dict(g=gid,d=(self.clock+timedelta(days=10)).isoformat(),t=self.clock.isoformat()))
 
  def tearDown(self):

@@ -28,7 +28,7 @@ with tempfile.TemporaryDirectory() as tmp:
      with db.connect() as c:
       expected=c.execute(text('SELECT answer FROM knowledge WHERE id=:k'),dict(k=q['id'])).scalar()
       if q.get('group_role')=='transfer':
-       assert groups.requirements_met(c,q['id']),(day,q);transfers+=1
+       assert groups.requirements_met(c,q['id'],stamp=clock[0]),(day,q);transfers+=1
      rating=rng.choices(['clear','hard','forgot'],[.70,.18,.12])[0]
      if rng.random()<.12:
       app.check_spelling(app.SpellingCheck(id=f'{day}-{turn}',question_id=q['question_id'],answer='__wrong__'));bad+=1

@@ -1,10 +1,16 @@
 """Course order and minimal core materials, independent of review timing."""
 import re
+import curriculum_engine
 from sqlalchemy import text,bindparam
 from datetime import timedelta
 STRUCTURE_WORDS=set("to at for a an the of on in with by doing do something someone about after before into up down off out over under through from as without upon".split())
 
 def core_members(c,gid,rows):
+ lesson={r[0]:r for r in c.execute(text('SELECT knowledge_id,role,position FROM curriculum_lessons WHERE goal_id=:g'),dict(g=gid))}
+ if lesson:
+  root=c.execute(text('SELECT root_id FROM learning_groups WHERE id=:g'),dict(g=gid)).scalar()
+  selected=[dict(r,role=lesson[r['id']][1],position=lesson[r['id']][2]) for r in rows if r['id'] in lesson]
+  return sorted([r for r in selected if r['id']==root or r['role']!='word' or not curriculum_engine.chunk_covers(c,root,r['id'])],key=lambda r:r['position'])
  root=c.execute(text('SELECT root_id FROM learning_groups WHERE id=:g'),dict(g=gid)).scalar()
  anchors=[r for r in rows if r['id']==root or r['role'] in ('base','phrase')]
  tokens=set(re.findall('[a-z]+',' '.join(r['answer'] for r in anchors).casefold()))
@@ -25,20 +31,13 @@ def owns_review(c,gid,r):
  return owner==gid
 
 def unseen(c,course='all',limit=1):
- filt='' if course=='all' else "AND EXISTS(SELECT 1 FROM group_members m JOIN course_items i ON i.knowledge_id=m.knowledge_id JOIN course_units u ON u.id=i.unit_id WHERE m.group_id=g.id AND u.course_id=:course)"
- return c.execute(text("""SELECT g.id,g.title,g.kind AS unit_type FROM learning_groups g JOIN progress p ON p.knowledge_id=g.root_id
- JOIN group_primary owner ON owner.knowledge_id=g.root_id AND owner.group_id=g.id
- WHERE p.introduced=0 AND EXISTS(SELECT 1 FROM group_members cm JOIN course_items ci ON ci.knowledge_id=cm.knowledge_id WHERE cm.group_id=g.id)
- AND NOT (g.kind='word' AND EXISTS(SELECT 1 FROM group_members other JOIN learning_groups eg ON eg.id=other.group_id JOIN course_items ei ON ei.knowledge_id=eg.root_id JOIN course_items wi ON wi.knowledge_id=g.root_id WHERE other.knowledge_id=g.root_id AND other.group_id!=g.id AND ei.unit_id=wi.unit_id))
- AND NOT EXISTS(SELECT 1 FROM daily_group_tasks t WHERE t.group_id=g.id) """+filt+"""
- ORDER BY COALESCE((SELECT CASE WHEN u.course_id='foundation' THEN 0 ELSE (SELECT rowid FROM learning_courses WHERE id=u.course_id) END FROM course_items i JOIN course_units u ON u.id=i.unit_id WHERE i.knowledge_id=g.root_id),999999),
- COALESCE((SELECT u.position FROM course_items i JOIN course_units u ON u.id=i.unit_id WHERE i.knowledge_id=g.root_id),999999),
- COALESCE((SELECT i.position FROM course_items i WHERE i.knowledge_id=g.root_id),999999),g.rowid LIMIT :n"""),dict(course=course,n=limit)).mappings().all()
+ return curriculum_engine.candidates(c,course,limit)
+
 
 
 def ordered(c,gids):
  if not gids:return []
- rows=c.execute(text("SELECT g.id,CASE WHEN u.course_id='foundation' THEN 0 WHEN u.course_id IS NOT NULL THEN (SELECT rowid FROM learning_courses WHERE id=u.course_id) ELSE 999999 END AS course_order,COALESCE(u.position,999999) AS unit_order,COALESCE(i.position,999999) AS item_order FROM learning_groups g LEFT JOIN course_items i ON i.knowledge_id=g.root_id LEFT JOIN course_units u ON u.id=i.unit_id WHERE g.id IN :ids ORDER BY course_order,unit_order,item_order,g.rowid").bindparams(bindparam('ids',expanding=True)),dict(ids=list(dict.fromkeys(gids)))).all()
+ rows=c.execute(text("SELECT g.id,CASE WHEN u.course_id='foundation' THEN 0 WHEN u.course_id IS NOT NULL THEN (SELECT rowid FROM learning_courses WHERE id=u.course_id) ELSE 999999 END AS course_order,COALESCE(u.position,999999) AS unit_order,COALESCE(i.position,999999) AS item_order FROM learning_groups g LEFT JOIN course_items i ON i.knowledge_id=g.root_id LEFT JOIN course_units u ON u.id=i.unit_id WHERE g.id IN :ids ORDER BY COALESCE((SELECT MIN(p.unit_position*1000000+t.difficulty*10000+p.position) FROM curriculum_paths p JOIN curriculum_goals t ON t.id=p.goal_id WHERE t.status='ready' AND p.goal_id=g.id AND p.course_id='foundation'),999999999),course_order,unit_order,item_order,g.rowid").bindparams(bindparam('ids',expanding=True)),dict(ids=list(dict.fromkeys(gids)))).all()
  return [r[0] for r in rows]
 
 def allowed(c,gids,course,include_new=True):
@@ -48,7 +47,7 @@ def allowed(c,gids,course,include_new=True):
   if not c.execute(text('SELECT 1 FROM learning_groups g JOIN group_primary own ON own.knowledge_id=g.root_id AND own.group_id=g.id JOIN group_members m ON m.group_id=g.id WHERE g.id=:g LIMIT 1'),dict(g=gid)).first():continue
   introduced=c.execute(text('SELECT p.introduced FROM learning_groups g JOIN progress p ON p.knowledge_id=g.root_id WHERE g.id=:g'),dict(g=gid)).scalar()
   if introduced:result.add(gid)
-  elif len(new)<3:new.append(gid);result.add(gid)
+  elif len(new)<3 and c.execute(text("SELECT 1 FROM curriculum_goals WHERE id=:g AND status='ready'"),dict(g=gid)).first() and not curriculum_engine.blockers(c,gid):new.append(gid);result.add(gid)
  return result
 
 def finish(c,gid,stamp,pending):

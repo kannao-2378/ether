@@ -14,6 +14,14 @@ class GroupLearningTests(unittest.TestCase):
    for kid,answer in [('test-listen','listen'),('test-music','music')]:
     c.execute(text('INSERT INTO knowledge VALUES(:k,:a,:a,:a,:a)'),dict(k=kid,a=answer));c.execute(text('INSERT INTO progress(knowledge_id) VALUES(:k)'),dict(k=kid))
    groups.install(c)
+   c.execute(text("UPDATE progress SET introduced=1,level=3,due_at=:t WHERE knowledge_id='drink-water' OR knowledge_id=(SELECT id FROM knowledge WHERE answer='music' ORDER BY rowid LIMIT 1)"),dict(t=(self.clock+timedelta(days=10)).isoformat()))
+   c.execute(text("UPDATE group_primary SET group_id='listen-to' WHERE knowledge_id='word-i'"))
+   c.execute(text("UPDATE progress SET introduced=1,level=3,due_at=:t WHERE knowledge_id IN (SELECT knowledge_id FROM curriculum_lessons WHERE goal_id='drink-water' AND role IN ('phrase','sentence'))"),dict(t=(self.clock+timedelta(days=10)).isoformat()))
+   # Explicit legacy lesson fixture tests scheduler invariants independently of the new authored route.
+   c.execute(text("DELETE FROM curriculum_prerequisites WHERE goal_id='listen-to'"))
+   c.execute(text("DELETE FROM curriculum_lessons WHERE goal_id='listen-to'"))
+   c.execute(text("UPDATE group_primary SET group_id='listen-to' WHERE knowledge_id='test-music'"))
+   c.execute(text("INSERT OR IGNORE INTO group_members VALUES('listen-to','test-music','word',0)"))
    self.assertTrue(groups.admit(c,'listen-to','test-listen',self.clock,1,0))
   app.save_settings({'daily-new-limit':1,'daily-review-limit':0})
  def tearDown(self):self.time.stop();self.engine.stop();self.db.dispose();self.temp.cleanup()

@@ -370,3 +370,5 @@ html{scrollbar-gutter:stable}
 .sentence-guide{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 1ch;max-width:100%;margin:4px auto 10px;pointer-events:none}
 .sentence-guide span{display:block;max-width:100%;height:2px;border-bottom:1px solid currentColor;opacity:.5}
 .memo-writing.wrong .sentence-guide{color:#d9534f}
+
+.teaching-route{margin:22px 0}.teaching-route>p,.teaching-route>small{font-size:12px}.teaching-route details{border-bottom:1px solid var(--border,#384442);padding:10px 0}.teaching-route summary{display:flex;justify-content:space-between;cursor:pointer;font-size:14px}.teaching-route details>p{font-size:12px;margin:8px 0}.teaching-goal{display:flex;justify-content:space-between;gap:12px;padding:8px 0;font-size:12px}.teaching-goal small{display:block;font-size:11px;opacity:.75;margin-top:3px}.teaching-goal>div:last-child{text-align:right;max-width:48%}

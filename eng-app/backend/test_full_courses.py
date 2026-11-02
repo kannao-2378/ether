@@ -33,11 +33,10 @@ class FullCourseTests(unittest.TestCase):
   unit=max((u for c in plan['curriculum'] for u in c['units']),key=lambda u:u['total'])
   page=app.curriculum_unit(unit['id']);self.assertEqual(len(page['items']),min(100,unit['total']));self.assertLessEqual(len(page['items']),100)
   self.assertEqual(app.curriculum_unit(unit['id'],page=999)['items'],[])
- def test_course_choice_includes_required_base_without_reset(self):
+ def test_uncompiled_course_is_not_used_as_new_lessons(self):
   app.save_settings({'active-course':'course-finance'})
-  q=app.next_question()
-  with self.engine.connect() as c:
-   self.assertTrue(c.execute(text("SELECT 1 FROM course_items ci JOIN course_units cu ON cu.id=ci.unit_id JOIN group_members gm ON gm.knowledge_id=ci.knowledge_id WHERE cu.course_id='course-finance' AND gm.group_id=:g"),dict(g=q['group_id'])).first())
+  q=app.next_question();self.assertEqual(q['kind'],'done')
+  route=app.learning_plan()['route'];self.assertEqual(route['ready_total'],0);self.assertGreater(route['draft_total'],0)
  def test_reimport_preserves_answers_and_progress(self):
   with self.engine.begin() as c:c.execute(text("UPDATE progress SET attempts=12,level=3 WHERE knowledge_id='want-to'"))
   with self.engine.begin() as c:

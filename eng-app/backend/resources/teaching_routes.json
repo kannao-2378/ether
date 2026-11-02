@@ -1,0 +1,1540 @@
+{
+  "course_id": "foundation",
+  "units": [
+    {
+      "id": "route-actions",
+      "title": "日常动作",
+      "goal": "先表达做什么，再组成带 I 的简单句。",
+      "position": 0
+    },
+    {
+      "id": "route-intentions",
+      "title": "状态、需求与计划",
+      "goal": "表达自己的状态、想法与打算。",
+      "position": 1
+    },
+    {
+      "id": "route-activities",
+      "title": "喜好与持续学习",
+      "goal": "区分 to 后的基本写法和 -ing 写法。",
+      "position": 2
+    },
+    {
+      "id": "route-interaction",
+      "title": "与人和事物互动",
+      "goal": "表达听、看、等、交谈和请求。",
+      "position": 3
+    },
+    {
+      "id": "route-views",
+      "title": "能力、情绪与看法",
+      "goal": "说明擅长什么、担心什么和同意谁。",
+      "position": 4
+    },
+    {
+      "id": "route-time",
+      "title": "时间与日常安排",
+      "goal": "给已会的句子补上时间信息。",
+      "position": 5
+    },
+    {
+      "id": "route-space",
+      "title": "位置与数量",
+      "goal": "说明位置和数量。",
+      "position": 6
+    },
+    {
+      "id": "route-connections",
+      "title": "原因、打算与过去习惯",
+      "goal": "用已学表达说明原因、将来打算与过去习惯。",
+      "position": 7
+    }
+  ],
+  "goals": [
+    {
+      "key": "drink-water",
+      "id": "drink-water",
+      "unit": "route-actions",
+      "english": "drink water",
+      "chinese": "喝水",
+      "sentence": "I drink water.",
+      "sentence_zh": "我喝水。",
+      "usage": "先说 drink（喝），再说 water（水）；前面加 I，就表示我喝水。",
+      "objective": "喝水，并在简单句中使用",
+      "materials": [
+        {
+          "en": "drink",
+          "zh": "喝"
+        },
+        {
+          "en": "water",
+          "zh": "水"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [],
+      "phrase": null,
+      "phrase_zh": null,
+      "difficulty": 1
+    },
+    {
+      "key": "eat-a-meal",
+      "id": "eat-a-meal",
+      "unit": "route-actions",
+      "english": "eat",
+      "chinese": "吃饭",
+      "sentence": "I eat.",
+      "sentence_zh": "我吃饭。",
+      "usage": "eat 是吃；I eat 表示我吃饭。也可以在 eat 后面说吃的东西。",
+      "objective": "吃饭，并在简单句中使用",
+      "materials": [
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [],
+      "phrase": null,
+      "phrase_zh": null,
+      "difficulty": 1
+    },
+    {
+      "key": "read-books",
+      "id": "read-books",
+      "unit": "route-actions",
+      "english": "read books",
+      "chinese": "读书",
+      "sentence": "I read books.",
+      "sentence_zh": "我读书。",
+      "usage": "read 是阅读，books 是书（复数）；说我读书时，在前面加 I。",
+      "objective": "读书，并在简单句中使用",
+      "materials": [
+        {
+          "en": "read",
+          "zh": "阅读"
+        },
+        {
+          "en": "books",
+          "zh": "书（复数）"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [],
+      "phrase": null,
+      "phrase_zh": null,
+      "difficulty": 1
+    },
+    {
+      "key": "learn-english",
+      "id": "learn-english",
+      "unit": "route-actions",
+      "english": "learn English",
+      "chinese": "学英语",
+      "sentence": "I learn English.",
+      "sentence_zh": "我学英语。",
+      "usage": "learn 后直接说学什么；学英语是 learn English，中间不加 to。",
+      "objective": "学英语，并在简单句中使用",
+      "materials": [
+        {
+          "en": "learn",
+          "zh": "学习"
+        },
+        {
+          "en": "English",
+          "zh": "英语"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [],
+      "phrase": null,
+      "phrase_zh": null,
+      "difficulty": 1
+    },
+    {
+      "key": "go-home",
+      "id": "go-home",
+      "unit": "route-actions",
+      "english": "go home",
+      "chinese": "回家",
+      "sentence": "I go home.",
+      "sentence_zh": "我回家。",
+      "usage": "回家写 go home，不写 go to home。",
+      "objective": "回家，并在简单句中使用",
+      "materials": [
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [],
+      "phrase": null,
+      "phrase_zh": null,
+      "difficulty": 1
+    },
+    {
+      "key": "get-up",
+      "id": "get-up",
+      "unit": "route-actions",
+      "english": "get up",
+      "chinese": "起床",
+      "sentence": "I get up.",
+      "sentence_zh": "我起床。",
+      "usage": "get up 一起表示起床，不把 get 单独翻译成得到。",
+      "objective": "起床，并在简单句中使用",
+      "materials": [
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [],
+      "phrase": null,
+      "phrase_zh": null,
+      "difficulty": 1
+    },
+    {
+      "key": "go-to-school",
+      "id": "go-to-school",
+      "unit": "route-actions",
+      "english": "go to school",
+      "chinese": "去学校",
+      "sentence": "I go to school.",
+      "sentence_zh": "我去学校。",
+      "usage": "去学校写 go to school；和 go home 的接法不同，不漏掉 to。",
+      "objective": "去学校，并在简单句中使用",
+      "materials": [
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [],
+      "phrase": null,
+      "phrase_zh": null,
+      "difficulty": 1
+    },
+    {
+      "key": "cook-at-home",
+      "id": "cook-at-home",
+      "unit": "route-actions",
+      "english": "cook at home",
+      "chinese": "在家做饭",
+      "sentence": "I cook at home.",
+      "sentence_zh": "我在家做饭。",
+      "usage": "cook 是做饭；at home 是在家，放在动作后说明地点。",
+      "objective": "在家做饭，并在简单句中使用",
+      "materials": [
+        {
+          "en": "cook",
+          "zh": "做饭"
+        },
+        {
+          "en": "at home",
+          "zh": "在家"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [],
+      "phrase": null,
+      "phrase_zh": null,
+      "difficulty": 1
+    },
+    {
+      "key": "route-i-am",
+      "id": "route-i-am",
+      "unit": "route-intentions",
+      "english": "I am",
+      "chinese": "我是／我处于……状态",
+      "sentence": "I am ready.",
+      "sentence_zh": "我准备好了。",
+      "usage": "说我是什么或处于什么状态，用 I am；ready 是准备好的，不写 I ready。",
+      "objective": "我是／我处于……状态，并在简单句中使用",
+      "materials": [
+        {
+          "en": "ready",
+          "zh": "准备好的"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "drink-water"
+      ],
+      "phrase": null,
+      "phrase_zh": null,
+      "difficulty": 1
+    },
+    {
+      "key": "want-to",
+      "id": "want-to",
+      "unit": "route-intentions",
+      "english": "want to",
+      "chinese": "想要做某事",
+      "sentence": "I want to drink water.",
+      "sentence_zh": "我想喝水。",
+      "usage": "want to 后写想做的动作，例如 want to drink water（想喝水）；drink 用基本写法，不写 drinking。",
+      "objective": "想要做某事，并在简单句中使用",
+      "materials": [
+        {
+          "en": "drink water",
+          "zh": "喝水"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "drink-water"
+      ],
+      "phrase": "want to drink water",
+      "phrase_zh": "想喝水",
+      "difficulty": 1,
+      "variants": [
+        {
+          "en": "I want to learn English.",
+          "zh": "我想学英语。",
+          "requires": [
+            "learn-english"
+          ]
+        },
+        {
+          "en": "I want to read books.",
+          "zh": "我想读书。",
+          "requires": [
+            "read-books"
+          ]
+        },
+        {
+          "en": "I want to go to school.",
+          "zh": "我想去学校。",
+          "requires": [
+            "go-to-school"
+          ]
+        },
+        {
+          "en": "I want to eat.",
+          "zh": "我想吃饭。",
+          "requires": [
+            "eat-a-meal"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "need-to",
+      "id": "need-to",
+      "unit": "route-intentions",
+      "english": "need to",
+      "chinese": "需要做某事",
+      "sentence": "I need to rest.",
+      "sentence_zh": "我需要休息。",
+      "usage": "need to 后写需要做的动作；rest 是休息。",
+      "objective": "需要做某事，并在简单句中使用",
+      "materials": [
+        {
+          "en": "rest",
+          "zh": "休息"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "want-to"
+      ],
+      "phrase": "need to rest",
+      "phrase_zh": "需要休息",
+      "difficulty": 1,
+      "variants": [
+        {
+          "en": "I need to drink water.",
+          "zh": "我需要喝水。",
+          "requires": [
+            "drink-water"
+          ]
+        },
+        {
+          "en": "I need to go home.",
+          "zh": "我需要回家。",
+          "requires": [
+            "go-home"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "hope-to",
+      "id": "hope-to",
+      "unit": "route-intentions",
+      "english": "hope to",
+      "chinese": "希望做某事",
+      "sentence": "I hope to learn English.",
+      "sentence_zh": "我希望学英语。",
+      "usage": "hope to 表达希望做一件事，后面写动作的基本写法。",
+      "objective": "希望做某事，并在简单句中使用",
+      "materials": [
+        {
+          "en": "learn English",
+          "zh": "学英语"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "want-to",
+        "learn-english"
+      ],
+      "phrase": "hope to learn English",
+      "phrase_zh": "希望学英语",
+      "difficulty": 1
+    },
+    {
+      "key": "plan-to",
+      "id": "plan-to",
+      "unit": "route-intentions",
+      "english": "plan to",
+      "chinese": "计划做某事",
+      "sentence": "I plan to read books.",
+      "sentence_zh": "我计划读书。",
+      "usage": "plan to 表达计划；后面直接接 read books 这样的动作。",
+      "objective": "计划做某事，并在简单句中使用",
+      "materials": [
+        {
+          "en": "read books",
+          "zh": "读书"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "want-to",
+        "read-books"
+      ],
+      "phrase": "plan to read books",
+      "phrase_zh": "计划读书",
+      "difficulty": 1,
+      "variants": [
+        {
+          "en": "I plan to learn English.",
+          "zh": "我计划学英语。",
+          "requires": [
+            "learn-english"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "decide-to",
+      "id": "decide-to",
+      "unit": "route-intentions",
+      "english": "decide to",
+      "chinese": "决定做某事",
+      "sentence": "I decide to learn English.",
+      "sentence_zh": "我决定学英语。",
+      "usage": "decide to 表示作出决定；后面的 learn 不加 -ing。",
+      "objective": "决定做某事，并在简单句中使用",
+      "materials": [
+        {
+          "en": "learn English",
+          "zh": "学英语"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "want-to",
+        "learn-english"
+      ],
+      "phrase": "decide to learn English",
+      "phrase_zh": "决定学英语",
+      "difficulty": 1,
+      "variants": [
+        {
+          "en": "I decide to read books.",
+          "zh": "我决定读书。",
+          "requires": [
+            "read-books"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "route-would-like-to",
+      "id": "route-would-like-to",
+      "unit": "route-intentions",
+      "english": "would like to",
+      "chinese": "想要做某事（较委婉）",
+      "sentence": "I would like to drink water.",
+      "sentence_zh": "我想喝水。",
+      "usage": "would like to 比 want to 更委婉；后面同样接动作的基本写法。",
+      "objective": "想要做某事（较委婉），并在简单句中使用",
+      "materials": [
+        {
+          "en": "drink water",
+          "zh": "喝水"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "want-to"
+      ],
+      "phrase": "would like to drink water",
+      "phrase_zh": "想喝水（较委婉）",
+      "difficulty": 1
+    },
+    {
+      "key": "like-doing",
+      "id": "like-doing",
+      "unit": "route-activities",
+      "english": "like doing",
+      "chinese": "喜欢做某事（-ing 接法）",
+      "sentence": "I like reading books.",
+      "sentence_zh": "我喜欢读书。",
+      "usage": "like 后可以接 -ing；read 变成 reading。like to read 也正确，本题练 -ing。",
+      "objective": "喜欢做某事（-ing 接法），并在简单句中使用",
+      "materials": [
+        {
+          "en": "read books",
+          "zh": "读书"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "read-books"
+      ],
+      "phrase": "like reading books",
+      "phrase_zh": "喜欢读书（-ing 接法）",
+      "difficulty": 1,
+      "variants": [
+        {
+          "en": "I like cooking.",
+          "zh": "我喜欢做饭。",
+          "requires": [
+            "cook-at-home"
+          ]
+        },
+        {
+          "en": "I like learning English.",
+          "zh": "我喜欢学英语。",
+          "requires": [
+            "learn-english"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "enjoy-doing",
+      "id": "enjoy-doing",
+      "unit": "route-activities",
+      "english": "enjoy doing",
+      "chinese": "享受做某事的乐趣",
+      "sentence": "I enjoy reading.",
+      "sentence_zh": "我享受阅读的乐趣。",
+      "usage": "enjoy 后面的动作写 -ing：read 变成 reading；不写 enjoy to read。",
+      "objective": "享受做某事的乐趣，并在简单句中使用",
+      "materials": [
+        {
+          "en": "read",
+          "zh": "阅读"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "like-doing"
+      ],
+      "phrase": "enjoy reading",
+      "phrase_zh": "享受阅读的乐趣",
+      "difficulty": 1,
+      "variants": [
+        {
+          "en": "I enjoy learning English.",
+          "zh": "我享受学英语的乐趣。",
+          "requires": [
+            "learn-english"
+          ]
+        },
+        {
+          "en": "I enjoy cooking.",
+          "zh": "我享受做饭的乐趣。",
+          "requires": [
+            "cook-at-home"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "learn-to",
+      "id": "learn-to",
+      "unit": "route-activities",
+      "english": "learn to",
+      "chinese": "学着做某事",
+      "sentence": "I learn to cook.",
+      "sentence_zh": "我学着做饭。",
+      "usage": "学一项做事的能力用 learn to；学英语这个科目直接写 learn English。",
+      "objective": "学着做某事，并在简单句中使用",
+      "materials": [
+        {
+          "en": "cook",
+          "zh": "做饭"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "cook-at-home",
+        "learn-english"
+      ],
+      "phrase": "learn to cook",
+      "phrase_zh": "学着做饭",
+      "difficulty": 1
+    },
+    {
+      "key": "try-to",
+      "id": "try-to",
+      "unit": "route-activities",
+      "english": "try to",
+      "chinese": "努力尝试做某事",
+      "sentence": "I try to learn English.",
+      "sentence_zh": "我努力尝试学英语。",
+      "usage": "try to 表示努力尝试完成动作；try doing 是尝试某种方法，另行学习。",
+      "objective": "努力尝试做某事，并在简单句中使用",
+      "materials": [
+        {
+          "en": "learn English",
+          "zh": "学英语"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "want-to",
+        "learn-english"
+      ],
+      "phrase": "try to learn English",
+      "phrase_zh": "努力尝试学英语",
+      "difficulty": 1
+    },
+    {
+      "key": "practice-doing",
+      "id": "practice-doing",
+      "unit": "route-activities",
+      "english": "practice doing",
+      "chinese": "练习做某事",
+      "sentence": "I practice speaking English.",
+      "sentence_zh": "我练习说英语。",
+      "usage": "practice 后的动作写 -ing；speak（说）变成 speaking。本课使用美式 practice。",
+      "objective": "练习做某事，并在简单句中使用",
+      "materials": [
+        {
+          "en": "speak",
+          "zh": "说"
+        },
+        {
+          "en": "English",
+          "zh": "英语"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "like-doing"
+      ],
+      "phrase": "practice speaking English",
+      "phrase_zh": "练习说英语",
+      "difficulty": 1
+    },
+    {
+      "key": "keep-doing",
+      "id": "keep-doing",
+      "unit": "route-activities",
+      "english": "keep doing",
+      "chinese": "持续做某事",
+      "sentence": "I keep learning.",
+      "sentence_zh": "我持续学习。",
+      "usage": "keep 后面的动作写 -ing，learn 变成 learning。",
+      "objective": "持续做某事，并在简单句中使用",
+      "materials": [
+        {
+          "en": "learn",
+          "zh": "学习"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "enjoy-doing",
+        "learn-english"
+      ],
+      "phrase": "keep learning",
+      "phrase_zh": "持续学习",
+      "difficulty": 1
+    },
+    {
+      "key": "finish-doing",
+      "id": "finish-doing",
+      "unit": "route-activities",
+      "english": "finish doing",
+      "chinese": "完成做某事",
+      "sentence": "I want to finish reading.",
+      "sentence_zh": "我想完成阅读。",
+      "usage": "finish 后的动作写 -ing；finish reading 表示读完。整句先说我想，再说完成阅读。",
+      "objective": "完成做某事，并在简单句中使用",
+      "materials": [
+        {
+          "en": "read",
+          "zh": "阅读"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "enjoy-doing",
+        "want-to"
+      ],
+      "phrase": "finish reading",
+      "phrase_zh": "完成阅读",
+      "difficulty": 1
+    },
+    {
+      "key": "listen-to",
+      "id": "listen-to",
+      "unit": "route-interaction",
+      "english": "listen to",
+      "chinese": "听……",
+      "sentence": "I listen to music.",
+      "sentence_zh": "我听音乐。",
+      "usage": "listen 后面说听的对象时用 to：listen to music。",
+      "objective": "听……，并在简单句中使用",
+      "materials": [
+        {
+          "en": "music",
+          "zh": "音乐"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "drink-water"
+      ],
+      "phrase": "listen to music",
+      "phrase_zh": "听音乐",
+      "difficulty": 1,
+      "variants": [
+        {
+          "en": "I listen to the radio.",
+          "zh": "我听广播。",
+          "requires": [
+            "the-radio"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "look-at",
+      "id": "look-at",
+      "unit": "route-interaction",
+      "english": "look at",
+      "chinese": "看……",
+      "sentence": "I look at this picture.",
+      "sentence_zh": "我看这张图片。",
+      "usage": "look at 后说目光指向什么；看是 look at，寻找是 look for。",
+      "objective": "看……，并在简单句中使用",
+      "materials": [
+        {
+          "en": "this picture",
+          "zh": "这张图片"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "drink-water"
+      ],
+      "phrase": "look at this picture",
+      "phrase_zh": "看这张图片",
+      "difficulty": 1
+    },
+    {
+      "key": "wait-for",
+      "id": "wait-for",
+      "unit": "route-interaction",
+      "english": "wait for",
+      "chinese": "等待……",
+      "sentence": "I wait for the bus.",
+      "sentence_zh": "我等公共汽车。",
+      "usage": "wait for 后说等谁或等什么；the bus 表示公共汽车。",
+      "objective": "等待……，并在简单句中使用",
+      "materials": [
+        {
+          "en": "the bus",
+          "zh": "公共汽车"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "drink-water"
+      ],
+      "phrase": "wait for the bus",
+      "phrase_zh": "等公共汽车",
+      "difficulty": 1
+    },
+    {
+      "key": "talk-to",
+      "id": "talk-to",
+      "unit": "route-interaction",
+      "english": "talk to",
+      "chinese": "与……交谈",
+      "sentence": "I talk to my friend.",
+      "sentence_zh": "我和我的朋友交谈。",
+      "usage": "talk to 后面说交谈对象；talk with 也可能自然，本课练 talk to。",
+      "objective": "与……交谈，并在简单句中使用",
+      "materials": [
+        {
+          "en": "my friend",
+          "zh": "我的朋友"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "drink-water"
+      ],
+      "phrase": "talk to my friend",
+      "phrase_zh": "与我的朋友交谈",
+      "difficulty": 1
+    },
+    {
+      "key": "ask-for",
+      "id": "ask-for",
+      "unit": "route-interaction",
+      "english": "ask for",
+      "chinese": "请求得到……",
+      "sentence": "I ask for help.",
+      "sentence_zh": "我请求帮助。",
+      "usage": "ask for 后写希望得到的东西；ask someone 是问某人，不是同一种接法。",
+      "objective": "请求得到……，并在简单句中使用",
+      "materials": [
+        {
+          "en": "help",
+          "zh": "帮助"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "drink-water"
+      ],
+      "phrase": "ask for help",
+      "phrase_zh": "请求帮助",
+      "difficulty": 1
+    },
+    {
+      "key": "look-for",
+      "id": "look-for",
+      "unit": "route-interaction",
+      "english": "look for",
+      "chinese": "寻找……",
+      "sentence": "I look for my keys.",
+      "sentence_zh": "我找我的钥匙。",
+      "usage": "look for 表示寻找；和 look at（看）区分。",
+      "objective": "寻找……，并在简单句中使用",
+      "materials": [
+        {
+          "en": "my keys",
+          "zh": "我的钥匙"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "look-at"
+      ],
+      "phrase": "look for my keys",
+      "phrase_zh": "找我的钥匙",
+      "difficulty": 1
+    },
+    {
+      "key": "look-after",
+      "id": "look-after",
+      "unit": "route-interaction",
+      "english": "look after",
+      "chinese": "照顾……",
+      "sentence": "I look after my cat.",
+      "sentence_zh": "我照顾我的猫。",
+      "usage": "look after 一起表示照顾；after 在这个词块里不是时间先后。",
+      "objective": "照顾……，并在简单句中使用",
+      "materials": [
+        {
+          "en": "my cat",
+          "zh": "我的猫"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "look-at"
+      ],
+      "phrase": "look after my cat",
+      "phrase_zh": "照顾我的猫",
+      "difficulty": 1
+    },
+    {
+      "key": "pay-for",
+      "id": "pay-for",
+      "unit": "route-interaction",
+      "english": "pay for",
+      "chinese": "为……付钱",
+      "sentence": "I pay for lunch.",
+      "sentence_zh": "我付午饭的钱。",
+      "usage": "pay for 后说为哪件东西或服务付钱。",
+      "objective": "为……付钱，并在简单句中使用",
+      "materials": [
+        {
+          "en": "lunch",
+          "zh": "午饭"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "drink-water"
+      ],
+      "phrase": "pay for lunch",
+      "phrase_zh": "付午饭的钱",
+      "difficulty": 1
+    },
+    {
+      "key": "route-good-at",
+      "id": "route-good-at",
+      "unit": "route-views",
+      "english": "good at",
+      "chinese": "擅长……",
+      "sentence": "I am good at reading.",
+      "sentence_zh": "我擅长阅读。",
+      "usage": "说我擅长要写 I am good at；后面若是动作，用 reading 这样的 -ing 写法。",
+      "objective": "擅长……，并在简单句中使用",
+      "materials": [
+        {
+          "en": "read",
+          "zh": "阅读"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "route-i-am",
+        "like-doing"
+      ],
+      "phrase": "good at reading",
+      "phrase_zh": "擅长阅读",
+      "difficulty": 2
+    },
+    {
+      "key": "route-afraid-of",
+      "id": "route-afraid-of",
+      "unit": "route-views",
+      "english": "afraid of",
+      "chinese": "害怕……",
+      "sentence": "I am afraid of dogs.",
+      "sentence_zh": "我怕狗。",
+      "usage": "说我害怕用 I am afraid of，再说怕什么；不省略 am。",
+      "objective": "害怕……，并在简单句中使用",
+      "materials": [
+        {
+          "en": "dogs",
+          "zh": "狗（复数）"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "route-i-am"
+      ],
+      "phrase": "afraid of dogs",
+      "phrase_zh": "怕狗",
+      "difficulty": 2
+    },
+    {
+      "key": "worry-about",
+      "id": "worry-about",
+      "unit": "route-views",
+      "english": "worry about",
+      "chinese": "担心……",
+      "sentence": "I worry about my family.",
+      "sentence_zh": "我担心我的家人。",
+      "usage": "worry about 后写担心的人或事；I worry 不需要加 am。",
+      "objective": "担心……，并在简单句中使用",
+      "materials": [
+        {
+          "en": "my family",
+          "zh": "我的家人"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "route-i-am"
+      ],
+      "phrase": "worry about my family",
+      "phrase_zh": "担心我的家人",
+      "difficulty": 2
+    },
+    {
+      "key": "agree-with",
+      "id": "agree-with",
+      "unit": "route-views",
+      "english": "agree with",
+      "chinese": "同意某人的看法",
+      "sentence": "I agree with you.",
+      "sentence_zh": "我同意你的看法。",
+      "usage": "agree with 后写人；I agree 不写 I am agree。",
+      "objective": "同意某人的看法，并在简单句中使用",
+      "materials": [
+        {
+          "en": "you",
+          "zh": "你"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "talk-to"
+      ],
+      "phrase": "agree with you",
+      "phrase_zh": "同意你的看法",
+      "difficulty": 2
+    },
+    {
+      "key": "think-about",
+      "id": "think-about",
+      "unit": "route-views",
+      "english": "think about",
+      "chinese": "考虑……",
+      "sentence": "I think about my plan.",
+      "sentence_zh": "我考虑我的计划。",
+      "usage": "think about 后说正在考虑的人或事；my plan 是我的计划。",
+      "objective": "考虑……，并在简单句中使用",
+      "materials": [
+        {
+          "en": "my plan",
+          "zh": "我的计划"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "plan-to"
+      ],
+      "phrase": "think about my plan",
+      "phrase_zh": "考虑我的计划",
+      "difficulty": 2
+    },
+    {
+      "key": "depend-on",
+      "id": "depend-on",
+      "unit": "route-views",
+      "english": "depend on",
+      "chinese": "依靠……",
+      "sentence": "I depend on my family.",
+      "sentence_zh": "我依靠我的家人。",
+      "usage": "depend on 后说依靠的人或事；不要漏掉 on。",
+      "objective": "依靠……，并在简单句中使用",
+      "materials": [
+        {
+          "en": "my family",
+          "zh": "我的家人"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "worry-about"
+      ],
+      "phrase": "depend on my family",
+      "phrase_zh": "依靠我的家人",
+      "difficulty": 2
+    },
+    {
+      "key": "belong-to",
+      "id": "belong-to",
+      "unit": "route-views",
+      "english": "belong to",
+      "chinese": "属于……",
+      "sentence": "I belong to this group.",
+      "sentence_zh": "我属于这个小组。",
+      "usage": "belong to 后写所属的人或集体；这里的 to 后接 this group，不是接动作。",
+      "objective": "属于……，并在简单句中使用",
+      "materials": [
+        {
+          "en": "this group",
+          "zh": "这个小组"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "talk-to"
+      ],
+      "phrase": "belong to this group",
+      "phrase_zh": "属于这个小组",
+      "difficulty": 2
+    },
+    {
+      "key": "every-day",
+      "id": "every-day",
+      "unit": "route-time",
+      "english": "every day",
+      "chinese": "每天",
+      "sentence": "I read books every day.",
+      "sentence_zh": "我每天读书。",
+      "usage": "every day 表示每天，是两个词，常放在这类句子的末尾。",
+      "objective": "每天，并在简单句中使用",
+      "materials": [
+        {
+          "en": "read books",
+          "zh": "读书"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        },
+        {
+          "en": "learn English",
+          "zh": "学英语"
+        }
+      ],
+      "requires": [
+        "read-books",
+        "learn-english"
+      ],
+      "phrase": null,
+      "phrase_zh": null,
+      "difficulty": 2,
+      "variants": [
+        {
+          "en": "I learn English every day.",
+          "zh": "我每天学英语。",
+          "requires": [
+            "learn-english"
+          ]
+        },
+        {
+          "en": "I cook at home every day.",
+          "zh": "我每天在家做饭。",
+          "requires": [
+            "cook-at-home"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "route-in-the-morning",
+      "id": "route-in-the-morning",
+      "unit": "route-time",
+      "english": "in the morning",
+      "chinese": "在早上",
+      "sentence": "I learn English in the morning.",
+      "sentence_zh": "我早上学英语。",
+      "usage": "in the morning 表示在早上；放在动作后面补充时间。",
+      "objective": "在早上，并在简单句中使用",
+      "materials": [
+        {
+          "en": "learn English",
+          "zh": "学英语"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "learn-english",
+        "every-day"
+      ],
+      "phrase": null,
+      "phrase_zh": null,
+      "difficulty": 2
+    },
+    {
+      "key": "route-at-night",
+      "id": "route-at-night",
+      "unit": "route-time",
+      "english": "at night",
+      "chinese": "在夜间",
+      "sentence": "I read books at night.",
+      "sentence_zh": "我晚上读书。",
+      "usage": "夜间用 at night；和 in the morning 的介词不同，按词块记忆。",
+      "objective": "在夜间，并在简单句中使用",
+      "materials": [
+        {
+          "en": "read books",
+          "zh": "读书"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "every-day"
+      ],
+      "phrase": null,
+      "phrase_zh": null,
+      "difficulty": 2
+    },
+    {
+      "key": "route-after-work",
+      "id": "route-after-work",
+      "unit": "route-time",
+      "english": "after work",
+      "chinese": "下班后",
+      "sentence": "I go home after work.",
+      "sentence_zh": "我下班后回家。",
+      "usage": "after work 表示下班后；这里 after 表示时间在后。",
+      "objective": "下班后，并在简单句中使用",
+      "materials": [
+        {
+          "en": "go home",
+          "zh": "回家"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "go-home",
+        "every-day"
+      ],
+      "phrase": null,
+      "phrase_zh": null,
+      "difficulty": 2
+    },
+    {
+      "key": "route-before-dinner",
+      "id": "route-before-dinner",
+      "unit": "route-time",
+      "english": "before dinner",
+      "chinese": "晚饭前",
+      "sentence": "I read books before dinner.",
+      "sentence_zh": "我晚饭前读书。",
+      "usage": "before dinner 表示晚饭前；before 是在前，after 是在后。",
+      "objective": "晚饭前，并在简单句中使用",
+      "materials": [
+        {
+          "en": "read books",
+          "zh": "读书"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "route-after-work"
+      ],
+      "phrase": null,
+      "phrase_zh": null,
+      "difficulty": 2
+    },
+    {
+      "key": "route-on-weekends",
+      "id": "route-on-weekends",
+      "unit": "route-time",
+      "english": "on weekends",
+      "chinese": "在周末（美式）",
+      "sentence": "I cook at home on weekends.",
+      "sentence_zh": "我周末在家做饭。",
+      "usage": "美式表达常用 on weekends；本课先学这一种说法。",
+      "objective": "在周末（美式），并在简单句中使用",
+      "materials": [
+        {
+          "en": "cook at home",
+          "zh": "在家做饭"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "cook-at-home",
+        "every-day"
+      ],
+      "phrase": null,
+      "phrase_zh": null,
+      "difficulty": 2
+    },
+    {
+      "key": "route-at-home",
+      "id": "route-at-home",
+      "unit": "route-space",
+      "english": "at home",
+      "chinese": "在家",
+      "sentence": "I am at home.",
+      "sentence_zh": "我在家。",
+      "usage": "说我在家可以写 I am at home；说在家做饭是 cook at home。",
+      "objective": "在家，并在简单句中使用",
+      "materials": [
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "route-i-am",
+        "cook-at-home"
+      ],
+      "phrase": null,
+      "phrase_zh": null,
+      "difficulty": 2
+    },
+    {
+      "key": "route-in-front-of",
+      "id": "route-in-front-of",
+      "unit": "route-space",
+      "english": "in front of",
+      "chinese": "在……前面",
+      "sentence": "I am in front of the school.",
+      "sentence_zh": "我在学校前面。",
+      "usage": "in front of 后面需要说在什么前面；本组不再把 in front 另算一个新组。",
+      "objective": "在……前面，并在简单句中使用",
+      "materials": [
+        {
+          "en": "the school",
+          "zh": "这所学校"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "route-i-am",
+        "go-to-school"
+      ],
+      "phrase": null,
+      "phrase_zh": null,
+      "difficulty": 2
+    },
+    {
+      "key": "route-next-to",
+      "id": "route-next-to",
+      "unit": "route-space",
+      "english": "next to",
+      "chinese": "在……旁边",
+      "sentence": "I am next to my friend.",
+      "sentence_zh": "我在我朋友旁边。",
+      "usage": "next to 后写相邻的人或物；I am 说明我所在的位置。",
+      "objective": "在……旁边，并在简单句中使用",
+      "materials": [
+        {
+          "en": "my friend",
+          "zh": "我的朋友"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "route-i-am",
+        "talk-to"
+      ],
+      "phrase": null,
+      "phrase_zh": null,
+      "difficulty": 2
+    },
+    {
+      "key": "route-a-lot-of",
+      "id": "route-a-lot-of",
+      "unit": "route-space",
+      "english": "a lot of",
+      "chinese": "许多……",
+      "sentence": "I read a lot of books.",
+      "sentence_zh": "我读很多书。",
+      "usage": "a lot of 后面接东西；这里 books 用复数。不把 a lot 和 a lot of 当成完全相同的结构。",
+      "objective": "许多……，并在简单句中使用",
+      "materials": [
+        {
+          "en": "read",
+          "zh": "阅读"
+        },
+        {
+          "en": "books",
+          "zh": "书（复数）"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "read-books"
+      ],
+      "phrase": null,
+      "phrase_zh": null,
+      "difficulty": 2
+    },
+    {
+      "key": "route-because-of",
+      "id": "route-because-of",
+      "unit": "route-connections",
+      "english": "because of",
+      "chinese": "因为……（后接事物）",
+      "sentence": "I stay at home because of the rain.",
+      "sentence_zh": "因为下雨，我待在家里。",
+      "usage": "because of 后接原因的事物，例如 the rain；直接接完整句子要学 because 的另一种结构。",
+      "objective": "因为……（后接事物），并在简单句中使用",
+      "materials": [
+        {
+          "en": "stay at home",
+          "zh": "待在家里"
+        },
+        {
+          "en": "the rain",
+          "zh": "下雨"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "route-at-home"
+      ],
+      "phrase": null,
+      "phrase_zh": null,
+      "difficulty": 3
+    },
+    {
+      "key": "route-going-to",
+      "id": "route-going-to",
+      "unit": "route-connections",
+      "english": "be going to",
+      "chinese": "打算做某事",
+      "sentence": "I am going to read books.",
+      "sentence_zh": "我打算读书。",
+      "usage": "be going to 表达打算；说我打算时 be 写成 am，所以是 I am going to。后面接动作。",
+      "objective": "打算做某事，并在简单句中使用",
+      "materials": [
+        {
+          "en": "read books",
+          "zh": "读书"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "route-i-am",
+        "plan-to"
+      ],
+      "phrase": "am going to read books",
+      "phrase_zh": "打算读书（配合 I）",
+      "difficulty": 3
+    },
+    {
+      "key": "route-used-to",
+      "id": "route-used-to",
+      "unit": "route-connections",
+      "english": "used to",
+      "chinese": "过去常常（现在通常不再如此）",
+      "sentence": "I used to read books.",
+      "sentence_zh": "我过去常常读书。",
+      "usage": "used to 后写动作的基本写法，强调过去的习惯，与现在有对比；不是 use 的普通现在时。",
+      "objective": "过去常常（现在通常不再如此），并在简单句中使用",
+      "materials": [
+        {
+          "en": "read books",
+          "zh": "读书"
+        },
+        {
+          "en": "I",
+          "zh": "我"
+        }
+      ],
+      "requires": [
+        "every-day",
+        "plan-to"
+      ],
+      "phrase": "used to read books",
+      "phrase_zh": "过去常常读书",
+      "difficulty": 3
+    }
+  ],
+  "replace_course": true
+}

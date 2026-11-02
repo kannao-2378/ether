@@ -1,3 +1,4 @@
+import curriculum_engine
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import json
@@ -204,6 +205,12 @@ def test_action(action: str, data: dict):
     else:raise HTTPException(404,'未知测试操作')
     return test_status()
 
+def group_mode(c,qid):
+    if not testing.get():return True
+    if c.execute(text("SELECT 1 FROM group_questions WHERE question_id=:q AND group_id LIKE 'focus-%'"),dict(q=qid)).first():return True
+    return bool(c.execute(text("SELECT 1 FROM sqlite_master WHERE name='test_clock'")).first() and c.execute(text('SELECT stage FROM test_clock WHERE id=1')).scalar() is None)
+
+
 def answer_hint(c,item):
     options=transfer.answer_options(item['id'],item['answer'],(content.details(c,item['id']) or {}).get('accepted_answers'))
     shapes=[list(map(len,transfer.normalize(a).split())) for a in options]
@@ -235,7 +242,8 @@ def learning_plan():
     with engine.connect() as c:
         admitted=group_learning.counts(c,now())
     with engine.connect() as c:curriculum=content.curriculum(c,include_items=False);packages=bulk_courses.summary(c)
-    return dict(date=day,curriculum=curriculum,packages=packages,new_limit=s['daily-new-limit'],review_limit=s['daily-review-limit'],new_admitted=admitted.get('new',0),review_admitted=admitted.get('review',0),new_breakdown=d.get('new_breakdown',{}),cross_day_due=d['cross_day_due'],same_day_practice=d['same_day_practice'],today_count=d['today_count'],rules=[rule_profile(r) for r in RULES],weak=[dict(id=i['id'],answer=i['answer'],prompt=i['prompt'],familiarity=familiarity(i)[1]) for i in d['items'] if i['introduced'] and i['level']<3][:10])
+    with engine.connect() as c:route=curriculum_engine.report(c,s['active-course'])
+    return dict(date=day,route=route,curriculum=curriculum,packages=packages,new_limit=s['daily-new-limit'],review_limit=s['daily-review-limit'],new_admitted=admitted.get('new',0),review_admitted=admitted.get('review',0),new_breakdown=d.get('new_breakdown',{}),cross_day_due=d['cross_day_due'],same_day_practice=d['same_day_practice'],today_count=d['today_count'],rules=[rule_profile(r) for r in RULES],weak=[dict(id=i['id'],answer=i['answer'],prompt=i['prompt'],familiarity=familiarity(i)[1]) for i in d['items'] if i['introduced'] and i['level']<3][:10])
 
 @app.get('/api/daily-activity')
 def daily_activity_report(day: str | None=None,planning: bool=False):
@@ -471,10 +479,14 @@ def next_question():
     with engine.begin() as c:
         stage=c.execute(text('SELECT stage FROM test_clock WHERE id=1')).scalar() if testing.get() else None
         special=focus_training.select(c,now())
-        if not testing.get() or special:
+        if not testing.get() or special or stage is None:
             settings=study_settings(c)
             kind,item=special if special else group_learning.select(c,now(),settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course'])
-            if kind=='done':return dict(kind='done',message='今日可安排的学习组已完成或达到上限。')
+            if kind=='done':
+                route=curriculum_engine.report(c,settings['active-course'])
+                if not route['ready_total']:return dict(kind='done',reason='uncompiled-course',message='本课程暂无已编排新课；可在学习计划选择课程，或在词典加入专项。')
+                if not route['unintroduced']:return dict(kind='done',reason='no-more-new-goals',message='没有新的已编排学习组；未完成训练和到期复习仍会继续安排。')
+                return dict(kind='done',message='今日可安排的学习组已完成或达到上限。')
             if kind=='learn':return dict(kind='learn',**item)
             qid=item.get('question_id') or str(uuid.uuid4())
             if not item.get('question_id'):
@@ -573,6 +585,8 @@ def skip_test_question(qid: str):
         rebuild(c,kid)
         c.execute(text('UPDATE progress SET level=5 WHERE knowledge_id=:k'),dict(k=kid))
         update_coverage(c,kid,now())
+        c.execute(text('DELETE FROM group_usage WHERE question_id=:q'),dict(q=qid))
+        if group_mode(c,qid):group_learning.refresh(c,kid,now(),qid)
         assessment.refresh(c,kid)
     return dict(saved=True,test_skip=True)
 
@@ -600,7 +614,7 @@ def feedback(body: Feedback):
           FROM answers a WHERE a.question_id=:q) WHERE question_id=:q'''),dict(q=body.question_id,confidence=body.confidence))
         assessment.refresh(c,kid)
         apply_retention_limit(c,kid)
-        if not testing.get() or c.execute(text("SELECT 1 FROM group_questions WHERE question_id=:q AND group_id LIKE 'focus-%'"),dict(q=body.question_id)).first():group_learning.refresh(c,kid,now(),body.question_id)
+        if group_mode(c,body.question_id):group_learning.refresh(c,kid,now(),body.question_id)
     return dict(saved=True)
 
 @app.post('/api/check')
@@ -641,7 +655,7 @@ def submit(body: Submission):
         update_coverage(c,row['knowledge_id'],now())
         assessment.refresh(c,row['knowledge_id'])
         apply_retention_limit(c,row['knowledge_id'])
-        if not testing.get() or c.execute(text("SELECT 1 FROM group_questions WHERE question_id=:q AND group_id LIKE 'focus-%'"),dict(q=body.question_id)).first():group_learning.refresh(c,row['knowledge_id'],now(),body.question_id)
+        if group_mode(c,body.question_id):group_learning.refresh(c,row['knowledge_id'],now(),body.question_id)
         scheduled=c.execute(text('SELECT due_at,due_sequence,gap FROM review_queue WHERE knowledge_id=:k'),dict(k=row['knowledge_id'])).mappings().first()
         result['due_at']=scheduled['due_at']
         c.execute(text('UPDATE answers SET due_at=:d WHERE question_id=:q'),dict(d=scheduled['due_at'],q=body.question_id))
