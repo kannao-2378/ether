@@ -323,7 +323,7 @@ def select(c,stamp,new_limit,review_limit,course='all'):
  current=c.execute(text("""SELECT t.group_id FROM daily_group_tasks t LEFT JOIN group_progress p ON p.group_id=t.group_id
  WHERE t.day=:d AND t.group_id NOT LIKE 'focus-%' AND (p.due_at IS NULL OR julianday(p.due_at)<=julianday(:t)) ORDER BY t.rowid"""),dict(d=day,t=stamp.isoformat())).scalars().all()
  candidates=[]
- for gid in current[:12]:
+ for gid in current:
   hist=events(c,gid,day)
   item,_=step(c,gid,stamp,history=hist)
   if item:

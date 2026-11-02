@@ -139,4 +139,21 @@ class GroupLearningTests(unittest.TestCase):
   with self.db.begin() as c:c.execute(text("INSERT INTO group_progress VALUES('want-to',:d,:t,0)"),dict(d=future,t=self.clock.isoformat()))
   own=app.memory_history('word-i');other=app.memory_history('word-i',group_id='want-to')
   self.assertNotEqual(own['group_due_at'],other['group_due_at']);self.assertEqual(other['group_due_at'],future)
+ def test_completed_legacy_bookings_do_not_hide_active_group_after_twelfth_row(self):
+  q=app.next_question();app.introduce(q['id']);q=app.next_question();self.correct(q,'hard')
+  with self.db.begin() as c:
+   for i in range(11):
+    gid='old-empty-'+str(i)
+    c.execute(text("INSERT INTO learning_groups VALUES(:g,'word-i',:g,'word')"),dict(g=gid))
+    c.execute(text("INSERT INTO daily_group_tasks VALUES('2026-11-01',:g,'review','word-i')"),dict(g=gid))
+   c.execute(text("INSERT INTO daily_group_tasks VALUES('2026-11-01','look-at','new','look-at')"))
+   c.execute(text("INSERT OR IGNORE INTO group_active_slots VALUES('look-at',:t)"),dict(t=self.clock.isoformat()))
+   for i in range(10):c.execute(text('INSERT INTO group_active_slots VALUES(:g,:t)'),dict(g='other-active-'+str(i),t=self.clock.isoformat()))
+  app.save_settings({'daily-new-limit':2})
+  nxt=app.next_question();self.assertEqual(nxt['group_id'],'look-at');self.assertNotEqual(nxt['id'],q['id'])
+  with self.db.connect() as c:self.assertEqual(c.execute(text('SELECT COUNT(*) FROM group_active_slots')).scalar(),12)
+ def test_dashboard_history_keeps_original_question_group(self):
+  q=app.next_question();app.introduce(q['id']);q=app.next_question();self.correct(q)
+  row=next(h for h in app.dashboard()['history'] if h['question_id']==q['question_id'])
+  self.assertEqual(row['group_id'],q['group_id']);self.assertEqual(row['group_title'],q['group_title'])
 if __name__=='__main__':unittest.main()
