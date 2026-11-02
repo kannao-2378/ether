@@ -364,3 +364,9 @@ html{scrollbar-gutter:stable}
 .focus-training{padding:10px 0 16px;border-bottom:1px solid var(--control-border,#dce2e9)}.focus-training h4{margin:6px 0}.focus-training p,.focus-training small{font-size:12px}.focus-training .actions{flex-wrap:wrap}.focus-training button,.daily-overview .daily-entry button{font-size:12px;padding:6px 10px}
 
 .word-lookup{margin:12px 0;font-size:13px}.word-lookup>button,.word-lookup .actions button{font-size:12px;padding:6px 10px}.word-lookup h4{margin:12px 0}.lookup-option{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--control-border,#dce2e9)}.lookup-option input{width:18px;height:18px;flex-shrink:0}.lookup-option span{min-width:0;overflow-wrap:anywhere}.lookup-option small{display:block;font-size:12px;margin-top:4px}.lookup-note{font-size:12px;opacity:.75}.word-lookup .actions{flex-wrap:wrap}
+
+/* Word lengths guide automatic sentence checking; native input keeps editing/IME intact. */
+.memo-writing.sentence-writing input,.sentence-guide{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:clamp(20px,4.6vw,32px)}
+.sentence-guide{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 1ch;max-width:100%;margin:4px auto 10px;pointer-events:none}
+.sentence-guide span{display:block;max-width:100%;height:2px;border-bottom:1px solid currentColor;opacity:.5}
+.memo-writing.wrong .sentence-guide{color:#d9534f}

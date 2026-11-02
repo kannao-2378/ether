@@ -1,3 +1,4 @@
+import {sentenceReady} from './sentenceInput';
 import {AuthGate} from './AuthGate';
 import {useViewport} from './useViewport';
 import {requestId} from './requestId';
@@ -93,7 +94,7 @@ function App({onLogout}:{onLogout?:()=>void}){
   const text=checked?.answer||active.answer||dashboard?.items.find((i:any)=>i.id===active.id)?.answer||'';
   if(!text){setError('当前题目的发音内容尚未加载，请重新连接后重试。');return;}
   // Keep playback inside the original tap, rather than after a network await.
-  if(active.kind==='recall'&&!checked?.correct&&active.question_id)void api('/reveal/'+active.question_id,{}).catch(e=>setError(e instanceof Error?e.message:'提示记录保存失败，请重试。'));
+  if((reviewIndex===null||reviewSpelling)&&active.kind==='recall'&&!checked?.correct&&active.question_id)void api('/reveal/'+active.question_id,{}).catch(e=>setError(e instanceof Error?e.message:'提示记录保存失败，请重试。'));
   speech.speak(text);
  }
 
@@ -102,7 +103,6 @@ function App({onLogout}:{onLogout?:()=>void}){
   function keydown(e:KeyboardEvent){
    if(page!=='今日学习'||e.isComposing)return;
    const activeItem=reviewIndex===null?q:previousItems[reviewIndex];
-   const transferStage=dashboard?.items.find((i:any)=>i.id===activeItem?.id)?.stage===4;
    const writing=reviewIndex===null?!checked?.correct:reviewSpelling&&!checked?.correct;
    const key=eventKey(e);
    if((e.target as HTMLElement).closest('select'))return;
@@ -111,9 +111,9 @@ function App({onLogout}:{onLogout?:()=>void}){
     if(!e.repeat&&!busy&&writing){setPeek(true);const target=activeItem?.question_id;if(target)void api('/reveal/'+target,{}).catch(e=>setError(e instanceof Error?e.message:'提示记录保存失败，请重试。'));}
     return;
    }
-   if(key===(transferStage&&writing?keys.submit:keys.audio)||transferStage&&key===keys.contextAudio){
+   if(key==='Enter'||key===keys.audio){
     e.preventDefault();e.stopImmediatePropagation();
-    if(!e.repeat&&!busy&&!checking){if(transferStage&&writing&&key===keys.submit)void checkInput(answer);else if(reviewIndex!==null)speech.speak(dashboard?.items.find((i:any)=>i.id===activeItem?.id)?.answer||'');else pronounce();}
+    if(!e.repeat&&!busy&&!checking)pronounce();
     return;
    }
    if(key===keys.familiar){e.preventDefault();e.stopImmediatePropagation();if(!e.repeat&&!busy&&reviewIndex===null)void startChallenge();return;}
@@ -141,8 +141,9 @@ function App({onLogout}:{onLogout?:()=>void}){
   if(checkLock.current||result||checked?.correct||composing.current)return;
   const active=reviewIndex===null?q:previousItems[reviewIndex];
   const limit=active?.answer_length??dashboard?.items.find((i:any)=>i.id===active?.id)?.answer.length;
-  const isTransfer=dashboard?.items.find((i:any)=>i.id===active?.id)?.stage===4;
-  if(!value.trim()||(!force&&!isTransfer&&(!limit||value.trim().replace(/[.!?。！？]+$/,'').trim().length<limit)))return;
+  const expected=dashboard?.items.find((i:any)=>i.id===active?.id)?.answer||'';
+  const shapes=active?.answer_shapes||[expected.trim().replace(/[.!?。！？]+$/,'').split(/\s+/).map((w:string)=>w.length)];
+  if(!value.trim()||(!force&&((shapes[0]?.length>1)?!sentenceReady(value,shapes):(!limit||value.trim().replace(/[.!?。！？]+$/,'').trim().length<limit))))return;
   const key=active.question_id+':'+value;
   if(checkKey.current===key)return;
   checkKey.current=key;checkLock.current=true;setChecking(true);setCheckError('');
@@ -154,7 +155,7 @@ function App({onLogout}:{onLogout?:()=>void}){
  const introduced=dashboard?.items.filter((i:any)=>i.introduced).length??0;
  const current=dashboard?.items.find((i:any)=>i.id===q?.id);
  return <div className={page==='今日学习'?'shell study-mode':'shell'}><nav className="mobile-pages" aria-label="页面导航">{['今日学习','学习计划','我的词典','学习档案','设置'].map(p=><button key={p} aria-current={page===p?'page':undefined} onClick={()=>setPage(p)}>{p}</button>)}</nav><aside><div className="brand">循序<span>ENGLISH LEARNING</span></div><div className="label">个人学习空间</div>{['今日学习','学习计划','我的词典','学习档案','设置'].map(p=><button key={p} className={page===p?'nav active':'nav'} onClick={()=>setPage(p)}>{p}<span>›</span></button>)}{onLogout&&<button className="nav logout" onClick={onLogout}>退出登录</button>}<div className="aside-bottom"><i/> 学习进度 · 自动保存<small>从搭配开始，慢慢说出自己的话。</small></div></aside><main>{isTestMode()&&<div className="test-mode-banner">独立测试模式 · 使用测试数据库 · 可在设置中模拟日期或退出</div>}<header><div><h1>{page}</h1></div><span className="badge">阶段 01 · 基础搭配</span></header>{error&&<div role="alert" className="error">{error}<button onClick={()=>act(refresh)}>重新连接</button></div>}
- {page==='今日学习'?<><Study extendDaily={extendDaily} peekStart={()=>{if(busy||checking)return;setPeek(true);const target=(reviewIndex===null?q:previousItems[reviewIndex])?.question_id;if(target)void api('/reveal/'+target,{}).catch(e=>setError(e instanceof Error?e.message:'提示记录保存失败，请重试。'));}} peekEnd={()=>setPeek(false)} speechMessage={speech.message} newBreakdown={dashboard?.new_breakdown} groupTitle={reviewIndex===null?q?.group_title:previousItems[reviewIndex]?.group_title} reviewCount={dashboard?.today_review??0} newCount={dashboard?.today_new??0} keys={keys} canChallenge={reviewIndex===null&&q?.kind==='learn'} challenge={()=>void startChallenge()} canSkip={isTestMode()&&reviewIndex===null&&q?.kind==='recall'&&!checked?.correct} skip={()=>void skipForTest()} previousDisabled={busy||checking||!previousItems.length} selectedFeedback={reviewIndex===null?null:previousItems[reviewIndex]?.confidence} reviewing={reviewIndex!==null} peek={peek} q={reviewIndex===null?q:{...dashboard?.items.find((i:any)=>i.id===previousItems[reviewIndex]?.id),...previousItems[reviewIndex],kind:reviewSpelling?'recall':'learn'}} current={reviewIndex===null?current:dashboard?.items.find((i:any)=>i.id===previousItems[reviewIndex]?.id)} introduced={introduced} total={total} crossDayDue={dashboard?.cross_day_due??0} sameDayPractice={dashboard?.same_day_practice??0} todayCount={dashboard?.today_count??0} answer={answer} checked={checked} hint={reviewIndex===null?hint:null} result={reviewIndex===null?result:null} busy={busy} checking={checking} checkError={checkError} shake={shake} speak={speech.speak} pronounce={pronounce} reveal={()=>void revealAnswer()} submit={submitAnswer} next={()=>reviewIndex!==null?reviewNext():void continueLearning()} back={previous} navigate={setPage} retry={()=>void checkInput(answer,true)} compositionStart={()=>{composing.current=true;}} compositionEnd={(e:any)=>{composing.current=false;if((reviewIndex===null?current:dashboard?.items.find((i:any)=>i.id===previousItems[reviewIndex]?.id))?.stage!==4)void checkInput(e.currentTarget.value);}} change={(e:any)=>{const value=e.target.value;setAnswer(value);setChecked(null);checkKey.current='';if((reviewIndex===null?current:dashboard?.items.find((i:any)=>i.id===previousItems[reviewIndex]?.id))?.stage!==4)void checkInput(value);}}/></>:page==='学习计划'?<Plan start={()=>setPage('今日学习')}/>:page==='我的词典'?<Dictionary speak={speech.speak}/>:page==='规则课程'?<Lesson speak={speech.speak}/>:page==='设置'?<Settings onLogout={onLogout} theme={theme} setTheme={setTheme} speech={speech.controls} back={()=>setPage('今日学习')}/>:<LearningProfile/>}
+ {page==='今日学习'?<><Study extendDaily={extendDaily} peekStart={()=>{if(busy||checking)return;setPeek(true);const target=(reviewIndex===null?q:previousItems[reviewIndex])?.question_id;if(target)void api('/reveal/'+target,{}).catch(e=>setError(e instanceof Error?e.message:'提示记录保存失败，请重试。'));}} peekEnd={()=>setPeek(false)} speechMessage={speech.message} newBreakdown={dashboard?.new_breakdown} groupTitle={reviewIndex===null?q?.group_title:previousItems[reviewIndex]?.group_title} reviewCount={dashboard?.today_review??0} newCount={dashboard?.today_new??0} keys={keys} canChallenge={reviewIndex===null&&q?.kind==='learn'} challenge={()=>void startChallenge()} canSkip={isTestMode()&&reviewIndex===null&&q?.kind==='recall'&&!checked?.correct} skip={()=>void skipForTest()} previousDisabled={busy||checking||!previousItems.length} selectedFeedback={reviewIndex===null?null:previousItems[reviewIndex]?.confidence} reviewing={reviewIndex!==null} peek={peek} q={reviewIndex===null?q:{...dashboard?.items.find((i:any)=>i.id===previousItems[reviewIndex]?.id),...previousItems[reviewIndex],kind:reviewSpelling?'recall':'learn'}} current={reviewIndex===null?current:dashboard?.items.find((i:any)=>i.id===previousItems[reviewIndex]?.id)} introduced={introduced} total={total} crossDayDue={dashboard?.cross_day_due??0} sameDayPractice={dashboard?.same_day_practice??0} todayCount={dashboard?.today_count??0} answer={answer} checked={checked} hint={reviewIndex===null?hint:null} result={reviewIndex===null?result:null} busy={busy} checking={checking} checkError={checkError} shake={shake} speak={speech.speak} pronounce={pronounce} reveal={()=>void revealAnswer()} submit={submitAnswer} next={()=>reviewIndex!==null?reviewNext():void continueLearning()} back={previous} navigate={setPage} retry={()=>void checkInput(answer,true)} compositionStart={()=>{composing.current=true;}} compositionEnd={(e:any)=>{composing.current=false;void checkInput(e.currentTarget.value);}} change={(e:any)=>{const value=e.target.value;setAnswer(value);setChecked(null);checkKey.current='';void checkInput(value);}}/></>:page==='学习计划'?<Plan start={()=>setPage('今日学习')}/>:page==='我的词典'?<Dictionary speak={speech.speak}/>:page==='规则课程'?<Lesson speak={speech.speak}/>:page==='设置'?<Settings onLogout={onLogout} theme={theme} setTheme={setTheme} speech={speech.controls} back={()=>setPage('今日学习')}/>:<LearningProfile/>}
  </main></div>;
 }
 createRoot(document.getElementById('root')!).render(<AuthGate>{logout=><App onLogout={logout}/>}</AuthGate>);

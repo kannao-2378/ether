@@ -204,6 +204,12 @@ def test_action(action: str, data: dict):
     else:raise HTTPException(404,'未知测试操作')
     return test_status()
 
+def answer_hint(c,item):
+    options=transfer.answer_options(item['id'],item['answer'],(content.details(c,item['id']) or {}).get('accepted_answers'))
+    shapes=[list(map(len,transfer.normalize(a).split())) for a in options]
+    return dict(answer_length=len(normalize(item['answer'])),word_lengths=list(map(len,normalize(item['answer']).split())),answer_shapes=shapes)
+
+
 def normalize(value):
     return transfer.normalize(value)
 
@@ -276,7 +282,7 @@ def challenge(kid: str):
             qid=str(uuid.uuid4())
             c.execute(text('INSERT INTO questions VALUES(:q,:k,:t,0)'),dict(q=qid,k=kid,t=now().isoformat()))
         c.execute(text('UPDATE progress SET introduced=1 WHERE knowledge_id=:k'),dict(k=kid))
-        return dict(kind='recall',question_id=qid,id=kid,prompt=item['prompt'],answer_length=len(normalize(item['answer'])),challenge=True)
+        return dict(kind='recall',question_id=qid,id=kid,prompt=item['prompt'],**answer_hint(c,item),challenge=True)
 
 class LookupQuery(BaseModel):
     word: str = Field(min_length=1,max_length=80)
@@ -427,7 +433,7 @@ def save_settings(values: dict):
             required={'clear','hard','forgot','familiar','peek','audio','submit','contextAudio'}
             allowed={'1','2','3','4','5','6','7','8','9','F2','F3','F4','F6','F7','F8','F9','Enter','Control','Alt+Enter'}
             if not isinstance(value,dict) or set(value)!=required or any(v not in allowed for v in value.values()):raise HTTPException(422,'快捷键配置无效')
-            pairs=list(value.items())
+            pairs=[(k,v) for k,v in value.items() if k not in ('submit','contextAudio')]
             for i,(a,v) in enumerate(pairs):
                 for b,w in pairs[i+1:]:
                     if v==w and {a,b}!={'audio','submit'}:raise HTTPException(422,'快捷键重复')
@@ -445,8 +451,12 @@ def dashboard(summary_only: bool = False):
         if not summary_only:
             items = [dict(r) for r in c.execute(text('SELECT k.*,p.*,COALESCE(l.stage,1) AS stage,l.parent_id,CASE WHEN l.parent_id IS NULL OR pp.level>=3 THEN 1 ELSE 0 END AS unlocked FROM knowledge k JOIN progress p ON k.id=p.knowledge_id LEFT JOIN course_links l ON l.knowledge_id=k.id LEFT JOIN progress pp ON pp.knowledge_id=l.parent_id')).mappings()]
             answers = [dict(r) for r in c.execute(text('SELECT a.*,COALESCE((SELECT confidence FROM feedback_events f WHERE f.question_id=a.question_id ORDER BY f.rowid DESC LIMIT 1),a.confidence) AS effective_confidence,k.prompt,k.answer,gq.group_id,lg.title AS group_title FROM answers a JOIN knowledge k ON k.id=a.knowledge_id LEFT JOIN group_questions gq ON gq.question_id=a.question_id LEFT JOIN learning_groups lg ON lg.id=gq.group_id ORDER BY a.created_at DESC LIMIT 100')).mappings()]
+            hints={}
             for answer in answers:
                 answer['confidence']=answer.pop('effective_confidence')
+                kid=answer['knowledge_id']
+                if kid not in hints:hints[kid]=answer_hint(c,dict(id=kid,answer=answer['answer']))
+                answer.update(hints[kid])
         counts=group_learning.due_counts(c,now())
         day_start=now().astimezone(timezone(timedelta(hours=8))).replace(hour=0,minute=0,second=0,microsecond=0).astimezone(timezone.utc).isoformat()
         today_count=c.execute(text('SELECT COUNT(*) FROM answers WHERE julianday(created_at)>=julianday(:t)'),dict(t=day_start)).scalar()
@@ -470,7 +480,7 @@ def next_question():
             if not item.get('question_id'):
                 c.execute(text('INSERT INTO questions(id,knowledge_id,created_at,revealed) VALUES(:q,:k,:t,0)'),dict(q=qid,k=item['id'],t=now().isoformat()))
                 c.execute(text('INSERT INTO group_questions VALUES(:q,:g,:r)'),dict(q=qid,g=item['group_id'],r=item['role']))
-            return dict(kind='recall',question_id=qid,id=item['id'],prompt=item['prompt'],answer_length=len(normalize(item['answer'])),group_id=item['group_id'],group_title=item.get('group_title',''),group_role=item['role'])
+            return dict(kind='recall',question_id=qid,id=item['id'],prompt=item['prompt'],**answer_hint(c,item),group_id=item['group_id'],group_title=item.get('group_title',''),group_role=item['role'])
 
         stage_filter=(' AND COALESCE((SELECT stage FROM course_links l WHERE l.knowledge_id=k.id),1)=:stage' if stage else '')+" AND NOT EXISTS(SELECT 1 FROM daily_coverage cv WHERE cv.knowledge_id=k.id AND cv.day=:day)"
         pending=c.execute(text('SELECT q.id AS question_id,k.* FROM questions q JOIN knowledge k ON q.knowledge_id=k.id LEFT JOIN answers a ON a.question_id=q.id WHERE a.id IS NULL'+stage_filter+' ORDER BY q.created_at LIMIT 1'),dict(stage=stage,day=now().astimezone(timezone(timedelta(hours=8))).date().isoformat())).mappings().first()
@@ -495,14 +505,14 @@ def next_question():
             existing=c.execute(text('SELECT q.id FROM questions q LEFT JOIN answers a ON a.question_id=q.id WHERE q.knowledge_id=:k AND a.id IS NULL LIMIT 1'),dict(k=material['id'])).scalar()
             qid=existing or str(uuid.uuid4())
             if not existing:c.execute(text('INSERT INTO questions(id,knowledge_id,created_at,revealed) VALUES(:q,:k,:t,0)'),dict(q=qid,k=material['id'],t=now().isoformat()))
-            return dict(kind='recall',question_id=qid,id=material['id'],prompt=material['prompt'],answer_length=len(normalize(material['answer'])),supplement=True)
+            return dict(kind='recall',question_id=qid,id=material['id'],prompt=material['prompt'],**answer_hint(c,material),supplement=True)
         if pending:
             missing=None if testing.get() else transfer.missing_material(c,text,pending['id'])
             if missing:
                 material=material_question(missing)
                 if material:return material
             elif testing.get() or admit_pending(pending['id'],'review'):
-                return dict(kind='recall',question_id=pending['question_id'],id=pending['id'],prompt=pending['prompt'],answer_length=len(normalize(pending['answer'])))
+                return dict(kind='recall',question_id=pending['question_id'],id=pending['id'],prompt=pending['prompt'],**answer_hint(c,pending))
         if stage==4 and not bulk_courses.summary(c):
             item,message=context_engine.pick(c,now(),test=True)
             if item is None:return dict(kind='done',message=message,context_round_complete=True)
@@ -523,7 +533,7 @@ def next_question():
         if kind=='done':return dict(kind='done',message='今日安排已完成或已达每日组数上限，剩余任务会保留。')
         qid = str(uuid.uuid4())
         c.execute(text('INSERT INTO questions (id,knowledge_id,created_at) VALUES (:q,:k,:t)'),dict(q=qid,k=item['id'],t=now().isoformat()))
-        return dict(kind='recall',question_id=qid,id=item['id'],prompt=item['prompt'],answer_length=len(normalize(item['answer'])))
+        return dict(kind='recall',question_id=qid,id=item['id'],prompt=item['prompt'],**answer_hint(c,item))
 
 @app.post('/api/introduce/{kid}')
 def introduce(kid: str):

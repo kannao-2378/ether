@@ -3,13 +3,17 @@ import re
 def normalize(s):
  return re.sub(r'\s+',' ',s.strip().replace('’',"'")).casefold().rstrip('.!?。！？').rstrip()
 
-def grade(kid,answer,expected,alternatives=None):
- norm=normalize
+def answer_options(kid,expected,alternatives=None):
  variants={
   'want-to-transfer-eat':['I want to eat.','I want to have a meal.','I want to eat a meal.'],
   'want-to-transfer-school':['I want to go to school.'],
  }
  valid=alternatives or variants.get(kid,[expected])
+ return valid
+
+def grade(kid,answer,expected,alternatives=None):
+ norm=normalize
+ valid=answer_options(kid,expected,alternatives)
  correct=norm(answer) in [norm(s) for s in valid]
  errors=[]
  if not correct:
