@@ -3,6 +3,7 @@ from datetime import datetime
 from sqlalchemy import text
 import group_learning as groups
 import focus_training
+import course_policy
 
 def build(c,stamp,day,new_limit,review_limit,course='all',planning=False):
  today=groups.day_of(stamp)
@@ -30,15 +31,15 @@ def build(c,stamp,day,new_limit,review_limit,course='all',planning=False):
  result['special']=sum(b['kind']=='special' and b['id'] in practiced for b in booked)
  if planning and day==today:
   seen={b['id'] for b in booked}
-  for gid in groups.active_groups(c,stamp):
+  active=groups.active_groups(c,stamp);permitted=course_policy.allowed(c,active+[b['id'] for b in booked],course,result['new']<new_limit)
+  for b in booked:
+   if b['id'] not in permitted and b['kind']!='special' and b['status']!='completed':b['status']='waiting'
+  for gid in course_policy.ordered(c,active):
+   if gid not in permitted:continue
    if gid in seen:continue
    r=c.execute(text('SELECT id,title,kind AS unit_type FROM learning_groups WHERE id=:g'),dict(g=gid)).mappings().first()
    if r:result['preview_review'].append(dict(r))
   result['review_waiting']=len(result['preview_review'])
   result['preview_review']=result['preview_review'][:max(0,review_limit-result['review'])]
-  course_filter='' if course=='all' else "AND EXISTS(SELECT 1 FROM group_members m JOIN course_items i ON i.knowledge_id=m.knowledge_id JOIN course_units u ON u.id=i.unit_id WHERE m.group_id=g.id AND u.course_id=:course)"
-  result['preview_new']=[dict(r) for r in c.execute(text("""SELECT g.id,g.title,g.kind AS unit_type FROM learning_groups g
- JOIN progress p ON p.knowledge_id=g.root_id JOIN group_primary own ON own.knowledge_id=g.root_id AND own.group_id=g.id
- WHERE p.introduced=0 AND NOT EXISTS(SELECT 1 FROM daily_group_tasks t WHERE t.group_id=g.id) """+course_filter+"""
- ORDER BY CASE WHEN g.kind='expression' THEN 0 ELSE 1 END,COALESCE((SELECT MIN(i.position) FROM group_members m JOIN course_items i ON i.knowledge_id=m.knowledge_id WHERE m.group_id=g.id),999999),g.rowid LIMIT :n"""),dict(course=course,n=max(0,new_limit-result['new']))).mappings()]
+  result['preview_new']=[dict(r) for r in course_policy.unseen(c,course,max(0,new_limit-result['new']))]
  return result

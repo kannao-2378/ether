@@ -18,6 +18,7 @@ class ExtraLearningTests(unittest.TestCase):
     c.execute(text('INSERT INTO knowledge VALUES(:k,:a,:a,:a,:a)'),dict(k='quota-word-'+str(n),a='quotaword'+str(n)))
     c.execute(text('INSERT INTO progress(knowledge_id) VALUES(:k)'),dict(k='quota-word-'+str(n)))
    app.content.install(c);app.group_learning.install(c)
+   for n in range(10):c.execute(text("INSERT OR IGNORE INTO course_items VALUES(:k,'materials',:p)"),dict(k='quota-word-'+str(n),p=1000+n))
    units=c.execute(text('SELECT id,root_id FROM learning_groups LIMIT 50')).all()
    for gid,kid in units:
     c.execute(text("INSERT INTO daily_group_tasks VALUES('2026-11-01',:g,'new',:k)"),dict(g=gid,k=kid))

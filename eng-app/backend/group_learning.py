@@ -4,6 +4,7 @@ Individual answers/FSRS cards are never rewritten to manufacture mastery.
 """
 from datetime import datetime,timedelta,timezone
 import json,re
+import course_policy
 from sqlalchemy import text
 ZONE=timezone(timedelta(hours=8));VERSION='families-v6'
 TABLES=('lookup_previews','focus_requests','learning_groups','group_members','group_primary','group_requirements','group_questions','daily_group_tasks','group_progress','group_usage','group_active_slots','group_install','group_migrations')
@@ -27,6 +28,7 @@ def install(c):
   'CREATE TABLE IF NOT EXISTS group_install(id INTEGER PRIMARY KEY,version TEXT,knowledge_count INTEGER)',
   'CREATE INDEX IF NOT EXISTS group_members_item ON group_members(knowledge_id,group_id)',
   'CREATE INDEX IF NOT EXISTS group_primary_group ON group_primary(group_id,knowledge_id)',
+  'CREATE INDEX IF NOT EXISTS daily_group_family ON daily_group_tasks(group_id,day)',
   'CREATE INDEX IF NOT EXISTS group_questions_family ON group_questions(group_id,question_id)',
   'CREATE INDEX IF NOT EXISTS group_usage_target ON group_usage(target_id,question_id)']:
   c.execute(text(sql))
@@ -135,6 +137,7 @@ def install(c):
   FROM daily_tasks dt JOIN group_primary p ON p.knowledge_id=dt.knowledge_id
   GROUP BY dt.day,p.group_id"""))
   c.execute(text("INSERT INTO group_migrations VALUES('legacy-tasks-v1')"))
+ course_policy.register_core(c)
 
 def family(c,kid):
  return c.execute(text('SELECT group_id FROM group_primary WHERE knowledge_id=:k'),dict(k=kid)).scalar() or kid
@@ -177,23 +180,24 @@ def members(c,gid):
 def supported(c,kid,stamp):
  return bool(c.execute(text("SELECT 1 FROM group_usage u JOIN answers a ON a.question_id=u.question_id WHERE u.target_id=:k AND date(a.created_at,'+8 hours')=:d LIMIT 1"),dict(k=kid,d=day_of(stamp))).first())
 
-def requirements_met(c,kid):
- return not c.execute(text('''SELECT 1 FROM group_requirements r JOIN progress p ON p.knowledge_id=r.material_id
- WHERE r.knowledge_id=:k AND p.level<3 LIMIT 1'''),dict(k=kid)).first()
+def requirements_met(c,kid,ignore=None):
+ missing=c.execute(text('SELECT r.material_id FROM group_requirements r JOIN progress p ON p.knowledge_id=r.material_id WHERE r.knowledge_id=:k AND p.level<3'),dict(k=kid)).scalars().all()
+ return all(material==ignore or course_policy.covered_function(c,kid,material) for material in missing)
+
 
 def step(c,gid,stamp,history=None):
  """One active step per group; no stable gate for early transfer."""
  if gid.startswith('focus-'):
   import focus_training
   return focus_training.step(c,gid,stamp)
- rows=members(c,gid);history=events(c,gid,day_of(stamp)) if history is None else history
+ all_rows=members(c,gid);rows=course_policy.core_members(c,gid,all_rows);history=events(c,gid,day_of(stamp)) if history is None else history
  kind=c.execute(text('SELECT kind FROM daily_group_tasks WHERE day=:d AND group_id=:g'),dict(d=day_of(stamp),g=gid)).scalar()
  if kind is None:
   introduced=c.execute(text('SELECT p.introduced FROM learning_groups g JOIN progress p ON p.knowledge_id=g.root_id WHERE g.id=:g'),dict(g=gid)).scalar()
   seen_before=c.execute(text('SELECT 1 FROM daily_group_tasks WHERE group_id=:g AND day<:d LIMIT 1'),dict(g=gid,d=day_of(stamp))).first()
   kind='review' if introduced or seen_before else 'new'
  if kind=='review' and not history:
-  due=[r for r in rows if r['introduced'] and (not r['due_at'] or datetime.fromisoformat(r['due_at'])<=stamp) and (r['role'] not in ('sentence','transfer') or requirements_met(c,r['id']))]
+  due=[r for r in all_rows if r['introduced'] and course_policy.owns_review(c,gid,r) and (not r['due_at'] or datetime.fromisoformat(r['due_at'])<=stamp) and (r['role'] not in ('sentence','transfer') or requirements_met(c,r['id']))]
   if due:return sorted(due,key=lambda r:(r['level']>=3,r['attempts'],r['role'] not in ('base','phrase'),r['last_at'] or ''))[0],False
 
  if not rows:return None,False
@@ -203,7 +207,7 @@ def step(c,gid,stamp,history=None):
  def known(r):return r['level']>=3 or r['id'] in successful or supported(c,r['id'],stamp)
  # A concrete failure takes priority over advancing to another component.
  if history and not independent(history[-1]):
-  repair=next((r for r in rows if r['id']==history[-1]['knowledge_id']),rows[0])
+  repair=next((r for r in all_rows if r['id']==history[-1]['knowledge_id']),rows[0])
   if repair['role'] not in ('sentence','transfer') or requirements_met(c,repair['id']):return repair,False
  roots=[r for r in rows if r['role']=='base']
  bases=roots or [r for r in rows if r['id']==gid]
@@ -215,14 +219,12 @@ def step(c,gid,stamp,history=None):
  for r in phrases:
   if not known(r):return r,False
  for word in [r for r in rows if r['role']=='sentence_word' and not known(r)]:
-  ready=c.execute(text('''SELECT 1 FROM group_members m WHERE m.group_id=:g AND m.role='sentence'
-   AND NOT EXISTS(SELECT 1 FROM group_requirements r JOIN progress p ON p.knowledge_id=r.material_id
-    WHERE r.knowledge_id=m.knowledge_id AND r.material_id!=:w AND p.level<3) LIMIT 1'''),dict(g=gid,w=word['id'])).first()
+  ready=any(requirements_met(c,r['id'],ignore=word['id']) for r in rows if r['role']=='sentence')
   if ready:return word,False
  sentences=[r for r in rows if r['role']=='sentence' and requirements_met(c,r['id'])]
  for r in sentences[:1]:
   if not known(r):return r,False
- variants=sorted([r for r in rows if r['role']=='transfer' and requirements_met(c,r['id'])],key=lambda r:(r['attempts'],r['last_at'] or ''))
+ variants=sorted([r for r in rows if r['role']=='transfer' and requirements_met(c,r['id']) and (r['level']<3 or not r['due_at'] or datetime.fromisoformat(r['due_at'])<=stamp)],key=lambda r:(r['attempts'],r['last_at'] or ''))
  # Different registered source materials, not repeat spellings of one question.
  def material(r):return c.execute(text('SELECT material_id FROM sentence_combinations WHERE knowledge_id=:k'),dict(k=r['id'])).scalar() or r['id']
  unique=[];seen=set()
@@ -234,14 +236,14 @@ def step(c,gid,stamp,history=None):
   if len(passed)<min(2,len(unique)):
    for r in unique:
     if material(r) not in passed:return r,len(unique)<2
- kind=c.execute(text('SELECT kind FROM daily_group_tasks WHERE day=:d AND group_id=:g'),dict(d=day_of(stamp),g=gid)).scalar()
+ if kind=='review' and not history:return None,len(unique)<2
  needed=3 if kind=='new' else 1
  # Three interleaved successes across the group, never three per component.
  if streak<needed:
   candidates=sentences[:1] or phrases or bases or rows[:1]
   # Revisit an independently unverified due component on later days.
   if kind=='review':
-   due=[r for r in rows if r['introduced'] and (not r['due_at'] or datetime.fromisoformat(r['due_at'])<=stamp) and (r['role'] not in ('sentence','transfer') or requirements_met(c,r['id']))]
+   due=[r for r in all_rows if r['introduced'] and course_policy.owns_review(c,gid,r) and (not r['due_at'] or datetime.fromisoformat(r['due_at'])<=stamp) and (r['role'] not in ('sentence','transfer') or requirements_met(c,r['id']))]
    if due:candidates=sorted(due,key=lambda r:(r['level']>=3,r['attempts']))
   return candidates[0],len(unique)<2
  return None,len(unique)<2
@@ -253,7 +255,7 @@ def active_groups(c,stamp):
  WHERE p.group_id NOT LIKE 'focus-%' AND s.introduced=1 AND (gp.due_at IS NULL OR julianday(gp.due_at)<=julianday(:t))
  AND (s.due_at IS NULL OR julianday(s.due_at)<=julianday(:t))
  UNION SELECT d.group_id FROM daily_group_tasks d LEFT JOIN group_progress gp ON gp.group_id=d.group_id
- WHERE d.group_id NOT LIKE 'focus-%' AND d.day<:day AND (gp.due_at IS NULL OR julianday(gp.due_at)<=julianday(:t))
+ WHERE d.group_id NOT LIKE 'focus-%' AND EXISTS(SELECT 1 FROM learning_groups lg JOIN group_primary own ON own.knowledge_id=lg.root_id AND own.group_id=lg.id WHERE lg.id=d.group_id) AND d.day<:day AND (gp.due_at IS NULL OR julianday(gp.due_at)<=julianday(:t))
  ORDER BY 1"""),dict(t=stamp.isoformat(),day=today)).scalars().all()
 
 def pool_count(c,stamp):
@@ -322,10 +324,15 @@ def select(c,stamp,new_limit,review_limit,course='all'):
   if resumed and acquire(c,gid,stamp):c.execute(text('UPDATE group_progress SET due_at=NULL WHERE group_id=:g'),dict(g=gid))
  current=c.execute(text("""SELECT t.group_id FROM daily_group_tasks t LEFT JOIN group_progress p ON p.group_id=t.group_id
  WHERE t.day=:d AND t.group_id NOT LIKE 'focus-%' AND (p.due_at IS NULL OR julianday(p.due_at)<=julianday(:t)) ORDER BY t.rowid"""),dict(d=day,t=stamp.isoformat())).scalars().all()
+ active_new=c.execute(text("SELECT COUNT(*) FROM group_active_slots s JOIN daily_group_tasks d ON d.group_id=s.group_id WHERE d.day=:d AND d.kind='new'"),dict(d=day)).scalar()
+ permitted=course_policy.allowed(c,current+active_groups(c,stamp),course,counts(c,stamp).get('new',0)<new_limit and active_new<3)
+ current=course_policy.ordered(c,current)
  candidates=[]
  for gid in current:
+  if gid not in permitted:continue
   hist=events(c,gid,day)
-  item,_=step(c,gid,stamp,history=hist)
+  item,pending_transfer=step(c,gid,stamp,history=hist)
+  if item is None:course_policy.finish(c,gid,stamp,pending_transfer)
   if item:
    gap=(2 if hist[-1]['rating']=='forgot' else 4 if not independent(hist[-1]) else 8) if hist else 0
    due=hist[-1]['seq']+gap+1 if hist else 0
@@ -334,6 +341,7 @@ def select(c,stamp,new_limit,review_limit,course='all'):
  def result(gid,item):
   item=dict(item);item['group_id']=gid
   if item['role'] in ('sentence','transfer') and not requirements_met(c,item['id']):return None
+  if pool_count(c,stamp)>=12 and not c.execute(text('SELECT 1 FROM group_active_slots WHERE group_id=:g'),dict(g=gid)).first():course_policy.pause_lower(c,gid)
   if not admit(c,gid,item['id'],stamp,new_limit,review_limit):return None
   if item['role'] in ('word','sentence_word') and not item['introduced']:
    # Freeze first teaching ownership; shared later uses don't create new quotas.
@@ -349,17 +357,17 @@ def select(c,stamp,new_limit,review_limit,course='all'):
   choice=result(gid,item)
   if choice:return choice
  # Due groups already learned on previous days get priority over new groups.
- for gid in active_groups(c,stamp):
-  if gid in current:continue
-  item,_=step(c,gid,stamp)
-  if item and admit(c,gid,item['id'],stamp,new_limit,review_limit):return result(gid,item)
- if len(candidates)<12 and pool_count(c,stamp)<12 and counts(c,stamp).get('new',0)<new_limit:
-  course_filter='' if course=='all' else "AND EXISTS(SELECT 1 FROM group_members m JOIN course_items i ON i.knowledge_id=m.knowledge_id JOIN course_units u ON u.id=i.unit_id WHERE m.group_id=g.id AND u.course_id=:course)"
-  unseen=c.execute(text('''SELECT g.id FROM learning_groups g JOIN progress p ON p.knowledge_id=g.root_id
-   JOIN group_primary primary_group ON primary_group.knowledge_id=g.root_id AND primary_group.group_id=g.id
-   WHERE p.introduced=0 AND NOT EXISTS(SELECT 1 FROM daily_group_tasks t WHERE t.group_id=g.id) '''+course_filter+'''
-   ORDER BY CASE WHEN g.kind='expression' THEN 0 ELSE 1 END,
-   COALESCE((SELECT MIN(i.position) FROM group_members m JOIN course_items i ON i.knowledge_id=m.knowledge_id WHERE m.group_id=g.id),999999),g.rowid LIMIT 1'''),dict(d=day,course=course)).scalar()
+ for gid in course_policy.ordered(c,active_groups(c,stamp)):
+  if gid in current or gid not in permitted:continue
+  item,pending_transfer=step(c,gid,stamp)
+  if item is None:course_policy.finish(c,gid,stamp,pending_transfer)
+  if item:
+   choice=result(gid,item)
+   if choice:return choice
+ new_goals=c.execute(text("SELECT COUNT(*) FROM group_active_slots s JOIN daily_group_tasks d ON d.group_id=s.group_id WHERE d.day=:d AND d.kind='new'"),dict(d=day)).scalar()
+ if new_goals<3 and len(candidates)<12 and pool_count(c,stamp)<12 and counts(c,stamp).get('new',0)<new_limit:
+  ordered=course_policy.unseen(c,course)
+  unseen=ordered[0]['id'] if ordered else None
   if unseen:
    item,_=step(c,unseen,stamp)
    if item:

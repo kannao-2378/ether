@@ -121,13 +121,14 @@ class GroupLearningTests(unittest.TestCase):
    self.assertEqual(c.execute(text("SELECT COUNT(*) FROM answers a JOIN group_questions q ON q.question_id=a.question_id WHERE q.role='transfer' AND date(a.created_at,'+8 hours')=:d"),dict(d=groups.day_of(self.clock))).scalar(),2)
  def test_first_context_word_owner_survives_restart_without_new_slot(self):
   with self.db.begin() as c:
-   c.execute(text("INSERT INTO knowledge VALUES('shared-bread','面包','bread','面包','bread')"));c.execute(text("INSERT INTO progress(knowledge_id) VALUES('shared-bread')"))
+   c.execute(text("INSERT INTO knowledge VALUES('shared-audio','音频','audio','音频','audio')"));c.execute(text("INSERT INTO progress(knowledge_id) VALUES('shared-audio')"))
    app.content.install(c);groups.install(c)
-   c.execute(text("INSERT OR IGNORE INTO group_members VALUES('listen-to','shared-bread','word',0)"))
+   c.execute(text("INSERT OR IGNORE INTO group_members VALUES('listen-to','shared-audio','word',0)"))
+  with self.db.begin() as c:c.execute(text("UPDATE knowledge SET answer='listen to audio' WHERE id='listen-to-action'"))
   self.finish()
   with self.db.begin() as c:
-   self.assertEqual(groups.family(c,'shared-bread'),'listen-to');groups.install(c)
-   self.assertEqual(groups.family(c,'shared-bread'),'listen-to');self.assertEqual(groups.counts(c,self.clock),{'new':1})
+   self.assertEqual(groups.family(c,'shared-audio'),'listen-to');groups.install(c)
+   self.assertEqual(groups.family(c,'shared-audio'),'listen-to');self.assertEqual(groups.counts(c,self.clock),{'new':1})
  def test_unfinished_family_is_review_next_day_even_before_root_introduction(self):
   q=app.next_question();app.introduce(q['id']);self.correct(app.next_question())
   self.clock+=timedelta(days=1);app.save_settings({'daily-new-limit':0,'daily-review-limit':1})
