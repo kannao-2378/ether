@@ -40,4 +40,18 @@ class AssessmentTests(unittest.TestCase):
   self.answer();assessment.refresh(self.c,'want-to')
   self.assertEqual(assessment.get(self.c,'want-to'),assessment.calculate(self.c,'want-to'))
 
+ def test_transfer_can_be_demonstrated_before_memory_is_stable(self):
+  self.answer(kid='compose-want-to-learn-english');self.answer(kid='compose-want-to-read-books')
+  e=assessment.calculate(self.c,'want-to')
+  self.assertFalse(e['stable']);self.assertTrue(e['transferable']);self.assertEqual(e['transfer_label'],'可迁移')
+ def test_stable_memory_does_not_imply_transfer(self):
+  for day in (0,1,8):self.answer(day)
+  e=assessment.calculate(self.c,'want-to')
+  self.assertTrue(e['stable']);self.assertFalse(e['transferable']);self.assertEqual(e['transfer_label'],'未验证')
+ def test_one_context_is_only_initial_use_and_hard_can_lower_transfer(self):
+  q=self.answer(kid='compose-want-to-learn-english');e=assessment.calculate(self.c,'want-to')
+  self.assertEqual(e['transfer_label'],'初步会用');self.assertFalse(e['transferable'])
+  self.c.execute(text("INSERT INTO feedback_events VALUES('lower-transfer',:q,'hard',:t)"),dict(q=q,t=self.start.isoformat()))
+  self.assertFalse(assessment.calculate(self.c,'want-to')['transferable'])
+
 if __name__=='__main__':unittest.main()

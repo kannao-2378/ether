@@ -5,7 +5,7 @@ Legacy answers remain untouched: absence of trial metadata is not proof of trans
 import re
 from sqlalchemy import text
 
-VERSION=2
+VERSION=3
 TABLES=('teaching_exposures','question_trials')
 
 def key(value):

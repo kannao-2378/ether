@@ -4,6 +4,9 @@ import transfer_evidence
 from datetime import datetime,timedelta,timezone
 from sqlalchemy import text
 
+def transferable(e):
+ return bool(e.get('transfer_contexts',0)>=2 and e.get('last_transfer_ok',False))
+
 def install(c):
  c.execute(text('CREATE TABLE IF NOT EXISTS knowledge_assessments(knowledge_id TEXT PRIMARY KEY,payload TEXT NOT NULL)'))
 
@@ -39,8 +42,8 @@ def calculate(c,kid):
  contexts=len({r['material_id'] for r in successful})
  transfer_days=len({datetime.fromisoformat(r['created_at']).astimezone(timezone(timedelta(hours=8))).date().isoformat() for r in successful})
  last_transfer_ok=bool(uses and uses[-1]['correct'] and not uses[-1]['revealed'] and not uses[-1]['failed'] and uses[-1]['rating']=='clear')
- transfer='尚无迁移验证' if not uses else '近期迁移表现待巩固' if not last_transfer_ok else '多情境、跨日使用有证据' if contexts>=3 and transfer_days>=2 else '已有不同情境使用证据' if contexts>=2 else '仅在一种材料中验证'
- result=dict(evidence_version=transfer_evidence.VERSION,latest_feedback=rows[-1]['rating'] if rows else None,last_at=rows[-1]['created_at'] if rows else None,retention=retention,stable=stable,independent_successes=sum(history),independent_days=len(days),delayed_successes=delayed,longest_gap_days=round(max_gap,1),recent_independent_rate=round(rate,2) if rate is not None else None,transfer=transfer,transfer_contexts=contexts,transfer_successes=len(successful),transfer_days=transfer_days,criteria='稳固：至少3个独立成功日、2次间隔≥24小时成功，其中一次间隔≥7天；最近10次独立通过率≥80%，最近一次通过。此为初始可调规则。')
+ transfer='尚无迁移验证' if not uses else '近期迁移表现待练习' if not last_transfer_ok else '多情境、跨日使用有证据' if contexts>=3 and transfer_days>=2 else '已有不同情境使用证据' if contexts>=2 else '仅在一种材料中验证'
+ result=dict(transferable=contexts>=2 and last_transfer_ok,last_transfer_ok=last_transfer_ok,transfer_label='未验证' if not uses else '待练习' if not last_transfer_ok else '可迁移' if contexts>=2 else '初步会用',evidence_version=transfer_evidence.VERSION,latest_feedback=rows[-1]['rating'] if rows else None,last_at=rows[-1]['created_at'] if rows else None,retention=retention,stable=stable,independent_successes=sum(history),independent_days=len(days),delayed_successes=delayed,longest_gap_days=round(max_gap,1),recent_independent_rate=round(rate,2) if rate is not None else None,transfer=transfer,transfer_contexts=contexts,transfer_successes=len(successful),transfer_days=transfer_days,criteria='稳固：至少3个独立成功日、2次间隔≥24小时成功，其中一次间隔≥7天；最近10次独立通过率≥80%，最近一次通过。此为初始可调规则。')
  return result
 
 def refresh(c,kid):
