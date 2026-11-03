@@ -623,6 +623,24 @@ class SpellingCheck(BaseModel):
     question_id: str
     answer: str = Field(max_length=1000)
 
+class WordCheck(SpellingCheck):
+    word_index: int = Field(ge=0,le=499)
+
+@app.post('/api/check-word')
+def check_word(body: WordCheck):
+    with engine.begin() as c:
+        row=c.execute(text('SELECT k.* FROM questions q JOIN knowledge k ON k.id=q.knowledge_id WHERE q.id=:q'),dict(q=body.question_id)).mappings().first()
+        if not row:raise HTTPException(404,'题目不存在')
+        given=transfer.normalize(body.answer).split()
+        if len(given)!=body.word_index+1:raise HTTPException(422,'请按顺序填写单词')
+        options=[transfer.normalize(a).split() for a in transfer.answer_options(row['id'],row['answer'],(content.details(c,row['id']) or {}).get('accepted_answers'))]
+        matching=[words for words in options if len(words)>=len(given) and words[:len(given)]==given]
+        pending=not matching and any(len(words)>=len(given) and words[:len(given)-1]==given[:-1] and words[len(given)-1].startswith(given[-1]) for words in options)
+        # Partial word success is not a completed answer or a memory success.
+        if not matching and not pending:
+            c.execute(text('INSERT OR IGNORE INTO spelling_checks VALUES(:id,:q,:a,0,:t)'),dict(id=body.id,q=body.question_id,a=body.answer,t=now().isoformat()))
+        return dict(correct=bool(matching),pending=pending,complete=any(len(words)==len(given) for words in matching),answer_shapes=[list(map(len,words)) for words in matching] if matching else [])
+
 class Feedback(BaseModel):
     question_id: str
     confidence: str = Field(pattern='^(clear|hard|forgot)$')

@@ -2,14 +2,12 @@ import {learningFetch} from './testMode';
 import {KnowledgeContent} from './KnowledgeContent';
 import {MeaningLines} from './MeaningLines';
 import {RecentHistory} from './RecentHistory';
-import {useEffect,useLayoutEffect,useRef,useState} from 'react';
-import {spaceByLengths} from './sentenceInput';
+import {useEffect,useRef,useState} from 'react';
+import {WordSpelling} from './WordSpelling';
 import {isMobileLayout,hasDesktopInput} from './useViewport';
 
 export function Study(p:any){
- const input=useRef<HTMLInputElement>(null);
- const selection=useRef<number|null>(null),composing=useRef(false);
- useLayoutEffect(()=>{if(selection.current!==null&&input.current){input.current.setSelectionRange(selection.current,selection.current);selection.current=null;}},[p.answer]);
+ const input=useRef<HTMLInputElement|null>(null);
  const peekHadFocus=useRef(false);
  const keyboardWasOpen=useRef(false),lastKeyboardTouch=useRef(0);
  const [inputFocused,setInputFocused]=useState(false);
@@ -44,30 +42,13 @@ export function Study(p:any){
  const startPeek=(e:any)=>{e.preventDefault();peekHadFocus.current=document.activeElement===input.current;e.currentTarget.setPointerCapture(e.pointerId);p.peekStart?.();};
  const endPeek=(e?:any)=>{e?.preventDefault();p.peekEnd?.();if(peekHadFocus.current&&document.hasFocus()&&input.current&&document.activeElement!==input.current)focus();};
  const hasDraft=Boolean(p.answer);
- const lengths:number[]=q?.word_lengths||((item?.answer||'').trim().replace(/[.!?。！？]+$/,'').split(/\s+/).map((w:string)=>w.length));
- const sentence=lengths.length>1;
- const formatInput=(e:any)=>{
-  const field=e.currentTarget;
-  const deletion=e.nativeEvent?.inputType;
-  if(deletion?.startsWith('delete')&&field.value.length<p.answer.length&&field.value.replace(/\s/g,'')===p.answer.replace(/\s/g,'')){
-   const pos=field.selectionStart??0,index=deletion==='deleteContentBackward'?pos-1:pos;
-   if(index>=0&&index<field.value.length){field.value=field.value.slice(0,index)+field.value.slice(index+1);field.setSelectionRange(index,index);}
-  }
-  const parts=field.value.trim().split(/\s+/).map((w:string)=>w.length);
-  const shapes:number[][]=q?.answer_shapes||[lengths];
-  const shape=shapes.find(s=>parts.length<=s.length&&parts.every((n:number,i:number)=>i===parts.length-1?n<=s[i]:n===s[i]))||lengths;
-  const result=spaceByLengths(field.value,shape,field.selectionStart??field.value.length);
-  field.value=result.value;selection.current=result.cursor;
-  p.change(e);
-  field.setSelectionRange(result.cursor,result.cursor);
- };
 
 
  return <div className={'memo-study'+(hasDraft?' has-draft':'')+(q?.kind==='recall'&&!revealed?' is-writing':'')}><div className="memo-toolbar"><button onClick={p.back} disabled={p.previousDisabled} aria-label="上一项">‹</button>{p.reviewing&&<span className="review-mode-label">回看模式</span>}<span className="study-task-counts" title={'按组／项计数；新学表达组 '+(p.newBreakdown?.expression??0)+'、独立单词 '+(p.newBreakdown?.word??0)}>复习 {p.reviewCount??0}  · 新学 {p.newCount??0}</span></div>
  {!q||q.kind==='done'?<div className="memo-empty"><h2>{!q?'正在恢复学习…':rest?'今日学习结束':q.reason==='interleaving-needed'?'暂时没有其他内容':'今日内容已完成'}</h2><p>{!q?'正在读取课程与进度。':rest?'进度已保存，明天继续。':q.context_round_complete||q.reason?q.message:'还想继续学新内容吗？'}</p>{q?.kind==='done'&&(q.reason==='interleaving-needed'?<><button disabled={p.busy} onClick={p.resumePractice}>再练这一项</button><button onClick={()=>p.navigate('学习计划')}>查看学习计划</button></>:q.reason?<button onClick={()=>p.navigate('学习计划')}>查看学习计划</button>:q.context_round_complete?<button disabled={p.busy} onClick={p.next}>开始下一轮情境题</button>:!rest?<><div className="memo-extra-options">{[10,20,50].map(amount=><button key={amount} disabled={p.busy} onClick={()=>p.extendDaily(amount)}>再学 {amount} 组</button>)}</div>{p.busy&&<small role="status">正在安排新内容…</small>}<button className="memo-rest" disabled={p.busy} onClick={()=>setRest(true)}>今天不学了</button></>:<button className="memo-rest" onClick={()=>setRest(false)}>还是想再学一些</button>)}</div>:<>
  <div className="memo-heading" role="button" tabIndex={0} aria-label="播放当前内容发音" onPointerDown={e=>e.preventDefault()} onClick={p.pronounce} onKeyDown={e=>{if(e.key===' '){e.preventDefault();p.pronounce();}}}><div className="heading-stack"><h2 className={revealed?'':'recall-title'}>{revealed?english:q.exercise_mode==='transfer'?'换情境，独立写出句子':isSentence?'独立写出完整句子':'请回忆拼写'}</h2><div className="heading-pronunciation" aria-hidden={!revealed||!pronunciation}>{revealed&&pronunciation&&<>{pronunciation.ipa_us&&<span className="phonetic-link">{pronunciation.ipa_us}</span>}{pronunciation.syllables&&<span>{pronunciation.syllables} · {pronunciation.stress}</span>}{!pronunciation.ipa_us&&pronunciation.pronunciation_parts?.map((part:any)=><span key={part.en}>核心词 {part.en} <span className="phonetic-link">{part.ipa}</span> · {part.syllables}（{part.stress}）</span>)}</>}</div></div></div>
  <div className="memo-meaning"><div className="memo-meaning-text"><MeaningLines meaning={q.prompt} pos={pronunciation?.pos} type={pronunciation?.entry_type}/></div></div>{!revealed&&<div className="memo-section-title memo-example-title concealed" aria-hidden="true"/>}
- {q.kind==='recall'&&!revealed&&<div className={'memo-writing '+'sentence-writing '+(p.checked?.correct===false?'wrong':'')} onClick={focus}><input ref={input} onFocus={()=>setInputFocused(true)} onBlur={()=>setInputFocused(false)} autoCapitalize="none" autoCorrect="off" aria-label="英文搭配答案" value={p.peek?english:p.answer} maxLength={sentence?500:(q.answer_length??item?.answer.length)} style={{width:(lengths.reduce((a,b)=>a+b,0)+lengths.length-1)+'ch',maxWidth:'100%',textAlign:'left',padding:'0'} } placeholder="" spellCheck={false} autoComplete="off" readOnly={p.peek&&!isMobileLayout()} onCompositionStart={e=>{composing.current=true;p.compositionStart?.(e);}} onCompositionEnd={e=>{composing.current=false;formatInput(e);p.compositionEnd?.(e);}} onChange={e=>{if(p.peek&&isMobileLayout())p.peekEnd?.();if(composing.current)p.change(e);else formatInput(e);}}/>{<div className="sentence-guide" aria-label="按单词长度分段" aria-hidden={p.peek}>{lengths.map((n,i)=><span key={i} style={{width:n+'ch'}}/>)}</div>}</div>}
+ {q.kind==='recall'&&!revealed&&<div className="memo-writing sentence-writing" onClick={focus}><WordSpelling key={q.question_id} question={q} inputRef={input} peek={p.peek} english={english} draft={p.answer} onDraft={(value,complete)=>p.change({target:{value},skipCheck:!complete})} onFocusChange={setInputFocused}/></div>}
  {revealed&&<div className="memo-content"><KnowledgeContent id={q.id} speak={p.speak} study onLoaded={setMetadata}/><RecentHistory id={q.id} groupId={q.group_id} revision={p.selectedFeedback}/></div>}
  {p.checked?.correct&&p.checked?.notices?.map((line:string)=><p className="transfer-feedback" key={line}>{line}</p>)}
  {p.speechMessage&&<p className="transfer-feedback desktop-speech-status" role="status">{p.speechMessage}</p>}
