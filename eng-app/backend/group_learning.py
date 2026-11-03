@@ -175,6 +175,17 @@ def events(c,gid,day):
 
 def independent(e):return bool(e['correct'] and not e['revealed'] and not e['failed'] and e['rating']=='clear')
 
+def recent_fuzzy(c,stamp):
+ row=c.execute(text('''SELECT k.answer,a.created_at,a.correct,
+ EXISTS(SELECT 1 FROM spelling_checks s WHERE s.question_id=a.question_id AND s.correct=0 AND julianday(s.created_at)<=julianday(a.created_at)) AS failed,
+ COALESCE((SELECT confidence FROM feedback_events f WHERE f.question_id=a.question_id ORDER BY rowid DESC LIMIT 1),a.confidence) AS rating
+ FROM answers a JOIN knowledge k ON k.id=a.knowledge_id ORDER BY a.rowid DESC LIMIT 1''')).mappings().first()
+ return row if row and row['correct'] and not row['failed'] and row['rating']=='hard' and day_of(datetime.fromisoformat(row['created_at']))==day_of(stamp) else None
+
+def repeats_fuzzy(item,last):
+ normalize=lambda value:' '.join(value.casefold().split()).rstrip('.!?。！？ ')
+ return bool(last and normalize(item['answer'])==normalize(last['answer']))
+
 def members(c,gid):
  return [dict(r) for r in c.execute(text('SELECT k.*,p.*,m.role,m.position FROM group_members m JOIN knowledge k ON k.id=m.knowledge_id JOIN progress p ON p.knowledge_id=k.id WHERE m.group_id=:g ORDER BY m.position,k.rowid'),dict(g=gid)).mappings()]
 
@@ -305,10 +316,11 @@ def refresh(c,kid,stamp,question_id=None):
   due=min(dates or [stamp+timedelta(days=1)]).isoformat()
  c.execute(text('INSERT INTO group_progress VALUES(:g,:d,:t,:p) ON CONFLICT(group_id) DO UPDATE SET due_at=excluded.due_at,last_at=excluded.last_at,transfer_pending=excluded.transfer_pending'),dict(g=gid,d=due,t=stamp.isoformat(),p=int(pending)))
 
-def select(c,stamp,new_limit,review_limit,course='all'):
+def select(c,stamp,new_limit,review_limit,course='all',allow_repeat=False):
  import focus_training
- special=focus_training.select(c,stamp)
+ special=focus_training.select(c,stamp,allow_repeat=allow_repeat)
  if special:return special
+ last_fuzzy=None if allow_repeat else recent_fuzzy(c,stamp)
  day=day_of(stamp);seq=c.execute(text('SELECT COALESCE(MAX(rowid),0)+1 FROM answers')).scalar()
  # A persisted unfinished question always resumes before introducing anything else.
  pending_rows=c.execute(text('''SELECT k.*,q.id AS question_id,COALESCE(g.group_id,p.group_id) AS group_id,COALESCE(g.role,m.role,'base') AS role
@@ -350,6 +362,7 @@ def select(c,stamp,new_limit,review_limit,course='all'):
  ready=[r for r in candidates if r[0]<=seq]
  def result(gid,item):
   item=dict(item);item['group_id']=gid
+  if repeats_fuzzy(item,last_fuzzy):return None
   if item['role'] in ('phrase','sentence','transfer') and not requirements_met(c,item['id'],stamp=stamp):return None
   if pool_count(c,stamp)>=12 and not c.execute(text('SELECT 1 FROM group_active_slots WHERE group_id=:g'),dict(g=gid)).first():course_policy.pause_lower(c,gid)
   if not admit(c,gid,item['id'],stamp,new_limit,review_limit):return None
@@ -387,6 +400,7 @@ def select(c,stamp,new_limit,review_limit,course='all'):
  for _,gid,item in sorted(candidates,key=lambda r:r[0]):
   choice=result(gid,item)
   if choice:return choice
+ if last_fuzzy and (candidates or c.execute(text("SELECT 1 FROM focus_requests WHERE status IN ('pending','active') LIMIT 1")).first()):return 'paused',None
  return 'done',None
 
 

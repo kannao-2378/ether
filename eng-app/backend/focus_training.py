@@ -89,16 +89,18 @@ def refresh(c,gid,stamp):
   c.execute(text('INSERT INTO group_progress VALUES(:g,:d,:t,0) ON CONFLICT(group_id) DO UPDATE SET due_at=excluded.due_at,last_at=excluded.last_at'),dict(g=gid,d=(stamp+timedelta(days=1)).isoformat(),t=stamp.isoformat()))
   c.execute(text('DELETE FROM group_active_slots WHERE group_id=:g'),dict(g=gid))
 
-def select(c,stamp):
+def select(c,stamp,allow_repeat=False):
+ last_fuzzy=None if allow_repeat else groups.recent_fuzzy(c,stamp)
  requests=c.execute(text("SELECT id FROM focus_requests WHERE status IN ('pending','active') ORDER BY rowid")).scalars().all()
  for gid in requests:
   item,_=step(c,gid,stamp)
   if item is None:refresh(c,gid,stamp);continue
+  pending=c.execute(text('SELECT q.id FROM questions q JOIN group_questions g ON g.question_id=q.id LEFT JOIN answers a ON a.question_id=q.id WHERE g.group_id=:g AND q.knowledge_id=:k AND a.id IS NULL ORDER BY q.rowid LIMIT 1'),dict(g=gid,k=item['id'])).scalar()
+  if not pending and groups.repeats_fuzzy(item,last_fuzzy):continue
   if not groups.acquire(c,gid,stamp):return None
   c.execute(text("UPDATE focus_requests SET status='active' WHERE id=:g"),dict(g=gid))
   c.execute(text("INSERT OR IGNORE INTO daily_group_tasks VALUES(:d,:g,'special',:k)"),dict(d=groups.day_of(stamp),g=gid,k=item['id']))
   item=dict(item);item['group_id']=gid;item['group_title']='专项 · '+c.execute(text('SELECT answer FROM knowledge WHERE id=(SELECT knowledge_id FROM focus_requests WHERE id=:g)'),dict(g=gid)).scalar()
-  pending=c.execute(text('SELECT q.id FROM questions q JOIN group_questions g ON g.question_id=q.id LEFT JOIN answers a ON a.question_id=q.id WHERE g.group_id=:g AND q.knowledge_id=:k AND a.id IS NULL ORDER BY q.rowid LIMIT 1'),dict(g=gid,k=item['id'])).scalar()
   if pending:item['question_id']=pending
   return ('recall' if item['introduced'] else 'learn'),item
  return None

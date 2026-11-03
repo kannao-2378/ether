@@ -490,13 +490,14 @@ def dashboard(summary_only: bool = False):
     return summary if summary_only else dict(items=items, history=answers, **summary)
 
 @app.post('/api/next')
-def next_question():
+def next_question(allow_repeat: bool=False):
     with engine.begin() as c:
         stage=c.execute(text('SELECT stage FROM test_clock WHERE id=1')).scalar() if testing.get() else None
-        special=focus_training.select(c,now())
+        special=focus_training.select(c,now(),allow_repeat=allow_repeat)
         if not testing.get() or special or stage is None:
             settings=study_settings(c)
-            kind,item=special if special else group_learning.select(c,now(),settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course'])
+            kind,item=special if special else group_learning.select(c,now(),settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course'],allow_repeat=allow_repeat)
+            if kind=='paused':return dict(kind='done',reason='interleaving-needed',message='模糊的内容已保留待练，暂时没有其他内容可穿插。可以休息一下，或主动再练这一项。')
             if kind=='done':
                 route=curriculum_engine.report(c,settings['active-course'])
                 if not route['ready_total']:return dict(kind='done',reason='uncompiled-course',message='本课程暂无已编排新课；可在学习计划选择课程，或在词典加入专项。')
