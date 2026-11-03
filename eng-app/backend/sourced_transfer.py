@@ -58,11 +58,11 @@ def basics_ready(c,gid):
  basics=c.execute(text("SELECT knowledge_id FROM curriculum_lessons WHERE goal_id=:g AND role IN ('phrase','sentence')"),dict(g=gid)).scalars().all()
  return ce.known(c,gid) and not ce.blockers(c,gid) and bool(basics) and all(ce.known(c,k) for k in basics)
 
-def spacing(c,mid,stamp):
+def spacing(c,mid,stamp,gap=GAP):
  row=c.execute(text('''SELECT a.rowid,a.created_at FROM answers a WHERE (a.knowledge_id=:m OR a.knowledge_id IN (SELECT alias_id FROM curriculum_aliases WHERE knowledge_id=:m)) ORDER BY a.rowid DESC LIMIT 1'''),dict(m=mid)).first()
  if not row or datetime.fromisoformat(row[1]).astimezone(ZONE).date()!=stamp.astimezone(ZONE).date():return 0
  completed=c.execute(text('''SELECT count(*) FROM answers a WHERE a.rowid>:s AND a.knowledge_id!=:m AND a.knowledge_id NOT IN (SELECT alias_id FROM curriculum_aliases WHERE knowledge_id=:m) AND a.correct=1 AND NOT EXISTS(SELECT 1 FROM test_skips x WHERE x.question_id=a.question_id)'''),dict(s=row[0],m=mid)).scalar()
- return max(0,GAP-completed)
+ return max(0,gap-completed)
 
 def allowed(c,kid,stamp):
  row=c.execute(text('SELECT goal_id,material_id FROM source_sentence_targets WHERE knowledge_id=:k'),dict(k=kid)).first()
@@ -85,6 +85,11 @@ def preparation_step(c,gid,stamp):
  if ce.known(c,gid) and row['due_at'] and datetime.fromisoformat(row['due_at'])>stamp:return None,False
  return dict(row,role='base',position=0),False
 
+def retry_ready(c,mid,stamp):
+ if not c.execute(text('SELECT 1 FROM source_preparation_items WHERE knowledge_id=:k'),dict(k=mid)).first() or ce.known(c,mid):return True
+ rating=c.execute(text("SELECT COALESCE((SELECT confidence FROM feedback_events f WHERE f.question_id=a.question_id ORDER BY f.rowid DESC LIMIT 1),a.confidence) FROM answers a WHERE a.knowledge_id=:k ORDER BY a.rowid DESC LIMIT 1"),dict(k=mid)).scalar()
+ return not spacing(c,mid,stamp,gap=2 if rating=='forgot' else 4)
+
 def select_preparation(c,stamp,new_limit,review_limit,allow_repeat=False):
  import group_learning as gl
  if not enabled(c):return None
@@ -102,12 +107,14 @@ def select_preparation(c,stamp,new_limit,review_limit,allow_repeat=False):
   last=None if allow_repeat else gl.recent_fuzzy(c,stamp)
   choices=[item for item in choices if not gl.repeats_fuzzy(item,last)]
   if not choices:continue
-  item=choices[0];mid=item['id'];existing=c.execute(text('SELECT 1 FROM daily_group_tasks WHERE day=:d AND group_id=:g'),dict(d=day,g=mid)).first()
-  if not item['introduced'] and not existing and (used>=2 or new_active>=3):continue
-  if not gl.admit(c,mid,mid,stamp,new_limit,review_limit):continue
-  kind=c.execute(text('SELECT kind FROM daily_group_tasks WHERE day=:d AND group_id=:g'),dict(d=day,g=mid)).scalar()
-  c.execute(text('INSERT OR IGNORE INTO daily_tasks VALUES(:d,:k,:v)'),dict(d=day,k=mid,v=kind))
-  return ('recall' if item['introduced'] else 'learn'),dict(item,role='base',group_id=mid,group_title='迁移材料准备')
+  for item in sorted(choices,key=lambda r:(r['attempts'],r['last_at'] or '')):
+   mid=item['id'];existing=c.execute(text('SELECT 1 FROM daily_group_tasks WHERE day=:d AND group_id=:g'),dict(d=day,g=mid)).first()
+   if not allow_repeat and item['introduced'] and not retry_ready(c,mid,stamp):continue
+   if not item['introduced'] and not existing and (used>=2 or new_active>=3):continue
+   if not gl.admit(c,mid,mid,stamp,new_limit,review_limit):continue
+   kind=c.execute(text('SELECT kind FROM daily_group_tasks WHERE day=:d AND group_id=:g'),dict(d=day,g=mid)).scalar()
+   c.execute(text('INSERT OR IGNORE INTO daily_tasks VALUES(:d,:k,:v)'),dict(d=day,k=mid,v=kind))
+   return ('recall' if item['introduced'] else 'learn'),dict(item,role='base',group_id=mid,group_title='迁移材料准备')
  return None
 
 def report(c,stamp,limits=None):
@@ -147,6 +154,7 @@ def report(c,stamp,limits=None):
    elif not introduced and not existing and used>=2:reason='今日已新增两项迁移材料'
    slots=c.execute(text('SELECT count(*) FROM group_active_slots a LEFT JOIN group_progress g ON g.group_id=a.group_id WHERE g.due_at IS NULL OR julianday(g.due_at)<=julianday(:t)'),dict(t=stamp.isoformat())).scalar()
    if slots>=12 and not c.execute(text('SELECT 1 FROM group_active_slots WHERE group_id=:g'),dict(g=mid)).first():reason='12项活动池已满'
+  if not reason and state=='需要准备材料' and pending and all(not retry_ready(c,m['id'],stamp) for m in pending):reason='难记材料等待穿插或隔天再练'
   title=c.execute(text('SELECT title FROM learning_groups WHERE id=:g'),dict(g=gid)).scalar()
   result.append(dict(goal_id=gid,title=title,state=state,total=len(targets(c,gid)),ready=ready,waiting=waiting,missing=pending[:2],missing_total=len(pending),seen=seen,successful_materials=materials,successful_days=days,minimum_materials=3,minimum_days=2,delayed_validation=delayed,waiting_reason=reason,today_successful_materials=today_count))
  return result

@@ -67,3 +67,16 @@ class FuzzyOrderTests(unittest.TestCase):
   with self.db.begin() as c:c.execute(text("UPDATE knowledge SET answer='SAMPLEA.' WHERE id='order-1'"))
   q=app.next_question();self.answer(q)
   self.assertEqual(app.next_question()['reason'],'interleaving-needed')
+
+ def test_forgotten_rotates_when_another_item_exists(self):
+  self.prepare(2)
+  with self.db.begin() as c:app.sourced_transfer.activate(c)
+  first=app.next_question();self.answer(first,'forgot')
+  self.assertNotEqual(app.next_question()['id'],first['id'])
+
+ def test_pilot_single_forgotten_item_pauses_without_faking_mastery(self):
+  self.prepare(1)
+  with self.db.begin() as c:app.sourced_transfer.activate(c)
+  q=app.next_question();self.answer(q,'forgot')
+  self.assertEqual(app.next_question()['reason'],'interleaving-needed')
+  self.assertEqual(app.next_question(allow_repeat=True)['id'],q['id'])

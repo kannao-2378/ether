@@ -105,3 +105,33 @@ class SourcedPilotTests(unittest.TestCase):
   with self.db.connect() as c:self.assertEqual(st.report(c,self.stamp)[0]['state'],'今日迁移练习已完成')
   with patch.object(gl,'select',return_value=('done',None)):
    self.assertEqual(app.next_question()['reason'],'transfer-daily-limit')
+
+ def test_forgotten_material_does_not_block_other_preparation(self):
+  with self.db.begin() as c:st.activate(c);self.prepared(c)
+  item=self.material_answer(confidence='forgot')
+  with self.db.begin() as c:
+   choice=st.select_preparation(c,self.stamp,50,50)
+   self.assertIsNotNone(choice);self.assertNotEqual(choice[1]['id'],item['id'])
+ def test_preparation_runs_before_continuously_due_other_reviews(self):
+  with self.db.begin() as c:
+   st.activate(c);self.prepared(c)
+   c.execute(text("UPDATE progress SET due_at=:t WHERE knowledge_id='word-read'"),dict(t=self.stamp.isoformat()))
+  q=app.next_question();self.assertEqual(q['group_title'],'迁移材料准备');self.assertEqual(q['kind'],'learn')
+
+ def test_forgotten_preparation_requires_two_other_completed_exercises(self):
+  with self.db.begin() as c:st.activate(c);self.prepared(c)
+  item=self.material_answer(confidence='forgot')
+  for index,kid in enumerate(('word-i','word-water')):
+   q=app.challenge(kid);en=app.knowledge_content(kid)['answer'];app.submit(app.Submission(question_id=q['question_id'],answer=en,confidence='clear'))
+   with self.db.connect() as c:self.assertEqual(st.retry_ready(c,item['id'],self.stamp),index==1)
+
+ def test_only_difficult_material_has_explicit_spacing_reason(self):
+  with self.db.begin() as c:
+   st.activate(c);self.prepared(c)
+   items=c.execute(text('SELECT knowledge_id FROM source_preparation_items ORDER BY rowid')).scalars().all()
+   for kid in items[1:]:c.execute(text('UPDATE progress SET introduced=1,level=3 WHERE knowledge_id=:k'),dict(k=kid))
+   for row in st.targets(c,'want-to')[1:]:app.transfer_evidence.expose(c,row['knowledge_id'],self.stamp)
+  self.material_answer(confidence='forgot')
+  with self.db.connect() as c:
+   report=st.report(c,self.stamp)[0]
+   self.assertEqual(report['waiting_reason'],'难记材料等待穿插或隔天再练')

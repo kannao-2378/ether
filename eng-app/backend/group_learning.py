@@ -180,7 +180,8 @@ def recent_fuzzy(c,stamp):
  EXISTS(SELECT 1 FROM spelling_checks s WHERE s.question_id=a.question_id AND s.correct=0 AND julianday(s.created_at)<=julianday(a.created_at)) AS failed,
  COALESCE((SELECT confidence FROM feedback_events f WHERE f.question_id=a.question_id ORDER BY rowid DESC LIMIT 1),a.confidence) AS rating
  FROM answers a JOIN knowledge k ON k.id=a.knowledge_id ORDER BY a.rowid DESC LIMIT 1''')).mappings().first()
- return row if row and row['correct'] and not row['failed'] and row['rating']=='hard' and day_of(datetime.fromisoformat(row['created_at']))==day_of(stamp) else None
+ if row and row['rating']=='forgot' and not sourced_transfer.enabled(c):return None
+ return row if row and row['correct'] and row['rating'] in ('hard','forgot') and (row['rating']=='forgot' or not row['failed']) and day_of(datetime.fromisoformat(row['created_at']))==day_of(stamp) else None
 
 def repeats_fuzzy(item,last):
  normalize=lambda value:' '.join(value.casefold().split()).rstrip('.!?。！？ ')
@@ -352,6 +353,8 @@ def select(c,stamp,new_limit,review_limit,course='all',allow_repeat=False):
   kind=c.execute(text('SELECT kind FROM daily_group_tasks WHERE day=:d AND group_id=:g'),dict(d=day,g=pending['group_id'])).scalar()
   c.execute(text('INSERT OR IGNORE INTO daily_tasks VALUES(:d,:k,:v)'),dict(d=day,k=pending['id'],v=kind))
   return 'recall',dict(pending)
+ preparation=sourced_transfer.select_preparation(c,stamp,new_limit,review_limit,allow_repeat=allow_repeat)
+ if preparation:return preparation
  # Revisit today's deferred transfer when newly learned materials become available.
  deferred=c.execute(text("SELECT group_id FROM group_progress WHERE transfer_pending=1 AND date(last_at,'+8 hours')=:d AND julianday(due_at)>julianday(:t)"),dict(d=day,t=stamp.isoformat())).scalars().all()
  for gid in deferred:
@@ -376,6 +379,7 @@ def select(c,stamp,new_limit,review_limit,course='all',allow_repeat=False):
  ready=[r for r in candidates if r[0]<=seq]
  def result(gid,item):
   item=dict(item);item['group_id']=gid
+  if not allow_repeat and not sourced_transfer.retry_ready(c,item['id'],stamp):return None
   if repeats_fuzzy(item,last_fuzzy):return None
   if item['role'] in ('phrase','sentence','transfer') and not requirements_met(c,item['id'],stamp=stamp):return None
   if pool_count(c,stamp)>=12 and not c.execute(text('SELECT 1 FROM group_active_slots WHERE group_id=:g'),dict(g=gid)).first():course_policy.pause_lower(c,gid)
@@ -401,8 +405,6 @@ def select(c,stamp,new_limit,review_limit,course='all',allow_repeat=False):
   if item:
    choice=result(gid,item)
    if choice:return choice
- preparation=sourced_transfer.select_preparation(c,stamp,new_limit,review_limit,allow_repeat=allow_repeat)
- if preparation:return preparation
  new_goals=c.execute(text("SELECT COUNT(*) FROM group_active_slots s JOIN daily_group_tasks d ON d.group_id=s.group_id WHERE d.day=:d AND d.kind='new'"),dict(d=day)).scalar()
  if new_goals<3 and len(candidates)<12 and pool_count(c,stamp)<12 and counts(c,stamp).get('new',0)<new_limit:
   ordered=course_policy.unseen(c,course)

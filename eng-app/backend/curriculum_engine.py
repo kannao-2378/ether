@@ -1,3 +1,4 @@
+from selection_cache import memoized
 """One prerequisite-aware teaching registry for every course; learner evidence stays separate."""
 import json,hashlib,re
 from pathlib import Path
@@ -154,6 +155,7 @@ def member(c,gid,kid,role,pos):
  c.execute(text('INSERT OR IGNORE INTO group_members VALUES(:g,:k,:r,:p)'),dict(g=gid,k=kid,r=role,p=pos))
  c.execute(text('INSERT OR REPLACE INTO curriculum_lessons VALUES(:g,:k,:r,:p,1)'),dict(g=gid,k=kid,r=role,p=pos))
 
+@memoized
 def known(c,kid):
  # Most recent direct result across an authored equivalent set wins, including forgetting.
  row=c.execute(text("SELECT p.level FROM progress p WHERE p.introduced=1 AND (p.knowledge_id=:k OR p.knowledge_id IN (SELECT alias_id FROM curriculum_aliases WHERE knowledge_id=:k)) ORDER BY julianday(p.last_at) DESC,p.knowledge_id=:k DESC LIMIT 1"),dict(k=kid)).first()

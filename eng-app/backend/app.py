@@ -1,6 +1,7 @@
 import curriculum_engine
 import composition_engine
 import sourced_transfer
+import selection_cache
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import json
@@ -507,7 +508,7 @@ def dashboard(summary_only: bool = False):
 
 @app.post('/api/next')
 def next_question(allow_repeat: bool=False):
-    with engine.begin() as c:
+    with engine.begin() as c,selection_cache.scope():
         stage=c.execute(text('SELECT stage FROM test_clock WHERE id=1')).scalar() if testing.get() else None
         special=focus_training.select(c,now(),allow_repeat=allow_repeat)
         if not testing.get() or special or stage is None:

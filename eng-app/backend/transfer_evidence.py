@@ -1,3 +1,4 @@
+from selection_cache import memoized,invalidate
 """Record teaching exposure separately from verified transfer trials.
 
 Legacy answers remain untouched: absence of trial metadata is not proof of transfer.
@@ -16,6 +17,7 @@ def install(c):
  c.execute(text('CREATE TABLE IF NOT EXISTS question_trials(question_id TEXT PRIMARY KEY,mode TEXT NOT NULL,reason TEXT NOT NULL,version INTEGER NOT NULL)'))
 
 def expose(c,kid,stamp,details=None,source='teaching'):
+ invalidate()
  answer=c.execute(text('SELECT answer FROM knowledge WHERE id=:k'),dict(k=kid)).scalar()
  values=[answer] if answer else []
  for field in ('examples','extensions'):
@@ -24,6 +26,7 @@ def expose(c,kid,stamp,details=None,source='teaching'):
  for value in values:
   c.execute(text('INSERT OR IGNORE INTO teaching_exposures VALUES(:a,:k,:t,:s)'),dict(a=key(value),k=kid,t=stamp.isoformat(),s=source))
 
+@memoized
 def classify(c,kid,role=None,answer=None):
  stage=c.execute(text('SELECT stage FROM course_links WHERE knowledge_id=:k'),dict(k=kid)).scalar()
  mode='recall';reason='ordinary practice'
