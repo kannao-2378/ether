@@ -1,5 +1,6 @@
 import curriculum_engine
 import composition_engine
+import sourced_transfer
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import json
@@ -146,6 +147,7 @@ def initialize(target,with_bulk=False):
         focus_training.install(c)
         group_learning.install(c)
         composition_engine.install(c)
+        sourced_transfer.install(c)
         # Only derived assessment caches are refreshed; raw answers and FSRS cards stay intact.
         for cached in c.execute(text('SELECT knowledge_id,payload FROM knowledge_assessments')).all():
             if json.loads(cached[1]).get('evidence_version')!=transfer_evidence.VERSION:
@@ -180,6 +182,11 @@ def test_status():
 @app.post('/api/test/{action}')
 def test_action(action: str, data: dict):
     if not testing.get():raise HTTPException(403,'仅允许在独立测试模式使用')
+    if action=='transfer-pilot':
+        with test_engine.begin() as c:
+            sourced_transfer.activate(c)
+            c.execute(text('UPDATE test_clock SET stage=NULL WHERE id=1'))
+        return dict(enabled=True,scope='want-to')
     if action=='advance':
         days=data.get('days')
         if type(days) is not int or days not in (1,3,7):raise HTTPException(422,'请选择1、3或7天')
@@ -199,6 +206,7 @@ def test_action(action: str, data: dict):
         with test_engine.begin() as c:
             for table in ('answers','questions','spelling_checks','feedback_events','review_queue','memory_states','consolidation_slots','daily_new_pacing','daily_tasks','daily_coverage','lesson_attempts','context_round_items','context_rounds','composition_evidence','knowledge_assessments','test_skips','daily_extensions','teaching_exposures','question_trials','composition_items','composition_cursors'):
                 c.execute(text('DELETE FROM '+table))
+            c.execute(text("DELETE FROM app_settings WHERE key='sourced-transfer-pilot'"))
             for table in ('focus_requests','group_questions','daily_group_tasks','group_progress','group_usage','group_active_slots'):c.execute(text('DELETE FROM '+table))
             c.execute(text('UPDATE test_clock SET days=0,stage=1 WHERE id=1'))
             c.execute(text('UPDATE progress SET introduced=0,attempts=0,correct=0,streak=0,level=0,interval_days=0,due_at=NULL,last_at=NULL'))
@@ -251,8 +259,10 @@ def learning_plan():
     with engine.connect() as c:
         admitted=group_learning.counts(c,now())
     with engine.connect() as c:curriculum=content.curriculum(c,include_items=False);packages=bulk_courses.summary(c)
-    with engine.connect() as c:route=curriculum_engine.report(c,s['active-course'])
-    return dict(date=day,route=route,curriculum=curriculum,packages=packages,new_limit=s['daily-new-limit'],review_limit=s['daily-review-limit'],new_admitted=admitted.get('new',0),review_admitted=admitted.get('review',0),new_breakdown=d.get('new_breakdown',{}),cross_day_due=d['cross_day_due'],same_day_practice=d['same_day_practice'],today_count=d['today_count'],rules=[rule_profile(r) for r in RULES],weak=[dict(id=i['id'],answer=i['answer'],prompt=i['prompt'],familiarity=familiarity(i)[1]) for i in d['items'] if i['introduced'] and i['level']<3][:10])
+    with engine.connect() as c:
+        route=curriculum_engine.report(c,s['active-course'])
+        preparation=sourced_transfer.report(c,now(),s)
+    return dict(date=day,route=route,transfer_preparation=preparation,curriculum=curriculum,packages=packages,new_limit=s['daily-new-limit'],review_limit=s['daily-review-limit'],new_admitted=admitted.get('new',0),review_admitted=admitted.get('review',0),new_breakdown=d.get('new_breakdown',{}),cross_day_due=d['cross_day_due'],same_day_practice=d['same_day_practice'],today_count=d['today_count'],rules=[rule_profile(r) for r in RULES],weak=[dict(id=i['id'],answer=i['answer'],prompt=i['prompt'],familiarity=familiarity(i)[1]) for i in d['items'] if i['introduced'] and i['level']<3][:10])
 
 @app.get('/api/daily-activity')
 def daily_activity_report(day: str | None=None,planning: bool=False):
@@ -292,6 +302,8 @@ def challenge(kid: str):
     with engine.begin() as c:
         item=c.execute(text('SELECT k.*,l.parent_id FROM knowledge k LEFT JOIN course_links l ON l.knowledge_id=k.id WHERE k.id=:k'),dict(k=kid)).mappings().first()
         if not item:raise HTTPException(404,'内容不存在')
+        source_goal=c.execute(text('SELECT goal_id FROM source_sentence_targets WHERE knowledge_id=:k'),dict(k=kid)).scalar()
+        if source_goal and (not sourced_transfer.basics_ready(c,source_goal) or not sourced_transfer.allowed(c,kid,now())):raise HTTPException(409,'请先完成迁移材料准备与穿插练习')
         if item['parent_id'] and not testing.get():
             level=c.execute(text('SELECT level FROM progress WHERE knowledge_id=:k'),dict(k=item['parent_id'])).scalar() or 0
             if level<3:raise HTTPException(409,'请先验证前置内容')
@@ -332,6 +344,7 @@ def import_lookup(body: LookupImport):
         except ValueError as e:raise HTTPException(400,str(e))
         group_learning.install(c)
         composition_engine.install(c)
+        sourced_transfer.install(c)
         # Only derived assessment caches are refreshed; raw answers and FSRS cards stay intact.
         for cached in c.execute(text('SELECT knowledge_id,payload FROM knowledge_assessments')).all():
             if json.loads(cached[1]).get('evidence_version')!=transfer_evidence.VERSION:
@@ -503,6 +516,11 @@ def next_question(allow_repeat: bool=False):
             kind,item=special if special else group_learning.select(c,now(),settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course'],allow_repeat=allow_repeat)
             if kind=='paused':return dict(kind='done',reason='interleaving-needed',message='模糊的内容已保留待练，暂时没有其他内容可穿插。可以休息一下，或主动再练这一项。')
             if kind=='done':
+                plans=sourced_transfer.report(c,now(),settings)
+                if any(p['state']=='等待穿插练习' for p in plans):return dict(kind='done',reason='transfer-spacing',message='迁移材料已备好，先穿插其他练习或隔天再验证。')
+                if any(p['state']=='今日迁移练习已完成' for p in plans):return dict(kind='done',reason='transfer-daily-limit',message='本组今日迁移练习量已完成，其他候选已保留。')
+                if any(p['waiting_reason'] for p in plans):return dict(kind='done',reason='transfer-preparation-budget',message=next(p['waiting_reason'] for p in plans if p['waiting_reason'])+'；迁移任务已保留。')
+                if any(p['state']=='需要补充新例句' for p in plans):return dict(kind='done',reason='transfer-content-gap',message='当前缺少未展示过的新例句，已记录待补充。')
                 route=curriculum_engine.report(c,settings['active-course'])
                 if not route['ready_total']:return dict(kind='done',reason='uncompiled-course',message='本课程暂无已编排新课；可在学习计划选择课程，或在词典加入专项。')
                 if not route['unintroduced']:return dict(kind='done',reason='no-more-new-goals',message='没有新的已编排学习组；未完成训练和到期复习仍会继续安排。')

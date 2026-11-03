@@ -4,10 +4,10 @@ Individual answers/FSRS cards are never rewritten to manufacture mastery.
 """
 from datetime import datetime,timedelta,timezone
 import json,re
-import course_policy,curriculum_engine,transfer_evidence,composition_engine
+import course_policy,curriculum_engine,transfer_evidence,composition_engine,sourced_transfer
 from sqlalchemy import text
 ZONE=timezone(timedelta(hours=8));VERSION='families-v6'
-TABLES=('lookup_previews','focus_requests','learning_groups','group_members','group_primary','group_requirements','group_questions','daily_group_tasks','group_progress','group_usage','group_active_slots','group_install','group_migrations')+curriculum_engine.TABLES+transfer_evidence.TABLES+composition_engine.TABLES
+TABLES=('lookup_previews','focus_requests','learning_groups','group_members','group_primary','group_requirements','group_questions','daily_group_tasks','group_progress','group_usage','group_active_slots','group_install','group_migrations')+curriculum_engine.TABLES+transfer_evidence.TABLES+composition_engine.TABLES+sourced_transfer.TABLES
 CORE={'want-to':['want'],'enjoy-doing':['enjoy'],'decide-to':['decide'],'like-doing':['like'],
       'listen-to':['listen','music'],'look-at':['look','picture'],'wait-for':['wait','bus'],
       'talk-to':['talk','friend'],'ask-for':['ask','help']}
@@ -199,6 +199,7 @@ def requirements_met(c,kid,ignore=None,stamp=None):
 
 def step(c,gid,stamp,history=None):
  """One active step per group; no stable gate for early transfer."""
+ if c.execute(text('SELECT 1 FROM source_preparation_items WHERE knowledge_id=:g'),dict(g=gid)).first():return sourced_transfer.preparation_step(c,gid,stamp)
  if gid.startswith('focus-'):
   import focus_training
   return focus_training.step(c,gid,stamp)
@@ -209,7 +210,7 @@ def step(c,gid,stamp,history=None):
   seen_before=c.execute(text('SELECT 1 FROM daily_group_tasks WHERE group_id=:g AND day<:d LIMIT 1'),dict(g=gid,d=day_of(stamp))).first()
   kind='review' if introduced or seen_before else 'new'
  if kind=='review' and not history:
-  due=[r for r in all_rows if r['introduced'] and course_policy.owns_review(c,gid,r) and (not r['due_at'] or datetime.fromisoformat(r['due_at'])<=stamp) and (r['role'] not in ('phrase','sentence','transfer') or requirements_met(c,r['id'],stamp=stamp))]
+  due=[r for r in all_rows if r['introduced'] and course_policy.owns_review(c,gid,r) and (not r['due_at'] or datetime.fromisoformat(r['due_at'])<=stamp) and (r['role'] not in ('phrase','sentence','transfer') or requirements_met(c,r['id'],stamp=stamp)) and (r['role']!='transfer' or sourced_transfer.eligible(c,gid,r['id'],stamp))]
   if due:return sorted(due,key=lambda r:(r['level']>=3,r['attempts'],r['role'] not in ('base','phrase'),r['last_at'] or ''))[0],False
 
  status=c.execute(text('SELECT status FROM curriculum_goals WHERE id=:g'),dict(g=gid)).scalar()
@@ -244,7 +245,7 @@ def step(c,gid,stamp,history=None):
  sentences=[r for r in rows if r['role']=='sentence' and requirements_met(c,r['id'],stamp=stamp)]
  for r in sentences[:1]:
   if not known(r):return r,False
- variants=[r for r in rows if r['role']=='transfer' and requirements_met(c,r['id'],stamp=stamp) and (r['level']<3 or not r['due_at'] or datetime.fromisoformat(r['due_at'])<=stamp)]
+ variants=[r for r in rows if r['role']=='transfer' and sourced_transfer.eligible(c,gid,r['id'],stamp) and requirements_met(c,r['id'],stamp=stamp) and (r['level']<3 or not r['due_at'] or datetime.fromisoformat(r['due_at'])<=stamp)]
  modes={r['id']:transfer_evidence.classify(c,r['id'],'transfer')[0] for r in variants}
  variants.sort(key=lambda r:(modes[r['id']]!='transfer',modes[r['id']]!='transfer-review',r['attempts'],r['last_at'] or ''))
  # Different registered source materials, not repeat spellings of one question.
@@ -270,7 +271,7 @@ def step(c,gid,stamp,history=None):
   candidates=sentences[:1] or phrases or bases or rows[:1]
   # Revisit an independently unverified due component on later days.
   if kind=='review':
-   due=[r for r in all_rows if r['introduced'] and course_policy.owns_review(c,gid,r) and (not r['due_at'] or datetime.fromisoformat(r['due_at'])<=stamp) and (r['role'] not in ('phrase','sentence','transfer') or requirements_met(c,r['id'],stamp=stamp))]
+   due=[r for r in all_rows if r['introduced'] and course_policy.owns_review(c,gid,r) and (not r['due_at'] or datetime.fromisoformat(r['due_at'])<=stamp) and (r['role'] not in ('phrase','sentence','transfer') or requirements_met(c,r['id'],stamp=stamp)) and (r['role']!='transfer' or sourced_transfer.eligible(c,gid,r['id'],stamp))]
    if due:candidates=sorted(due,key=lambda r:(r['level']>=3,r['attempts']))
   return candidates[0],len(unique)<2
  return None,len(unique)<2
@@ -322,6 +323,9 @@ def refresh(c,kid,stamp,question_id=None):
    dates.append(own if own and own>stamp else stamp+timedelta(days=1))
   due=min(dates or [stamp+timedelta(days=1)]).isoformat()
  c.execute(text('INSERT INTO group_progress VALUES(:g,:d,:t,:p) ON CONFLICT(group_id) DO UPDATE SET due_at=excluded.due_at,last_at=excluded.last_at,transfer_pending=excluded.transfer_pending'),dict(g=gid,d=due,t=stamp.isoformat(),p=int(pending)))
+ if chosen is None and c.execute(text('SELECT 1 FROM source_preparation_items WHERE knowledge_id=:g'),dict(g=gid)).first():
+  c.execute(text('DELETE FROM group_active_slots WHERE group_id=:g'),dict(g=gid))
+
 
 def select(c,stamp,new_limit,review_limit,course='all',allow_repeat=False):
  import focus_training
@@ -336,6 +340,8 @@ def select(c,stamp,new_limit,review_limit,course='all',allow_repeat=False):
  LEFT JOIN answers a ON a.question_id=q.id WHERE a.id IS NULL ORDER BY q.rowid''')).mappings().all()
  for pending in pending_rows:
   if pending['group_id'].startswith('focus-'):continue
+  if not sourced_transfer.allowed(c,pending['id'],stamp):continue
+  if pending['role']=='transfer' and not sourced_transfer.eligible(c,pending['group_id'],pending['id'],stamp):continue
   if pending['role'] in ('phrase','sentence','transfer'):
    if not requirements_met(c,pending['id'],stamp=stamp):continue
    roots=c.execute(text("SELECT p.level,k.id FROM group_members m JOIN progress p ON p.knowledge_id=m.knowledge_id JOIN knowledge k ON k.id=m.knowledge_id WHERE m.group_id=:g AND m.role='base'"),dict(g=pending['group_id'])).all()
@@ -395,6 +401,8 @@ def select(c,stamp,new_limit,review_limit,course='all',allow_repeat=False):
   if item:
    choice=result(gid,item)
    if choice:return choice
+ preparation=sourced_transfer.select_preparation(c,stamp,new_limit,review_limit,allow_repeat=allow_repeat)
+ if preparation:return preparation
  new_goals=c.execute(text("SELECT COUNT(*) FROM group_active_slots s JOIN daily_group_tasks d ON d.group_id=s.group_id WHERE d.day=:d AND d.kind='new'"),dict(d=day)).scalar()
  if new_goals<3 and len(candidates)<12 and pool_count(c,stamp)<12 and counts(c,stamp).get('new',0)<new_limit:
   ordered=course_policy.unseen(c,course)

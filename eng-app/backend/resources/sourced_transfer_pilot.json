@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "scope": "want-to only; disabled by default",
+  "rows": [
+    {
+      "source_id": "sent-30dd8a11c0dc72a4",
+      "english": "I want to go abroad.",
+      "chinese": "我想出国。",
+      "original_chinese": "我想去外国。",
+      "goal": "want-to",
+      "material": {
+        "english": "go abroad",
+        "chinese": "出国",
+        "usage": "go 是去，abroad 是到国外；go abroad 合起来表示出国。"
+      },
+      "source": {
+        "en": "I want to go abroad.",
+        "zh": "我想去外国。",
+        "scene": "Tatoeba 双语例句",
+        "source_url": "https://tatoeba.org/en/sentences/show/21938",
+        "translation_url": "https://tatoeba.org/en/sentences/show/382414",
+        "attribution": "Tatoeba sentence IDs 21938 / 382414",
+        "license": "CC BY 2.0 FR"
+      },
+      "review": {
+        "status": "approved",
+        "method": "AI辅助逐条核对英文、中文及目标用法；非教师复核",
+        "note": "原英文保留；中文必要时改为明确的教学提示"
+      }
+    },
+    {
+      "source_id": "sent-e8c517985b4f1e69",
+      "english": "I want to go skating.",
+      "chinese": "我想去滑冰。",
+      "original_chinese": "我想去滑冰。",
+      "goal": "want-to",
+      "material": {
+        "english": "go skating",
+        "chinese": "去滑冰",
+        "usage": "go skating 表示去滑冰，作为完整表达记忆。"
+      },
+      "source": {
+        "en": "I want to go skating.",
+        "zh": "我想去滑冰。",
+        "scene": "Tatoeba 双语例句",
+        "source_url": "https://tatoeba.org/en/sentences/show/10011012",
+        "translation_url": "https://tatoeba.org/en/sentences/show/9987043",
+        "attribution": "Tatoeba sentence IDs 10011012 / 9987043",
+        "license": "CC BY 2.0 FR"
+      },
+      "review": {
+        "status": "approved",
+        "method": "AI辅助逐条核对英文、中文及目标用法；非教师复核",
+        "note": "原英文保留；中文必要时改为明确的教学提示"
+      }
+    },
+    {
+      "source_id": "sent-4ac221bea818dc03",
+      "english": "I want to lose weight.",
+      "chinese": "我想减肥。",
+      "original_chinese": "我想减肥。",
+      "goal": "want-to",
+      "material": {
+        "english": "lose weight",
+        "chinese": "减肥",
+        "usage": "lose weight 是减轻体重、减肥的常用表达。"
+      },
+      "source": {
+        "en": "I want to lose weight.",
+        "zh": "我想减肥。",
+        "scene": "Tatoeba 双语例句",
+        "source_url": "https://tatoeba.org/en/sentences/show/259295",
+        "translation_url": "https://tatoeba.org/en/sentences/show/332631",
+        "attribution": "Tatoeba sentence IDs 259295 / 332631",
+        "license": "CC BY 2.0 FR"
+      },
+      "review": {
+        "status": "approved",
+        "method": "AI辅助逐条核对英文、中文及目标用法；非教师复核",
+        "note": "原英文保留；中文必要时改为明确的教学提示"
+      }
+    },
+    {
+      "source_id": "sent-6cd9a2673dbb9c4f",
+      "english": "I want to eat apple pie.",
+      "chinese": "我想吃苹果派。",
+      "original_chinese": "我想吃苹果派。",
+      "goal": "want-to",
+      "material": {
+        "english": "eat apple pie",
+        "chinese": "吃苹果派",
+        "usage": "eat 是吃，apple pie 是苹果派。"
+      },
+      "source": {
+        "en": "I want to eat apple pie.",
+        "zh": "我想吃苹果派。",
+        "scene": "Tatoeba 双语例句",
+        "source_url": "https://tatoeba.org/en/sentences/show/252663",
+        "translation_url": "https://tatoeba.org/en/sentences/show/333852",
+        "attribution": "Tatoeba sentence IDs 252663 / 333852",
+        "license": "CC BY 2.0 FR"
+      },
+      "review": {
+        "status": "approved",
+        "method": "AI辅助逐条核对英文、中文及目标用法；非教师复核",
+        "note": "原英文保留；中文必要时改为明确的教学提示"
+      }
+    },
+    {
+      "source_id": "sent-21c1d5d5789e2235",
+      "english": "I want to watch this film.",
+      "chinese": "我想看这部电影。",
+      "original_chinese": "我想看这部电影。",
+      "goal": "want-to",
+      "material": {
+        "english": "watch this film",
+        "chinese": "看这部电影",
+        "usage": "watch 是观看，this film 是这部电影。"
+      },
+      "source": {
+        "en": "I want to watch this film.",
+        "zh": "我想看这部电影。",
+        "scene": "Tatoeba 双语例句",
+        "source_url": "https://tatoeba.org/en/sentences/show/1211529",
+        "translation_url": "https://tatoeba.org/en/sentences/show/333946",
+        "attribution": "Tatoeba sentence IDs 1211529 / 333946",
+        "license": "CC BY 2.0 FR"
+      },
+      "review": {
+        "status": "approved",
+        "method": "AI辅助逐条核对英文、中文及目标用法；非教师复核",
+        "note": "原英文保留；中文必要时改为明确的教学提示"
+      }
+    }
+  ]
+}

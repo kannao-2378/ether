@@ -8,6 +8,7 @@ from pathlib import Path
 from datetime import timezone,timedelta
 from sqlalchemy import text
 import curriculum_engine as ce,transfer_evidence as evidence
+import sourced_transfer
 
 RULES=Path(__file__).parent/'resources/composition_rules.json'
 TABLES=('composition_items','composition_cursors')
@@ -128,6 +129,7 @@ def prepare(c,stamp):
  ordered=sorted(cat.goals.items(),key=lambda item:states.get(item[1]['id'],('','', ''))[2])
  for target,goal in ordered:
   gid=goal['id']
+  if sourced_transfer.enabled(c,gid):continue
   state=states.get(gid)
   if state and state[0]==signature and state[1]<0:continue
   if not ce.known(c,gid) or ce.blockers(c,gid):continue
