@@ -30,6 +30,9 @@ class CompositionTests(unittest.TestCase):
    self.assertEqual(next(r['zh'] for r in want if r['en']=='I want to drink water every day.'),'我想每天喝水。');self.assertIn('I want to rest.',[r['en'] for r in want]);self.assertIn('I enjoy resting.',[r['en'] for r in enjoy])
    self.assertFalse(any('enjoy rest.' in r['en'] or 'enjoy to ' in r['en'] or 'enjoy getting up' in r['en'] for r in enjoy))
    self.assertFalse(any('water' in r['en'] for r in comp.candidates(cat,'talk-to',facts)))
+   self.assertFalse(any('my keys' in r['en'] for r in comp.candidates(cat,'route-next-to',facts)))
+   self.assertFalse(any('every day' in r['en'] for r in comp.candidates(cat,'route-afraid-of',facts)))
+   self.assertFalse(any('get up' in r['en'] for r in comp.candidates(cat,'route-used-to',facts)))
  def test_unknown_material_and_unknown_basics_are_not_used(self):
   with self.db.begin() as c:
    cat,facts=self.catalog(c);self.assertEqual(comp.prepare(c,self.stamp),0);self.assertEqual(facts['actions'],[])

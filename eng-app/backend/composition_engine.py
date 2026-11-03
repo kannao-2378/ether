@@ -58,6 +58,7 @@ def candidates(cat,target,facts):
  for frame in cat.spec['frames']:
   if frame['target']!=target:continue
   for action in actions:
+   if target in action.get('excluded_frames',[]):continue
    form=frame.get('form','base')
    if frame['tag'] not in action.get('tags',[]) or not action.get(form):continue
    if form=='gerund' and any(not cat.resolve(r) for r in action.get('gerund_requires',[])):continue
@@ -73,7 +74,7 @@ def candidates(cat,target,facts):
   for obj in objects:
    if not set(relation['tags'])&set(obj.get('tags',[])):continue
    en='I '+relation['head']+' '+obj['en'];zh='我'+relation['zh']+obj['zh']+relation.get('suffix_zh','')
-   yield from timed(en,zh,[obj],target,target not in ('agree-with','depend-on'))
+   yield from timed(en,zh,[obj],target,relation.get('allow_time',True))
  if target in cat.spec['action_targets']:
   goal=cat.goals[target];clause=goal['sentence'].rstrip('.');meaning=goal['sentence_zh'].rstrip('。')
   for time in times:yield emit(clause+' '+time['en'],'我'+time['zh']+meaning.removeprefix('我'),[time],target+'+time')
