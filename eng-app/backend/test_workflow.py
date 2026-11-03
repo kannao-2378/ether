@@ -45,7 +45,9 @@ class WorkflowTests(unittest.TestCase):
  def test_pending_unfinished_not_editable_as_completed(self):
   with self.assertRaises(HTTPException):app.feedback(app.Feedback(question_id=self.question(),confidence='clear'))
  def test_composition_feedback_updates_rule_evidence_both_ways(self):
-  q=self.question('compose-want-to-drink-water');self.submit(q,'I want to drink water.','forgot')
+  q=self.question('compose-want-to-drink-water')
+  with self.db.begin() as c:c.execute(text("INSERT INTO question_trials VALUES(:q,'transfer','isolated genuine trial',2)"),dict(q=q))
+  self.submit(q,'I want to drink water.','forgot')
   self.assertEqual(app.rule_profile('want-to')['independent_uses'],0)
   app.feedback(app.Feedback(question_id=q,confidence='clear'))
   self.assertEqual(app.rule_profile('want-to')['independent_uses'],1)

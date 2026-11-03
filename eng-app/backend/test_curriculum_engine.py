@@ -141,3 +141,88 @@ class TeachingRegistryTests(unittest.TestCase):
    chosen=course_policy.core_members(c,'look-at',groups.members(c,'look-at'))
    self.assertNotIn('this picture',[r['answer'] for r in chosen])
    self.assertTrue(ce.material_covered(c,'look-at',next(r['id'] for r in groups.members(c,'look-at') if r['answer']=='this picture')))
+
+ def fresh_transfer(self):
+  with self.db.begin() as c:
+   c.execute(text('UPDATE progress SET level=3,introduced=1,due_at=:d'),dict(d=(self.clock+timedelta(days=10)).isoformat()))
+   kid=c.execute(text("SELECT knowledge_id FROM curriculum_lessons WHERE goal_id='want-to' AND role='transfer' ORDER BY position LIMIT 1")).scalar()
+   answer=c.execute(text('SELECT answer FROM knowledge WHERE id=:k'),dict(k=kid)).scalar()
+   c.execute(text("UPDATE progress SET level=0,introduced=0,due_at=NULL WHERE knowledge_id IN (SELECT id FROM knowledge WHERE lower(rtrim(answer,'.!? '))=:a)"),dict(a=answer.lower().rstrip('.!? ')))
+   self.assertTrue(groups.admit(c,'want-to',kid,self.clock,50,50))
+  return kid,answer
+ def finish_transfer(self,q,answer):
+  app.check_spelling(app.SpellingCheck(id=q['question_id']+'-check',question_id=q['question_id'],answer=answer))
+  app.submit(app.Submission(question_id=q['question_id'],answer=answer,confidence='clear'))
+ def test_unseen_transfer_starts_in_chinese_without_teaching(self):
+  kid,answer=self.fresh_transfer();q=app.next_question()
+  self.assertEqual((q['kind'],q['id'],q['exercise_mode']),('recall',kid,'transfer'));self.assertNotIn('answer',q)
+  self.assertEqual(app.next_question()['question_id'],q['question_id'])
+  self.finish_transfer(q,answer)
+  with self.db.connect() as c:self.assertEqual(app.assessment.calculate(c,kid)['transfer_successes'],1)
+ def test_teaching_exposure_never_counts_as_new_transfer(self):
+  kid,answer=self.fresh_transfer();app.introduce(kid);q=app.next_question()
+  self.assertEqual(q['exercise_mode'],'recall');self.finish_transfer(q,answer)
+  with self.db.connect() as c:
+   self.assertEqual(app.assessment.calculate(c,kid)['transfer_successes'],0)
+   self.assertEqual(c.execute(text('SELECT independent FROM composition_evidence WHERE question_id=:q'),dict(q=q['question_id'])).scalar(),0)
+ def test_parent_example_is_not_a_novel_combination(self):
+  kid,answer=self.fresh_transfer()
+  with self.db.begin() as c:
+   import transfer_evidence
+   transfer_evidence.expose(c,'want-to',self.clock,dict(examples=[dict(en=answer)]))
+  q=app.next_question();self.assertEqual(q['exercise_mode'],'recall')
+ def test_transfer_hints_errors_and_feedback_corrections(self):
+  kid,answer=self.fresh_transfer();q=app.next_question();app.reveal(q['question_id']);self.finish_transfer(q,answer)
+  with self.db.connect() as c:self.assertEqual(app.assessment.calculate(c,kid)['transfer_successes'],0)
+  q=app.challenge(kid);app.check_spelling(app.SpellingCheck(id='bad-transfer',question_id=q['question_id'],answer='wrong'));self.finish_transfer(q,answer)
+  with self.db.connect() as c:self.assertEqual(app.assessment.calculate(c,kid)['transfer_successes'],0)
+ def test_verified_transfer_review_and_correction(self):
+  kid,answer=self.fresh_transfer();q=app.next_question();self.finish_transfer(q,answer)
+  review=app.challenge(kid)
+  with self.db.connect() as c:self.assertEqual(c.execute(text('SELECT mode FROM question_trials WHERE question_id=:q'),dict(q=review['question_id'])).scalar(),'transfer-review')
+  self.finish_transfer(review,answer)
+  app.feedback(app.Feedback(question_id=q['question_id'],confidence='hard'));app.feedback(app.Feedback(question_id=review['question_id'],confidence='forgot'))
+  with self.db.connect() as c:self.assertEqual(app.assessment.calculate(c,kid)['transfer_successes'],0)
+ def test_legacy_trial_cannot_be_silently_certified(self):
+  kid,answer=self.fresh_transfer();q=app.next_question();self.finish_transfer(q,answer)
+  with self.db.begin() as c:
+   c.execute(text('DELETE FROM question_trials WHERE question_id=:q'),dict(q=q['question_id']))
+   c.execute(text('UPDATE knowledge_assessments SET payload=:p WHERE knowledge_id=:k'),dict(k=kid,p=json.dumps(dict(stable=False,transfer_successes=999))))
+   self.assertEqual(app.assessment.get(c,kid)['transfer_successes'],0)
+   self.assertEqual(c.execute(text('SELECT COUNT(*) FROM answers WHERE question_id=:q'),dict(q=q['question_id'])).scalar(),1)
+ def test_ordinary_sentence_usage_is_not_transfer(self):
+  kid,answer=self.fresh_transfer()
+  with self.db.connect() as c:sentence=c.execute(text("SELECT knowledge_id FROM curriculum_lessons WHERE goal_id='want-to' AND role='sentence' LIMIT 1")).scalar()
+  q=app.challenge(sentence);self.finish_transfer(q,app.knowledge_content(sentence)['answer'])
+  with self.db.connect() as c:self.assertEqual(app.assessment.calculate(c,'want-to')['transfer_successes'],0)
+
+ def test_client_hint_flag_covers_delayed_reveal_request(self):
+  kid,answer=self.fresh_transfer();q=app.next_question()
+  app.submit(app.Submission(question_id=q['question_id'],answer=answer,confidence='clear',hint_used=True))
+  with self.db.connect() as c:
+   self.assertEqual(app.assessment.calculate(c,kid)['transfer_successes'],0)
+   self.assertEqual(c.execute(text('SELECT revealed FROM answers WHERE question_id=:q'),dict(q=q['question_id'])).scalar(),1)
+ def test_legacy_displayed_example_does_not_become_novel(self):
+  kid,answer=self.fresh_transfer()
+  with self.db.begin() as c:c.execute(text("UPDATE knowledge SET example=:a WHERE id='want-to'"),dict(a=answer))
+  self.assertEqual(app.next_question()['exercise_mode'],'recall')
+ def test_evidence_migration_preserves_raw_history_and_exports(self):
+  kid,answer=self.fresh_transfer();q=app.next_question();self.finish_transfer(q,answer)
+  tables=('answers','feedback_events','progress','memory_states')
+  with self.db.begin() as c:
+   c.execute(text('DELETE FROM question_trials'))
+   c.execute(text('UPDATE knowledge_assessments SET payload=:p WHERE knowledge_id=:k'),dict(k=kid,p=json.dumps(dict(stable=False,transfer_successes=999))))
+   before={t:c.execute(text('SELECT * FROM '+t)).all() for t in tables}
+  app.initialize(self.db,with_bulk=False)
+  with self.db.connect() as c:
+   self.assertEqual(before,{t:c.execute(text('SELECT * FROM '+t)).all() for t in tables})
+   self.assertEqual(app.assessment.get(c,kid)['transfer_successes'],0)
+  exported=app.export()['tables']
+  self.assertIn('question_trials',exported);self.assertIn('teaching_exposures',exported)
+
+
+ def test_metadata_prefetch_is_not_visible_teaching(self):
+  kid,answer=self.fresh_transfer();app.knowledge_content(kid)
+  with self.db.connect() as c:self.assertIsNone(c.execute(text('SELECT 1 FROM teaching_exposures WHERE knowledge_id=:k'),dict(k=kid)).first())
+  app.knowledge_content(kid,visible=True)
+  self.assertEqual(app.next_question()['exercise_mode'],'recall')

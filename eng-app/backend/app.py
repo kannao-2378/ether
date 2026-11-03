@@ -19,6 +19,7 @@ import daily_activity
 import group_learning
 from learning_profile import familiarity,RULES
 import assessment
+import transfer_evidence
 import content
 import bulk_courses
 import oxford_audio
@@ -129,6 +130,7 @@ def initialize(target,with_bulk=False):
         c.execute(text('CREATE INDEX IF NOT EXISTS extensions_day ON daily_extensions(day)'))
         install_memory(c)
         assessment.install(c)
+        transfer_evidence.install(c)
         for old in c.execute(text('SELECT DISTINCT a.knowledge_id FROM answers a LEFT JOIN review_queue r ON r.knowledge_id=a.knowledge_id WHERE r.version IS NULL OR r.version<5')).scalars().all():
             rebuild(c,old)
             if not assessment.get(c,old)['stable']:
@@ -142,6 +144,11 @@ def initialize(target,with_bulk=False):
         word_lookup.install(c)
         focus_training.install(c)
         group_learning.install(c)
+        # Only derived assessment caches are refreshed; raw answers and FSRS cards stay intact.
+        for cached in c.execute(text('SELECT knowledge_id,payload FROM knowledge_assessments')).all():
+            if json.loads(cached[1]).get('evidence_version')!=transfer_evidence.VERSION:
+                payload=assessment.calculate(c,cached[0])
+                c.execute(text('UPDATE knowledge_assessments SET payload=:p WHERE knowledge_id=:k'),dict(k=cached[0],p=json.dumps(payload,ensure_ascii=False)))
 
 initialize(real_engine,with_bulk=os.environ.get('PELS_SKIP_BULK')!='1')
 initialize(test_engine,with_bulk=not AUTH.enabled and os.environ.get('PELS_SKIP_BULK')!='1')
@@ -188,7 +195,7 @@ def test_action(action: str, data: dict):
             c.execute(text('DELETE FROM daily_tasks'))
     elif action in ('reset','prepare'):
         with test_engine.begin() as c:
-            for table in ('answers','questions','spelling_checks','feedback_events','review_queue','memory_states','consolidation_slots','daily_new_pacing','daily_tasks','daily_coverage','lesson_attempts','context_round_items','context_rounds','composition_evidence','knowledge_assessments','test_skips','daily_extensions'):
+            for table in ('answers','questions','spelling_checks','feedback_events','review_queue','memory_states','consolidation_slots','daily_new_pacing','daily_tasks','daily_coverage','lesson_attempts','context_round_items','context_rounds','composition_evidence','knowledge_assessments','test_skips','daily_extensions','teaching_exposures','question_trials'):
                 c.execute(text('DELETE FROM '+table))
             for table in ('focus_requests','group_questions','daily_group_tasks','group_progress','group_usage','group_active_slots'):c.execute(text('DELETE FROM '+table))
             c.execute(text('UPDATE test_clock SET days=0,stage=1 WHERE id=1'))
@@ -225,7 +232,7 @@ def rule_profile(rule_id: str):
     if rule_id not in RULES:raise HTTPException(404,'该规则尚未制作')
     with engine.connect() as c:
         reading=c.execute(text('SELECT read_at FROM rule_readings WHERE rule_id=:r'),dict(r=rule_id)).scalar()
-        used=c.execute(text('''SELECT COUNT(*) FROM composition_evidence e JOIN answers a ON a.question_id=e.question_id WHERE e.structure_id=:r AND e.independent=1
+        used=c.execute(text('''SELECT COUNT(*) FROM composition_evidence e JOIN answers a ON a.question_id=e.question_id WHERE e.structure_id=:r AND e.independent=1 AND EXISTS(SELECT 1 FROM question_trials t WHERE t.question_id=e.question_id AND t.mode IN ('transfer','transfer-review'))
           AND COALESCE((SELECT f.confidence FROM feedback_events f WHERE f.question_id=e.question_id ORDER BY f.rowid DESC LIMIT 1),a.confidence)='clear' '''),dict(r=rule_id)).scalar()
         level=c.execute(text('SELECT level FROM progress WHERE knowledge_id=:r'),dict(r=rule_id)).scalar() or 0
     return dict(id=rule_id,**RULES[rule_id],read_at=reading,independent_uses=used,state='已在组合题中独立使用' if used else '搭配回忆通过，待验证规则运用' if level>=3 else '已看讲解，待练习验证' if reading else '尚未学习')
@@ -270,11 +277,13 @@ def curriculum_unit(unit_id: str,page: int=1):
     return dict(items=items,total=total,page=page,page_size=100,total_pages=(total+99)//100)
 
 @app.get('/api/knowledge/{kid}')
-def knowledge_content(kid: str):
-    with engine.connect() as c:
+def knowledge_content(kid: str, visible: bool=False):
+    with engine.begin() as c:
         row=c.execute(text('SELECT * FROM knowledge WHERE id=:k'),dict(k=kid)).mappings().first()
         if not row:raise HTTPException(404,'知识内容不存在')
-        return dict(row,details=content.details(c,kid))
+        details=content.details(c,kid)
+        if visible:transfer_evidence.expose(c,kid,now(),details,source='visible explanation')
+        return dict(row,details=details)
 
 @app.post('/api/challenge/{kid}')
 def challenge(kid: str):
@@ -289,6 +298,7 @@ def challenge(kid: str):
         if not qid:
             qid=str(uuid.uuid4())
             c.execute(text('INSERT INTO questions VALUES(:q,:k,:t,0)'),dict(q=qid,k=kid,t=now().isoformat()))
+        transfer_evidence.register(c,qid,kid)
         c.execute(text('UPDATE progress SET introduced=1 WHERE knowledge_id=:k'),dict(k=kid))
         return dict(kind='recall',question_id=qid,id=kid,prompt=item['prompt'],**answer_hint(c,item),challenge=True)
 
@@ -319,6 +329,11 @@ def import_lookup(body: LookupImport):
         try:result=word_lookup.import_items(c,body.preview_id,body.selected,now())
         except ValueError as e:raise HTTPException(400,str(e))
         group_learning.install(c)
+        # Only derived assessment caches are refreshed; raw answers and FSRS cards stay intact.
+        for cached in c.execute(text('SELECT knowledge_id,payload FROM knowledge_assessments')).all():
+            if json.loads(cached[1]).get('evidence_version')!=transfer_evidence.VERSION:
+                payload=assessment.calculate(c,cached[0])
+                c.execute(text('UPDATE knowledge_assessments SET payload=:p WHERE knowledge_id=:k'),dict(k=cached[0],p=json.dumps(payload,ensure_ascii=False)))
         if body.train:result['focus']=focus_training.add(c,result['id'],now(),member_ids=result['imported_ids'])
         result['items']=[dict(c.execute(text('SELECT k.*,p.*,COALESCE(l.stage,1) AS stage FROM knowledge k JOIN progress p ON p.knowledge_id=k.id LEFT JOIN course_links l ON l.knowledge_id=k.id WHERE k.id=:k'),dict(k=kid)).mappings().one()) for kid in result['imported_ids']]
     return dict(saved=True,**result)
@@ -487,12 +502,17 @@ def next_question():
                 if not route['ready_total']:return dict(kind='done',reason='uncompiled-course',message='本课程暂无已编排新课；可在学习计划选择课程，或在词典加入专项。')
                 if not route['unintroduced']:return dict(kind='done',reason='no-more-new-goals',message='没有新的已编排学习组；未完成训练和到期复习仍会继续安排。')
                 return dict(kind='done',message='今日可安排的学习组已完成或达到上限。')
-            if kind=='learn':return dict(kind='learn',**item)
+            if kind=='learn':
+                transfer_evidence.expose(c,item['id'],now(),content.details(c,item['id']))
+                return dict(kind='learn',**item)
             qid=item.get('question_id') or str(uuid.uuid4())
             if not item.get('question_id'):
                 c.execute(text('INSERT INTO questions(id,knowledge_id,created_at,revealed) VALUES(:q,:k,:t,0)'),dict(q=qid,k=item['id'],t=now().isoformat()))
                 c.execute(text('INSERT INTO group_questions VALUES(:q,:g,:r)'),dict(q=qid,g=item['group_id'],r=item['role']))
-            return dict(kind='recall',question_id=qid,id=item['id'],prompt=item['prompt'],**answer_hint(c,item),group_id=item['group_id'],group_title=item.get('group_title',''),group_role=item['role'])
+                transfer_evidence.register(c,qid,item['id'],item['role'])
+            mode=c.execute(text('SELECT mode FROM question_trials WHERE question_id=:q'),dict(q=qid)).scalar() or 'recall'
+            if item['role']=='transfer':c.execute(text('UPDATE progress SET introduced=1 WHERE knowledge_id=:k'),dict(k=item['id']))
+            return dict(kind='recall',question_id=qid,id=item['id'],prompt=item['prompt'],**answer_hint(c,item),group_id=item['group_id'],group_title=item.get('group_title',''),group_role=item['role'],exercise_mode=mode)
 
         stage_filter=(' AND COALESCE((SELECT stage FROM course_links l WHERE l.knowledge_id=k.id),1)=:stage' if stage else '')+" AND NOT EXISTS(SELECT 1 FROM daily_coverage cv WHERE cv.knowledge_id=k.id AND cv.day=:day)"
         pending=c.execute(text('SELECT q.id AS question_id,k.* FROM questions q JOIN knowledge k ON q.knowledge_id=k.id LEFT JOIN answers a ON a.question_id=q.id WHERE a.id IS NULL'+stage_filter+' ORDER BY q.created_at LIMIT 1'),dict(stage=stage,day=now().astimezone(timezone(timedelta(hours=8))).date().isoformat())).mappings().first()
@@ -540,16 +560,20 @@ def next_question():
         if item and item['id'].startswith('compose-'):c.execute(text('UPDATE progress SET introduced=1 WHERE knowledge_id=:k'),dict(k=item['id']))
         if kind=='learn':
             item_stage=c.execute(text('SELECT stage FROM course_links WHERE knowledge_id=:k'),dict(k=item['id'])).scalar()
-            if item_stage!=4:return dict(kind=kind,**item)
+            if item_stage!=4:
+                transfer_evidence.expose(c,item['id'],now(),content.details(c,item['id']))
+                return dict(kind=kind,**item)
             c.execute(text('UPDATE progress SET introduced=1 WHERE knowledge_id=:k'),dict(k=item['id']))
         if kind=='done':return dict(kind='done',message='今日安排已完成或已达每日组数上限，剩余任务会保留。')
         qid = str(uuid.uuid4())
         c.execute(text('INSERT INTO questions (id,knowledge_id,created_at) VALUES (:q,:k,:t)'),dict(q=qid,k=item['id'],t=now().isoformat()))
+        transfer_evidence.register(c,qid,item['id'])
         return dict(kind='recall',question_id=qid,id=item['id'],prompt=item['prompt'],**answer_hint(c,item))
 
 @app.post('/api/introduce/{kid}')
 def introduce(kid: str):
     with engine.begin() as c:
+        transfer_evidence.expose(c,kid,now(),content.details(c,kid))
         result = c.execute(text('UPDATE progress SET introduced=1,due_at=:t WHERE knowledge_id=:k AND introduced=0'),dict(k=kid,t=now().isoformat()))
         if not result.rowcount:
             raise HTTPException(409,'内容不存在或已经学习')
@@ -562,9 +586,12 @@ def reveal(qid: str):
         if not row:
             raise HTTPException(404,'题目不存在')
         c.execute(text('UPDATE questions SET revealed=1 WHERE id=:q'),dict(q=qid))
+        kid=c.execute(text('SELECT knowledge_id FROM questions WHERE id=:q'),dict(q=qid)).scalar()
+        transfer_evidence.expose(c,kid,now(),source='hint')
         return dict(row)
 
 class Submission(BaseModel):
+    hint_used: bool = False
     question_id: str
     answer: str = Field(max_length=1000)
     confidence: str = Field(pattern='^(clear|hard|forgot)$')
@@ -609,7 +636,7 @@ def feedback(body: Feedback):
         rebuild(c,kid)
         update_coverage(c,kid,now())
         c.execute(text('''UPDATE composition_evidence SET independent=(SELECT CASE WHEN a.correct=1 AND a.revealed=0
-          AND :confidence='clear' AND NOT EXISTS(SELECT 1 FROM spelling_checks sc WHERE sc.question_id=a.question_id AND sc.correct=0 AND julianday(sc.created_at)<=julianday(a.created_at))
+          AND :confidence='clear' AND EXISTS(SELECT 1 FROM question_trials t WHERE t.question_id=a.question_id AND t.mode IN ('transfer','transfer-review')) AND NOT EXISTS(SELECT 1 FROM spelling_checks sc WHERE sc.question_id=a.question_id AND sc.correct=0 AND julianday(sc.created_at)<=julianday(a.created_at))
           AND NOT EXISTS(SELECT 1 FROM test_skips ts WHERE ts.question_id=a.question_id) THEN 1 ELSE 0 END
           FROM answers a WHERE a.question_id=:q) WHERE question_id=:q'''),dict(q=body.question_id,confidence=body.confidence))
         assessment.refresh(c,kid)
@@ -625,6 +652,7 @@ def check_spelling(body: SpellingCheck):
             raise HTTPException(404,'题目不存在')
         assessment=transfer.grade(row['id'],body.answer,row['answer'],(content.details(c,row['id']) or {}).get('accepted_answers'))
         correct=assessment['correct']
+        if correct:transfer_evidence.expose(c,row['id'],now(),content.details(c,row['id']),source='checked answer')
         c.execute(text('INSERT OR IGNORE INTO spelling_checks VALUES (:id,:q,:a,:c,:t)'),dict(id=body.id,q=body.question_id,a=body.answer,c=int(correct),t=now().isoformat()))
         return dict(correct=correct,analysis=assessment['analysis'],notices=assessment['notices'],**(dict(answer=row['answer'],explanation=row['explanation'],example=row['example']) if correct else {}))
 
@@ -639,6 +667,9 @@ def submit(body: Submission):
             raise HTTPException(404,'题目不存在')
         c.execute(text('''INSERT OR IGNORE INTO group_questions SELECT :q,p.group_id,m.role FROM group_primary p
           JOIN group_members m ON m.group_id=p.group_id AND m.knowledge_id=p.knowledge_id WHERE p.knowledge_id=:k'''),dict(q=body.question_id,k=row['knowledge_id']))
+        if body.hint_used:
+            c.execute(text('UPDATE questions SET revealed=1 WHERE id=:q'),dict(q=body.question_id))
+            row=dict(row,revealed=1)
         correct=transfer.grade(row['knowledge_id'],body.answer,row['answer'],(content.details(c,row['knowledge_id']) or {}).get('accepted_answers'))['correct']
         if not correct:raise HTTPException(422,'请先完成正确拼写，再提交记忆反馈')
         due=now()
@@ -651,7 +682,7 @@ def submit(body: Submission):
         combination=c.execute(text('SELECT structure_id,material_id FROM sentence_combinations WHERE knowledge_id=:k'),dict(k=row['knowledge_id'])).mappings().first()
         if combination:
             errors=c.execute(text('SELECT COUNT(*) FROM spelling_checks WHERE question_id=:q AND correct=0'),dict(q=body.question_id)).scalar()
-            c.execute(text('INSERT OR IGNORE INTO composition_evidence VALUES(:q,:s,:m,:i,:t)'),dict(q=body.question_id,s=combination['structure_id'],m=combination['material_id'],i=int(correct and not row['revealed'] and not errors and body.confidence=='clear'),t=now().isoformat()))
+            c.execute(text('INSERT OR IGNORE INTO composition_evidence VALUES(:q,:s,:m,:i,:t)'),dict(q=body.question_id,s=combination['structure_id'],m=combination['material_id'],i=int(correct and not row['revealed'] and not errors and body.confidence=='clear' and bool(c.execute(text("SELECT 1 FROM question_trials WHERE question_id=:q AND mode IN ('transfer','transfer-review')"),dict(q=body.question_id)).first())),t=now().isoformat()))
         update_coverage(c,row['knowledge_id'],now())
         assessment.refresh(c,row['knowledge_id'])
         apply_retention_limit(c,row['knowledge_id'])

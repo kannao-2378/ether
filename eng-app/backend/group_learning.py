@@ -4,10 +4,10 @@ Individual answers/FSRS cards are never rewritten to manufacture mastery.
 """
 from datetime import datetime,timedelta,timezone
 import json,re
-import course_policy,curriculum_engine
+import course_policy,curriculum_engine,transfer_evidence
 from sqlalchemy import text
 ZONE=timezone(timedelta(hours=8));VERSION='families-v6'
-TABLES=('lookup_previews','focus_requests','learning_groups','group_members','group_primary','group_requirements','group_questions','daily_group_tasks','group_progress','group_usage','group_active_slots','group_install','group_migrations')+curriculum_engine.TABLES
+TABLES=('lookup_previews','focus_requests','learning_groups','group_members','group_primary','group_requirements','group_questions','daily_group_tasks','group_progress','group_usage','group_active_slots','group_install','group_migrations')+curriculum_engine.TABLES+transfer_evidence.TABLES
 CORE={'want-to':['want'],'enjoy-doing':['enjoy'],'decide-to':['decide'],'like-doing':['like'],
       'listen-to':['listen','music'],'look-at':['look','picture'],'wait-for':['wait','bus'],
       'talk-to':['talk','friend'],'ask-for':['ask','help']}
@@ -362,7 +362,7 @@ def select(c,stamp,new_limit,review_limit,course='all'):
   item['group_title']=c.execute(text('SELECT title FROM learning_groups WHERE id=:g'),dict(g=gid)).scalar()
   kind=c.execute(text('SELECT kind FROM daily_group_tasks WHERE day=:d AND group_id=:g'),dict(d=day,g=gid)).scalar()
   c.execute(text('INSERT OR IGNORE INTO daily_tasks VALUES(:d,:k,:v)'),dict(d=day,k=item['id'],v=kind))
-  return ('recall' if item['introduced'] else 'learn'),item
+  return ('recall' if item['introduced'] or item['role']=='transfer' else 'learn'),item
  for _,gid,item in sorted(ready,key=lambda r:r[0]):
   choice=result(gid,item)
   if choice:return choice

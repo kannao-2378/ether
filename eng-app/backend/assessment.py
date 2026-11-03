@@ -1,5 +1,6 @@
 """Evidence-based assessment: subjective feedback, retention and transfer stay separate."""
 import json
+import transfer_evidence
 from datetime import datetime,timedelta,timezone
 from sqlalchemy import text
 
@@ -31,6 +32,7 @@ def calculate(c,kid):
  a.correct,a.revealed,COALESCE((SELECT f.confidence FROM feedback_events f WHERE f.question_id=a.question_id ORDER BY f.rowid DESC LIMIT 1),a.confidence) AS rating,
  EXISTS(SELECT 1 FROM spelling_checks s WHERE s.question_id=a.question_id AND s.correct=0 AND julianday(s.created_at)<=julianday(a.created_at)) AS failed
  FROM sentence_combinations sc JOIN answers a ON a.knowledge_id=sc.knowledge_id
+ JOIN question_trials qt ON qt.question_id=a.question_id AND qt.mode IN ('transfer','transfer-review')
  WHERE (sc.structure_id=:k OR sc.material_id=:k OR sc.knowledge_id=:k OR EXISTS(SELECT 1 FROM transfer_materials tm WHERE tm.knowledge_id=sc.knowledge_id AND tm.material_id=:k))
  AND NOT EXISTS(SELECT 1 FROM test_skips ts WHERE ts.question_id=a.question_id) ORDER BY a.rowid'''),dict(k=kid)).mappings()]
  successful=[r for r in uses if r['correct'] and not r['revealed'] and not r['failed'] and r['rating']=='clear']
@@ -38,7 +40,7 @@ def calculate(c,kid):
  transfer_days=len({datetime.fromisoformat(r['created_at']).astimezone(timezone(timedelta(hours=8))).date().isoformat() for r in successful})
  last_transfer_ok=bool(uses and uses[-1]['correct'] and not uses[-1]['revealed'] and not uses[-1]['failed'] and uses[-1]['rating']=='clear')
  transfer='尚无迁移验证' if not uses else '近期迁移表现待巩固' if not last_transfer_ok else '多情境、跨日使用有证据' if contexts>=3 and transfer_days>=2 else '已有不同情境使用证据' if contexts>=2 else '仅在一种材料中验证'
- result=dict(latest_feedback=rows[-1]['rating'] if rows else None,last_at=rows[-1]['created_at'] if rows else None,retention=retention,stable=stable,independent_successes=sum(history),independent_days=len(days),delayed_successes=delayed,longest_gap_days=round(max_gap,1),recent_independent_rate=round(rate,2) if rate is not None else None,transfer=transfer,transfer_contexts=contexts,transfer_successes=len(successful),transfer_days=transfer_days,criteria='稳固：至少3个独立成功日、2次间隔≥24小时成功，其中一次间隔≥7天；最近10次独立通过率≥80%，最近一次通过。此为初始可调规则。')
+ result=dict(evidence_version=transfer_evidence.VERSION,latest_feedback=rows[-1]['rating'] if rows else None,last_at=rows[-1]['created_at'] if rows else None,retention=retention,stable=stable,independent_successes=sum(history),independent_days=len(days),delayed_successes=delayed,longest_gap_days=round(max_gap,1),recent_independent_rate=round(rate,2) if rate is not None else None,transfer=transfer,transfer_contexts=contexts,transfer_successes=len(successful),transfer_days=transfer_days,criteria='稳固：至少3个独立成功日、2次间隔≥24小时成功，其中一次间隔≥7天；最近10次独立通过率≥80%，最近一次通过。此为初始可调规则。')
  return result
 
 def refresh(c,kid):
@@ -57,4 +59,5 @@ def refresh(c,kid):
 
 def get(c,kid):
  raw=c.execute(text('SELECT payload FROM knowledge_assessments WHERE knowledge_id=:k'),dict(k=kid)).scalar()
- return json.loads(raw) if raw else calculate(c,kid)
+ cached=json.loads(raw) if raw else None
+ return cached if cached and cached.get('evidence_version')==transfer_evidence.VERSION else calculate(c,kid)

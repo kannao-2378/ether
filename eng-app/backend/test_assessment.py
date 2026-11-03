@@ -12,6 +12,7 @@ class AssessmentTests(unittest.TestCase):
  def answer(self,day=0,kid='want-to',rating='clear',hint=0,skip=False):
   self.seq+=1;q=str(self.seq)
   self.c.execute(text("INSERT INTO answers VALUES(:q,:q,:k,'answer',1,:h,:r,:t,NULL,'')"),dict(q=q,k=kid,h=hint,r=rating,t=(self.start+timedelta(days=day,seconds=self.seq)).isoformat()))
+  if kid.startswith('compose-'):self.c.execute(text("INSERT INTO question_trials VALUES(:q,'transfer','isolated genuine trial',2)"),dict(q=q))
   if skip:self.c.execute(text('INSERT INTO test_skips VALUES(:q,:t)'),dict(q=q,t=self.start.isoformat()))
   return q
  def test_same_day_successes_not_stable(self):

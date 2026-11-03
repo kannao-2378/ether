@@ -5,7 +5,7 @@ const labels:Record<string,string>={word:'单词',collocation:'固定搭配',phr
 const extensionTranslation=(e:any)=>e.zh||(/^相关(?:表达|用法)/.test(e.note||'')?'':(e.note||'').replace(/^对应中文[：:]\s*/,''));
 export function KnowledgeContent({id,speak,study=false,onLoaded}:{id:string;speak:(s:string)=>void;study?:boolean;onLoaded?:(data:any)=>void}){
  const [data,setData]=useState<any>(null),[error,setError]=useState(''),[revision,retry]=useState(0);
- useEffect(()=>{const controller=new AbortController();setError('');learningFetch('/api/knowledge/'+encodeURIComponent(id),{signal:controller.signal}).then(async r=>{if(!r.ok)throw Error('内容读取失败');return r.json();}).then(data=>{if(!controller.signal.aborted){setData(data);onLoaded?.(data);}}).catch(e=>{if(e.name!=='AbortError')setError('内容读取失败，请重试。');});return()=>controller.abort();},[id,revision,onLoaded]);
+ useEffect(()=>{const controller=new AbortController();setError('');learningFetch('/api/knowledge/'+encodeURIComponent(id)+'?visible=true',{signal:controller.signal}).then(async r=>{if(!r.ok)throw Error('内容读取失败');return r.json();}).then(data=>{if(!controller.signal.aborted){setData(data);onLoaded?.(data);}}).catch(e=>{if(e.name!=='AbortError')setError('内容读取失败，请重试。');});return()=>controller.abort();},[id,revision,onLoaded]);
  if(error)return <div className="knowledge-content"><button onClick={()=>retry(v=>v+1)}>{error}</button></div>;
  if(data?.id!==id)return <p className="knowledge-loading" role="status">正在读取知识说明…</p>;
  const d=data.details||{};
