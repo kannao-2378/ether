@@ -24,9 +24,7 @@ def expose(c,kid,stamp,details=None,source='teaching'):
  for value in values:
   c.execute(text('INSERT OR IGNORE INTO teaching_exposures VALUES(:a,:k,:t,:s)'),dict(a=key(value),k=kid,t=stamp.isoformat(),s=source))
 
-def register(c,qid,kid,role=None):
- old=c.execute(text('SELECT mode FROM question_trials WHERE question_id=:q'),dict(q=qid)).scalar()
- if old:return old
+def classify(c,kid,role=None):
  stage=c.execute(text('SELECT stage FROM course_links WHERE knowledge_id=:k'),dict(k=kid)).scalar()
  mode='recall';reason='ordinary practice'
  if role=='transfer' or stage==4:
@@ -47,5 +45,11 @@ def register(c,qid,kid,role=None):
   exposed=exposed or examples
   mode='transfer-review' if proven else 'recall' if exposed or seen else 'transfer'
   reason='verified variation review' if proven else 'answer previously taught or legacy exposure unknown' if exposed or seen else 'new combination, no recorded teaching exposure'
+ return mode,reason
+
+def register(c,qid,kid,role=None):
+ old=c.execute(text('SELECT mode FROM question_trials WHERE question_id=:q'),dict(q=qid)).scalar()
+ if old:return old
+ mode,reason=classify(c,kid,role)
  c.execute(text('INSERT OR IGNORE INTO question_trials VALUES(:q,:m,:r,:v)'),dict(q=qid,m=mode,r=reason,v=VERSION))
  return mode

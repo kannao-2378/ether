@@ -244,7 +244,9 @@ def step(c,gid,stamp,history=None):
  sentences=[r for r in rows if r['role']=='sentence' and requirements_met(c,r['id'],stamp=stamp)]
  for r in sentences[:1]:
   if not known(r):return r,False
- variants=sorted([r for r in rows if r['role']=='transfer' and requirements_met(c,r['id'],stamp=stamp) and (r['level']<3 or not r['due_at'] or datetime.fromisoformat(r['due_at'])<=stamp)],key=lambda r:(r['attempts'],r['last_at'] or ''))
+ variants=[r for r in rows if r['role']=='transfer' and requirements_met(c,r['id'],stamp=stamp) and (r['level']<3 or not r['due_at'] or datetime.fromisoformat(r['due_at'])<=stamp)]
+ modes={r['id']:transfer_evidence.classify(c,r['id'],'transfer')[0] for r in variants}
+ variants.sort(key=lambda r:(modes[r['id']]!='transfer',modes[r['id']]!='transfer-review',r['attempts'],r['last_at'] or ''))
  # Different registered source materials, not repeat spellings of one question.
  def material(r):return c.execute(text('SELECT material_id FROM sentence_combinations WHERE knowledge_id=:k'),dict(k=r['id'])).scalar() or r['id']
  unique=[];seen=set()
@@ -252,7 +254,12 @@ def step(c,gid,stamp,history=None):
   tag=material(r)
   if tag not in seen:unique.append(r);seen.add(tag)
  passed={material(r) for r in rows if r['role']=='transfer' and r['id'] in (successful|preview)}
+ proven={e['knowledge_id'] for e in history if independent(e) and c.execute(text("SELECT 1 FROM question_trials WHERE question_id=:q AND mode IN ('transfer','transfer-review')"),dict(q=e['question_id'])).first()}
+ proven_materials={material(r) for r in rows if r['role']=='transfer' and r['id'] in (proven|preview)}
  if sentences or not any(r['role']=='sentence' for r in rows):
+  if len(proven_materials)<2:
+   for r in unique:
+    if modes[r['id']] in ('transfer','transfer-review') and material(r) not in proven_materials:return r,len(unique)<2
   if len(passed)<min(2,len(unique)):
    for r in unique:
     if material(r) not in passed:return r,len(unique)<2
@@ -277,7 +284,7 @@ def active_groups(c,stamp):
  UNION SELECT d.group_id FROM daily_group_tasks d LEFT JOIN group_progress gp ON gp.group_id=d.group_id
  WHERE d.group_id NOT LIKE 'focus-%' AND EXISTS(SELECT 1 FROM learning_groups lg JOIN group_primary own ON own.knowledge_id=lg.root_id AND own.group_id=lg.id WHERE lg.id=d.group_id) AND d.day<:day AND (gp.due_at IS NULL OR julianday(gp.due_at)<=julianday(:t))
  ORDER BY 1"""),dict(t=stamp.isoformat(),day=today)).scalars().all()
- return list(dict.fromkeys(list(rows)+curriculum_engine.upgrades(c)))
+ return list(dict.fromkeys(list(rows)+curriculum_engine.upgrades(c,stamp)))
 
 def pool_count(c,stamp):
  c.execute(text("""DELETE FROM group_active_slots WHERE group_id IN (SELECT group_id FROM group_progress WHERE due_at IS NOT NULL AND julianday(due_at)>julianday(:t))"""),dict(t=stamp.isoformat()))
@@ -347,7 +354,8 @@ def select(c,stamp,new_limit,review_limit,course='all',allow_repeat=False):
  current=c.execute(text("""SELECT t.group_id FROM daily_group_tasks t LEFT JOIN group_progress p ON p.group_id=t.group_id
  WHERE t.day=:d AND t.group_id NOT LIKE 'focus-%' AND (p.due_at IS NULL OR julianday(p.due_at)<=julianday(:t)) ORDER BY t.rowid"""),dict(d=day,t=stamp.isoformat())).scalars().all()
  active_new=c.execute(text("SELECT COUNT(*) FROM group_active_slots s JOIN daily_group_tasks d ON d.group_id=s.group_id WHERE d.day=:d AND d.kind='new'"),dict(d=day)).scalar()
- permitted=course_policy.allowed(c,current+active_groups(c,stamp),course,counts(c,stamp).get('new',0)<new_limit and active_new<3)
+ active=active_groups(c,stamp)
+ permitted=course_policy.allowed(c,current+active,course,counts(c,stamp).get('new',0)<new_limit and active_new<3)
  current=course_policy.ordered(c,current)
  candidates=[]
  for gid in current:
@@ -380,7 +388,7 @@ def select(c,stamp,new_limit,review_limit,course='all',allow_repeat=False):
   choice=result(gid,item)
   if choice:return choice
  # Due groups already learned on previous days get priority over new groups.
- for gid in course_policy.ordered(c,active_groups(c,stamp)):
+ for gid in course_policy.ordered(c,active):
   if gid in current or gid not in permitted:continue
   item,pending_transfer=step(c,gid,stamp)
   if item is None:course_policy.finish(c,gid,stamp,pending_transfer)

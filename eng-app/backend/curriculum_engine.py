@@ -6,6 +6,7 @@ from sqlalchemy import text,bindparam
 def gloss(value):return re.sub(r'\W+','',re.sub(r'[（(].*?[）)]','',value or '')).casefold()
 
 MANIFEST=Path(__file__).parent/'resources/teaching_routes.json'
+TRANSFER_PACK=Path(__file__).parent/'resources/transfer_practice.psv'
 TABLES=('curriculum_goals','curriculum_paths','curriculum_prerequisites','curriculum_lessons','curriculum_aliases','curriculum_versions')
 
 def install(c):
@@ -22,9 +23,16 @@ def install(c):
  c.execute(text("INSERT OR IGNORE INTO curriculum_goals(id,objective,status) SELECT id,title,'draft' FROM learning_groups WHERE id NOT LIKE 'focus-%'"))
  c.execute(text("""INSERT OR IGNORE INTO curriculum_paths(course_id,unit_id,unit_title,unit_goal,unit_position,goal_id,position) SELECT DISTINCT u.course_id,u.id,u.title,u.goal,u.position,g.group_id,MIN(i.position)
  FROM course_items i JOIN course_units u ON u.id=i.unit_id JOIN group_primary g ON g.knowledge_id=i.knowledge_id JOIN curriculum_goals t ON t.id=g.group_id AND t.status='draft' GROUP BY u.id,g.group_id"""))
- raw=MANIFEST.read_bytes();revision='registry-v3:'+hashlib.sha256(raw).hexdigest()
+ raw=MANIFEST.read_bytes();extra=TRANSFER_PACK.read_bytes();revision='registry-v4:'+hashlib.sha256(raw+extra).hexdigest()
  if c.execute(text('SELECT 1 FROM curriculum_versions WHERE id=:v'),dict(v=revision)).first():return
- publish(c,json.loads(raw),revision)
+ spec=json.loads(raw);goals={g['key']:g for g in spec['goals']}
+ for line in extra.decode('utf-8-sig').splitlines():
+  if not line.strip() or line.startswith('#'):continue
+  target,en,zh,deps=[s.strip() for s in line.split('|')]
+  if target not in goals:raise ValueError('unknown transfer target '+target)
+  variants=goals[target].setdefault('variants',[])
+  if not any(v['en'].strip().casefold().rstrip('.!?')==en.casefold().rstrip('.!?') for v in variants):variants.append(dict(en=en,zh=zh,requires=deps.split(',') if deps else []))
+ publish(c,spec,revision)
  c.execute(text('INSERT INTO curriculum_versions VALUES(:v)'),dict(v=revision))
 
 def publish(c,spec,revision='custom'):
@@ -58,15 +66,26 @@ def publish(c,spec,revision='custom'):
  for k in graph:visit(k,set())
  if any(type(g.get('difficulty',1)) is not int or not 1<=g.get('difficulty',1)<=6 for g in goals):raise ValueError('invalid goal difficulty')
  if any(not g.get('objective') or not g.get('usage') or not g.get('sentence') or not g.get('chinese') for g in goals):raise ValueError('incomplete teaching content')
+ material_ids={}
+ for g in goals:
+  for m in g.get('materials',[]):
+   choices=c.execute(text('SELECT id,prompt FROM knowledge WHERE lower(answer)=lower(:a) ORDER BY rowid'),dict(a=m['en'])).all()
+   row=next((r for r in choices if r[0]==m.get('id') or gloss(r[1])==gloss(m['zh'])),None)
+   mid=row[0] if row else ids[g['key']]+'-material-'+hashlib.sha256((m['en'].casefold()+'|'+gloss(m['zh'])).encode()).hexdigest()[:12]
+   material_ids.setdefault(m['en'].casefold(),mid)
  for g in goals:
   for v in g.get('variants',[]):
    for dep in v.get('requires',[]):
+    if dep.startswith('material:'):
+     if dep[9:].casefold() not in material_ids:raise ValueError('missing authored material '+dep)
+     continue
     if dep not in ids and not c.execute(text('SELECT 1 FROM knowledge WHERE id=:k'),dict(k=dep)).first():raise ValueError('missing transfer material '+dep)
  units={u['id']:u for u in spec['units']}
  if any(g['unit'] not in units for g in goals):raise ValueError('unknown teaching unit')
  for gid in removed:
   c.execute(text('DELETE FROM curriculum_paths WHERE course_id=:c AND goal_id=:g AND authored=1'),dict(c=spec['course_id'],g=gid))
   c.execute(text("UPDATE curriculum_goals SET status='retired' WHERE id=:g AND NOT EXISTS(SELECT 1 FROM curriculum_paths WHERE goal_id=:g AND authored=1)"),dict(g=gid))
+ variant_links=[]
  for g in goals:
   kid=ids[g['key']]
   card(c,kid,g['english'],g['chinese'],g['usage'],g['sentence'],g['sentence_zh'],'word' if ' ' not in g['english'] else 'collocation')
@@ -108,15 +127,18 @@ def publish(c,spec,revision='custom'):
     if mid!=kid:c.execute(text('INSERT OR IGNORE INTO group_requirements VALUES(:k,:m)'),dict(k=kid,m=mid))
   for v in g.get('variants',[]):
    kid=gid+'-lesson-transfer-'+hashlib.sha256(v['en'].strip().casefold().rstrip('.!?').encode()).hexdigest()[:12]
-   for dep in v.get('requires',[]):
-    material=ids.get(dep,dep)
-    c.execute(text('INSERT OR IGNORE INTO group_requirements VALUES(:k,:m)'),dict(k=kid,m=material))
-   if v.get('requires'):c.execute(text('INSERT OR IGNORE INTO sentence_combinations VALUES(:k,:g,:m,1)'),dict(k=kid,g=gid,m=ids.get(v['requires'][0],v['requires'][0])))
+   variant_links.append((gid,kid,v.get('requires',[])))
   # Exact, explicitly authored equivalent forms reuse latest evidence, never copy grades.
   for kid in lesson_ids:
    for (alias,) in c.execute(text('SELECT b.id FROM knowledge a JOIN knowledge b ON lower(trim(a.answer))=lower(trim(b.answer)) WHERE a.id=:k AND a.id!=b.id'),dict(k=kid,family=gid+'-%')):
     c.execute(text('INSERT OR IGNORE INTO curriculum_aliases VALUES(:k,:a)'),dict(k=kid,a=alias))
 
+ for gid,kid,deps in variant_links:
+  resolved=[material_ids[d[9:].casefold()] if d.startswith('material:') else ids.get(d,d) for d in deps]
+  for material in resolved:
+   c.execute(text('INSERT OR IGNORE INTO group_requirements VALUES(:k,:m)'),dict(k=kid,m=material))
+   c.execute(text('INSERT OR IGNORE INTO transfer_materials VALUES(:k,:m)'),dict(k=kid,m=material))
+  if resolved:c.execute(text('INSERT OR IGNORE INTO sentence_combinations VALUES(:k,:g,:m,1)'),dict(k=kid,g=gid,m=resolved[0]))
  c.execute(text('DELETE FROM group_active_slots WHERE NOT EXISTS(SELECT 1 FROM learning_groups g JOIN group_primary p ON p.knowledge_id=g.root_id AND p.group_id=g.id WHERE g.id=group_active_slots.group_id)'))
 
 def card(c,kid,en,zh,usage,example,example_zh,kind,replace=True):
@@ -182,12 +204,22 @@ def report(c,course='all'):
  return dict(units=list(units.values()),current_unit=current,ready_total=stats[0],draft_total=draft,unintroduced=stats[1],truncated=stats[0]>len(seen),recalled=sum(u['recalled'] for u in units.values()),note='回忆通过不等于长期稳固；未编排资料仍可在词典查看或加入专项。')
 
 
-def upgrades(c):
+def upgrades(c,stamp=None):
  rows=c.execute(text("""SELECT g.id,l.knowledge_id FROM curriculum_goals t JOIN learning_groups g ON g.id=t.id
  JOIN progress root ON root.knowledge_id=g.root_id JOIN curriculum_lessons l ON l.goal_id=g.id
  JOIN progress p ON p.knowledge_id=l.knowledge_id
  WHERE t.status='ready' AND root.introduced=1 AND root.level>=3 AND p.introduced=0 AND l.role IN ('phrase','sentence')""")).all()
- return list(dict.fromkeys(g for g,k in rows if not blockers(c,g) and not known(c,k)))
+ result=list(dict.fromkeys(g for g,k in rows if not blockers(c,g) and not known(c,k)))
+ if stamp is not None:
+  import group_learning,transfer_evidence
+  candidates=c.execute(text("""SELECT DISTINCT g.id FROM curriculum_goals t JOIN learning_groups g ON g.id=t.id
+   JOIN progress p ON p.knowledge_id=g.root_id JOIN curriculum_lessons l ON l.goal_id=g.id
+   WHERE t.status='ready' AND p.introduced=1 AND p.level>=3 AND l.role='transfer'""")).scalars()
+  for gid in candidates:
+   if gid in result or blockers(c,gid):continue
+   item,_=group_learning.step(c,gid,stamp)
+   if item and item['role']=='transfer' and transfer_evidence.classify(c,item['id'],'transfer')[0]=='transfer':result.append(gid)
+ return result
 
 
 def chunk_covers(c,target,material):

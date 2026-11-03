@@ -1,0 +1,151 @@
+# goal | English | Chinese prompt | explicitly required learned goals/materials
+drink-water|I need to drink water.|我需要喝水。|need-to
+drink-water|I drink water at home.|我在家喝水。|route-at-home
+drink-water|I drink water in the morning.|我早上喝水。|route-in-the-morning
+eat-a-meal|I want to eat at home.|我想在家吃饭。|want-to,route-at-home
+eat-a-meal|I eat after work.|我下班后吃饭。|route-after-work
+eat-a-meal|I eat before dinner.|我在晚饭前吃东西。|route-before-dinner
+read-books|I need to read books.|我需要读书。|need-to
+read-books|I read books at home.|我在家读书。|route-at-home
+read-books|I read books on weekends.|我周末读书。|route-on-weekends
+learn-english|I try to learn English at home.|我尝试在家学英语。|try-to,route-at-home
+learn-english|I want to learn English at home.|我想在家学英语。|want-to,route-at-home
+learn-english|I learn English after work.|我下班后学英语。|route-after-work
+go-home|I try to go home.|我尝试回家。|try-to
+go-home|I go home at night.|我晚上回家。|route-at-night
+go-home|I need to go home after work.|我需要下班后回家。|need-to,route-after-work
+get-up|I want to get up.|我想起床。|want-to
+get-up|I need to get up.|我需要起床。|need-to
+get-up|I get up in the morning.|我早上起床。|route-in-the-morning
+go-to-school|I need to go to school.|我需要去学校。|need-to
+go-to-school|I go to school in the morning.|我早上去学校。|route-in-the-morning
+go-to-school|I go to school every day.|我每天去学校。|every-day
+cook-at-home|I want to cook at home.|我想在家做饭。|want-to
+cook-at-home|I need to cook at home.|我需要在家做饭。|need-to
+cook-at-home|I cook at home at night.|我晚上在家做饭。|route-at-night
+route-i-am|I am at home at night.|我晚上在家。|route-at-home,route-at-night
+route-i-am|I am in front of the school in the morning.|我早上在学校前面。|route-in-front-of,route-in-the-morning
+route-i-am|I am next to my friend after work.|我下班后在朋友旁边。|route-next-to,route-after-work
+want-to|I want to go home.|我想回家。|go-home
+want-to|I want to get up.|我想起床。|get-up
+want-to|I want to cook at home.|我想在家做饭。|cook-at-home
+need-to|I need to learn English.|我需要学英语。|learn-english
+need-to|I need to read books.|我需要读书。|read-books
+need-to|I need to go to school.|我需要去学校。|go-to-school
+hope-to|I hope to go home.|我希望回家。|go-home
+hope-to|I hope to read books.|我希望读书。|read-books
+hope-to|I hope to cook at home.|我希望在家做饭。|cook-at-home
+plan-to|I plan to cook at home.|我计划在家做饭。|cook-at-home
+plan-to|I plan to go home.|我计划回家。|go-home
+plan-to|I plan to go to school.|我计划去学校。|go-to-school
+decide-to|I decide to go home.|我决定回家。|go-home
+decide-to|I decide to cook at home.|我决定在家做饭。|cook-at-home
+decide-to|I decide to go to school.|我决定去学校。|go-to-school
+route-would-like-to|I would like to read books.|我想读书。（用委婉的说法）|read-books
+route-would-like-to|I would like to learn English.|我想学英语。（用委婉的说法）|learn-english
+route-would-like-to|I would like to go home.|我想回家。（用委婉的说法）|go-home
+like-doing|I like reading books at home.|我喜欢在家读书。|route-at-home,read-books
+like-doing|I like cooking on weekends.|我喜欢周末做饭。|route-on-weekends,cook-at-home
+like-doing|I like learning English in the morning.|我喜欢早上学英语。|route-in-the-morning,learn-english
+enjoy-doing|I enjoy reading books.|我享受读书的乐趣。|read-books
+enjoy-doing|I enjoy cooking at home.|我享受在家做饭的乐趣。|cook-at-home
+enjoy-doing|I enjoy learning English at home.|我享受在家学英语的乐趣。|route-at-home,learn-english
+learn-to|I learn to read.|我学习阅读。|material:read
+learn-to|I learn to cook at home.|我学习在家做饭。|cook-at-home
+learn-to|I learn to speak English.|我学习说英语。|material:speak,material:English
+try-to|I try to read books.|我尝试读书。|read-books
+try-to|I try to cook at home.|我尝试在家做饭。|cook-at-home
+try-to|I try to go home.|我尝试回家。|go-home
+practice-doing|I practice reading books.|我练习读书。|read-books
+practice-doing|I practice cooking at home.|我练习在家做饭。|cook-at-home
+practice-doing|I practice speaking English at home.|我在家练习说英语。|route-at-home,material:speak,material:English
+keep-doing|I keep reading books.|我继续读书。|read-books
+keep-doing|I keep cooking at home.|我继续在家做饭。|cook-at-home
+keep-doing|I keep learning English.|我继续学英语。|learn-english
+finish-doing|I want to finish cooking.|我想做完饭。|cook-at-home
+finish-doing|I need to finish reading books.|我需要读完书。|need-to,read-books
+finish-doing|I want to finish reading at home.|我想在家完成阅读。|route-at-home,material:read
+listen-to|I listen to my teacher.|我听老师说话。（用my teacher）|my-teacher
+listen-to|I listen to music at home.|我在家听音乐。|route-at-home,material:music
+listen-to|I listen to the radio in the morning.|我早上听广播。|route-in-the-morning,the-radio
+look-at|I look at my cat.|我看我的猫。|material:my cat
+look-at|I look at my keys.|我看我的钥匙。|material:my keys
+look-at|I look at this picture at home.|我在家看这张图片。|route-at-home,material:this picture
+wait-for|I wait for my friend.|我等我的朋友。|material:my friend
+wait-for|I wait for my teacher.|我等我的老师。|my-teacher
+wait-for|I wait for the bus after work.|我下班后等公交车。|route-after-work,material:the bus
+talk-to|I talk to my teacher.|我和老师交谈。（用my teacher）|my-teacher
+talk-to|I talk to my family.|我和家人交谈。|material:my family
+talk-to|I talk to my friend after work.|我下班后和朋友交谈。|route-after-work,material:my friend
+ask-for|I ask for more time.|我请求得到更多时间。|more-time
+ask-for|I ask for help at home.|我在家寻求帮助。|route-at-home,material:help
+ask-for|I ask for help after work.|我下班后寻求帮助。|route-after-work,material:help
+look-for|I look for my cat.|我寻找我的猫。|material:my cat
+look-for|I look for my friend.|我寻找我的朋友。|material:my friend
+look-for|I look for my keys at home.|我在家找钥匙。|route-at-home,material:my keys
+look-after|I look after my family.|我照顾家人。|material:my family
+look-after|I look after my cat at home.|我在家照顾我的猫。|route-at-home,material:my cat
+look-after|I look after my cat on weekends.|我周末照顾我的猫。|route-on-weekends,material:my cat
+pay-for|I pay for books.|我付钱买书。|material:books
+pay-for|I pay for water.|我付钱买水。|material:water
+pay-for|I pay for lunch after work.|我下班后付午饭钱。|route-after-work,material:lunch
+route-good-at|I am good at cooking.|我擅长做饭。|cook-at-home
+route-good-at|I am good at speaking English.|我擅长说英语。|material:speak,material:English
+route-good-at|I am good at reading books.|我擅长读书。|read-books
+route-afraid-of|I am afraid of my cat.|我怕我的猫。|material:my cat
+route-afraid-of|I am afraid of dogs at night.|我晚上怕狗。|route-at-night,material:dogs
+route-afraid-of|I am afraid of dogs in the morning.|我早上怕狗。|route-in-the-morning,material:dogs
+worry-about|I worry about my plan.|我担心我的计划。|material:my plan
+worry-about|I worry about my cat.|我担心我的猫。|material:my cat
+worry-about|I worry about my family at night.|我晚上担心家人。|route-at-night,material:my family
+agree-with|I agree with my friend.|我赞同朋友的意见。|material:my friend
+agree-with|I agree with my teacher.|我赞同老师的意见。|my-teacher
+agree-with|I agree with my family.|我赞同家人的意见。|material:my family
+think-about|I think about my family.|我思考家人的事情。|material:my family
+think-about|I think about my friend.|我想起我的朋友。|material:my friend
+think-about|I think about my plan at night.|我晚上思考我的计划。|route-at-night,material:my plan
+depend-on|I depend on my friend.|我依靠我的朋友。|material:my friend
+depend-on|I depend on my teacher.|我依靠我的老师。|my-teacher
+depend-on|I depend on you.|我依靠你。|material:you
+belong-to|I want to belong to this group.|我想成为这个群体的一员。|want-to
+belong-to|I hope to belong to this group.|我希望成为这个群体的一员。|hope-to
+belong-to|I used to belong to this group.|我过去是这个群体的一员。|route-used-to
+every-day|I go home every day.|我每天回家。|go-home
+every-day|I listen to music every day.|我每天听音乐。|listen-to,material:music
+every-day|I read books at home every day.|我每天在家读书。|route-at-home,read-books
+route-in-the-morning|I drink water in the morning.|我早上喝水。|drink-water
+route-in-the-morning|I cook at home in the morning.|我早上在家做饭。|cook-at-home
+route-in-the-morning|I go to school in the morning.|我早上去学校。|go-to-school
+route-at-night|I learn English at night.|我晚上学英语。|learn-english
+route-at-night|I cook at home at night.|我晚上在家做饭。|cook-at-home
+route-at-night|I listen to music at night.|我晚上听音乐。|listen-to,material:music
+route-after-work|I read books after work.|我下班后读书。|read-books
+route-after-work|I learn English after work.|我下班后学英语。|learn-english
+route-after-work|I talk to my friend after work.|我下班后和朋友交谈。|talk-to,material:my friend
+route-before-dinner|I drink water before dinner.|我晚饭前喝水。|drink-water
+route-before-dinner|I learn English before dinner.|我晚饭前学英语。|learn-english
+route-before-dinner|I cook at home before dinner.|我晚饭前在家做饭。|cook-at-home
+route-on-weekends|I read books on weekends.|我周末读书。|read-books
+route-on-weekends|I learn English on weekends.|我周末学英语。|learn-english
+route-on-weekends|I look after my cat on weekends.|我周末照顾我的猫。|look-after,material:my cat
+route-at-home|I read books at home.|我在家读书。|read-books
+route-at-home|I listen to music at home.|我在家听音乐。|listen-to,material:music
+route-at-home|I learn English at home.|我在家学英语。|learn-english
+route-in-front-of|I am in front of my friend.|我在朋友前面。|material:my friend
+route-in-front-of|I am in front of the bus.|我在公交车前面。|material:the bus
+route-in-front-of|I wait for my friend in front of the school.|我在学校前面等朋友。|wait-for,material:my friend,material:the school
+route-next-to|I am next to my teacher.|我在老师旁边。（用my teacher）|my-teacher
+route-next-to|I am next to the school.|我在学校旁边。|material:the school
+route-next-to|I read books next to my friend.|我在朋友旁边读书。|read-books,material:my friend
+route-a-lot-of|I want to read a lot of books.|我想读很多书。|want-to
+route-a-lot-of|I drink a lot of water.|我喝很多水。|drink-water
+route-a-lot-of|I read a lot of books at home.|我在家读很多书。|route-at-home,read-books
+route-because-of|I go home because of the rain.|因为下雨，我回家。|go-home,material:the rain
+route-because-of|I wait for the bus because of the rain.|因为下雨，我等公交车。|wait-for,material:the bus,material:the rain
+route-because-of|I cook at home because of the rain.|因为下雨，我在家做饭。|cook-at-home,material:the rain
+route-going-to|I am going to cook at home.|我打算在家做饭。|cook-at-home
+route-going-to|I am going to learn English.|我打算学英语。|learn-english
+route-going-to|I am going to go home.|我打算回家。|go-home
+route-used-to|I used to cook at home.|我过去常在家做饭。|cook-at-home
+route-used-to|I used to learn English.|我过去常学英语。|learn-english
+route-used-to|I used to go to school.|我过去常去学校。|go-to-school
