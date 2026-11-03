@@ -121,3 +121,23 @@ class TeachingRegistryTests(unittest.TestCase):
 
  def test_existing_word_phrase_sentence_classification_is_preserved(self):
   with self.db.connect() as c:self.assertEqual(app.content.details(c,'drink-water')['entry_type'],'phrase')
+
+ def test_old_phrase_cannot_bypass_new_material_dependencies(self):
+  with self.db.begin() as c:
+   self.assertFalse(groups.requirements_met(c,'look-at-action'))
+   c.execute(text("UPDATE progress SET introduced=1,level=3,due_at=:t WHERE knowledge_id IN ('look-at','drink-water')"),dict(t=(self.clock+timedelta(days=10)).isoformat()))
+   c.execute(text("UPDATE progress SET introduced=1,level=2,due_at=:t WHERE knowledge_id='look-at-action'"),dict(t=self.clock.isoformat()))
+   item,_=groups.step(c,'look-at',self.clock);self.assertEqual(item['answer'],'this picture')
+ def test_pending_old_phrase_waits_for_its_material(self):
+  with self.db.begin() as c:
+   c.execute(text("UPDATE progress SET introduced=1,level=3 WHERE knowledge_id='look-at'"))
+   c.execute(text("INSERT INTO questions VALUES('old-picture-pending','look-at-action',:t,0)"),dict(t=self.clock.isoformat()))
+   c.execute(text("INSERT INTO group_questions VALUES('old-picture-pending','look-at','phrase')"))
+  q=app.next_question();self.assertNotEqual(q.get('question_id'),'old-picture-pending')
+
+ def test_known_full_phrase_does_not_backtrack_to_its_material(self):
+  with self.db.begin() as c:
+   c.execute(text("UPDATE progress SET introduced=1,level=3,last_at=:t WHERE knowledge_id='look-at-action'"),dict(t=self.clock.isoformat()))
+   chosen=course_policy.core_members(c,'look-at',groups.members(c,'look-at'))
+   self.assertNotIn('this picture',[r['answer'] for r in chosen])
+   self.assertTrue(ce.material_covered(c,'look-at',next(r['id'] for r in groups.members(c,'look-at') if r['answer']=='this picture')))

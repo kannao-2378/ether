@@ -378,3 +378,7 @@ html{scrollbar-gutter:stable}
 .memo-writing.sentence-writing input{line-height:1.2;transform:none!important;animation:none!important}
 
 .memo-writing.sentence-writing.wrong input{color:#d9534f}
+
+.memo-meaning-text{display:flex;flex-direction:column}
+.memo-meaning-text>.meaning-lines{margin-block:auto;flex-shrink:0}
+.mobile-study-actions>button:first-child{touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}

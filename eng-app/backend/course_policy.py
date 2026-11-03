@@ -10,7 +10,7 @@ def core_members(c,gid,rows):
  if lesson:
   root=c.execute(text('SELECT root_id FROM learning_groups WHERE id=:g'),dict(g=gid)).scalar()
   selected=[dict(r,role=lesson[r['id']][1],position=lesson[r['id']][2]) for r in rows if r['id'] in lesson]
-  return sorted([r for r in selected if r['id']==root or r['role']!='word' or not curriculum_engine.chunk_covers(c,root,r['id'])],key=lambda r:r['position'])
+  return sorted([r for r in selected if r['id']==root or r['role']!='word' or not curriculum_engine.material_covered(c,gid,r['id'])],key=lambda r:r['position'])
  root=c.execute(text('SELECT root_id FROM learning_groups WHERE id=:g'),dict(g=gid)).scalar()
  anchors=[r for r in rows if r['id']==root or r['role'] in ('base','phrase')]
  tokens=set(re.findall('[a-z]+',' '.join(r['answer'] for r in anchors).casefold()))

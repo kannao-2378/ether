@@ -197,3 +197,10 @@ def chunk_covers(c,target,material):
  rows=c.execute(text("SELECT k.id,k.answer FROM curriculum_lessons t JOIN curriculum_lessons l ON l.goal_id=t.goal_id JOIN knowledge k ON k.id=l.knowledge_id WHERE t.knowledge_id=:k AND l.role IN ('base','phrase')"),dict(k=target)).all()
  boundary=lambda small,big:bool(re.search(r'(?<![a-z])'+re.escape(small)+r'(?![a-z])',big,re.I))
  return any(known(c,k) and boundary(word,chunk) and boundary(chunk,answer) for k,chunk in rows)
+
+
+def material_covered(c,gid,material):
+ word=c.execute(text('SELECT answer FROM knowledge WHERE id=:k'),dict(k=material)).scalar()
+ if not word:return False
+ rows=c.execute(text("SELECT k.id,k.answer FROM curriculum_lessons l JOIN knowledge k ON k.id=l.knowledge_id WHERE l.goal_id=:g AND l.role IN ('base','phrase')"),dict(g=gid)).all()
+ return any(known(c,k) and re.search(r'(?<![a-z])'+re.escape(word)+r'(?![a-z])',chunk,re.I) for k,chunk in rows)

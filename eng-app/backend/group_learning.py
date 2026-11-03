@@ -182,7 +182,7 @@ def supported(c,kid,stamp):
  return bool(c.execute(text("SELECT 1 FROM group_usage u JOIN answers a ON a.question_id=u.question_id WHERE u.target_id=:k AND date(a.created_at,'+8 hours')=:d AND julianday(a.created_at)>=COALESCE((SELECT MAX(julianday(last_at)) FROM progress WHERE knowledge_id=:k OR knowledge_id IN (SELECT alias_id FROM curriculum_aliases WHERE knowledge_id=:k)),0) LIMIT 1"),dict(k=kid,d=day_of(stamp))).first())
 
 def requirements_met(c,kid,ignore=None,stamp=None):
- missing=c.execute(text('SELECT r.material_id FROM group_requirements r JOIN progress p ON p.knowledge_id=r.material_id WHERE r.knowledge_id=:k AND p.level<3'),dict(k=kid)).scalars().all()
+ missing=c.execute(text('SELECT r.material_id FROM group_requirements r JOIN progress p ON p.knowledge_id=r.material_id WHERE (r.knowledge_id=:k OR r.knowledge_id IN (SELECT knowledge_id FROM curriculum_aliases WHERE alias_id=:k)) AND p.level<3'),dict(k=kid)).scalars().all()
  return all(material==ignore or curriculum_engine.known(c,material) or (stamp is not None and supported(c,material,stamp)) or curriculum_engine.chunk_covers(c,kid,material) or course_policy.covered_function(c,kid,material) for material in missing)
 
 
@@ -198,7 +198,7 @@ def step(c,gid,stamp,history=None):
   seen_before=c.execute(text('SELECT 1 FROM daily_group_tasks WHERE group_id=:g AND day<:d LIMIT 1'),dict(g=gid,d=day_of(stamp))).first()
   kind='review' if introduced or seen_before else 'new'
  if kind=='review' and not history:
-  due=[r for r in all_rows if r['introduced'] and course_policy.owns_review(c,gid,r) and (not r['due_at'] or datetime.fromisoformat(r['due_at'])<=stamp) and (r['role'] not in ('sentence','transfer') or requirements_met(c,r['id'],stamp=stamp))]
+  due=[r for r in all_rows if r['introduced'] and course_policy.owns_review(c,gid,r) and (not r['due_at'] or datetime.fromisoformat(r['due_at'])<=stamp) and (r['role'] not in ('phrase','sentence','transfer') or requirements_met(c,r['id'],stamp=stamp))]
   if due:return sorted(due,key=lambda r:(r['level']>=3,r['attempts'],r['role'] not in ('base','phrase'),r['last_at'] or ''))[0],False
 
  status=c.execute(text('SELECT status FROM curriculum_goals WHERE id=:g'),dict(g=gid)).scalar()
@@ -217,7 +217,7 @@ def step(c,gid,stamp,history=None):
  # A concrete failure takes priority over advancing to another component.
  if history and not independent(history[-1]) and history[-1]['knowledge_id'] not in preview:
   repair=next((r for r in rows if r['id']==history[-1]['knowledge_id']),rows[0])
-  if repair['role'] not in ('sentence','transfer') or requirements_met(c,repair['id'],stamp=stamp):return repair,False
+  if repair['role'] not in ('phrase','sentence','transfer') or requirements_met(c,repair['id'],stamp=stamp):return repair,False
  roots=[r for r in rows if r['role']=='base']
  bases=roots or [r for r in rows if r['id']==gid]
  for r in rows:
@@ -252,7 +252,7 @@ def step(c,gid,stamp,history=None):
   candidates=sentences[:1] or phrases or bases or rows[:1]
   # Revisit an independently unverified due component on later days.
   if kind=='review':
-   due=[r for r in all_rows if r['introduced'] and course_policy.owns_review(c,gid,r) and (not r['due_at'] or datetime.fromisoformat(r['due_at'])<=stamp) and (r['role'] not in ('sentence','transfer') or requirements_met(c,r['id'],stamp=stamp))]
+   due=[r for r in all_rows if r['introduced'] and course_policy.owns_review(c,gid,r) and (not r['due_at'] or datetime.fromisoformat(r['due_at'])<=stamp) and (r['role'] not in ('phrase','sentence','transfer') or requirements_met(c,r['id'],stamp=stamp))]
    if due:candidates=sorted(due,key=lambda r:(r['level']>=3,r['attempts']))
   return candidates[0],len(unique)<2
  return None,len(unique)<2
@@ -317,7 +317,7 @@ def select(c,stamp,new_limit,review_limit,course='all'):
  LEFT JOIN answers a ON a.question_id=q.id WHERE a.id IS NULL ORDER BY q.rowid''')).mappings().all()
  for pending in pending_rows:
   if pending['group_id'].startswith('focus-'):continue
-  if pending['role'] in ('sentence','transfer'):
+  if pending['role'] in ('phrase','sentence','transfer'):
    if not requirements_met(c,pending['id'],stamp=stamp):continue
    roots=c.execute(text("SELECT p.level,k.id FROM group_members m JOIN progress p ON p.knowledge_id=m.knowledge_id JOIN knowledge k ON k.id=m.knowledge_id WHERE m.group_id=:g AND m.role='base'"),dict(g=pending['group_id'])).all()
    if any(level<3 and not supported(c,kid,stamp) for level,kid in roots):continue
@@ -350,7 +350,7 @@ def select(c,stamp,new_limit,review_limit,course='all'):
  ready=[r for r in candidates if r[0]<=seq]
  def result(gid,item):
   item=dict(item);item['group_id']=gid
-  if item['role'] in ('sentence','transfer') and not requirements_met(c,item['id'],stamp=stamp):return None
+  if item['role'] in ('phrase','sentence','transfer') and not requirements_met(c,item['id'],stamp=stamp):return None
   if pool_count(c,stamp)>=12 and not c.execute(text('SELECT 1 FROM group_active_slots WHERE group_id=:g'),dict(g=gid)).first():course_policy.pause_lower(c,gid)
   if not admit(c,gid,item['id'],stamp,new_limit,review_limit):return None
   if item['role'] in ('word','sentence_word') and not item['introduced']:
