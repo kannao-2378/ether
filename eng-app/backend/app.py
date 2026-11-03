@@ -1,4 +1,5 @@
 import curriculum_engine
+import composition_engine
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import json
@@ -144,6 +145,7 @@ def initialize(target,with_bulk=False):
         word_lookup.install(c)
         focus_training.install(c)
         group_learning.install(c)
+        composition_engine.install(c)
         # Only derived assessment caches are refreshed; raw answers and FSRS cards stay intact.
         for cached in c.execute(text('SELECT knowledge_id,payload FROM knowledge_assessments')).all():
             if json.loads(cached[1]).get('evidence_version')!=transfer_evidence.VERSION:
@@ -195,7 +197,7 @@ def test_action(action: str, data: dict):
             c.execute(text('DELETE FROM daily_tasks'))
     elif action in ('reset','prepare'):
         with test_engine.begin() as c:
-            for table in ('answers','questions','spelling_checks','feedback_events','review_queue','memory_states','consolidation_slots','daily_new_pacing','daily_tasks','daily_coverage','lesson_attempts','context_round_items','context_rounds','composition_evidence','knowledge_assessments','test_skips','daily_extensions','teaching_exposures','question_trials'):
+            for table in ('answers','questions','spelling_checks','feedback_events','review_queue','memory_states','consolidation_slots','daily_new_pacing','daily_tasks','daily_coverage','lesson_attempts','context_round_items','context_rounds','composition_evidence','knowledge_assessments','test_skips','daily_extensions','teaching_exposures','question_trials','composition_items','composition_cursors'):
                 c.execute(text('DELETE FROM '+table))
             for table in ('focus_requests','group_questions','daily_group_tasks','group_progress','group_usage','group_active_slots'):c.execute(text('DELETE FROM '+table))
             c.execute(text('UPDATE test_clock SET days=0,stage=1 WHERE id=1'))
@@ -329,6 +331,7 @@ def import_lookup(body: LookupImport):
         try:result=word_lookup.import_items(c,body.preview_id,body.selected,now())
         except ValueError as e:raise HTTPException(400,str(e))
         group_learning.install(c)
+        composition_engine.install(c)
         # Only derived assessment caches are refreshed; raw answers and FSRS cards stay intact.
         for cached in c.execute(text('SELECT knowledge_id,payload FROM knowledge_assessments')).all():
             if json.loads(cached[1]).get('evidence_version')!=transfer_evidence.VERSION:
@@ -495,6 +498,7 @@ def next_question(allow_repeat: bool=False):
         stage=c.execute(text('SELECT stage FROM test_clock WHERE id=1')).scalar() if testing.get() else None
         special=focus_training.select(c,now(),allow_repeat=allow_repeat)
         if not testing.get() or special or stage is None:
+            composition_engine.prepare(c,now())
             settings=study_settings(c)
             kind,item=special if special else group_learning.select(c,now(),settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course'],allow_repeat=allow_repeat)
             if kind=='paused':return dict(kind='done',reason='interleaving-needed',message='模糊的内容已保留待练，暂时没有其他内容可穿插。可以休息一下，或主动再练这一项。')

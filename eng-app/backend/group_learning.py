@@ -4,10 +4,10 @@ Individual answers/FSRS cards are never rewritten to manufacture mastery.
 """
 from datetime import datetime,timedelta,timezone
 import json,re
-import course_policy,curriculum_engine,transfer_evidence
+import course_policy,curriculum_engine,transfer_evidence,composition_engine
 from sqlalchemy import text
 ZONE=timezone(timedelta(hours=8));VERSION='families-v6'
-TABLES=('lookup_previews','focus_requests','learning_groups','group_members','group_primary','group_requirements','group_questions','daily_group_tasks','group_progress','group_usage','group_active_slots','group_install','group_migrations')+curriculum_engine.TABLES+transfer_evidence.TABLES
+TABLES=('lookup_previews','focus_requests','learning_groups','group_members','group_primary','group_requirements','group_questions','daily_group_tasks','group_progress','group_usage','group_active_slots','group_install','group_migrations')+curriculum_engine.TABLES+transfer_evidence.TABLES+composition_engine.TABLES
 CORE={'want-to':['want'],'enjoy-doing':['enjoy'],'decide-to':['decide'],'like-doing':['like'],
       'listen-to':['listen','music'],'look-at':['look','picture'],'wait-for':['wait','bus'],
       'talk-to':['talk','friend'],'ask-for':['ask','help']}

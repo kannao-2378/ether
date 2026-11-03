@@ -24,11 +24,11 @@ def expose(c,kid,stamp,details=None,source='teaching'):
  for value in values:
   c.execute(text('INSERT OR IGNORE INTO teaching_exposures VALUES(:a,:k,:t,:s)'),dict(a=key(value),k=kid,t=stamp.isoformat(),s=source))
 
-def classify(c,kid,role=None):
+def classify(c,kid,role=None,answer=None):
  stage=c.execute(text('SELECT stage FROM course_links WHERE knowledge_id=:k'),dict(k=kid)).scalar()
  mode='recall';reason='ordinary practice'
  if role=='transfer' or stage==4:
-  answer=c.execute(text('SELECT answer FROM knowledge WHERE id=:k'),dict(k=kid)).scalar() or ''
+  answer=answer if answer is not None else c.execute(text('SELECT answer FROM knowledge WHERE id=:k'),dict(k=kid)).scalar() or ''
   exposed=c.execute(text('SELECT 1 FROM teaching_exposures WHERE answer_key=:a'),dict(a=key(answer))).first()
   # A successful genuine trial may later be reviewed; an assisted first attempt cannot.
   proven=c.execute(text("""SELECT 1 FROM answers a JOIN question_trials t ON t.question_id=a.question_id
