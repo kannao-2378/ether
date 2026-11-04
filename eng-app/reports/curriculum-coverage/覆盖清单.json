@@ -59,7 +59,7 @@
     },
     {
       "path": "backend/curriculum_engine.py",
-      "sha256": "84e5ff24170e1dac00630ed29ce854edf3689c46bdf710ebf3e68f2fbde254b1",
+      "sha256": "7a69bb0822a6afd300102f94918965996d0d9c71af5eba83bea094840c1b9837",
       "normalization": "CRLF_to_LF"
     },
     {

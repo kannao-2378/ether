@@ -78,13 +78,13 @@ def backfill_pronunciation(c):
         JOIN knowledge_details d ON d.knowledge_id=k.id WHERE p.course_id=:c'''),{'c':COURSE}).all()
     ignored={'i','you','we','they','he','she','it','a','an','the','to','of','am','is','are','be','do','does','did'}
     for kid,en,raw in rows:
-        if not kid.startswith('mainline-'):continue
+        if not kid.startswith(('mainline-','auto-transfer-')):continue
         d=json.loads(raw);before=json.dumps(d,sort_keys=True)
         reference=catalog.get(en.strip().casefold())
         if reference:
             for field,value in reference.items():
                 if not d.get(field):d[field]=value
-        elif not d.get('ipa_us') and not d.get('pronunciation_parts'):
+        elif not d.get('ipa_us') and not any(part.get('ipa') for part in d.get('pronunciation_parts',[])):
             tokens=re.findall(r"[A-Za-z]+(?:'[A-Za-z]+)?",en)
             candidates=[w for w in tokens if w.casefold() not in ignored and w.casefold() in catalog]
             candidates=candidates or [w for w in tokens if w.casefold() in catalog]

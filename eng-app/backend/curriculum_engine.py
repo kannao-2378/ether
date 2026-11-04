@@ -1,6 +1,7 @@
 from selection_cache import memoized
 """One prerequisite-aware teaching registry for every course; learner evidence stays separate."""
 import json,hashlib,re
+import pronunciation_metadata
 from pathlib import Path
 from datetime import datetime,timezone
 from sqlalchemy import text,bindparam
@@ -153,6 +154,7 @@ def card(c,kid,en,zh,usage,example,example_zh,kind,replace=True):
  raw=c.execute(text('SELECT payload FROM knowledge_details WHERE knowledge_id=:k'),dict(k=kid)).scalar();d=json.loads(raw) if raw else {}
  if replace or not raw:
   d.update(entry_type=d.get('entry_type',kind),usage=usage,structure=d.get('structure') or '',examples=[dict(en=example,zh=example_zh)],speech_text=en,knowledge_points=[],review_status='自编教学内容；已校验课程依赖与结构，非官方教材')
+  pronunciation_metadata.enrich(d,en)
   c.execute(text('INSERT INTO knowledge_details VALUES(:k,:p,100,:t) ON CONFLICT(knowledge_id) DO UPDATE SET payload=excluded.payload,version=100,updated_at=excluded.updated_at'),dict(k=kid,p=json.dumps(d,ensure_ascii=False),t=datetime.now(timezone.utc).isoformat()))
 
 def member(c,gid,kid,role,pos):

@@ -67,5 +67,10 @@ class ProductionMainlineTests(unittest.TestCase):
    self.assertTrue(phonetic['drink water']['pronunciation_parts'])
    before=snapshot(c);mainline.install(c)
    self.assertEqual(before,snapshot(c))
+ def test_future_composed_card_has_syllable_reference(self):
+  with self.db.begin() as c:
+   ce.card(c,'auto-transfer-fixture','I go home every day.','我每天回家。','测试','I go home every day.','我每天回家。','sentence')
+   d=content.details(c,'auto-transfer-fixture')
+   self.assertTrue(d['pronunciation_parts'][0]['syllables'])
 
 if __name__=='__main__':unittest.main()
