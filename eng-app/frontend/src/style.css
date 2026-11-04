@@ -396,3 +396,7 @@ html{scrollbar-gutter:stable}
 .word-slot.word-wrong{color:#d9534f;border-bottom-color:#d9534f}
 .memo-writing.sentence-writing input.word-editor{position:absolute;z-index:1;min-width:0;min-height:0;max-width:none;box-sizing:border-box;margin:0;padding:0 0 2px;border:0;border-radius:0;text-align:left;font:inherit;line-height:1.2;background:transparent;color:inherit;transition:none}
 .memo-writing.sentence-writing input.word-editor.word-wrong{color:#d9534f;border-bottom-color:#d9534f}
+
+/* A long dictionary gloss must wrap beside its POS, not below the whole badge. */
+.meaning-line.has-pos{display:grid;grid-template-columns:fit-content(42%) minmax(0,1fr);align-items:start}
+.meaning-line.has-pos>.meaning-text{min-width:0;overflow-wrap:anywhere}

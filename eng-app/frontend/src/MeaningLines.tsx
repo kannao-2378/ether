@@ -4,6 +4,6 @@ export function MeaningLines({meaning,pos,type}:{meaning:string;pos?:string;type
  return <div className="meaning-lines">{(meaning||'').replace(/\\n/g,'\n').split('\n').filter(s=>s.trim()).map((line,index)=>{
   const match=line.trim().match(/^(n|vt|vi|v|adj|adv|a|ad|pron|prep|conj|num|interj|int|det|aux)\.\s*(.+)$/i);
   const label=match?`${match[1]}. ${names[match[1].toLowerCase()]}`:fallback;
-  return <div className="meaning-line" key={index}>{label&&<span className="meaning-pos">{label}</span>}<span>{match?match[2]:line}</span></div>;
+  return <div className={'meaning-line'+(label?' has-pos':'')} key={index}>{label&&<span className="meaning-pos">{label}</span>}<span className="meaning-text">{match?match[2]:line}</span></div>;
  })}</div>;
 }
