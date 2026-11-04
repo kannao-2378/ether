@@ -1,6 +1,7 @@
 """Versioned, original teaching notes; lexical metadata is separate from learner evidence."""
 import json
 import beginner_notes
+import pronunciation_metadata
 from datetime import datetime,timezone
 from sqlalchemy import text
 
@@ -105,7 +106,14 @@ def install(c):
 
 def details(c,kid):
  raw=c.execute(text('SELECT payload FROM knowledge_details WHERE knowledge_id=:k'),dict(k=kid)).scalar()
- return json.loads(raw) if raw else None
+ if not raw:return None
+ payload=json.loads(raw)
+ # Read-only fallback also covers retained legacy review cards. The new-course
+ # backfill must not leave old questions without available syllable references.
+ if not payload.get('ipa_us') and not payload.get('pronunciation_parts') or not payload.get('syllables') and payload.get('entry_type')=='word':
+  answer=c.execute(text('SELECT answer FROM knowledge WHERE id=:k'),dict(k=kid)).scalar()
+  if answer:pronunciation_metadata.enrich(payload,answer)
+ return payload
 
 def curriculum(c,include_items=True):
  result=[]

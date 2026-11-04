@@ -72,5 +72,14 @@ class ProductionMainlineTests(unittest.TestCase):
    ce.card(c,'auto-transfer-fixture','I go home every day.','我每天回家。','测试','I go home every day.','我每天回家。','sentence')
    d=content.details(c,'auto-transfer-fixture')
    self.assertTrue(d['pronunciation_parts'][0]['syllables'])
+ def test_legacy_review_read_only_pronunciation_fallback(self):
+  with self.db.begin() as c:
+   ce.card(c,'legacy-review-fixture','I want to get up.','我想起床。','测试','I want to get up.','我想起床。','sentence')
+   d=json.loads(c.execute(text("SELECT payload FROM knowledge_details WHERE knowledge_id='legacy-review-fixture'")).scalar())
+   for field in ('ipa_us','syllables','stress','pronunciation_parts'):d.pop(field,None)
+   raw=json.dumps(d,ensure_ascii=False)
+   c.execute(text("UPDATE knowledge_details SET payload=:p WHERE knowledge_id='legacy-review-fixture'"),dict(p=raw))
+   self.assertTrue(content.details(c,'legacy-review-fixture')['pronunciation_parts'][0]['syllables'])
+   self.assertEqual(c.execute(text("SELECT payload FROM knowledge_details WHERE knowledge_id='legacy-review-fixture'")).scalar(),raw)
 
 if __name__=='__main__':unittest.main()
