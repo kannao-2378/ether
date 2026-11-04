@@ -1,5 +1,15 @@
 # GitHub与阿里云部署
 
+## 2026-11-04 主线正式上线
+
+用户授权上线后，运行代码770d6da已部署阿里云。启用`/etc/systemd/system/pels-english.service.d/mainline.conf`中的`PELS_MAINLINE_ENABLED=1`，默认新学路线已切换为`general-mainline`，实际登记148课题、294情境题，正式目录显示148项；不是只有测试入口。729目标仍不等于完整听说/开放能力认证。
+
+一致性备份：`/var/lib/pels/before-mainline-20261104-191717.zip`（600权限）。原运行代码与静态页保留于`/opt/pels/.before-mainline-20261104-191717`。上线前另用最新云端快照在隔离临时目录试装。
+
+停服备份后迁移核对：answers、feedback_events、progress、memory_states、questions、spelling_checks、review_queue、group_primary八类原始行均无丢失或改变；新知识项没有伪造掌握，SQLite完整性ok。service active、health正常，HTTPS首页及index-B6mUT8qJ.js/CSS均200，未登录profile401；原portfolio/index.html哈希保持。未向线上提交模拟答题。
+
+仅增加课程启用drop-in，没有替换登录密码文件、Nginx或原网站后端。用户后续自行选择其他课程，重启不会再强行改回主线。真实iPhone键盘、发音与登录后的完整人工学习流程未在本轮冒充已验证。接入细节见29号说明。
+
 ## 当前已运行环境
 
 | 项目 | 当前值 |
