@@ -1,0 +1,11 @@
+{
+  "objective_rows": 729,
+  "unique_objective_ids": 729,
+  "all_design_goals_present": true,
+  "valid_exported_asset_refs": true,
+  "policy_requirements_excluded": true,
+  "source_sentence_provenance_checked": true,
+  "all_new_objectives_remain_draft": true,
+  "runtime_or_learner_data_tested": false,
+  "real_data_written": false
+}

@@ -49,7 +49,7 @@ def publish(c,spec,revision='custom'):
   rows=c.execute(text("SELECT k.id,k.prompt,p.introduced FROM knowledge k JOIN progress p ON p.knowledge_id=k.id JOIN group_primary own ON own.knowledge_id=k.id JOIN learning_groups lg ON lg.id=own.group_id AND lg.root_id=k.id WHERE lower(k.answer)=lower(:a) ORDER BY k.id=:p DESC,k.rowid"),dict(a=g['english'],p=preferred)).all()
   row=next((r for r in rows if r[0]==preferred or not r[2] or gloss(r[1])==gloss(g['chinese'])),None)
   if existing and not row:raise ValueError('existing material must be reused through its teaching group')
-  ids[g['key']]=row[0] if row else preferred
+  ids[g['key']]=row[0] if row and spec.get('reuse_existing_roots',True) else preferred
  if len(set(ids.values()))!=len(ids):raise ValueError('duplicate goal identity; reuse one goal instead')
  graph={r[0]:[] for r in c.execute(text("SELECT id FROM curriculum_goals WHERE status='ready'"))}
  for a,b in c.execute(text('SELECT goal_id,prerequisite_id FROM curriculum_prerequisites')):graph.setdefault(a,[]).append(b)
@@ -60,10 +60,13 @@ def publish(c,spec,revision='custom'):
   for g in removed:
    if not c.execute(text('SELECT 1 FROM curriculum_paths WHERE goal_id=:g AND course_id!=:c AND authored=1'),dict(g=g,c=spec['course_id'])).first():graph.pop(g,None)
  for g in goals:graph[ids[g['key']]]=[ids.get(dep,dep) for dep in g.get('requires',[])]
+ checked=set()
  def visit(k,chain):
+  if k in checked:return
   if k in chain:raise ValueError('cyclic course prerequisites')
   if k not in graph:raise ValueError('missing course prerequisite '+k)
   for dep in graph[k]:visit(dep,chain|{k})
+  checked.add(k)
  for k in graph:visit(k,set())
  if any(type(g.get('difficulty',1)) is not int or not 1<=g.get('difficulty',1)<=6 for g in goals):raise ValueError('invalid goal difficulty')
  if any(not g.get('objective') or not g.get('usage') or not g.get('sentence') or not g.get('chinese') for g in goals):raise ValueError('incomplete teaching content')
@@ -110,7 +113,7 @@ def publish(c,spec,revision='custom'):
    mid=row[0] if row else gid+'-material-'+hashlib.sha256((m['en'].casefold()+'|'+gloss(m['zh'])).encode()).hexdigest()[:12]
    card(c,mid,m['en'],m['zh'],m.get('usage',m['en']+' 表示“'+m['zh']+'”。'),m['en'],m['zh'],'word' if ' ' not in m['en'] else 'phrase',replace=False)
    
-   if mid not in ids.values():
+   if mid not in ids.values() and not spec.get('preserve_existing_ownership',False):
     old=c.execute(text('SELECT group_id FROM group_primary WHERE knowledge_id=:k'),dict(k=mid)).scalar()
     if old==mid:c.execute(text('UPDATE group_primary SET group_id=:g WHERE knowledge_id=:k'),dict(g=gid,k=mid))
    c.execute(text('INSERT OR IGNORE INTO group_primary VALUES(:k,:g)'),dict(k=mid,g=gid))
@@ -131,6 +134,7 @@ def publish(c,spec,revision='custom'):
    variant_links.append((gid,kid,v.get('requires',[])))
   # Exact, explicitly authored equivalent forms reuse latest evidence, never copy grades.
   for kid in lesson_ids:
+   if not spec.get('automatic_aliases',True):continue
    for (alias,) in c.execute(text('SELECT b.id FROM knowledge a JOIN knowledge b ON lower(trim(a.answer))=lower(trim(b.answer)) WHERE a.id=:k AND a.id!=b.id'),dict(k=kid,family=gid+'-%')):
     c.execute(text('INSERT OR IGNORE INTO curriculum_aliases VALUES(:k,:a)'),dict(k=kid,a=alias))
 

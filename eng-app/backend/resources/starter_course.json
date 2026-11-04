@@ -1,0 +1,53 @@
+{
+  "version": "starter-v1",
+  "scope": "R01起步片段；不是115条R01目标或729条主线已经完成",
+  "review": {"status": "reviewed_original_starter", "method": "本项目原创基础讲解与固定练习，AI辅助核对用法、中文、依赖及答案曝光；非官方教材审定"},
+  "references": [
+    {"title": "British Council · Present simple", "url": "https://learnenglish.britishcouncil.org/free-resources/grammar/english-grammar-reference/present-simple"},
+    {"title": "British Council · Verbs followed by -ing or infinitive", "url": "https://learnenglish.britishcouncil.org/free-resources/grammar/a1-a2/verbs-followed-ing-or-infinitive"}
+  ],
+  "course_id": "starter-preview",
+  "title": "起步试学 · 从动作到表达想法",
+  "units": [
+    {"id":"starter-people","title":"01 我与动作材料","goal":"先理解少量材料，再组成简单句。","position":1},
+    {"id":"starter-actions","title":"02 阅读与学习","goal":"增加可复用的动作，不提前展示后面的迁移答案。","position":2},
+    {"id":"starter-want","title":"03 想要东西与想做动作","goal":"理解want和want to的区别，并独立换情境。","position":3}
+  ],
+  "goals": [
+    {"key":"starter-speaker","id":"word-i","unit":"starter-people","english":"I","chinese":"我（说话的人）","objective":"区分说话的人和对方，记住I与you。","usage":"I表示说话的人，也就是我；you表示正在交谈的对方。这里先认清这两个词，不要求写长句。","sentence":"I","sentence_zh":"我","materials":[{"en":"you","zh":"你（交谈的对方）"}],"requires":[],"difficulty":1},
+    {"key":"starter-drink-water","id":"drink-water","unit":"starter-people","english":"drink water","chinese":"喝水","objective":"理解喝与水的顺序，能说我喝水。","usage":"drink是喝，water是水；drink water合起来表示喝水。前面放I，就说清楚是我喝水。","sentence":"I drink water.","sentence_zh":"我喝水。","materials":[{"en":"drink","zh":"喝"},{"en":"water","zh":"水"},{"en":"I","zh":"我"}],"requires":["starter-speaker"],"difficulty":1},
+    {"key":"starter-eat-rice","id":"starter-eat-rice","unit":"starter-people","english":"eat rice","chinese":"吃米饭","objective":"把吃米饭组织成简单句，为后面的新组合准备材料。","usage":"eat是吃，rice是米饭；先说eat，再说吃的东西rice。I eat rice说的是我吃米饭。","sentence":"I eat rice.","sentence_zh":"我吃米饭。","materials":[{"en":"eat","zh":"吃"},{"en":"rice","zh":"米饭"},{"en":"I","zh":"我"}],"requires":["starter-speaker"],"difficulty":1},
+    {"key":"starter-read-books","id":"read-books","unit":"starter-actions","english":"read books","chinese":"读书","objective":"掌握读书这个动作词块，不预告将来的完整目标句。","usage":"read是阅读，books是书的复数写法；read books表示读书。这里把books连同词块一起学，完整的复数规则以后再展开。","sentence":"I read books.","sentence_zh":"我读书。","materials":[{"en":"read","zh":"阅读"},{"en":"books","zh":"书（复数）"},{"en":"I","zh":"我"}],"requires":["starter-speaker"],"difficulty":1},
+    {"key":"starter-learn-english","id":"learn-english","unit":"starter-actions","english":"learn English","chinese":"学英语","objective":"掌握学英语这个动作，区分动作和学习内容。","usage":"learn是学，English是英语；learn English表示学英语。这里English前不加to。","sentence":"I learn English.","sentence_zh":"我学英语。","materials":[{"en":"learn","zh":"学"},{"en":"English","zh":"英语"},{"en":"I","zh":"我"}],"requires":["starter-speaker"],"difficulty":1},
+    {"key":"starter-want-water","id":"starter-want-water","unit":"starter-want","english":"want water","chinese":"想要水","objective":"想要的是东西时，直接说want加东西。","usage":"want表示想要。想要水，直接说want water；加上I，就是I want water。这里要的是水这个东西，不是在说另一个动作。","sentence":"I want water.","sentence_zh":"我想要水。","materials":[{"en":"want","zh":"想要"},{"en":"water","zh":"水"},{"en":"I","zh":"我"}],"requires":["starter-drink-water"],"difficulty":1},
+    {"key":"starter-want-to","id":"want-to","unit":"starter-want","english":"want to","chinese":"想要做某事","objective":"想做动作时用want to，再独立换用已经学过的动作。","usage":"想要水，用want water。想做喝水这个动作，就用want to drink water。to后面的drink保持基本写法，不写drinking。I说明是谁想做。","phrase":"want to drink water","phrase_zh":"想喝水","sentence":"I want to drink water.","sentence_zh":"我想喝水。","materials":[{"en":"I","zh":"我"},{"en":"want","zh":"想要"},{"en":"drink water","zh":"喝水"}],"requires":["starter-want-water","starter-drink-water"],"difficulty":1,
+      "variants":[
+        {"en":"I want to learn English.","zh":"我想学英语。","requires":["starter-learn-english"],"accepted_answers":["I want to learn English.","I want to study English."]},
+        {"en":"I want to read books.","zh":"我想读书。","requires":["starter-read-books"],"accepted_answers":["I want to read books.","I want to read.","I want to read a book."]},
+        {"en":"I want to eat rice.","zh":"我想吃米饭。","requires":["starter-eat-rice"],"accepted_answers":["I want to eat rice.","I want to have rice."]}
+      ]}
+  ],
+  "word_notes": {
+    "I":{"pos":"pron. 人称代词","usage":"I表示说话的人，也就是我。它的书写形式是大写I。","zh":"我"},
+    "you":{"pos":"pron. 人称代词","usage":"you表示交谈的对方，可以是一人，也可以是多人。这里先练你这个意思。","zh":"你"},
+    "drink":{"pos":"v. 动词","usage":"drink表示喝。这里先认清喝这个动作，不要求背其他词形。","zh":"喝"},
+    "water":{"pos":"n. 名词","usage":"water在这里表示饮用的水，不写成a water。","zh":"水"},
+    "eat":{"pos":"v. 动词","usage":"eat表示吃，后面可以说明吃的东西。","zh":"吃"},
+    "rice":{"pos":"n. 名词","usage":"rice在这里表示米饭。作为食物的米饭，这里不加复数s。","zh":"米饭"},
+    "read":{"pos":"v. 动词","usage":"read在这里表示阅读，后面可以说明读什么。","zh":"阅读"},
+    "books":{"pos":"n. 名词复数","usage":"books是书的复数写法，末尾的s要保留。这里连同读书词块记忆。","zh":"书（复数）"},
+    "learn":{"pos":"v. 动词","usage":"learn在这里表示学，后面接学习的内容。","zh":"学"},
+    "English":{"pos":"n. 名词","usage":"English在这里表示英语，语言名称通常首字母大写。大小写问题作书写提示。","zh":"英语"},
+    "want":{"pos":"v. 动词","usage":"want表示想要；后面可以说想要的东西。接动作的用法稍后单独学。","zh":"想要"}
+  },
+  "mapped_objectives": {
+    "starter-speaker":["U01.1-G01"],
+    "starter-drink-water":["U02.1-G01","U02.1-G02","U02.1-G03","U02.4-G01","U02.4-G03"],
+    "starter-eat-rice":["U02.1-G01","U02.1-G02","U02.1-G03","U02.4-G03"],
+    "starter-read-books":["U02.2-G01","U02.2-G02","U02.4-G03"],
+    "starter-learn-english":["U02.2-G01","U02.2-G02","U02.4-G03"],
+    "starter-want-water":["U09.1-G01","U09.1-G02","U09.1-G03"],
+    "starter-want-to":["U09.2-G01","U09.2-G02","U09.2-G03","U09.2-G05"]
+  },
+  "coverage_note":"这些是起步片段关联，不等于所列目标的所有比较、听说、人物变化或跨日标准都已完成；不自动修改729目标的完整发布状态。"
+}

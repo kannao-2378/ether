@@ -1,0 +1,37 @@
+{
+  "version": "design-v4",
+  "topics": 148,
+  "learner_objectives": 729,
+  "quality_constraints": 6,
+  "placement_distribution": {
+    "R01": 25,
+    "R02": 32,
+    "R03": 31,
+    "R04": 14,
+    "R05": 14,
+    "R06": 16,
+    "R07": 13,
+    "R08": 3
+  },
+  "critical_capabilities": 40,
+  "critical_graph_cycles": 0,
+  "objective_placement_overrides": 27,
+  "checks": [
+    "complete_topic_placement",
+    "complete_objective_placement",
+    "unique_ids",
+    "valid_references",
+    "acyclic_critical_graph",
+    "want_without_third_person_gate",
+    "continuous_without_past_gate",
+    "past_question_gate",
+    "alternative_material_gate",
+    "clock_gate",
+    "local_block_only",
+    "primary_and_earliest_windows_distinct",
+    "critical_dependency_window_consistency"
+  ],
+  "scope": "design_only_not_runtime_or_teaching_effectiveness_test",
+  "runtime_changed": false,
+  "critical_dependency_window_conflicts": 0
+}

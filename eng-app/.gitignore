@@ -19,3 +19,6 @@ backend/data/
 .env.*
 !.env.example
 *.zip
+
+# Private server backups; never commit to GitHub
+/学习数据备份/

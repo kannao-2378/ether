@@ -1,4 +1,5 @@
 import {TeachingRoute} from './TeachingRoute';
+import {CoursePreview} from './CoursePreview';
 import {DailyOverview} from './DailyOverview';
 import {CourseUnit} from './CourseUnit';
 import {CourseSelection} from './CourseSelection';
@@ -10,6 +11,7 @@ export function Plan({start}:{start:()=>void}){
  const [data,setData]=useState<any>(null),[error,setError]=useState('');
  useEffect(()=>{const load=()=>learningFetch('/api/plan').then(r=>{if(!r.ok)throw Error('计划读取失败');return r.json();}).then(setData).catch(e=>setError(e.message));void load();window.addEventListener('settings-status',load);return()=>window.removeEventListener('settings-status',load);},[]);
  return <section className="panel"><DailyLimits/>{error&&<p role="alert">{error}</p>}{data&&<>
+ {data.starter_course&&<CoursePreview course={data.starter_course}/>}
  {data.transfer_preparation?.map((p:any)=><div className="row" key={p.goal_id}><div><strong>{p.title} · 迁移备课试点</strong><small>{p.waiting_reason||p.state} · 可用 {p.ready} · 待补材料 {p.missing_total}</small><small>已验证 {p.successful_materials}/{p.minimum_materials} 种材料 · {p.successful_days}/{p.minimum_days} 个学习日</small>{p.missing?.length>0&&<small>接下来准备：{p.missing.map((m:any)=>m.prompt).join('、')}</small>}</div></div>)}<CourseSelection courses={data.curriculum||[]}/><TeachingRoute route={data.route}/><DailyOverview planning/>
  {data.packages?.map((pack:any)=><div className="course-pack-summary" key={pack.id}><strong>资料库：{pack.expression_count.toLocaleString()} 个表达</strong><span>{pack.sentence_count.toLocaleString()} 个双语例句 · {pack.word_count.toLocaleString()} 项词汇</span></div>)}
  <details><summary>资料目录</summary><CurriculumOutline courses={data.curriculum||[]}/>

@@ -1,0 +1,74 @@
+{
+  "scope": "packaged_static_resources_only_no_live_or_private_DB",
+  "design_version": "design-v4",
+  "objectives": 729,
+  "topics": 148,
+  "route_windows": {
+    "R01": 115,
+    "R02": 163,
+    "R03": 160,
+    "R04": 68,
+    "R05": 69,
+    "R06": 81,
+    "R07": 58,
+    "R08": 15
+  },
+  "lexical_resources": 3885,
+  "expression_resources": 3000,
+  "source_sentences": 6538,
+  "legacy_groups": 50,
+  "legacy_psv_questions": 150,
+  "intro_lesson_steps": 6,
+  "pilot_reviewed_sentences": 5,
+  "dynamic_rule_frames": 16,
+  "dynamic_rule_warning": "只清点规则数量，不展开生成句子，也不把组合数当已审核课程",
+  "objectives_with_scoped_legacy_teaching_components": 116,
+  "objectives_with_nonchoice_question_candidates": 110,
+  "objectives_with_critical_capability_graph_components": 122,
+  "objectives_with_lexical_anchor_hits": 628,
+  "objectives_with_context_or_corpus_candidates": 353,
+  "exact_material_terms_checked": 444,
+  "exported_referenced_assets": 1136,
+  "new_objectives_ready": 0,
+  "new_objectives_published": 0,
+  "legacy_unplaced": [
+    {
+      "key": "worry-about",
+      "english": "worry about",
+      "reason": "未强行关联；需要在对应词义/领域材料中明确安置"
+    },
+    {
+      "key": "think-about",
+      "english": "think about",
+      "reason": "未强行关联；需要在对应词义/领域材料中明确安置"
+    },
+    {
+      "key": "depend-on",
+      "english": "depend on",
+      "reason": "未强行关联；需要在对应词义/领域材料中明确安置"
+    }
+  ],
+  "test_preview_groups": 7,
+  "test_preview_transfer_questions": 3,
+  "objectives_with_partial_test_preview_slice": 15,
+  "mainline_core_topics": 148,
+  "mainline_context_questions": 294,
+  "objectives_linked_to_topic_core": 729,
+  "gaps": {
+    "K02": 729,
+    "P02": 122,
+    "Q01": 619,
+    "V01": 729,
+    "B01": 729,
+    "E01": 613,
+    "T01": 376,
+    "Q02": 110,
+    "E02": 116,
+    "T02": 353,
+    "P01": 607,
+    "K01": 101,
+    "S01": 110
+  },
+  "warning": "有组件/有词条/有例句均不等于目标已经具备完整教学与评估；未评价实际学习效果",
+  "writes": "reports_only_no_runtime_or_real_data_mutations"
+}

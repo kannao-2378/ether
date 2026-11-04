@@ -1,0 +1,30 @@
+[
+  {
+    "id": "SRC01",
+    "source": "backend/resources/compiled_courses.json",
+    "record_id": "expr-1d03bdc1e001f187",
+    "finding": "going to条目混合将来意图和实际去向例句，自动知识点包含进行体解释，不能直接作为going-to将来课程讲解",
+    "action": "拆分语义/用法并审校，不能仅凭文字命中发布"
+  },
+  {
+    "id": "SRC02",
+    "source": "backend/resources/compiled_courses.json",
+    "record_id": "lex-b9776d7ddf459c9a",
+    "finding": "the的中文为“art. 那”，英文定义混入Thee旧义及其他用法，不能当初学者定冠词完整讲解",
+    "action": "使用有语境的定冠词讲解；原词典条目只作待核对资料"
+  },
+  {
+    "id": "SRC03",
+    "source": "backend/resources/teaching_routes.json",
+    "record_id": "route-used-to",
+    "finding": "旧先修只有every-day与plan-to，不能替代新课程对过去习惯及相应用法的能力准备",
+    "action": "旧依赖保留作历史信息，不自动复制为新目标硬先修"
+  },
+  {
+    "id": "SRC04",
+    "source": "backend/resources/teaching_routes.json",
+    "record_id": "decide-to",
+    "finding": "旧示范I decide to learn English需要具体自然语境；不能把它当过去决定的替代",
+    "action": "按v4路线在过去动作具备后编自然的决定情境"
+  }
+]

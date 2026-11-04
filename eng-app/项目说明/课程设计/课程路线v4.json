@@ -1,0 +1,6175 @@
+{
+  "version": "design-route-v4",
+  "status": "design_only_not_executable",
+  "date": "2026-11-04",
+  "meaning": "课题有一个主要教学窗口；实际目标可跨窗口先引入后深化。不能用课题窗口覆盖目标窗口，也不是按列表全序解锁。",
+  "stages": [
+    {
+      "id": "R01",
+      "name": "先能表达基本意思",
+      "description": "以I、you和少量已教材料开始，搭配先有意义，再逐步组成完整短句。礼貌求助作为可用词块早期出现。",
+      "topic_ids": [
+        "U01.1",
+        "U01.2",
+        "U01.3",
+        "U01.4",
+        "U02.1",
+        "U02.2",
+        "U02.3",
+        "U02.4",
+        "U03.1",
+        "U03.2",
+        "U03.3",
+        "U03.4",
+        "U04.1",
+        "U04.2",
+        "U04.3",
+        "U04.4",
+        "U09.1",
+        "U09.2",
+        "U09.3",
+        "U09.4",
+        "U13.1",
+        "U14.1",
+        "U14.2",
+        "U14.3",
+        "U32.1"
+      ]
+    },
+    {
+      "id": "R02",
+      "name": "描述身边事物和正在发生的事",
+      "description": "数量、时间和地点按需要补；现在进行的核心用法提前，不必等日常交流课全部结束。",
+      "topic_ids": [
+        "U05.1",
+        "U05.2",
+        "U05.3",
+        "U05.4",
+        "U06.1",
+        "U06.2",
+        "U06.3",
+        "U06.4",
+        "U07.1",
+        "U07.2",
+        "U07.3",
+        "U07.4",
+        "U08.1",
+        "U08.2",
+        "U08.3",
+        "U08.4",
+        "U10.1",
+        "U10.2",
+        "U10.3",
+        "U10.4",
+        "U12.1",
+        "U12.2",
+        "U12.3",
+        "U12.4",
+        "U17.1",
+        "U17.2",
+        "U17.3",
+        "U17.4",
+        "U01.5",
+        "U05.5",
+        "U06.5",
+        "U10.5"
+      ]
+    },
+    {
+      "id": "R03",
+      "name": "完成日常任务并扩展用法",
+      "description": "计划、礼貌、比较和生活任务交错学习；简单理由可在更早具备条件时使用。词根和词族只按当前词提供帮助。",
+      "topic_ids": [
+        "U11.1",
+        "U11.3",
+        "U11.4",
+        "U13.2",
+        "U13.3",
+        "U13.4",
+        "U14.4",
+        "U15.1",
+        "U15.2",
+        "U15.3",
+        "U15.4",
+        "U15.5",
+        "U16.1",
+        "U16.2",
+        "U16.3",
+        "U16.4",
+        "U20.1",
+        "U20.2",
+        "U03.5",
+        "U03.6",
+        "U07.5",
+        "U09.5",
+        "U12.5",
+        "U12.6",
+        "U02.5",
+        "U02.6",
+        "U23.1",
+        "U23.2",
+        "U23.3",
+        "U31.5",
+        "U32.2"
+      ]
+    },
+    {
+      "id": "R04",
+      "name": "讲过去、比较变化、安排未来",
+      "description": "先有过去事件，再练did提问和自然的过去决定。进行、简单过去和未来安排作语境比较。",
+      "topic_ids": [
+        "U18.1",
+        "U18.2",
+        "U18.3",
+        "U18.4",
+        "U19.1",
+        "U19.2",
+        "U19.3",
+        "U19.4",
+        "U11.2",
+        "U11.5",
+        "U04.5",
+        "U20.3",
+        "U20.4",
+        "U20.5"
+      ]
+    },
+    {
+      "id": "R05",
+      "name": "解释经历、持续、条件与推断",
+      "description": "经历与具体过去时间对照，原因和条件继续加深；完成形式先于对过去的情态推断。",
+      "topic_ids": [
+        "U21.1",
+        "U21.2",
+        "U21.3",
+        "U21.4",
+        "U22.1",
+        "U22.2",
+        "U22.3",
+        "U22.4",
+        "U23.4",
+        "U24.1",
+        "U24.2",
+        "U24.3",
+        "U24.4",
+        "U24.5"
+      ]
+    },
+    {
+      "id": "R06",
+      "name": "连接信息、解释与转述",
+      "description": "从已能独立表达的短句连接成长句，分别处理信息、限定、被动重点和转述。",
+      "topic_ids": [
+        "U25.1",
+        "U25.2",
+        "U25.3",
+        "U25.4",
+        "U26.1",
+        "U26.2",
+        "U26.3",
+        "U26.4",
+        "U27.1",
+        "U27.2",
+        "U27.3",
+        "U27.4",
+        "U28.1",
+        "U28.2",
+        "U28.3",
+        "U28.4"
+      ]
+    },
+    {
+      "id": "R07",
+      "name": "表达观点、假设和反思",
+      "description": "简单观点可以早说；这里系统训练理由、依据、假设和连贯表达。复杂反事实不作为日常交流的必经门槛。",
+      "topic_ids": [
+        "U29.1",
+        "U29.2",
+        "U29.3",
+        "U29.4",
+        "U29.5",
+        "U30.1",
+        "U30.2",
+        "U30.3",
+        "U30.4",
+        "U31.1",
+        "U31.2",
+        "U31.3",
+        "U31.4"
+      ]
+    },
+    {
+      "id": "R08",
+      "name": "持续交流与自主使用",
+      "description": "这里是更综合的互动、解释和概括，不表示前面不能聊天、阅读或开口。已选领域可以继续循环深化。",
+      "topic_ids": [
+        "U32.3",
+        "U32.4",
+        "U32.5"
+      ]
+    }
+  ],
+  "topic_placement": [
+    {
+      "topic_id": "U01.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U01.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U01.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U01.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U02.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U02.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U02.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U02.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U03.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U03.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U03.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U03.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U04.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U04.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U04.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U04.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U09.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U09.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U09.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U09.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U13.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U14.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U14.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U14.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U32.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R01",
+      "earliest_objective_window": "R01"
+    },
+    {
+      "topic_id": "U05.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U05.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U05.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U05.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U06.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U06.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U06.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U06.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U07.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U07.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U07.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U07.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U08.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U08.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U08.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U08.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U10.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U10.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U10.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U10.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U12.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U12.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U12.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U12.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U17.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U17.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U17.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U17.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U01.5",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U05.5",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U06.5",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U10.5",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R02",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U11.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U11.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U11.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U13.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U13.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U13.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U14.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U15.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U15.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U15.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U15.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U15.5",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U16.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U16.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U16.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U16.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U20.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U20.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U03.5",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U03.6",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U07.5",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U09.5",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U12.5",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U12.6",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U02.5",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U02.6",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U23.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R02"
+    },
+    {
+      "topic_id": "U23.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U23.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U31.5",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U32.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R03",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U18.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R04",
+      "earliest_objective_window": "R04"
+    },
+    {
+      "topic_id": "U18.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R04",
+      "earliest_objective_window": "R04"
+    },
+    {
+      "topic_id": "U18.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R04",
+      "earliest_objective_window": "R04"
+    },
+    {
+      "topic_id": "U18.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R04",
+      "earliest_objective_window": "R04"
+    },
+    {
+      "topic_id": "U19.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R04",
+      "earliest_objective_window": "R04"
+    },
+    {
+      "topic_id": "U19.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R04",
+      "earliest_objective_window": "R04"
+    },
+    {
+      "topic_id": "U19.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R04",
+      "earliest_objective_window": "R04"
+    },
+    {
+      "topic_id": "U19.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R04",
+      "earliest_objective_window": "R04"
+    },
+    {
+      "topic_id": "U11.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R04",
+      "earliest_objective_window": "R04"
+    },
+    {
+      "topic_id": "U11.5",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R04",
+      "earliest_objective_window": "R04"
+    },
+    {
+      "topic_id": "U04.5",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R04",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U20.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R04",
+      "earliest_objective_window": "R04"
+    },
+    {
+      "topic_id": "U20.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R04",
+      "earliest_objective_window": "R04"
+    },
+    {
+      "topic_id": "U20.5",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R04",
+      "earliest_objective_window": "R04"
+    },
+    {
+      "topic_id": "U21.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R05",
+      "earliest_objective_window": "R05"
+    },
+    {
+      "topic_id": "U21.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R05",
+      "earliest_objective_window": "R05"
+    },
+    {
+      "topic_id": "U21.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R05",
+      "earliest_objective_window": "R05"
+    },
+    {
+      "topic_id": "U21.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R05",
+      "earliest_objective_window": "R05"
+    },
+    {
+      "topic_id": "U22.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R05",
+      "earliest_objective_window": "R05"
+    },
+    {
+      "topic_id": "U22.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R05",
+      "earliest_objective_window": "R05"
+    },
+    {
+      "topic_id": "U22.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R05",
+      "earliest_objective_window": "R05"
+    },
+    {
+      "topic_id": "U22.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R05",
+      "earliest_objective_window": "R05"
+    },
+    {
+      "topic_id": "U23.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R05",
+      "earliest_objective_window": "R05"
+    },
+    {
+      "topic_id": "U24.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R05",
+      "earliest_objective_window": "R05"
+    },
+    {
+      "topic_id": "U24.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R05",
+      "earliest_objective_window": "R05"
+    },
+    {
+      "topic_id": "U24.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R05",
+      "earliest_objective_window": "R05"
+    },
+    {
+      "topic_id": "U24.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R05",
+      "earliest_objective_window": "R05"
+    },
+    {
+      "topic_id": "U24.5",
+      "role": "advanced_extension_not_daily_communication_gate",
+      "main_window": "R05",
+      "earliest_objective_window": "R05"
+    },
+    {
+      "topic_id": "U25.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R06",
+      "earliest_objective_window": "R06"
+    },
+    {
+      "topic_id": "U25.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R06",
+      "earliest_objective_window": "R06"
+    },
+    {
+      "topic_id": "U25.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R06",
+      "earliest_objective_window": "R06"
+    },
+    {
+      "topic_id": "U25.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R06",
+      "earliest_objective_window": "R06"
+    },
+    {
+      "topic_id": "U26.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R06",
+      "earliest_objective_window": "R06"
+    },
+    {
+      "topic_id": "U26.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R06",
+      "earliest_objective_window": "R06"
+    },
+    {
+      "topic_id": "U26.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R06",
+      "earliest_objective_window": "R06"
+    },
+    {
+      "topic_id": "U26.4",
+      "role": "advanced_extension_not_daily_communication_gate",
+      "main_window": "R06",
+      "earliest_objective_window": "R06"
+    },
+    {
+      "topic_id": "U27.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R06",
+      "earliest_objective_window": "R06"
+    },
+    {
+      "topic_id": "U27.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R06",
+      "earliest_objective_window": "R06"
+    },
+    {
+      "topic_id": "U27.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R06",
+      "earliest_objective_window": "R06"
+    },
+    {
+      "topic_id": "U27.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R06",
+      "earliest_objective_window": "R06"
+    },
+    {
+      "topic_id": "U28.1",
+      "role": "advanced_extension_not_daily_communication_gate",
+      "main_window": "R06",
+      "earliest_objective_window": "R06"
+    },
+    {
+      "topic_id": "U28.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R06",
+      "earliest_objective_window": "R06"
+    },
+    {
+      "topic_id": "U28.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R06",
+      "earliest_objective_window": "R06"
+    },
+    {
+      "topic_id": "U28.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R06",
+      "earliest_objective_window": "R06"
+    },
+    {
+      "topic_id": "U29.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R07",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U29.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R07",
+      "earliest_objective_window": "R07"
+    },
+    {
+      "topic_id": "U29.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R07",
+      "earliest_objective_window": "R07"
+    },
+    {
+      "topic_id": "U29.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R07",
+      "earliest_objective_window": "R07"
+    },
+    {
+      "topic_id": "U29.5",
+      "role": "advanced_extension_not_daily_communication_gate",
+      "main_window": "R07",
+      "earliest_objective_window": "R07"
+    },
+    {
+      "topic_id": "U30.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R07",
+      "earliest_objective_window": "R04"
+    },
+    {
+      "topic_id": "U30.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R07",
+      "earliest_objective_window": "R07"
+    },
+    {
+      "topic_id": "U30.3",
+      "role": "advanced_extension_not_daily_communication_gate",
+      "main_window": "R07",
+      "earliest_objective_window": "R07"
+    },
+    {
+      "topic_id": "U30.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R07",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U31.1",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R07",
+      "earliest_objective_window": "R03"
+    },
+    {
+      "topic_id": "U31.2",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R07",
+      "earliest_objective_window": "R07"
+    },
+    {
+      "topic_id": "U31.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R07",
+      "earliest_objective_window": "R07"
+    },
+    {
+      "topic_id": "U31.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R07",
+      "earliest_objective_window": "R07"
+    },
+    {
+      "topic_id": "U32.3",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R08",
+      "earliest_objective_window": "R08"
+    },
+    {
+      "topic_id": "U32.4",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R08",
+      "earliest_objective_window": "R08"
+    },
+    {
+      "topic_id": "U32.5",
+      "role": "core_or_extension_by_objective",
+      "main_window": "R08",
+      "earliest_objective_window": "R08"
+    }
+  ],
+  "objective_placement": [
+    {
+      "objective_id": "U01.1-G01",
+      "topic_id": "U01.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U01.1-G02",
+      "topic_id": "U01.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U01.1-G03",
+      "topic_id": "U01.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U01.1-G04",
+      "topic_id": "U01.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U01.2-G01",
+      "topic_id": "U01.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U01.2-G02",
+      "topic_id": "U01.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U01.2-G03",
+      "topic_id": "U01.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U01.2-G04",
+      "topic_id": "U01.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U01.2-G05",
+      "topic_id": "U01.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U01.3-G01",
+      "topic_id": "U01.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U01.3-G02",
+      "topic_id": "U01.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U01.3-G03",
+      "topic_id": "U01.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U01.3-G04",
+      "topic_id": "U01.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U01.3-G05",
+      "topic_id": "U01.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U01.4-G01",
+      "topic_id": "U01.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U01.4-G02",
+      "topic_id": "U01.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U01.4-G03",
+      "topic_id": "U01.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U01.4-G04",
+      "topic_id": "U01.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.1-G01",
+      "topic_id": "U02.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.1-G02",
+      "topic_id": "U02.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.1-G03",
+      "topic_id": "U02.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.1-G04",
+      "topic_id": "U02.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.1-G05",
+      "topic_id": "U02.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.2-G01",
+      "topic_id": "U02.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.2-G02",
+      "topic_id": "U02.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.2-G03",
+      "topic_id": "U02.2",
+      "first_window": "R02",
+      "note": "book/books作为词形对照后补；已学read books词块可先使用"
+    },
+    {
+      "objective_id": "U02.2-G04",
+      "topic_id": "U02.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.2-G05",
+      "topic_id": "U02.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.3-G01",
+      "topic_id": "U02.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.3-G02",
+      "topic_id": "U02.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.3-G03",
+      "topic_id": "U02.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.3-G04",
+      "topic_id": "U02.3",
+      "first_window": "R02",
+      "note": "先会go home等词块，再系统对比位置和移动"
+    },
+    {
+      "objective_id": "U02.3-G05",
+      "topic_id": "U02.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.4-G01",
+      "topic_id": "U02.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.4-G02",
+      "topic_id": "U02.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.4-G03",
+      "topic_id": "U02.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.4-G04",
+      "topic_id": "U02.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.4-G05",
+      "topic_id": "U02.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.1-G01",
+      "topic_id": "U03.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.1-G02",
+      "topic_id": "U03.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.1-G03",
+      "topic_id": "U03.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.1-G04",
+      "topic_id": "U03.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.2-G01",
+      "topic_id": "U03.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.2-G02",
+      "topic_id": "U03.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.2-G03",
+      "topic_id": "U03.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.2-G04",
+      "topic_id": "U03.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.2-G05",
+      "topic_id": "U03.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.3-G01",
+      "topic_id": "U03.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.3-G02",
+      "topic_id": "U03.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.3-G03",
+      "topic_id": "U03.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.3-G04",
+      "topic_id": "U03.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.4-G01",
+      "topic_id": "U03.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.4-G02",
+      "topic_id": "U03.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.4-G03",
+      "topic_id": "U03.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.4-G04",
+      "topic_id": "U03.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.1-G01",
+      "topic_id": "U04.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.1-G02",
+      "topic_id": "U04.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.1-G03",
+      "topic_id": "U04.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.1-G04",
+      "topic_id": "U04.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.1-G05",
+      "topic_id": "U04.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.2-G01",
+      "topic_id": "U04.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.2-G02",
+      "topic_id": "U04.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.2-G03",
+      "topic_id": "U04.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.2-G04",
+      "topic_id": "U04.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.2-G05",
+      "topic_id": "U04.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.3-G01",
+      "topic_id": "U04.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.3-G02",
+      "topic_id": "U04.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.3-G03",
+      "topic_id": "U04.3",
+      "first_window": "R02",
+      "note": "where问题需要至少一个位置答语，不强制整个地点单元完成"
+    },
+    {
+      "objective_id": "U04.3-G04",
+      "topic_id": "U04.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.3-G05",
+      "topic_id": "U04.3",
+      "first_window": "R02",
+      "note": "先教实际需要的地点词块再答"
+    },
+    {
+      "objective_id": "U04.4-G01",
+      "topic_id": "U04.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.4-G02",
+      "topic_id": "U04.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.4-G03",
+      "topic_id": "U04.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.4-G04",
+      "topic_id": "U04.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.4-G05",
+      "topic_id": "U04.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.4-G06",
+      "topic_id": "U04.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.4-G07",
+      "topic_id": "U04.4",
+      "first_window": "R02",
+      "note": "号码、字母和核对方式先具备；使用模拟资料"
+    },
+    {
+      "objective_id": "U05.1-G01",
+      "topic_id": "U05.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.1-G02",
+      "topic_id": "U05.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.1-G03",
+      "topic_id": "U05.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.1-G04",
+      "topic_id": "U05.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.1-G05",
+      "topic_id": "U05.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.2-G01",
+      "topic_id": "U05.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.2-G02",
+      "topic_id": "U05.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.2-G03",
+      "topic_id": "U05.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.2-G04",
+      "topic_id": "U05.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.2-G05",
+      "topic_id": "U05.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.3-G01",
+      "topic_id": "U05.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.3-G02",
+      "topic_id": "U05.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.3-G03",
+      "topic_id": "U05.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.3-G04",
+      "topic_id": "U05.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.3-G05",
+      "topic_id": "U05.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.4-G01",
+      "topic_id": "U05.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.4-G02",
+      "topic_id": "U05.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.4-G03",
+      "topic_id": "U05.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.4-G04",
+      "topic_id": "U05.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.4-G05",
+      "topic_id": "U05.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.1-G01",
+      "topic_id": "U06.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.1-G02",
+      "topic_id": "U06.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.1-G03",
+      "topic_id": "U06.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.1-G04",
+      "topic_id": "U06.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.1-G05",
+      "topic_id": "U06.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.2-G01",
+      "topic_id": "U06.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.2-G02",
+      "topic_id": "U06.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.2-G03",
+      "topic_id": "U06.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.2-G04",
+      "topic_id": "U06.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.2-G05",
+      "topic_id": "U06.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.2-G06",
+      "topic_id": "U06.2",
+      "first_window": "R03",
+      "note": "先有be状态与to接动作，再评价一件事"
+    },
+    {
+      "objective_id": "U06.3-G01",
+      "topic_id": "U06.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.3-G02",
+      "topic_id": "U06.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.3-G03",
+      "topic_id": "U06.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.3-G04",
+      "topic_id": "U06.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.3-G05",
+      "topic_id": "U06.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.4-G01",
+      "topic_id": "U06.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.4-G02",
+      "topic_id": "U06.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.4-G03",
+      "topic_id": "U06.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.4-G04",
+      "topic_id": "U06.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.1-G01",
+      "topic_id": "U07.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.1-G02",
+      "topic_id": "U07.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.1-G03",
+      "topic_id": "U07.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.1-G04",
+      "topic_id": "U07.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.1-G05",
+      "topic_id": "U07.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.2-G01",
+      "topic_id": "U07.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.2-G02",
+      "topic_id": "U07.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.2-G03",
+      "topic_id": "U07.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.2-G04",
+      "topic_id": "U07.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.2-G05",
+      "topic_id": "U07.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.3-G01",
+      "topic_id": "U07.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.3-G02",
+      "topic_id": "U07.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.3-G03",
+      "topic_id": "U07.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.3-G04",
+      "topic_id": "U07.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.3-G05",
+      "topic_id": "U07.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.4-G01",
+      "topic_id": "U07.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.4-G02",
+      "topic_id": "U07.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.4-G03",
+      "topic_id": "U07.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.4-G04",
+      "topic_id": "U07.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.4-G05",
+      "topic_id": "U07.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U08.1-G01",
+      "topic_id": "U08.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U08.1-G02",
+      "topic_id": "U08.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U08.1-G03",
+      "topic_id": "U08.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U08.1-G04",
+      "topic_id": "U08.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U08.1-G05",
+      "topic_id": "U08.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U08.2-G01",
+      "topic_id": "U08.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U08.2-G02",
+      "topic_id": "U08.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U08.2-G03",
+      "topic_id": "U08.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U08.2-G04",
+      "topic_id": "U08.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U08.2-G05",
+      "topic_id": "U08.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U08.3-G01",
+      "topic_id": "U08.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U08.3-G02",
+      "topic_id": "U08.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U08.3-G03",
+      "topic_id": "U08.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U08.3-G04",
+      "topic_id": "U08.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U08.3-G05",
+      "topic_id": "U08.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U08.4-G01",
+      "topic_id": "U08.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U08.4-G02",
+      "topic_id": "U08.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U08.4-G03",
+      "topic_id": "U08.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U08.4-G04",
+      "topic_id": "U08.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U08.4-G05",
+      "topic_id": "U08.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.1-G01",
+      "topic_id": "U09.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.1-G02",
+      "topic_id": "U09.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.1-G03",
+      "topic_id": "U09.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.1-G04",
+      "topic_id": "U09.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.2-G01",
+      "topic_id": "U09.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.2-G02",
+      "topic_id": "U09.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.2-G03",
+      "topic_id": "U09.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.2-G04",
+      "topic_id": "U09.2",
+      "first_window": "R02",
+      "note": "wants在第三人称动作变化具备后单独加入"
+    },
+    {
+      "objective_id": "U09.2-G05",
+      "topic_id": "U09.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.3-G01",
+      "topic_id": "U09.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.3-G02",
+      "topic_id": "U09.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.3-G03",
+      "topic_id": "U09.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.3-G04",
+      "topic_id": "U09.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.3-G05",
+      "topic_id": "U09.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.4-G01",
+      "topic_id": "U09.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.4-G02",
+      "topic_id": "U09.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.4-G03",
+      "topic_id": "U09.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.4-G04",
+      "topic_id": "U09.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.4-G05",
+      "topic_id": "U09.4",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.1-G01",
+      "topic_id": "U10.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.1-G02",
+      "topic_id": "U10.1",
+      "first_window": "R02",
+      "note": "likes及does形式依人物和相应能力扩展，不反锁I like"
+    },
+    {
+      "objective_id": "U10.1-G03",
+      "topic_id": "U10.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.1-G04",
+      "topic_id": "U10.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.2-G01",
+      "topic_id": "U10.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.2-G02",
+      "topic_id": "U10.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.2-G03",
+      "topic_id": "U10.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.2-G04",
+      "topic_id": "U10.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.2-G05",
+      "topic_id": "U10.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.2-G06",
+      "topic_id": "U10.2",
+      "first_window": "R03",
+      "note": "先有doing形式和be状态，再把活动放到话题位置"
+    },
+    {
+      "objective_id": "U10.3-G01",
+      "topic_id": "U10.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.3-G02",
+      "topic_id": "U10.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.3-G03",
+      "topic_id": "U10.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.3-G04",
+      "topic_id": "U10.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.3-G05",
+      "topic_id": "U10.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.4-G01",
+      "topic_id": "U10.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.4-G02",
+      "topic_id": "U10.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.4-G03",
+      "topic_id": "U10.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.4-G04",
+      "topic_id": "U10.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.4-G05",
+      "topic_id": "U10.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.1-G01",
+      "topic_id": "U11.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.1-G02",
+      "topic_id": "U11.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.1-G03",
+      "topic_id": "U11.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.1-G04",
+      "topic_id": "U11.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.1-G05",
+      "topic_id": "U11.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.2-G01",
+      "topic_id": "U11.2",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.2-G02",
+      "topic_id": "U11.2",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.2-G03",
+      "topic_id": "U11.2",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.2-G04",
+      "topic_id": "U11.2",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.2-G05",
+      "topic_id": "U11.2",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.3-G01",
+      "topic_id": "U11.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.3-G02",
+      "topic_id": "U11.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.3-G03",
+      "topic_id": "U11.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.3-G04",
+      "topic_id": "U11.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.3-G05",
+      "topic_id": "U11.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.4-G01",
+      "topic_id": "U11.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.4-G02",
+      "topic_id": "U11.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.4-G03",
+      "topic_id": "U11.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.4-G04",
+      "topic_id": "U11.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.4-G05",
+      "topic_id": "U11.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.1-G01",
+      "topic_id": "U12.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.1-G02",
+      "topic_id": "U12.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.1-G04",
+      "topic_id": "U12.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.1-G05",
+      "topic_id": "U12.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.2-G01",
+      "topic_id": "U12.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.2-G02",
+      "topic_id": "U12.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.2-G03",
+      "topic_id": "U12.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.2-G04",
+      "topic_id": "U12.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.2-G05",
+      "topic_id": "U12.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.3-G01",
+      "topic_id": "U12.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.3-G02",
+      "topic_id": "U12.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.3-G03",
+      "topic_id": "U12.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.3-G04",
+      "topic_id": "U12.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.3-G05",
+      "topic_id": "U12.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.4-G01",
+      "topic_id": "U12.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.4-G02",
+      "topic_id": "U12.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.4-G03",
+      "topic_id": "U12.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.4-G04",
+      "topic_id": "U12.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U13.1-G01",
+      "topic_id": "U13.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U13.1-G02",
+      "topic_id": "U13.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U13.1-G03",
+      "topic_id": "U13.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U13.1-G04",
+      "topic_id": "U13.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U13.1-G05",
+      "topic_id": "U13.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U13.2-G01",
+      "topic_id": "U13.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U13.2-G02",
+      "topic_id": "U13.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U13.2-G03",
+      "topic_id": "U13.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U13.2-G04",
+      "topic_id": "U13.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U13.2-G05",
+      "topic_id": "U13.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U13.3-G01",
+      "topic_id": "U13.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U13.3-G02",
+      "topic_id": "U13.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U13.3-G03",
+      "topic_id": "U13.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U13.3-G04",
+      "topic_id": "U13.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U13.3-G05",
+      "topic_id": "U13.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U13.4-G01",
+      "topic_id": "U13.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U13.4-G02",
+      "topic_id": "U13.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U13.4-G03",
+      "topic_id": "U13.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U13.4-G04",
+      "topic_id": "U13.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U13.4-G05",
+      "topic_id": "U13.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U14.1-G01",
+      "topic_id": "U14.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U14.1-G02",
+      "topic_id": "U14.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U14.1-G03",
+      "topic_id": "U14.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U14.1-G04",
+      "topic_id": "U14.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U14.1-G05",
+      "topic_id": "U14.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U14.2-G01",
+      "topic_id": "U14.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U14.2-G02",
+      "topic_id": "U14.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U14.2-G03",
+      "topic_id": "U14.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U14.2-G04",
+      "topic_id": "U14.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U14.2-G05",
+      "topic_id": "U14.2",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U14.3-G01",
+      "topic_id": "U14.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U14.3-G02",
+      "topic_id": "U14.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U14.3-G03",
+      "topic_id": "U14.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U14.3-G04",
+      "topic_id": "U14.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U14.3-G05",
+      "topic_id": "U14.3",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U14.4-G01",
+      "topic_id": "U14.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U14.4-G02",
+      "topic_id": "U14.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U14.4-G03",
+      "topic_id": "U14.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U14.4-G04",
+      "topic_id": "U14.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U14.4-G05",
+      "topic_id": "U14.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.1-G01",
+      "topic_id": "U15.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.1-G02",
+      "topic_id": "U15.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.1-G03",
+      "topic_id": "U15.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.1-G04",
+      "topic_id": "U15.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.1-G05",
+      "topic_id": "U15.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.2-G01",
+      "topic_id": "U15.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.2-G02",
+      "topic_id": "U15.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.2-G03",
+      "topic_id": "U15.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.2-G04",
+      "topic_id": "U15.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.2-G05",
+      "topic_id": "U15.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.3-G01",
+      "topic_id": "U15.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.3-G02",
+      "topic_id": "U15.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.3-G03",
+      "topic_id": "U15.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.3-G04",
+      "topic_id": "U15.3",
+      "first_window": "R05",
+      "note": "few/little的语气对照晚于基础数量表达"
+    },
+    {
+      "objective_id": "U15.3-G05",
+      "topic_id": "U15.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.4-G01",
+      "topic_id": "U15.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.4-G02",
+      "topic_id": "U15.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.4-G03",
+      "topic_id": "U15.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.4-G04",
+      "topic_id": "U15.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U16.1-G01",
+      "topic_id": "U16.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U16.1-G02",
+      "topic_id": "U16.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U16.1-G03",
+      "topic_id": "U16.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U16.1-G04",
+      "topic_id": "U16.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U16.1-G05",
+      "topic_id": "U16.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U16.2-G01",
+      "topic_id": "U16.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U16.2-G02",
+      "topic_id": "U16.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U16.2-G03",
+      "topic_id": "U16.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U16.2-G04",
+      "topic_id": "U16.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U16.2-G05",
+      "topic_id": "U16.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U16.3-G01",
+      "topic_id": "U16.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U16.3-G02",
+      "topic_id": "U16.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U16.3-G03",
+      "topic_id": "U16.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U16.3-G04",
+      "topic_id": "U16.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U16.3-G05",
+      "topic_id": "U16.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U16.4-G01",
+      "topic_id": "U16.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U16.4-G02",
+      "topic_id": "U16.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U16.4-G03",
+      "topic_id": "U16.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U16.4-G04",
+      "topic_id": "U16.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U16.4-G05",
+      "topic_id": "U16.4",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U17.1-G01",
+      "topic_id": "U17.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U17.1-G02",
+      "topic_id": "U17.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U17.1-G03",
+      "topic_id": "U17.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U17.1-G04",
+      "topic_id": "U17.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U17.1-G05",
+      "topic_id": "U17.1",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U17.2-G01",
+      "topic_id": "U17.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U17.2-G02",
+      "topic_id": "U17.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U17.2-G03",
+      "topic_id": "U17.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U17.2-G04",
+      "topic_id": "U17.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U17.2-G05",
+      "topic_id": "U17.2",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U17.3-G01",
+      "topic_id": "U17.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U17.3-G02",
+      "topic_id": "U17.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U17.3-G03",
+      "topic_id": "U17.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U17.3-G04",
+      "topic_id": "U17.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U17.3-G05",
+      "topic_id": "U17.3",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U17.4-G01",
+      "topic_id": "U17.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U17.4-G02",
+      "topic_id": "U17.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U17.4-G03",
+      "topic_id": "U17.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U17.4-G04",
+      "topic_id": "U17.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U17.4-G05",
+      "topic_id": "U17.4",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U18.1-G01",
+      "topic_id": "U18.1",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U18.1-G02",
+      "topic_id": "U18.1",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U18.1-G03",
+      "topic_id": "U18.1",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U18.1-G04",
+      "topic_id": "U18.1",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U18.1-G05",
+      "topic_id": "U18.1",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U18.2-G01",
+      "topic_id": "U18.2",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U18.2-G02",
+      "topic_id": "U18.2",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U18.2-G03",
+      "topic_id": "U18.2",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U18.2-G04",
+      "topic_id": "U18.2",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U18.2-G05",
+      "topic_id": "U18.2",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U18.3-G01",
+      "topic_id": "U18.3",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U18.3-G02",
+      "topic_id": "U18.3",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U18.3-G03",
+      "topic_id": "U18.3",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U18.3-G04",
+      "topic_id": "U18.3",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U18.3-G05",
+      "topic_id": "U18.3",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U18.4-G01",
+      "topic_id": "U18.4",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U18.4-G02",
+      "topic_id": "U18.4",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U18.4-G03",
+      "topic_id": "U18.4",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U18.4-G04",
+      "topic_id": "U18.4",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U18.4-G05",
+      "topic_id": "U18.4",
+      "first_window": "R05",
+      "note": "be used to与used to分开教；不只从相同字面推断"
+    },
+    {
+      "objective_id": "U19.1-G01",
+      "topic_id": "U19.1",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U19.1-G02",
+      "topic_id": "U19.1",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U19.1-G03",
+      "topic_id": "U19.1",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U19.1-G04",
+      "topic_id": "U19.1",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U19.1-G05",
+      "topic_id": "U19.1",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U19.2-G01",
+      "topic_id": "U19.2",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U19.2-G02",
+      "topic_id": "U19.2",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U19.2-G03",
+      "topic_id": "U19.2",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U19.2-G04",
+      "topic_id": "U19.2",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U19.2-G05",
+      "topic_id": "U19.2",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U19.3-G01",
+      "topic_id": "U19.3",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U19.3-G02",
+      "topic_id": "U19.3",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U19.3-G03",
+      "topic_id": "U19.3",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U19.3-G04",
+      "topic_id": "U19.3",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U19.3-G05",
+      "topic_id": "U19.3",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U19.4-G01",
+      "topic_id": "U19.4",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U19.4-G02",
+      "topic_id": "U19.4",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U19.4-G03",
+      "topic_id": "U19.4",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U19.4-G04",
+      "topic_id": "U19.4",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U19.4-G05",
+      "topic_id": "U19.4",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.1-G01",
+      "topic_id": "U20.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.1-G02",
+      "topic_id": "U20.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.1-G03",
+      "topic_id": "U20.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.1-G04",
+      "topic_id": "U20.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.1-G05",
+      "topic_id": "U20.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.2-G01",
+      "topic_id": "U20.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.2-G02",
+      "topic_id": "U20.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.2-G03",
+      "topic_id": "U20.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.2-G04",
+      "topic_id": "U20.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.2-G05",
+      "topic_id": "U20.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.3-G01",
+      "topic_id": "U20.3",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.3-G02",
+      "topic_id": "U20.3",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.3-G03",
+      "topic_id": "U20.3",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.3-G04",
+      "topic_id": "U20.3",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.3-G05",
+      "topic_id": "U20.3",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.4-G01",
+      "topic_id": "U20.4",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.4-G02",
+      "topic_id": "U20.4",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.4-G03",
+      "topic_id": "U20.4",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.4-G04",
+      "topic_id": "U20.4",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U21.1-G01",
+      "topic_id": "U21.1",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U21.1-G02",
+      "topic_id": "U21.1",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U21.1-G03",
+      "topic_id": "U21.1",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U21.1-G04",
+      "topic_id": "U21.1",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U21.1-G05",
+      "topic_id": "U21.1",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U21.2-G01",
+      "topic_id": "U21.2",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U21.2-G02",
+      "topic_id": "U21.2",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U21.2-G03",
+      "topic_id": "U21.2",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U21.2-G04",
+      "topic_id": "U21.2",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U21.2-G05",
+      "topic_id": "U21.2",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U21.3-G01",
+      "topic_id": "U21.3",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U21.3-G02",
+      "topic_id": "U21.3",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U21.3-G03",
+      "topic_id": "U21.3",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U21.3-G04",
+      "topic_id": "U21.3",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U21.3-G05",
+      "topic_id": "U21.3",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U21.4-G01",
+      "topic_id": "U21.4",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U21.4-G02",
+      "topic_id": "U21.4",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U21.4-G03",
+      "topic_id": "U21.4",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U21.4-G04",
+      "topic_id": "U21.4",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U21.4-G05",
+      "topic_id": "U21.4",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U22.1-G01",
+      "topic_id": "U22.1",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U22.1-G02",
+      "topic_id": "U22.1",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U22.1-G03",
+      "topic_id": "U22.1",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U22.1-G04",
+      "topic_id": "U22.1",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U22.2-G01",
+      "topic_id": "U22.2",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U22.2-G02",
+      "topic_id": "U22.2",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U22.2-G03",
+      "topic_id": "U22.2",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U22.2-G04",
+      "topic_id": "U22.2",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U22.2-G05",
+      "topic_id": "U22.2",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U22.3-G01",
+      "topic_id": "U22.3",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U22.3-G02",
+      "topic_id": "U22.3",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U22.3-G03",
+      "topic_id": "U22.3",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U22.3-G04",
+      "topic_id": "U22.3",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U22.3-G05",
+      "topic_id": "U22.3",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U22.4-G01",
+      "topic_id": "U22.4",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U22.4-G02",
+      "topic_id": "U22.4",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U22.4-G03",
+      "topic_id": "U22.4",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U22.4-G04",
+      "topic_id": "U22.4",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U22.4-G05",
+      "topic_id": "U22.4",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U23.1-G01",
+      "topic_id": "U23.1",
+      "first_window": "R02",
+      "note": "完整短句已会即可先用简单because说明原因，because of及其他对照随后深化"
+    },
+    {
+      "objective_id": "U23.1-G02",
+      "topic_id": "U23.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U23.1-G03",
+      "topic_id": "U23.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U23.1-G04",
+      "topic_id": "U23.1",
+      "first_window": "R02",
+      "note": "简单Why问答可在短句和原因具备后用，不必等全部原因课完成"
+    },
+    {
+      "objective_id": "U23.1-G05",
+      "topic_id": "U23.1",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U23.2-G01",
+      "topic_id": "U23.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U23.2-G02",
+      "topic_id": "U23.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U23.2-G03",
+      "topic_id": "U23.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U23.2-G04",
+      "topic_id": "U23.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U23.2-G05",
+      "topic_id": "U23.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U23.3-G01",
+      "topic_id": "U23.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U23.3-G02",
+      "topic_id": "U23.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U23.3-G03",
+      "topic_id": "U23.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U23.3-G04",
+      "topic_id": "U23.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U23.3-G05",
+      "topic_id": "U23.3",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U23.4-G01",
+      "topic_id": "U23.4",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U23.4-G02",
+      "topic_id": "U23.4",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U23.4-G03",
+      "topic_id": "U23.4",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U23.4-G04",
+      "topic_id": "U23.4",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U23.4-G05",
+      "topic_id": "U23.4",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.1-G01",
+      "topic_id": "U24.1",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.1-G02",
+      "topic_id": "U24.1",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.1-G03",
+      "topic_id": "U24.1",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.1-G04",
+      "topic_id": "U24.1",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.1-G05",
+      "topic_id": "U24.1",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.2-G01",
+      "topic_id": "U24.2",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.2-G02",
+      "topic_id": "U24.2",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.2-G03",
+      "topic_id": "U24.2",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.2-G04",
+      "topic_id": "U24.2",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.2-G05",
+      "topic_id": "U24.2",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.3-G01",
+      "topic_id": "U24.3",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.3-G02",
+      "topic_id": "U24.3",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.3-G03",
+      "topic_id": "U24.3",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.3-G04",
+      "topic_id": "U24.3",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.3-G05",
+      "topic_id": "U24.3",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.4-G01",
+      "topic_id": "U24.4",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.4-G02",
+      "topic_id": "U24.4",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.4-G03",
+      "topic_id": "U24.4",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.4-G04",
+      "topic_id": "U24.4",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.4-G05",
+      "topic_id": "U24.4",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U25.1-G01",
+      "topic_id": "U25.1",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U25.1-G02",
+      "topic_id": "U25.1",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U25.1-G03",
+      "topic_id": "U25.1",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U25.1-G04",
+      "topic_id": "U25.1",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U25.1-G05",
+      "topic_id": "U25.1",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U25.2-G01",
+      "topic_id": "U25.2",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U25.2-G02",
+      "topic_id": "U25.2",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U25.2-G03",
+      "topic_id": "U25.2",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U25.2-G04",
+      "topic_id": "U25.2",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U25.2-G05",
+      "topic_id": "U25.2",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U25.3-G01",
+      "topic_id": "U25.3",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U25.3-G02",
+      "topic_id": "U25.3",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U25.3-G03",
+      "topic_id": "U25.3",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U25.3-G04",
+      "topic_id": "U25.3",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U25.3-G05",
+      "topic_id": "U25.3",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U25.4-G01",
+      "topic_id": "U25.4",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U25.4-G02",
+      "topic_id": "U25.4",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U25.4-G03",
+      "topic_id": "U25.4",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U25.4-G04",
+      "topic_id": "U25.4",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U25.4-G05",
+      "topic_id": "U25.4",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U26.1-G01",
+      "topic_id": "U26.1",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U26.1-G02",
+      "topic_id": "U26.1",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U26.1-G03",
+      "topic_id": "U26.1",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U26.1-G04",
+      "topic_id": "U26.1",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U26.1-G05",
+      "topic_id": "U26.1",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U26.2-G01",
+      "topic_id": "U26.2",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U26.2-G02",
+      "topic_id": "U26.2",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U26.2-G03",
+      "topic_id": "U26.2",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U26.2-G04",
+      "topic_id": "U26.2",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U26.2-G05",
+      "topic_id": "U26.2",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U26.3-G01",
+      "topic_id": "U26.3",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U26.3-G02",
+      "topic_id": "U26.3",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U26.3-G03",
+      "topic_id": "U26.3",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U26.3-G04",
+      "topic_id": "U26.3",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U26.3-G05",
+      "topic_id": "U26.3",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U26.4-G01",
+      "topic_id": "U26.4",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U26.4-G02",
+      "topic_id": "U26.4",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U26.4-G03",
+      "topic_id": "U26.4",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U26.4-G04",
+      "topic_id": "U26.4",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U27.1-G01",
+      "topic_id": "U27.1",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U27.1-G02",
+      "topic_id": "U27.1",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U27.1-G03",
+      "topic_id": "U27.1",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U27.1-G04",
+      "topic_id": "U27.1",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U27.1-G05",
+      "topic_id": "U27.1",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U27.2-G01",
+      "topic_id": "U27.2",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U27.2-G02",
+      "topic_id": "U27.2",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U27.2-G03",
+      "topic_id": "U27.2",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U27.2-G04",
+      "topic_id": "U27.2",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U27.2-G05",
+      "topic_id": "U27.2",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U27.3-G01",
+      "topic_id": "U27.3",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U27.3-G02",
+      "topic_id": "U27.3",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U27.3-G03",
+      "topic_id": "U27.3",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U27.3-G04",
+      "topic_id": "U27.3",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U27.3-G05",
+      "topic_id": "U27.3",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U27.4-G01",
+      "topic_id": "U27.4",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U27.4-G02",
+      "topic_id": "U27.4",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U27.4-G03",
+      "topic_id": "U27.4",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U27.4-G04",
+      "topic_id": "U27.4",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U27.4-G05",
+      "topic_id": "U27.4",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U28.1-G01",
+      "topic_id": "U28.1",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U28.1-G02",
+      "topic_id": "U28.1",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U28.1-G03",
+      "topic_id": "U28.1",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U28.1-G04",
+      "topic_id": "U28.1",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U28.1-G05",
+      "topic_id": "U28.1",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U28.2-G01",
+      "topic_id": "U28.2",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U28.2-G02",
+      "topic_id": "U28.2",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U28.2-G03",
+      "topic_id": "U28.2",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U28.2-G04",
+      "topic_id": "U28.2",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U28.2-G05",
+      "topic_id": "U28.2",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U28.3-G01",
+      "topic_id": "U28.3",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U28.3-G02",
+      "topic_id": "U28.3",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U28.3-G03",
+      "topic_id": "U28.3",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U28.3-G04",
+      "topic_id": "U28.3",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U28.3-G05",
+      "topic_id": "U28.3",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U28.4-G01",
+      "topic_id": "U28.4",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U28.4-G02",
+      "topic_id": "U28.4",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U28.4-G03",
+      "topic_id": "U28.4",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U28.4-G04",
+      "topic_id": "U28.4",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U28.4-G05",
+      "topic_id": "U28.4",
+      "first_window": "R06",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.1-G01",
+      "topic_id": "U29.1",
+      "first_window": "R03",
+      "note": "日常简单同意可以早用"
+    },
+    {
+      "objective_id": "U29.1-G02",
+      "topic_id": "U29.1",
+      "first_window": "R03",
+      "note": "简单礼貌不同意可早用，不需先会论证长句"
+    },
+    {
+      "objective_id": "U29.1-G03",
+      "topic_id": "U29.1",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.1-G04",
+      "topic_id": "U29.1",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.1-G05",
+      "topic_id": "U29.1",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.2-G01",
+      "topic_id": "U29.2",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.2-G02",
+      "topic_id": "U29.2",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.2-G03",
+      "topic_id": "U29.2",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.2-G04",
+      "topic_id": "U29.2",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.2-G05",
+      "topic_id": "U29.2",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.3-G01",
+      "topic_id": "U29.3",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.3-G02",
+      "topic_id": "U29.3",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.3-G03",
+      "topic_id": "U29.3",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.3-G04",
+      "topic_id": "U29.3",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.3-G05",
+      "topic_id": "U29.3",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.4-G01",
+      "topic_id": "U29.4",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.4-G02",
+      "topic_id": "U29.4",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.4-G03",
+      "topic_id": "U29.4",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.4-G04",
+      "topic_id": "U29.4",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.4-G05",
+      "topic_id": "U29.4",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U30.1-G01",
+      "topic_id": "U30.1",
+      "first_window": "R04",
+      "note": "常见remember意义可在讲经历时用，不等到反思阶段才出现"
+    },
+    {
+      "objective_id": "U30.1-G02",
+      "topic_id": "U30.1",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U30.1-G03",
+      "topic_id": "U30.1",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U30.1-G04",
+      "topic_id": "U30.1",
+      "first_window": "R04",
+      "note": "remember doing/to do与U11.5合并复用，不再重复引入为新用法"
+    },
+    {
+      "objective_id": "U30.1-G05",
+      "topic_id": "U30.1",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U30.2-G01",
+      "topic_id": "U30.2",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U30.2-G02",
+      "topic_id": "U30.2",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U30.2-G03",
+      "topic_id": "U30.2",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U30.2-G04",
+      "topic_id": "U30.2",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U30.2-G05",
+      "topic_id": "U30.2",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U30.3-G01",
+      "topic_id": "U30.3",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U30.3-G02",
+      "topic_id": "U30.3",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U30.3-G03",
+      "topic_id": "U30.3",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U30.3-G04",
+      "topic_id": "U30.3",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U30.3-G05",
+      "topic_id": "U30.3",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U30.4-G01",
+      "topic_id": "U30.4",
+      "first_window": "R03",
+      "note": "简单询问动机可在已有疑问和原因表达后进行"
+    },
+    {
+      "objective_id": "U30.4-G02",
+      "topic_id": "U30.4",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U30.4-G03",
+      "topic_id": "U30.4",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U30.4-G04",
+      "topic_id": "U30.4",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U30.4-G05",
+      "topic_id": "U30.4",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U31.1-G01",
+      "topic_id": "U31.1",
+      "first_window": "R03",
+      "note": "早期用两三句围绕重点写短消息，后期再系统练段落"
+    },
+    {
+      "objective_id": "U31.1-G02",
+      "topic_id": "U31.1",
+      "first_window": "R03",
+      "note": "早期短消息先选相关信息，不等待所有长句完成"
+    },
+    {
+      "objective_id": "U31.1-G03",
+      "topic_id": "U31.1",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U31.1-G04",
+      "topic_id": "U31.1",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U31.1-G05",
+      "topic_id": "U31.1",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U31.2-G01",
+      "topic_id": "U31.2",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U31.2-G02",
+      "topic_id": "U31.2",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U31.2-G03",
+      "topic_id": "U31.2",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U31.2-G04",
+      "topic_id": "U31.2",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U31.2-G05",
+      "topic_id": "U31.2",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U31.3-G01",
+      "topic_id": "U31.3",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U31.3-G02",
+      "topic_id": "U31.3",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U31.3-G03",
+      "topic_id": "U31.3",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U31.3-G04",
+      "topic_id": "U31.3",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U31.3-G05",
+      "topic_id": "U31.3",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U31.4-G01",
+      "topic_id": "U31.4",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U31.4-G02",
+      "topic_id": "U31.4",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U31.4-G03",
+      "topic_id": "U31.4",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U31.4-G04",
+      "topic_id": "U31.4",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U31.4-G05",
+      "topic_id": "U31.4",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.1-G01",
+      "topic_id": "U32.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.1-G02",
+      "topic_id": "U32.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.1-G03",
+      "topic_id": "U32.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.1-G04",
+      "topic_id": "U32.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.1-G05",
+      "topic_id": "U32.1",
+      "first_window": "R01",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.2-G01",
+      "topic_id": "U32.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.2-G02",
+      "topic_id": "U32.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.2-G03",
+      "topic_id": "U32.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.2-G04",
+      "topic_id": "U32.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.2-G05",
+      "topic_id": "U32.2",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.3-G01",
+      "topic_id": "U32.3",
+      "first_window": "R08",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.3-G02",
+      "topic_id": "U32.3",
+      "first_window": "R08",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.3-G03",
+      "topic_id": "U32.3",
+      "first_window": "R08",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.3-G04",
+      "topic_id": "U32.3",
+      "first_window": "R08",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.3-G05",
+      "topic_id": "U32.3",
+      "first_window": "R08",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.4-G01",
+      "topic_id": "U32.4",
+      "first_window": "R08",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.4-G02",
+      "topic_id": "U32.4",
+      "first_window": "R08",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.4-G03",
+      "topic_id": "U32.4",
+      "first_window": "R08",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.4-G04",
+      "topic_id": "U32.4",
+      "first_window": "R08",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.4-G05",
+      "topic_id": "U32.4",
+      "first_window": "R08",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U01.5-G01",
+      "topic_id": "U01.5",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U01.5-G02",
+      "topic_id": "U01.5",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U01.5-G03",
+      "topic_id": "U01.5",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U01.5-G04",
+      "topic_id": "U01.5",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.5-G01",
+      "topic_id": "U02.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.5-G02",
+      "topic_id": "U02.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.5-G03",
+      "topic_id": "U02.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.5-G04",
+      "topic_id": "U02.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.5-G05",
+      "topic_id": "U02.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.5-G01",
+      "topic_id": "U03.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.5-G02",
+      "topic_id": "U03.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.5-G03",
+      "topic_id": "U03.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.5-G04",
+      "topic_id": "U03.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.5-G05",
+      "topic_id": "U03.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.6-G01",
+      "topic_id": "U03.6",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.6-G02",
+      "topic_id": "U03.6",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.6-G03",
+      "topic_id": "U03.6",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.6-G04",
+      "topic_id": "U03.6",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U03.6-G05",
+      "topic_id": "U03.6",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.5-G01",
+      "topic_id": "U04.5",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.5-G02",
+      "topic_id": "U04.5",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U04.5-G03",
+      "topic_id": "U04.5",
+      "first_window": "R03",
+      "note": "Which可早于过去问句学习，不能被Who called阻塞"
+    },
+    {
+      "objective_id": "U04.5-G04",
+      "topic_id": "U04.5",
+      "first_window": "R03",
+      "note": "Whose依归属表达安排，不需先会过去式"
+    },
+    {
+      "objective_id": "U04.5-G05",
+      "topic_id": "U04.5",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.5-G01",
+      "topic_id": "U05.5",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.5-G02",
+      "topic_id": "U05.5",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.5-G03",
+      "topic_id": "U05.5",
+      "first_window": "R03",
+      "note": "each/every等范围对照不阻塞早期some/any"
+    },
+    {
+      "objective_id": "U05.5-G04",
+      "topic_id": "U05.5",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.5-G05",
+      "topic_id": "U05.5",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U05.5-G06",
+      "topic_id": "U05.5",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.5-G01",
+      "topic_id": "U06.5",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.5-G02",
+      "topic_id": "U06.5",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.5-G03",
+      "topic_id": "U06.5",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.5-G04",
+      "topic_id": "U06.5",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U06.5-G05",
+      "topic_id": "U06.5",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.5-G01",
+      "topic_id": "U07.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.5-G02",
+      "topic_id": "U07.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.5-G03",
+      "topic_id": "U07.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.5-G04",
+      "topic_id": "U07.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U07.5-G05",
+      "topic_id": "U07.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.5-G01",
+      "topic_id": "U09.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.5-G02",
+      "topic_id": "U09.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.5-G03",
+      "topic_id": "U09.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.5-G04",
+      "topic_id": "U09.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U09.5-G05",
+      "topic_id": "U09.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.5-G01",
+      "topic_id": "U10.5",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.5-G02",
+      "topic_id": "U10.5",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.5-G03",
+      "topic_id": "U10.5",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.5-G04",
+      "topic_id": "U10.5",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U10.5-G05",
+      "topic_id": "U10.5",
+      "first_window": "R02",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.5-G01",
+      "topic_id": "U11.5",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.5-G02",
+      "topic_id": "U11.5",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.5-G03",
+      "topic_id": "U11.5",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.5-G04",
+      "topic_id": "U11.5",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U11.5-G05",
+      "topic_id": "U11.5",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.5-G01",
+      "topic_id": "U12.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.5-G02",
+      "topic_id": "U12.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.5-G03",
+      "topic_id": "U12.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.5-G04",
+      "topic_id": "U12.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.5-G05",
+      "topic_id": "U12.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.6-G01",
+      "topic_id": "U12.6",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.6-G02",
+      "topic_id": "U12.6",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.6-G03",
+      "topic_id": "U12.6",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.6-G04",
+      "topic_id": "U12.6",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U12.6-G05",
+      "topic_id": "U12.6",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.5-G01",
+      "topic_id": "U15.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.5-G02",
+      "topic_id": "U15.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.5-G03",
+      "topic_id": "U15.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.5-G04",
+      "topic_id": "U15.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U15.5-G05",
+      "topic_id": "U15.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.5-G01",
+      "topic_id": "U20.5",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.5-G02",
+      "topic_id": "U20.5",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.5-G03",
+      "topic_id": "U20.5",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.5-G04",
+      "topic_id": "U20.5",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U20.5-G05",
+      "topic_id": "U20.5",
+      "first_window": "R04",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.5-G01",
+      "topic_id": "U24.5",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.5-G02",
+      "topic_id": "U24.5",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U24.5-G03",
+      "topic_id": "U24.5",
+      "first_window": "R06",
+      "note": "过去推断需完成形式和情态判断基础"
+    },
+    {
+      "objective_id": "U24.5-G04",
+      "topic_id": "U24.5",
+      "first_window": "R06",
+      "note": "过去本应如何需完成形式与事实对照"
+    },
+    {
+      "objective_id": "U24.5-G05",
+      "topic_id": "U24.5",
+      "first_window": "R05",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.5-G01",
+      "topic_id": "U29.5",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.5-G02",
+      "topic_id": "U29.5",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.5-G03",
+      "topic_id": "U29.5",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.5-G04",
+      "topic_id": "U29.5",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U29.5-G05",
+      "topic_id": "U29.5",
+      "first_window": "R07",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U31.5-G01",
+      "topic_id": "U31.5",
+      "first_window": "R03",
+      "note": "词族随当前词出现，不在初期集中背完"
+    },
+    {
+      "objective_id": "U31.5-G02",
+      "topic_id": "U31.5",
+      "first_window": "R03",
+      "note": "少量有依据词缀辅助查词，不能当作猜词万能法"
+    },
+    {
+      "objective_id": "U31.5-G03",
+      "topic_id": "U31.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U31.5-G04",
+      "topic_id": "U31.5",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.5-G01",
+      "topic_id": "U32.5",
+      "first_window": "R08",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.5-G02",
+      "topic_id": "U32.5",
+      "first_window": "R08",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.5-G03",
+      "topic_id": "U32.5",
+      "first_window": "R08",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.5-G04",
+      "topic_id": "U32.5",
+      "first_window": "R08",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U32.5-G05",
+      "topic_id": "U32.5",
+      "first_window": "R08",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.6-G01",
+      "topic_id": "U02.6",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.6-G02",
+      "topic_id": "U02.6",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.6-G03",
+      "topic_id": "U02.6",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.6-G04",
+      "topic_id": "U02.6",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    },
+    {
+      "objective_id": "U02.6-G05",
+      "topic_id": "U02.6",
+      "first_window": "R03",
+      "note": "默认随课题窗口；具体词义/材料与硬先修尚待编课映射"
+    }
+  ],
+  "critical_starter_capabilities": [
+    {
+      "id": "C01",
+      "name": "用我和你指向交流中的人",
+      "objective_ids": [
+        "U01.1-G01"
+      ],
+      "requires": [],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R01"
+    },
+    {
+      "id": "C02",
+      "name": "掌握当前喝水动作词块",
+      "objective_ids": [
+        "U02.1-G01",
+        "U02.1-G02",
+        "U02.1-G03"
+      ],
+      "requires": [],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R01"
+    },
+    {
+      "id": "C03",
+      "name": "用我加动作组织最简单陈述",
+      "objective_ids": [
+        "U02.4-G01",
+        "U02.4-G03"
+      ],
+      "requires": [
+        "C01",
+        "C02"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R01"
+    },
+    {
+      "id": "C04",
+      "name": "掌握学习或阅读的当前动作材料",
+      "objective_ids": [
+        "U02.2-G01",
+        "U02.2-G02"
+      ],
+      "requires": [],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R01"
+    },
+    {
+      "id": "C05",
+      "name": "区分想要东西的表达",
+      "objective_ids": [
+        "U09.1-G01",
+        "U09.1-G03"
+      ],
+      "requires": [
+        "C01",
+        "C02"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R01"
+    },
+    {
+      "id": "C06",
+      "name": "用want to接基本动作",
+      "objective_ids": [
+        "U09.2-G01",
+        "U09.2-G02",
+        "U09.2-G05"
+      ],
+      "requires": [
+        "C03",
+        "C05"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R01"
+    },
+    {
+      "id": "C07",
+      "name": "用已知其他动作独立换情境",
+      "objective_ids": [
+        "U09.2-G03"
+      ],
+      "requires": [
+        "C06",
+        "C04"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R01"
+    },
+    {
+      "id": "C08",
+      "name": "用be说明当前身份或状态",
+      "objective_ids": [
+        "U01.2-G01",
+        "U01.2-G02",
+        "U01.2-G03"
+      ],
+      "requires": [
+        "C01"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R01"
+    },
+    {
+      "id": "C09",
+      "name": "指认一个具体东西",
+      "objective_ids": [
+        "U01.3-G01",
+        "U01.3-G02",
+        "U01.3-G03",
+        "U01.3-G04"
+      ],
+      "requires": [
+        "C08"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R01"
+    },
+    {
+      "id": "C10",
+      "name": "对be句作确认和否定",
+      "objective_ids": [
+        "U01.4-G01",
+        "U01.4-G02",
+        "U01.4-G03"
+      ],
+      "requires": [
+        "C09"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R01"
+    },
+    {
+      "id": "C11",
+      "name": "区分动作否定和be否定",
+      "objective_ids": [
+        "U04.1-G01",
+        "U04.1-G02",
+        "U04.1-G03",
+        "U04.1-G04"
+      ],
+      "requires": [
+        "C03",
+        "C08"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R01"
+    },
+    {
+      "id": "C12",
+      "name": "询问动作并作简短回答",
+      "objective_ids": [
+        "U04.2-G01",
+        "U04.2-G02",
+        "U04.2-G03",
+        "U04.2-G04"
+      ],
+      "requires": [
+        "C11"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R01"
+    },
+    {
+      "id": "C13",
+      "name": "询问或否定想做和需要做",
+      "objective_ids": [
+        "U09.4-G01",
+        "U09.4-G02",
+        "U09.4-G03",
+        "U09.4-G04"
+      ],
+      "requires": [
+        "C06",
+        "C11",
+        "C12"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R01"
+    },
+    {
+      "id": "C14",
+      "name": "区分其他人物和多人",
+      "objective_ids": [
+        "U01.1-G02",
+        "U01.1-G03",
+        "U01.1-G04"
+      ],
+      "requires": [
+        "C01"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R01"
+    },
+    {
+      "id": "C15",
+      "name": "用第三人称描述动作",
+      "objective_ids": [
+        "U08.3-G01",
+        "U08.3-G02"
+      ],
+      "requires": [
+        "C03",
+        "C14"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R02"
+    },
+    {
+      "id": "C16",
+      "name": "第三人称动作否定和提问",
+      "objective_ids": [
+        "U08.3-G03",
+        "U08.3-G04"
+      ],
+      "requires": [
+        "C15",
+        "C11",
+        "C12"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R02"
+    },
+    {
+      "id": "C17",
+      "name": "把want to用于他或她",
+      "objective_ids": [
+        "U09.2-G04"
+      ],
+      "requires": [
+        "C06",
+        "C15"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R02"
+    },
+    {
+      "id": "C18",
+      "name": "掌握当前动作的ing形式",
+      "objective_ids": [
+        "U17.1-G03"
+      ],
+      "requires": [
+        "C02"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R02"
+    },
+    {
+      "id": "C19",
+      "name": "用be doing说明正在发生",
+      "objective_ids": [
+        "U17.1-G01",
+        "U17.1-G02",
+        "U17.1-G04",
+        "U17.1-G05"
+      ],
+      "requires": [
+        "C03",
+        "C08",
+        "C14",
+        "C18"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R02"
+    },
+    {
+      "id": "C20",
+      "name": "询问或否定正在做的事情",
+      "objective_ids": [
+        "U17.2-G01",
+        "U17.2-G02",
+        "U17.2-G03",
+        "U17.2-G04"
+      ],
+      "requires": [
+        "C19",
+        "C10"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R02"
+    },
+    {
+      "id": "C21",
+      "name": "比较平时做与现在做",
+      "objective_ids": [
+        "U17.3-G01",
+        "U17.3-G02",
+        "U17.3-G04",
+        "U17.3-G05"
+      ],
+      "requires": [
+        "C03",
+        "C19"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R02"
+    },
+    {
+      "id": "C22",
+      "name": "用like表达喜欢的对象",
+      "objective_ids": [
+        "U10.1-G01",
+        "U10.1-G03",
+        "U10.1-G04"
+      ],
+      "requires": [
+        "C03"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R02"
+    },
+    {
+      "id": "C23",
+      "name": "用enjoy doing表达活动感受",
+      "objective_ids": [
+        "U10.3-G01",
+        "U10.3-G02",
+        "U10.3-G03",
+        "U10.3-G04"
+      ],
+      "requires": [
+        "C03",
+        "C18"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R02"
+    },
+    {
+      "id": "C24",
+      "name": "比较like doing与like to do",
+      "objective_ids": [
+        "U10.2-G01",
+        "U10.2-G02",
+        "U10.2-G03",
+        "U10.2-G04",
+        "U10.2-G05"
+      ],
+      "requires": [
+        "C22",
+        "C18",
+        "C06"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R02"
+    },
+    {
+      "id": "C25",
+      "name": "用can说明能力并提问",
+      "objective_ids": [
+        "U13.1-G01",
+        "U13.1-G02",
+        "U13.1-G03",
+        "U13.1-G04",
+        "U13.1-G05"
+      ],
+      "requires": [
+        "C03",
+        "C12"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R01"
+    },
+    {
+      "id": "C26",
+      "name": "使用基本礼貌指令",
+      "objective_ids": [
+        "U14.1-G01",
+        "U14.1-G02",
+        "U14.1-G03"
+      ],
+      "requires": [
+        "C03",
+        "C11"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R01"
+    },
+    {
+      "id": "C27",
+      "name": "使用Can/Could you请求",
+      "objective_ids": [
+        "U14.2-G01",
+        "U14.2-G02",
+        "U14.2-G03",
+        "U14.2-G04"
+      ],
+      "requires": [
+        "C25",
+        "C26"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R01"
+    },
+    {
+      "id": "C28",
+      "name": "礼貌表达想要东西或做事",
+      "objective_ids": [
+        "U14.3-G01",
+        "U14.3-G02",
+        "U14.3-G03",
+        "U14.3-G04",
+        "U14.3-G05"
+      ],
+      "requires": [
+        "C06"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R01"
+    },
+    {
+      "id": "C29",
+      "name": "给出一个完整的简单原因",
+      "objective_ids": [
+        "U23.1-G01",
+        "U23.1-G04"
+      ],
+      "requires": [
+        "C03",
+        "C08"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R02"
+    },
+    {
+      "id": "C30",
+      "name": "用已教过去式表达过去动作",
+      "objective_ids": [
+        "U18.2-G01",
+        "U18.2-G02",
+        "U18.2-G03",
+        "U18.2-G04"
+      ],
+      "requires": [
+        "C03",
+        "C14"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R04"
+    },
+    {
+      "id": "C31",
+      "name": "用过去be说明状态",
+      "objective_ids": [
+        "U18.1-G01",
+        "U18.1-G02",
+        "U18.1-G03",
+        "U18.1-G04",
+        "U18.1-G05"
+      ],
+      "requires": [
+        "C08",
+        "C14"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R04"
+    },
+    {
+      "id": "C32",
+      "name": "对过去动作提问和否定",
+      "objective_ids": [
+        "U18.3-G01",
+        "U18.3-G02",
+        "U18.3-G03",
+        "U18.3-G04",
+        "U18.3-G05"
+      ],
+      "requires": [
+        "C30",
+        "C31",
+        "C11",
+        "C12"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R04"
+    },
+    {
+      "id": "C33",
+      "name": "用自然的过去决定扩展decide to",
+      "objective_ids": [
+        "U11.2-G01",
+        "U11.2-G02",
+        "U11.2-G03",
+        "U11.2-G04",
+        "U11.2-G05"
+      ],
+      "requires": [
+        "C06",
+        "C30",
+        "C32"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R04"
+    },
+    {
+      "id": "C34",
+      "name": "用宾格指向动作涉及的人",
+      "objective_ids": [
+        "U03.3-G01",
+        "U03.3-G02",
+        "U03.3-G03",
+        "U03.3-G04"
+      ],
+      "requires": [
+        "C03",
+        "C14"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R01"
+    },
+    {
+      "id": "C35",
+      "name": "区分Who called与Who did you call",
+      "objective_ids": [
+        "U04.5-G01",
+        "U04.5-G02"
+      ],
+      "requires": [
+        "C30",
+        "C32",
+        "C34"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R04"
+    },
+    {
+      "id": "C36",
+      "name": "简单时长与数量",
+      "objective_ids": [
+        "U05.1-G01",
+        "U05.1-G02",
+        "U05.1-G03"
+      ],
+      "requires": [
+        "C09"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R02"
+    },
+    {
+      "id": "C37",
+      "name": "具体钟点与时段",
+      "objective_ids": [
+        "U08.1-G01",
+        "U08.1-G03",
+        "U08.1-G04"
+      ],
+      "requires": [
+        "C36"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R02"
+    },
+    {
+      "id": "C38",
+      "name": "用it表达时间",
+      "objective_ids": [
+        "U01.5-G02"
+      ],
+      "requires": [
+        "C08",
+        "C37"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R02"
+    },
+    {
+      "id": "C39",
+      "name": "把活动当作谈论对象",
+      "objective_ids": [
+        "U10.2-G06"
+      ],
+      "requires": [
+        "C18",
+        "C08"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R03"
+    },
+    {
+      "id": "C40",
+      "name": "用it和to动作评价事情",
+      "objective_ids": [
+        "U06.2-G06"
+      ],
+      "requires": [
+        "C08",
+        "C06"
+      ],
+      "lexical_binding_status": "pending",
+      "assessment_binding_status": "pending",
+      "earliest_complete_window": "R03"
+    }
+  ],
+  "capability_topological_order": [
+    "C01",
+    "C02",
+    "C03",
+    "C04",
+    "C05",
+    "C06",
+    "C07",
+    "C08",
+    "C09",
+    "C10",
+    "C11",
+    "C12",
+    "C13",
+    "C14",
+    "C15",
+    "C16",
+    "C17",
+    "C18",
+    "C19",
+    "C20",
+    "C21",
+    "C22",
+    "C23",
+    "C24",
+    "C25",
+    "C26",
+    "C27",
+    "C28",
+    "C29",
+    "C30",
+    "C31",
+    "C32",
+    "C33",
+    "C34",
+    "C35",
+    "C36",
+    "C37",
+    "C38",
+    "C39",
+    "C40"
+  ],
+  "scope": "40个关键能力节点已给出设计依赖并核对；没有把729个目标都声明为硬先修已完成；主要窗口与最早目标窗口分别保存，简单原因问答已明确前移",
+  "reuse_notes": {
+    "U04.4-G05": "与U32.1-G01同一求重复能力，按情境深化，不重复认定首次掌握",
+    "U30.1-G04": "与U11.5中的remember两种结构复用同一具体用法证据，后期换语境",
+    "U31.5-G01": "贯穿词汇学习，不作为早期使用普通词的先修门槛"
+  },
+  "domain_entry_policy": "按课题目标和已会材料进入，描述类可早，复杂论证后置；不整条主线通关才可选领域",
+  "independent_transfer_gate": [
+    "所需具体材料已具备独立证据",
+    "题目目标句未提前曝光",
+    "使用已审核的正确自然表达",
+    "提示/错误后改对与熟句回忆另记",
+    "开放回答超出固定答案能力时不冒充自动判定"
+  ],
+  "unresolved": [
+    "729目标的完整硬先修及词义/材料映射",
+    "3000项真实覆盖",
+    "题目与答案及内容审核",
+    "听说任务实现",
+    "实际教学效果"
+  ]
+}
