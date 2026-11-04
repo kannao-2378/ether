@@ -390,7 +390,9 @@ html{scrollbar-gutter:stable}
 /* Word checks move the caret's visual slot, never replace the native editor. */
 .word-spelling{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:clamp(20px,4.6vw,32px)}
 .word-slot{flex:none;display:block;box-sizing:content-box;min-height:1.2em;line-height:1.2;padding:0 0 1px;border-bottom:1px solid var(--muted,#888);white-space:pre;cursor:text}
-.word-slot.editing-slot{visibility:hidden}
+.word-slots{align-items:flex-start}
+.word-slot{height:calc(1.2em + 2px);min-height:0}
+.word-slot.editing-slot{visibility:visible;color:transparent!important}
 .word-slot.word-wrong{color:#d9534f;border-bottom-color:#d9534f}
-.memo-writing.sentence-writing input.word-editor{position:absolute;z-index:1;min-width:0;max-width:none;box-sizing:border-box;margin:0;padding:0 0 1px;border:0;border-bottom:1px solid var(--muted,#888);border-radius:0;text-align:left;font:inherit;line-height:1.2;background:transparent;color:inherit;transition:none}
+.memo-writing.sentence-writing input.word-editor{position:absolute;z-index:1;min-width:0;min-height:0;max-width:none;box-sizing:border-box;margin:0;padding:0 0 2px;border:0;border-radius:0;text-align:left;font:inherit;line-height:1.2;background:transparent;color:inherit;transition:none}
 .memo-writing.sentence-writing input.word-editor.word-wrong{color:#d9534f;border-bottom-color:#d9534f}
