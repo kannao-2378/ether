@@ -58,5 +58,14 @@ class ProductionMainlineTests(unittest.TestCase):
   item=q.json();self.assertNotEqual(item['kind'],'done')
   with self.db.connect() as c:
    self.assertTrue(c.execute(text('SELECT 1 FROM curriculum_lessons l JOIN curriculum_paths p ON p.goal_id=l.goal_id WHERE l.knowledge_id=:k AND p.course_id=:c'),dict(k=item['id'],c=mainline.COURSE)).first())
+ def test_new_cards_reuse_syllables_without_touching_progress(self):
+  with self.db.begin() as c:
+   mainline.install(c)
+   rows=c.execute(text("SELECT k.answer,d.payload FROM curriculum_lessons l JOIN knowledge k ON k.id=l.knowledge_id JOIN knowledge_details d ON d.knowledge_id=k.id WHERE l.goal_id='mainline-U02-1'")).all()
+   phonetic={en:json.loads(raw) for en,raw in rows}
+   self.assertTrue(phonetic['water']['ipa_us']);self.assertTrue(phonetic['water']['syllables'])
+   self.assertTrue(phonetic['drink water']['pronunciation_parts'])
+   before=snapshot(c);mainline.install(c)
+   self.assertEqual(before,snapshot(c))
 
 if __name__=='__main__':unittest.main()

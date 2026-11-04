@@ -32,12 +32,12 @@ export function Study(p:any){
  const keyboardOpen=()=>{
   if(!input.current||document.activeElement!==input.current)return false;
   const ios=/iPad|iPhone|iPod/.test(navigator.userAgent)||navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1;
-  return !ios||!window.visualViewport||window.innerHeight-window.visualViewport.height>160;
+  return !ios||!window.visualViewport||document.documentElement.dataset.keyboardOpen==='true'||window.innerHeight-window.visualViewport.height>160;
  };
  const toggleKeyboard=(wasOpen=keyboardOpen())=>{
   const field=input.current;if(!field)return;
   if(wasOpen)field.blur();
-  else{if(document.activeElement===field)field.blur();focus();} // Same scroll-free focus as tapping the input area.
+  else focus(); // Do not blur/refocus an already active iOS input in one gesture.
  };
  const startPeek=(e:any)=>{e.preventDefault();peekHadFocus.current=document.activeElement===input.current;e.currentTarget.setPointerCapture(e.pointerId);p.peekStart?.();};
  const endPeek=(e?:any)=>{e?.preventDefault();p.peekEnd?.();if(peekHadFocus.current&&document.hasFocus()&&input.current&&document.activeElement!==input.current)focus();};

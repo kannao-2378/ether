@@ -386,3 +386,11 @@ html{scrollbar-gutter:stable}
 .word-spelling{width:100%;position:relative}.word-slots{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:10px 1ch;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:clamp(20px,4.6vw,32px)}.memo-writing.sentence-writing .word-slots input{flex:none;min-width:0;max-width:100%;box-sizing:content-box;padding:0 0 1px;margin:0;border:0;border-bottom:1px solid var(--muted,#888);border-radius:0;background:transparent;text-align:left;line-height:1.2;font:inherit;color:inherit;box-shadow:none;outline:none;transition:none}.memo-writing.sentence-writing .word-slots input.word-wrong{color:#d9534f;border-bottom-color:#d9534f}.word-check-retry{font-size:12px;position:absolute;top:100%;left:50%;transform:translateX(-50%);white-space:nowrap}
 
 .mastery-evidence{display:flex;flex-direction:column;align-items:flex-end;gap:5px}.transfer-state{font-size:10px;line-height:1.3;opacity:.8}.transfer-state.transfer-proven{color:#39997b;opacity:1}.profile-transfer-summary{font-size:13px}
+
+/* Word checks move the caret's visual slot, never replace the native editor. */
+.word-spelling{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:clamp(20px,4.6vw,32px)}
+.word-slot{flex:none;display:block;box-sizing:content-box;min-height:1.2em;line-height:1.2;padding:0 0 1px;border-bottom:1px solid var(--muted,#888);white-space:pre;cursor:text}
+.word-slot.editing-slot{visibility:hidden}
+.word-slot.word-wrong{color:#d9534f;border-bottom-color:#d9534f}
+.memo-writing.sentence-writing input.word-editor{position:absolute;z-index:1;min-width:0;max-width:none;box-sizing:border-box;margin:0;padding:0 0 1px;border:0;border-bottom:1px solid var(--muted,#888);border-radius:0;text-align:left;font:inherit;line-height:1.2;background:transparent;color:inherit;transition:none}
+.memo-writing.sentence-writing input.word-editor.word-wrong{color:#d9534f;border-bottom-color:#d9534f}

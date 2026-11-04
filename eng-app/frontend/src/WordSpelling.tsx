@@ -1,6 +1,5 @@
 import {useLayoutEffect,useRef,useState,MutableRefObject} from 'react';
 import {learningFetch} from './testMode';
-import {isMobileLayout} from './useViewport';
 
 type Props={question:any;inputRef:MutableRefObject<HTMLInputElement|null>;peek:boolean;english:string;draft:string;onDraft:(value:string,complete:boolean)=>void;onFocusChange:(value:boolean)=>void};
 const clean=(value:string)=>value.replace(/\s/g,'').replace(/’/g,"'").replace(/[.!?。！？]+$/,'');
@@ -9,15 +8,20 @@ export function WordSpelling({question:q,inputRef,peek,english,draft,onDraft,onF
  const initial:number[][]=q.answer_shapes||[q.word_lengths||[q.answer_length||1]];
  const [shapes,setShapes]=useState(initial),[words,setWords]=useState<string[]>(draft?draft.split(/\s+/):[]);
  const [active,setActive]=useState(0),[valid,setValid]=useState<number[]>([]),[wrong,setWrong]=useState(-1),[error,setError]=useState(false);
- const fields=useRef<(HTMLInputElement|null)[]>([]),values=useRef(words),options=useRef(initial),verified=useRef<number[]>([]);
- const generation=useRef(0),busy=useRef(false),buffer=useRef(''),alive=useRef(true),ime=useRef(false),move=useRef(false);
+ const editor=useRef<HTMLInputElement|null>(null),slots=useRef<(HTMLSpanElement|null)[]>([]),container=useRef<HTMLDivElement|null>(null);
+ const values=useRef(words),options=useRef(initial),verified=useRef<number[]>([]);
+ const generation=useRef(0),busy=useRef(false),buffer=useRef(''),alive=useRef(true),ime=useRef(false);
  const onDraftRef=useRef(onDraft);onDraftRef.current=onDraft;
  useLayoutEffect(()=>{alive.current=true;if(values.current[0])void verify(0);return()=>{alive.current=false;generation.current++;};},[]);
- useLayoutEffect(()=>{inputRef.current=fields.current[active];if(move.current){move.current=false;inputRef.current?.focus({preventScroll:true});const end=inputRef.current?.value.length||0;inputRef.current?.setSelectionRange(end,end);}},[active,inputRef]);
+ // Keep one actual editing node mounted: an asynchronous word check must not
+ // blur one native iOS input and attempt to open another outside a user gesture.
+ const position=()=>{const field=editor.current,slot=slots.current[active],box=container.current;if(!field||!slot||!box)return;const r=slot.getBoundingClientRect(),b=box.getBoundingClientRect();Object.assign(field.style,{left:(r.left-b.left)+'px',top:(r.top-b.top)+'px',width:r.width+'px',height:r.height+'px'});};
+ useLayoutEffect(()=>{inputRef.current=editor.current;position();});
+ useLayoutEffect(()=>{const observer=new ResizeObserver(position);if(container.current)observer.observe(container.current);window.visualViewport?.addEventListener('resize',position);return()=>{observer.disconnect();window.visualViewport?.removeEventListener('resize',position);};},[active]);
  const lengths=shapes[0]||initial[0];
  const limit=(i:number)=>Math.max(...options.current.map(s=>s[i]||0),1);
  const publish=(next:string[],complete=false)=>{values.current=next;setWords(next);onDraftRef.current(next.join(' ').trimEnd(),complete);};
- const focusAt=(i:number)=>{move.current=true;setActive(i);if(active===i){fields.current[i]?.focus({preventScroll:true});move.current=false;}};
+ const focusAt=(i:number,userGesture=false)=>{setActive(i);if(userGesture&&editor.current!==document.activeElement)editor.current?.focus({preventScroll:true});};
 
  async function verify(i:number){
   const word=values.current[i]||'';
@@ -55,16 +59,16 @@ export function WordSpelling({question:q,inputRef,peek,english,draft,onDraft,onF
   buffer.current+=added.slice(Math.max(0,room));publish(next);void verify(i);
  }
  const firstUnverified=lengths.findIndex((_,i)=>!valid.includes(i));
- return <div className="word-spelling" onClick={e=>e.stopPropagation()}>
-  <div className="word-slots">{lengths.map((n,i)=><input key={i} ref={node=>{fields.current[i]=node;if(i===active)inputRef.current=node;}} aria-label={'第'+(i+1)+'个单词'} aria-invalid={!peek&&wrong===i} className={!peek&&wrong===i?'word-wrong':''} value={peek?(english.trim().split(/\s+/)[i]||''):(words[i]||'')} style={{width:n+'ch'}} maxLength={limit(i)} readOnly={peek&&!isMobileLayout()||i>firstUnverified&&firstUnverified>=0} autoCapitalize="none" autoCorrect="off" autoComplete="off" spellCheck={false} lang="en"
-   onPointerDown={e=>{if(!peek&&firstUnverified>=0&&i>firstUnverified){e.preventDefault();focusAt(firstUnverified);}}}
-   onFocus={()=>{setActive(i);onFocusChange(true);}} onBlur={()=>onFocusChange(false)}
-   onChange={e=>{if(!peek)edit(i,e.target.value);}}
-   onCompositionStart={()=>{ime.current=true;}} onCompositionEnd={e=>{ime.current=false;edit(i,e.currentTarget.value);}}
-   onKeyDown={e=>{if(e.key===' '){e.preventDefault();return;}if(peek)return;if(e.key==='Backspace'&&!words[i]&&i>0){e.preventDefault();edit(i-1,(words[i-1]||'').slice(0,-1));focusAt(i-1);return;}if(busy.current&&!e.ctrlKey&&!e.metaKey&&e.key.length===1){e.preventDefault();buffer.current+=clean(e.key);}}}
+ return <div ref={container} className="word-spelling" onClick={e=>e.stopPropagation()}>
+  <div className="word-slots" aria-hidden="true">{lengths.map((n,i)=><span key={i} ref={node=>{slots.current[i]=node;}} className={'word-slot'+(!peek&&wrong===i?' word-wrong':'')+(i===active?' editing-slot':'')} style={{width:n+'ch'}} onClick={()=>{if(!peek)focusAt(firstUnverified>=0&&i>firstUnverified?firstUnverified:i,true);}}>{peek?(english.trim().split(/\s+/)[i]||''):(words[i]||'')}</span>)}</div>
+  <input ref={editor} className={'word-editor'+(!peek&&wrong===active?' word-wrong':'')} aria-label={'第'+(active+1)+'个单词'} aria-invalid={!peek&&wrong===active} value={peek?(english.trim().split(/\s+/)[active]||''):(words[active]||'')} maxLength={limit(active)} autoCapitalize="none" autoCorrect="off" autoComplete="off" spellCheck={false} lang="en"
+   onFocus={()=>onFocusChange(true)} onBlur={()=>onFocusChange(false)}
+   onChange={e=>{if(!peek)edit(active,e.target.value);}}
+   onCompositionStart={()=>{ime.current=true;}} onCompositionEnd={e=>{ime.current=false;if(!peek)edit(active,e.currentTarget.value);}}
+   onKeyDown={e=>{if(e.key===' '){e.preventDefault();return;}if(peek)return;if(e.key==='Backspace'&&!words[active]&&active>0){e.preventDefault();edit(active-1,(words[active-1]||'').slice(0,-1));focusAt(active-1);return;}if(busy.current&&!e.ctrlKey&&!e.metaKey&&e.key.length===1){e.preventDefault();buffer.current+=clean(e.key);}}}
    onBeforeInput={(e:any)=>{const data=e.data??e.nativeEvent?.data;if(!peek&&busy.current&&data&&!ime.current){e.preventDefault();buffer.current+=clean(data);}}}
-   onPaste={e=>{if(peek)return;e.preventDefault();const text=clean(e.clipboardData.getData('text'));edit(i,'');feed(i,text);}}
-  />)}</div>
+   onPaste={e=>{e.preventDefault();if(peek)return;const text=clean(e.clipboardData.getData('text'));edit(active,'');feed(active,text);}}
+  />
   {error&&<button className="word-check-retry" onClick={()=>void verify(active)}>检查失败，点击重试</button>}
  </div>;
 }

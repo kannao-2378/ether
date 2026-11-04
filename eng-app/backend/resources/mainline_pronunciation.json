@@ -1,0 +1,4160 @@
+{
+  "a": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AH0"
+    ]
+  },
+  "about": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AH0",
+      "B",
+      "AW1",
+      "T"
+    ]
+  },
+  "according": {
+    "syllables": "3 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AH0",
+      "K",
+      "AO1",
+      "R",
+      "D",
+      "IH0",
+      "NG"
+    ]
+  },
+  "afraid": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AH0",
+      "F",
+      "R",
+      "EY1",
+      "D"
+    ]
+  },
+  "after": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AE1",
+      "F",
+      "T",
+      "ER0"
+    ]
+  },
+  "again": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AH0",
+      "G",
+      "EH1",
+      "N"
+    ]
+  },
+  "ago": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AH0",
+      "G",
+      "OW1"
+    ]
+  },
+  "agree": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AH0",
+      "G",
+      "R",
+      "IY1"
+    ]
+  },
+  "already": {
+    "syllables": "3 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AO0",
+      "L",
+      "R",
+      "EH1",
+      "D",
+      "IY0"
+    ]
+  },
+  "although": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AO2",
+      "L",
+      "DH",
+      "OW1"
+    ]
+  },
+  "am": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AE1",
+      "M"
+    ]
+  },
+  "an": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AE1",
+      "N"
+    ]
+  },
+  "and": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AH0",
+      "N",
+      "D"
+    ]
+  },
+  "anna": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AE1",
+      "N",
+      "AH0"
+    ]
+  },
+  "anna's": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AE1",
+      "N",
+      "AH0",
+      "Z"
+    ]
+  },
+  "answer": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AE1",
+      "N",
+      "S",
+      "ER0"
+    ]
+  },
+  "answered": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AE1",
+      "N",
+      "S",
+      "ER0",
+      "D"
+    ]
+  },
+  "any": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "EH1",
+      "N",
+      "IY0"
+    ]
+  },
+  "apple": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AE1",
+      "P",
+      "AH0",
+      "L"
+    ]
+  },
+  "are": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AA1",
+      "R"
+    ]
+  },
+  "aren't": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AA1",
+      "R",
+      "AH0",
+      "N",
+      "T"
+    ]
+  },
+  "arrive": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "ER0",
+      "AY1",
+      "V"
+    ]
+  },
+  "arrived": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "ER0",
+      "AY1",
+      "V",
+      "D"
+    ]
+  },
+  "arrives": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "ER0",
+      "AY1",
+      "V",
+      "Z"
+    ]
+  },
+  "as": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AE1",
+      "Z"
+    ]
+  },
+  "ask": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AE1",
+      "S",
+      "K"
+    ]
+  },
+  "asked": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AE1",
+      "S",
+      "K",
+      "T"
+    ]
+  },
+  "asks": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AE1",
+      "S",
+      "K",
+      "S"
+    ]
+  },
+  "at": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AE1",
+      "T"
+    ]
+  },
+  "ate": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "EY1",
+      "T"
+    ]
+  },
+  "bag": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "B",
+      "AE1",
+      "G"
+    ]
+  },
+  "be": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "B",
+      "IY1"
+    ]
+  },
+  "because": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "B",
+      "IH0",
+      "K",
+      "AO1",
+      "Z"
+    ]
+  },
+  "been": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "B",
+      "IH1",
+      "N"
+    ]
+  },
+  "before": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "B",
+      "IH0",
+      "F",
+      "AO1",
+      "R"
+    ]
+  },
+  "behind": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "B",
+      "IH0",
+      "HH",
+      "AY1",
+      "N",
+      "D"
+    ]
+  },
+  "best": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "B",
+      "EH1",
+      "S",
+      "T"
+    ]
+  },
+  "better": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "B",
+      "EH1",
+      "T",
+      "ER0"
+    ]
+  },
+  "big": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "B",
+      "IH1",
+      "G"
+    ]
+  },
+  "bigger": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "B",
+      "IH1",
+      "G",
+      "ER0"
+    ]
+  },
+  "book": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "B",
+      "UH1",
+      "K"
+    ]
+  },
+  "books": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "B",
+      "UH1",
+      "K",
+      "S"
+    ]
+  },
+  "bought": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "B",
+      "AA1",
+      "T"
+    ]
+  },
+  "break": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "B",
+      "R",
+      "EY1",
+      "K"
+    ]
+  },
+  "bus": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "B",
+      "AH1",
+      "S"
+    ]
+  },
+  "busy": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "B",
+      "IH1",
+      "Z",
+      "IY0"
+    ]
+  },
+  "but": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "B",
+      "AH1",
+      "T"
+    ]
+  },
+  "by": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "B",
+      "AY1"
+    ]
+  },
+  "call": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "K",
+      "AO1",
+      "L"
+    ]
+  },
+  "called": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "K",
+      "AO1",
+      "L",
+      "D"
+    ]
+  },
+  "calling": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "K",
+      "AO1",
+      "L",
+      "IH0",
+      "NG"
+    ]
+  },
+  "calls": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "K",
+      "AO1",
+      "L",
+      "Z"
+    ]
+  },
+  "can": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "K",
+      "AE1",
+      "N"
+    ]
+  },
+  "cannot": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "K",
+      "AE1",
+      "N",
+      "AA0",
+      "T"
+    ]
+  },
+  "change": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "CH",
+      "EY1",
+      "N",
+      "JH"
+    ]
+  },
+  "cheaper": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "CH",
+      "IY1",
+      "P",
+      "ER0"
+    ]
+  },
+  "children": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "CH",
+      "IH1",
+      "L",
+      "D",
+      "R",
+      "AH0",
+      "N"
+    ]
+  },
+  "choose": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "CH",
+      "UW1",
+      "Z"
+    ]
+  },
+  "class": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "K",
+      "L",
+      "AE1",
+      "S"
+    ]
+  },
+  "clean": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "K",
+      "L",
+      "IY1",
+      "N"
+    ]
+  },
+  "cleaned": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "K",
+      "L",
+      "IY1",
+      "N",
+      "D"
+    ]
+  },
+  "clearly": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "K",
+      "L",
+      "IH1",
+      "R",
+      "L",
+      "IY0"
+    ]
+  },
+  "compare": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "K",
+      "AH0",
+      "M",
+      "P",
+      "EH1",
+      "R"
+    ]
+  },
+  "cook": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "K",
+      "UH1",
+      "K"
+    ]
+  },
+  "cooking": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "K",
+      "UH1",
+      "K",
+      "IH0",
+      "NG"
+    ]
+  },
+  "correct": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "K",
+      "ER0",
+      "EH1",
+      "K",
+      "T"
+    ]
+  },
+  "costs": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "K",
+      "AA1",
+      "S",
+      "T",
+      "S"
+    ]
+  },
+  "could": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "K",
+      "UH1",
+      "D"
+    ]
+  },
+  "cup": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "K",
+      "AH1",
+      "P"
+    ]
+  },
+  "cups": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "K",
+      "AH1",
+      "P",
+      "S"
+    ]
+  },
+  "day": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "D",
+      "EY1"
+    ]
+  },
+  "days": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "D",
+      "EY1",
+      "Z"
+    ]
+  },
+  "decided": {
+    "syllables": "3 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "D",
+      "IH2",
+      "S",
+      "AY1",
+      "D",
+      "IH0",
+      "D"
+    ]
+  },
+  "decision": {
+    "syllables": "3 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "D",
+      "IH0",
+      "S",
+      "IH1",
+      "ZH",
+      "AH0",
+      "N"
+    ]
+  },
+  "design": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "D",
+      "IH0",
+      "Z",
+      "AY1",
+      "N"
+    ]
+  },
+  "designed": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "D",
+      "IH0",
+      "Z",
+      "AY1",
+      "N",
+      "D"
+    ]
+  },
+  "did": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "D",
+      "IH1",
+      "D"
+    ]
+  },
+  "disagree": {
+    "syllables": "3 个音节",
+    "stress": "第 3 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "D",
+      "IH0",
+      "S",
+      "AH0",
+      "G",
+      "R",
+      "IY1"
+    ]
+  },
+  "do": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "D",
+      "UW1"
+    ]
+  },
+  "does": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "D",
+      "AH1",
+      "Z"
+    ]
+  },
+  "door": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "D",
+      "AO1",
+      "R"
+    ]
+  },
+  "doors": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "D",
+      "AO1",
+      "R",
+      "Z"
+    ]
+  },
+  "drank": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "D",
+      "R",
+      "AE1",
+      "NG",
+      "K"
+    ]
+  },
+  "drink": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "D",
+      "R",
+      "IH1",
+      "NG",
+      "K"
+    ]
+  },
+  "drinking": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "D",
+      "R",
+      "IH1",
+      "NG",
+      "K",
+      "IH0",
+      "NG"
+    ]
+  },
+  "drinks": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "D",
+      "R",
+      "IH1",
+      "NG",
+      "K",
+      "S"
+    ]
+  },
+  "each": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "IY1",
+      "CH"
+    ]
+  },
+  "earlier": {
+    "syllables": "3 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "ER1",
+      "L",
+      "IY0",
+      "ER0"
+    ]
+  },
+  "easy": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "IY1",
+      "Z",
+      "IY0"
+    ]
+  },
+  "eat": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "IY1",
+      "T"
+    ]
+  },
+  "eaten": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "IY1",
+      "T",
+      "AH0",
+      "N"
+    ]
+  },
+  "english": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "IH1",
+      "NG",
+      "G",
+      "L",
+      "IH0",
+      "SH"
+    ]
+  },
+  "enjoy": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "EH2",
+      "N",
+      "JH",
+      "OY1"
+    ]
+  },
+  "enjoys": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "EH2",
+      "N",
+      "JH",
+      "OY1",
+      "Z"
+    ]
+  },
+  "enough": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "IH0",
+      "N",
+      "AH1",
+      "F"
+    ]
+  },
+  "enter": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "EH1",
+      "N",
+      "T",
+      "ER0"
+    ]
+  },
+  "ever": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "EH1",
+      "V",
+      "ER0"
+    ]
+  },
+  "every": {
+    "syllables": "3 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "EH1",
+      "V",
+      "ER0",
+      "IY0"
+    ]
+  },
+  "evidence": {
+    "syllables": "3 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "EH1",
+      "V",
+      "AH0",
+      "D",
+      "AH0",
+      "N",
+      "S"
+    ]
+  },
+  "example": {
+    "syllables": "3 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "IH0",
+      "G",
+      "Z",
+      "AE1",
+      "M",
+      "P",
+      "AH0",
+      "L"
+    ]
+  },
+  "explain": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "IH0",
+      "K",
+      "S",
+      "P",
+      "L",
+      "EY1",
+      "N"
+    ]
+  },
+  "family": {
+    "syllables": "3 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "F",
+      "AE1",
+      "M",
+      "AH0",
+      "L",
+      "IY0"
+    ]
+  },
+  "feel": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "F",
+      "IY1",
+      "L"
+    ]
+  },
+  "few": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "F",
+      "Y",
+      "UW1"
+    ]
+  },
+  "finish": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "F",
+      "IH1",
+      "N",
+      "IH0",
+      "SH"
+    ]
+  },
+  "finished": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "F",
+      "IH1",
+      "N",
+      "IH0",
+      "SH",
+      "T"
+    ]
+  },
+  "first": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "F",
+      "ER1",
+      "S",
+      "T"
+    ]
+  },
+  "for": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "F",
+      "AO1",
+      "R"
+    ]
+  },
+  "friday": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "F",
+      "R",
+      "AY1",
+      "D",
+      "IY0"
+    ]
+  },
+  "front": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "F",
+      "R",
+      "AH1",
+      "N",
+      "T"
+    ]
+  },
+  "games": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "G",
+      "EY1",
+      "M",
+      "Z"
+    ]
+  },
+  "gave": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "G",
+      "EY1",
+      "V"
+    ]
+  },
+  "get": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "G",
+      "EH1",
+      "T"
+    ]
+  },
+  "give": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "G",
+      "IH1",
+      "V"
+    ]
+  },
+  "gives": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "G",
+      "IH1",
+      "V",
+      "Z"
+    ]
+  },
+  "glass": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "G",
+      "L",
+      "AE1",
+      "S"
+    ]
+  },
+  "glasses": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "G",
+      "L",
+      "AE1",
+      "S",
+      "AH0",
+      "Z"
+    ]
+  },
+  "go": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "G",
+      "OW1"
+    ]
+  },
+  "goes": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "G",
+      "OW1",
+      "Z"
+    ]
+  },
+  "going": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "G",
+      "OW1",
+      "IH0",
+      "NG"
+    ]
+  },
+  "good": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "G",
+      "UH1",
+      "D"
+    ]
+  },
+  "grow": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "G",
+      "R",
+      "OW1"
+    ]
+  },
+  "had": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "HH",
+      "AE1",
+      "D"
+    ]
+  },
+  "hand": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "HH",
+      "AE1",
+      "N",
+      "D"
+    ]
+  },
+  "happy": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "HH",
+      "AE1",
+      "P",
+      "IY0"
+    ]
+  },
+  "hard": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "HH",
+      "AA1",
+      "R",
+      "D"
+    ]
+  },
+  "has": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "HH",
+      "AE1",
+      "Z"
+    ]
+  },
+  "have": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "HH",
+      "AE1",
+      "V"
+    ]
+  },
+  "he": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "HH",
+      "IY1"
+    ]
+  },
+  "help": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "HH",
+      "EH1",
+      "L",
+      "P"
+    ]
+  },
+  "helped": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "HH",
+      "EH1",
+      "L",
+      "P",
+      "T"
+    ]
+  },
+  "helps": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "HH",
+      "EH1",
+      "L",
+      "P",
+      "S"
+    ]
+  },
+  "her": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "HH",
+      "ER1"
+    ]
+  },
+  "here": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "HH",
+      "IY1",
+      "R"
+    ]
+  },
+  "herself": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "HH",
+      "ER0",
+      "S",
+      "EH1",
+      "L",
+      "F"
+    ]
+  },
+  "home": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "HH",
+      "OW1",
+      "M"
+    ]
+  },
+  "homework": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "HH",
+      "OW1",
+      "M",
+      "W",
+      "ER2",
+      "K"
+    ]
+  },
+  "hope": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "HH",
+      "OW1",
+      "P"
+    ]
+  },
+  "hot": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "HH",
+      "AA1",
+      "T"
+    ]
+  },
+  "hour": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AW1",
+      "ER0"
+    ]
+  },
+  "how": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "HH",
+      "AW1"
+    ]
+  },
+  "however": {
+    "syllables": "3 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "HH",
+      "AW2",
+      "EH1",
+      "V",
+      "ER0"
+    ]
+  },
+  "i": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AY1"
+    ]
+  },
+  "idea": {
+    "syllables": "3 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AY0",
+      "D",
+      "IY1",
+      "AH0"
+    ]
+  },
+  "if": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "IH1",
+      "F"
+    ]
+  },
+  "in": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "IH0",
+      "N"
+    ]
+  },
+  "information": {
+    "syllables": "4 个音节",
+    "stress": "第 3 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "IH2",
+      "N",
+      "F",
+      "ER0",
+      "M",
+      "EY1",
+      "SH",
+      "AH0",
+      "N"
+    ]
+  },
+  "instead": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "IH2",
+      "N",
+      "S",
+      "T",
+      "EH1",
+      "D"
+    ]
+  },
+  "interested": {
+    "syllables": "3 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "IH1",
+      "N",
+      "T",
+      "R",
+      "AH0",
+      "S",
+      "T",
+      "IH0",
+      "D"
+    ]
+  },
+  "into": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "IH1",
+      "N",
+      "T",
+      "UW0"
+    ]
+  },
+  "is": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "IH1",
+      "Z"
+    ]
+  },
+  "it": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "IH1",
+      "T"
+    ]
+  },
+  "job": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "JH",
+      "AA1",
+      "B"
+    ]
+  },
+  "just": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "JH",
+      "AH1",
+      "S",
+      "T"
+    ]
+  },
+  "keep": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "K",
+      "IY1",
+      "P"
+    ]
+  },
+  "kept": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "K",
+      "EH1",
+      "P",
+      "T"
+    ]
+  },
+  "know": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "N",
+      "OW1"
+    ]
+  },
+  "known": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "N",
+      "OW1",
+      "N"
+    ]
+  },
+  "last": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "L",
+      "AE1",
+      "S",
+      "T"
+    ]
+  },
+  "late": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "L",
+      "EY1",
+      "T"
+    ]
+  },
+  "later": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "L",
+      "EY1",
+      "T",
+      "ER0"
+    ]
+  },
+  "learn": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "L",
+      "ER1",
+      "N"
+    ]
+  },
+  "learning": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "L",
+      "ER1",
+      "N",
+      "IH0",
+      "NG"
+    ]
+  },
+  "leave": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "L",
+      "IY1",
+      "V"
+    ]
+  },
+  "leaving": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "L",
+      "IY1",
+      "V",
+      "IH0",
+      "NG"
+    ]
+  },
+  "left": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "L",
+      "EH1",
+      "F",
+      "T"
+    ]
+  },
+  "less": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "L",
+      "EH1",
+      "S"
+    ]
+  },
+  "let": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "L",
+      "EH1",
+      "T"
+    ]
+  },
+  "like": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "L",
+      "AY1",
+      "K"
+    ]
+  },
+  "likes": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "L",
+      "AY1",
+      "K",
+      "S"
+    ]
+  },
+  "listen": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "L",
+      "IH1",
+      "S",
+      "AH0",
+      "N"
+    ]
+  },
+  "live": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "L",
+      "AY1",
+      "V"
+    ]
+  },
+  "lived": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "L",
+      "IH1",
+      "V",
+      "D"
+    ]
+  },
+  "lives": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "L",
+      "IH1",
+      "V",
+      "Z"
+    ]
+  },
+  "london": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "L",
+      "AH1",
+      "N",
+      "D",
+      "AH0",
+      "N"
+    ]
+  },
+  "long": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "L",
+      "AO1",
+      "NG"
+    ]
+  },
+  "look": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "L",
+      "UH1",
+      "K"
+    ]
+  },
+  "looks": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "L",
+      "UH1",
+      "K",
+      "S"
+    ]
+  },
+  "made": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "EY1",
+      "D"
+    ]
+  },
+  "main": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "EY1",
+      "N"
+    ]
+  },
+  "make": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "EY1",
+      "K"
+    ]
+  },
+  "makes": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "EY1",
+      "K",
+      "S"
+    ]
+  },
+  "many": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "EH1",
+      "N",
+      "IY0"
+    ]
+  },
+  "matters": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "AE1",
+      "T",
+      "ER0",
+      "Z"
+    ]
+  },
+  "may": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "EY1"
+    ]
+  },
+  "me": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "IY1"
+    ]
+  },
+  "mean": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "IY1",
+      "N"
+    ]
+  },
+  "means": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "IY1",
+      "N",
+      "Z"
+    ]
+  },
+  "meet": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "IY1",
+      "T"
+    ]
+  },
+  "meeting": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "IY1",
+      "T",
+      "IH0",
+      "NG"
+    ]
+  },
+  "might": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "AY1",
+      "T"
+    ]
+  },
+  "mind": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "AY1",
+      "N",
+      "D"
+    ]
+  },
+  "mine": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "AY1",
+      "N"
+    ]
+  },
+  "monday": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "AH1",
+      "N",
+      "D",
+      "IY0"
+    ]
+  },
+  "more": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "AO1",
+      "R"
+    ]
+  },
+  "morning": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "AO1",
+      "R",
+      "N",
+      "IH0",
+      "NG"
+    ]
+  },
+  "most": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "OW1",
+      "S",
+      "T"
+    ]
+  },
+  "much": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "AH1",
+      "CH"
+    ]
+  },
+  "music": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "Y",
+      "UW1",
+      "Z",
+      "IH0",
+      "K"
+    ]
+  },
+  "must": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "AH1",
+      "S",
+      "T"
+    ]
+  },
+  "my": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "AY1"
+    ]
+  },
+  "myself": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "M",
+      "AY2",
+      "S",
+      "EH1",
+      "L",
+      "F"
+    ]
+  },
+  "name": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "N",
+      "EY1",
+      "M"
+    ]
+  },
+  "need": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "N",
+      "IY1",
+      "D"
+    ]
+  },
+  "needed": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "N",
+      "IY1",
+      "D",
+      "AH0",
+      "D"
+    ]
+  },
+  "never": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "N",
+      "EH1",
+      "V",
+      "ER0"
+    ]
+  },
+  "new": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "N",
+      "UW1"
+    ]
+  },
+  "next": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "N",
+      "EH1",
+      "K",
+      "S",
+      "T"
+    ]
+  },
+  "nice": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "N",
+      "AY1",
+      "S"
+    ]
+  },
+  "night": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "N",
+      "AY1",
+      "T"
+    ]
+  },
+  "not": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "N",
+      "AA1",
+      "T"
+    ]
+  },
+  "now": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "N",
+      "AW1"
+    ]
+  },
+  "of": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AH1",
+      "V"
+    ]
+  },
+  "off": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AO1",
+      "F"
+    ]
+  },
+  "often": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AO1",
+      "F",
+      "AH0",
+      "N"
+    ]
+  },
+  "older": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "OW1",
+      "L",
+      "D",
+      "ER0"
+    ]
+  },
+  "on": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AA1",
+      "N"
+    ]
+  },
+  "one": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "AH1",
+      "N"
+    ]
+  },
+  "online": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AO1",
+      "N",
+      "L",
+      "AY2",
+      "N"
+    ]
+  },
+  "open": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "OW1",
+      "P",
+      "AH0",
+      "N"
+    ]
+  },
+  "opening": {
+    "syllables": "3 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "OW1",
+      "P",
+      "AH0",
+      "N",
+      "IH0",
+      "NG"
+    ]
+  },
+  "order": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AO1",
+      "R",
+      "D",
+      "ER0"
+    ]
+  },
+  "other": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AH1",
+      "DH",
+      "ER0"
+    ]
+  },
+  "our": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AW1",
+      "ER0"
+    ]
+  },
+  "out": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AW1",
+      "T"
+    ]
+  },
+  "partly": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "P",
+      "AA1",
+      "R",
+      "T",
+      "L",
+      "IY0"
+    ]
+  },
+  "person": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "P",
+      "ER1",
+      "S",
+      "AH0",
+      "N"
+    ]
+  },
+  "pick": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "P",
+      "IH1",
+      "K"
+    ]
+  },
+  "picture": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "P",
+      "IH1",
+      "K",
+      "CH",
+      "ER0"
+    ]
+  },
+  "place": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "P",
+      "L",
+      "EY1",
+      "S"
+    ]
+  },
+  "plan": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "P",
+      "L",
+      "AE1",
+      "N"
+    ]
+  },
+  "plans": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "P",
+      "L",
+      "AE1",
+      "N",
+      "Z"
+    ]
+  },
+  "please": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "P",
+      "L",
+      "IY1",
+      "Z"
+    ]
+  },
+  "point": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "P",
+      "OY1",
+      "N",
+      "T"
+    ]
+  },
+  "practical": {
+    "syllables": "3 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "P",
+      "R",
+      "AE1",
+      "K",
+      "T",
+      "AH0",
+      "K",
+      "AH0",
+      "L"
+    ]
+  },
+  "practices": {
+    "syllables": "3 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "P",
+      "R",
+      "AE1",
+      "K",
+      "T",
+      "AH0",
+      "S",
+      "AH0",
+      "Z"
+    ]
+  },
+  "prefer": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "P",
+      "R",
+      "AH0",
+      "F",
+      "ER1"
+    ]
+  },
+  "quiet": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "K",
+      "W",
+      "AY1",
+      "AH0",
+      "T"
+    ]
+  },
+  "radio": {
+    "syllables": "3 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "R",
+      "EY1",
+      "D",
+      "IY0",
+      "OW2"
+    ]
+  },
+  "rain": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "R",
+      "EY1",
+      "N"
+    ]
+  },
+  "raining": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "R",
+      "EY1",
+      "N",
+      "IH0",
+      "NG"
+    ]
+  },
+  "rains": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "R",
+      "EY1",
+      "N",
+      "Z"
+    ]
+  },
+  "read": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "R",
+      "EH1",
+      "D"
+    ]
+  },
+  "reading": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "R",
+      "IY1",
+      "D",
+      "IH0",
+      "NG"
+    ]
+  },
+  "reads": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "R",
+      "IY1",
+      "D",
+      "Z"
+    ]
+  },
+  "ready": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "R",
+      "EH1",
+      "D",
+      "IY0"
+    ]
+  },
+  "realized": {
+    "syllables": "3 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "R",
+      "IY1",
+      "AH0",
+      "L",
+      "AY2",
+      "Z",
+      "D"
+    ]
+  },
+  "recall": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "R",
+      "IY1",
+      "K",
+      "AO2",
+      "L"
+    ]
+  },
+  "red": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "R",
+      "EH1",
+      "D"
+    ]
+  },
+  "remember": {
+    "syllables": "3 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "R",
+      "IH0",
+      "M",
+      "EH1",
+      "M",
+      "B",
+      "ER0"
+    ]
+  },
+  "report": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "R",
+      "IY0",
+      "P",
+      "AO1",
+      "R",
+      "T"
+    ]
+  },
+  "rest": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "R",
+      "EH1",
+      "S",
+      "T"
+    ]
+  },
+  "resting": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "R",
+      "EH1",
+      "S",
+      "T",
+      "IH0",
+      "NG"
+    ]
+  },
+  "rice": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "R",
+      "AY1",
+      "S"
+    ]
+  },
+  "room": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "R",
+      "UW1",
+      "M"
+    ]
+  },
+  "said": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "EH1",
+      "D"
+    ]
+  },
+  "save": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "EY1",
+      "V"
+    ]
+  },
+  "saves": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "EY1",
+      "V",
+      "Z"
+    ]
+  },
+  "say": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "EY1"
+    ]
+  },
+  "school": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "K",
+      "UW1",
+      "L"
+    ]
+  },
+  "seems": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "IY1",
+      "M",
+      "Z"
+    ]
+  },
+  "seen": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "IY1",
+      "N"
+    ]
+  },
+  "send": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "EH1",
+      "N",
+      "D"
+    ]
+  },
+  "seven": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "EH1",
+      "V",
+      "AH0",
+      "N"
+    ]
+  },
+  "she": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "SH",
+      "IY1"
+    ]
+  },
+  "should": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "SH",
+      "UH1",
+      "D"
+    ]
+  },
+  "simple": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "IH1",
+      "M",
+      "P",
+      "AH0",
+      "L"
+    ]
+  },
+  "since": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "IH1",
+      "N",
+      "S"
+    ]
+  },
+  "sister": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "IH1",
+      "S",
+      "T",
+      "ER0"
+    ]
+  },
+  "sit": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "IH1",
+      "T"
+    ]
+  },
+  "sitting": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "IH1",
+      "T",
+      "IH0",
+      "NG"
+    ]
+  },
+  "sleep": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "L",
+      "IY1",
+      "P"
+    ]
+  },
+  "slowly": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "L",
+      "OW1",
+      "L",
+      "IY0"
+    ]
+  },
+  "small": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "M",
+      "AO1",
+      "L"
+    ]
+  },
+  "so": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "OW1"
+    ]
+  },
+  "solution": {
+    "syllables": "3 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "AH0",
+      "L",
+      "UW1",
+      "SH",
+      "AH0",
+      "N"
+    ]
+  },
+  "some": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "AH1",
+      "M"
+    ]
+  },
+  "something": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "AH1",
+      "M",
+      "TH",
+      "IH0",
+      "NG"
+    ]
+  },
+  "sometimes": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "AH0",
+      "M",
+      "T",
+      "AY1",
+      "M",
+      "Z"
+    ]
+  },
+  "soon": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "UW1",
+      "N"
+    ]
+  },
+  "speak": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "P",
+      "IY1",
+      "K"
+    ]
+  },
+  "speaking": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "P",
+      "IY1",
+      "K",
+      "IH0",
+      "NG"
+    ]
+  },
+  "speaks": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "P",
+      "IY1",
+      "K",
+      "S"
+    ]
+  },
+  "station": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "T",
+      "EY1",
+      "SH",
+      "AH0",
+      "N"
+    ]
+  },
+  "stay": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "T",
+      "EY1"
+    ]
+  },
+  "stayed": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "T",
+      "EY1",
+      "D"
+    ]
+  },
+  "stopped": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "T",
+      "AA1",
+      "P",
+      "T"
+    ]
+  },
+  "straight": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "T",
+      "R",
+      "EY1",
+      "T"
+    ]
+  },
+  "student": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "T",
+      "UW1",
+      "D",
+      "AH0",
+      "N",
+      "T"
+    ]
+  },
+  "students": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "T",
+      "UW1",
+      "D",
+      "AH0",
+      "N",
+      "T",
+      "S"
+    ]
+  },
+  "studies": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "T",
+      "AH1",
+      "D",
+      "IY0",
+      "Z"
+    ]
+  },
+  "study": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "T",
+      "AH1",
+      "D",
+      "IY0"
+    ]
+  },
+  "suggest": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "AH0",
+      "JH",
+      "EH1",
+      "S",
+      "T"
+    ]
+  },
+  "suggests": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "AH0",
+      "JH",
+      "EH1",
+      "S",
+      "T",
+      "S"
+    ]
+  },
+  "sure": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "SH",
+      "UH1",
+      "R"
+    ]
+  },
+  "swim": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "W",
+      "IH1",
+      "M"
+    ]
+  },
+  "swimming": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "S",
+      "W",
+      "IH1",
+      "M",
+      "IH0",
+      "NG"
+    ]
+  },
+  "table": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "T",
+      "EY1",
+      "B",
+      "AH0",
+      "L"
+    ]
+  },
+  "takes": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "T",
+      "EY1",
+      "K",
+      "S"
+    ]
+  },
+  "talk": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "T",
+      "AO1",
+      "K"
+    ]
+  },
+  "tallest": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "T",
+      "AO1",
+      "L",
+      "IH0",
+      "S",
+      "T"
+    ]
+  },
+  "tea": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "T",
+      "IY1"
+    ]
+  },
+  "teacher": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "T",
+      "IY1",
+      "CH",
+      "ER0"
+    ]
+  },
+  "than": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "DH",
+      "AE1",
+      "N"
+    ]
+  },
+  "thanks": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "TH",
+      "AE1",
+      "NG",
+      "K",
+      "S"
+    ]
+  },
+  "that": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "DH",
+      "AE1",
+      "T"
+    ]
+  },
+  "the": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "DH",
+      "AH0"
+    ]
+  },
+  "then": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "DH",
+      "EH1",
+      "N"
+    ]
+  },
+  "there": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "DH",
+      "EH1",
+      "R"
+    ]
+  },
+  "these": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "DH",
+      "IY1",
+      "Z"
+    ]
+  },
+  "they": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "DH",
+      "EY1"
+    ]
+  },
+  "think": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "TH",
+      "IH1",
+      "NG",
+      "K"
+    ]
+  },
+  "thinks": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "TH",
+      "IH1",
+      "NG",
+      "K",
+      "S"
+    ]
+  },
+  "this": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "DH",
+      "IH1",
+      "S"
+    ]
+  },
+  "three": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "TH",
+      "R",
+      "IY1"
+    ]
+  },
+  "time": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "T",
+      "AY1",
+      "M"
+    ]
+  },
+  "tired": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "T",
+      "AY1",
+      "ER0",
+      "D"
+    ]
+  },
+  "to": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "T",
+      "UW1"
+    ]
+  },
+  "told": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "T",
+      "OW1",
+      "L",
+      "D"
+    ]
+  },
+  "tomorrow": {
+    "syllables": "3 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "T",
+      "AH0",
+      "M",
+      "AA1",
+      "R",
+      "OW2"
+    ]
+  },
+  "tonight": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "T",
+      "AH0",
+      "N",
+      "AY1",
+      "T"
+    ]
+  },
+  "too": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "T",
+      "UW1"
+    ]
+  },
+  "tool": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "T",
+      "UW1",
+      "L"
+    ]
+  },
+  "tools": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "T",
+      "UW1",
+      "L",
+      "Z"
+    ]
+  },
+  "try": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "T",
+      "R",
+      "AY1"
+    ]
+  },
+  "turn": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "T",
+      "ER1",
+      "N"
+    ]
+  },
+  "turns": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "T",
+      "ER1",
+      "N",
+      "Z"
+    ]
+  },
+  "two": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "T",
+      "UW1"
+    ]
+  },
+  "under": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AH1",
+      "N",
+      "D",
+      "ER0"
+    ]
+  },
+  "understand": {
+    "syllables": "3 个音节",
+    "stress": "第 3 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AH2",
+      "N",
+      "D",
+      "ER0",
+      "S",
+      "T",
+      "AE1",
+      "N",
+      "D"
+    ]
+  },
+  "unless": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AH0",
+      "N",
+      "L",
+      "EH1",
+      "S"
+    ]
+  },
+  "until": {
+    "syllables": "2 个音节",
+    "stress": "第 2 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AH0",
+      "N",
+      "T",
+      "IH1",
+      "L"
+    ]
+  },
+  "up": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AH1",
+      "P"
+    ]
+  },
+  "us": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "AH1",
+      "S"
+    ]
+  },
+  "use": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "Y",
+      "UW1",
+      "S"
+    ]
+  },
+  "used": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "Y",
+      "UW1",
+      "Z",
+      "D"
+    ]
+  },
+  "useful": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "Y",
+      "UW1",
+      "S",
+      "F",
+      "AH0",
+      "L"
+    ]
+  },
+  "usually": {
+    "syllables": "4 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "Y",
+      "UW1",
+      "ZH",
+      "AH0",
+      "W",
+      "AH0",
+      "L",
+      "IY0"
+    ]
+  },
+  "value": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "V",
+      "AE1",
+      "L",
+      "Y",
+      "UW0"
+    ]
+  },
+  "very": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "V",
+      "EH1",
+      "R",
+      "IY0"
+    ]
+  },
+  "wait": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "EY1",
+      "T"
+    ]
+  },
+  "waited": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "EY1",
+      "T",
+      "IH0",
+      "D"
+    ]
+  },
+  "waiting": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "EY1",
+      "T",
+      "IH0",
+      "NG"
+    ]
+  },
+  "walk": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "AO1",
+      "K"
+    ]
+  },
+  "want": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "AA1",
+      "N",
+      "T"
+    ]
+  },
+  "wanted": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "AO1",
+      "N",
+      "T",
+      "IH0",
+      "D"
+    ]
+  },
+  "wants": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "AA1",
+      "N",
+      "T",
+      "S"
+    ]
+  },
+  "was": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "AA1",
+      "Z"
+    ]
+  },
+  "water": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "AO1",
+      "T",
+      "ER0"
+    ]
+  },
+  "way": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "EY1"
+    ]
+  },
+  "we": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "IY1"
+    ]
+  },
+  "went": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "EH1",
+      "N",
+      "T"
+    ]
+  },
+  "were": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "ER1"
+    ]
+  },
+  "what": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "AH1",
+      "T"
+    ]
+  },
+  "when": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "EH1",
+      "N"
+    ]
+  },
+  "where": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "EH1",
+      "R"
+    ]
+  },
+  "whether": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "EH1",
+      "DH",
+      "ER0"
+    ]
+  },
+  "while": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "AY1",
+      "L"
+    ]
+  },
+  "who": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "HH",
+      "UW1"
+    ]
+  },
+  "whose": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "HH",
+      "UW1",
+      "Z"
+    ]
+  },
+  "why": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "AY1"
+    ]
+  },
+  "will": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "IH1",
+      "L"
+    ]
+  },
+  "with": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "IH1",
+      "DH"
+    ]
+  },
+  "wonder": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "AH1",
+      "N",
+      "D",
+      "ER0"
+    ]
+  },
+  "word": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "ER1",
+      "D"
+    ]
+  },
+  "words": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "ER1",
+      "D",
+      "Z"
+    ]
+  },
+  "work": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "ER1",
+      "K"
+    ]
+  },
+  "worked": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "ER1",
+      "K",
+      "T"
+    ]
+  },
+  "working": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "ER1",
+      "K",
+      "IH0",
+      "NG"
+    ]
+  },
+  "works": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "ER1",
+      "K",
+      "S"
+    ]
+  },
+  "would": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "W",
+      "UH1",
+      "D"
+    ]
+  },
+  "written": {
+    "syllables": "2 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "R",
+      "IH1",
+      "T",
+      "AH0",
+      "N"
+    ]
+  },
+  "year": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "Y",
+      "IH1",
+      "R"
+    ]
+  },
+  "years": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "Y",
+      "IH1",
+      "R",
+      "Z"
+    ]
+  },
+  "yesterday": {
+    "syllables": "3 个音节",
+    "stress": "第 1 音节重读",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "Y",
+      "EH1",
+      "S",
+      "T",
+      "ER0",
+      "D",
+      "EY2"
+    ]
+  },
+  "yet": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "Y",
+      "EH1",
+      "T"
+    ]
+  },
+  "you": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "Y",
+      "UW1"
+    ]
+  },
+  "your": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "Y",
+      "AO1",
+      "R"
+    ]
+  },
+  "yours": {
+    "syllables": "1 个音节",
+    "stress": "单音节",
+    "source": "CMU Pronouncing Dictionary",
+    "phones": [
+      "Y",
+      "UH1",
+      "R",
+      "Z"
+    ]
+  }
+}
