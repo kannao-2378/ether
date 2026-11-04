@@ -1,5 +1,15 @@
 # GitHub与阿里云部署
 
+## 2026-11-04 移动焦点与音节修复上线
+
+4e74ec0（含7a14dc4、521d05a）已部署。前端实际资产index-Fdi7VSDd.js与index-DxxOj_uT.css，主线音节补齐版本2启用；旧复习卡只读元数据也可返回已有音节引用，未来新组合题创建时补引用。
+
+最终备份`/var/lib/pels/before-keyboard-20261104-201222.zip`，回滚目录`/opt/pels/.before-keyboard-20261104-201222`。answers、feedback_events、progress、memory_states、questions、spelling_checks、review_queue、group_primary、composition_items九类原始行核对无改变或丢失，SQLite完整性ok，无伪造新掌握。当前课程选择保持，原有动态情境题保留。
+
+首次上线核对脚本误把294固定题当成运行时动态题总数，已自动恢复代码与停服前快照；更正为保留更新前题目后重新部署成功，没有删除动态题来匹配计数。service active、health正常、HTTPS首页和新资源200、未登录profile401、原作品集校验一致。没有修改排课、FSRS或每日额度，未向线上提交模拟答案。
+
+前端移动尺寸模拟验证保持同一输入节点、异步判词不意外失焦、错误色、缓冲、长按答案、键盘按钮、缩小/恢复视口及完整反馈。后端定向检查和生产构建通过；未声称iOS真机键盘动画已实测。实现与范围见30号说明。
+
 ## 2026-11-04 主线正式上线
 
 用户授权上线后，运行代码770d6da已部署阿里云。启用`/etc/systemd/system/pels-english.service.d/mainline.conf`中的`PELS_MAINLINE_ENABLED=1`，默认新学路线已切换为`general-mainline`，实际登记148课题、294情境题，正式目录显示148项；不是只有测试入口。729目标仍不等于完整听说/开放能力认证。
