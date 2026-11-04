@@ -139,3 +139,5 @@ curl -f http://127.0.0.1:8010/api/health
 
 
 2026-11-03 22:41：用户授权“检查组合，确认无问题后更新阿里云”。完成分步解锁、全50规则候选依赖检查、固定种子每目标抽样审查、实际小批落库及6项针对性检查，收紧生硬组合后6db12f9已部署。包含此前未部署的逐词输入、记忆/迁移分轴、165条静态变式和动态组合引擎。云端停服务后先备份 /var/lib/pels/before-composition-20261103-224143.zip（600）；旧运行代码和静态目录保留在 /opt/pels/.before-composition-20261103-224143（700）。离线初始化后、恢复服务前，answers/feedback_events/progress/memory_states相对快照逐行比较均0变更/丢失，SQLite完整性ok，新表存在。service active、health正常，HTTPS首页及新JS/CSS200、未登录profile401，原portfolio/index.html哈希不变。未向真实库提交模拟答题；未重跑全套或两个月模拟。
+
+2026-11-05：8006b40已静态上线。中文提示并排显示、触摸答案和播放保留输入焦点。首页和新JS/CSS可访问、health正常、原作品集校验一致。回滚目录 /opt/pels/.before-meaning-touch-20261105-074037；未重启后端、未写学习数据库。移动尺寸隔离检查通过，iOS真机待用户复测。
