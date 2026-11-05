@@ -145,3 +145,5 @@ curl -f http://127.0.0.1:8010/api/health
 2026-11-05：84cb491已上线，仅更新backend/app.py。6项隔离逐词检查通过（含自行纠正成功和提示仍不独立），未跑全套。部署前一致性备份 /var/lib/pels/before-input-correction-20261105-080816.zip；旧代码 /opt/pels/.app-before-input-correction-20261105-080816.py。health正常、input_corrections表存在、SQLite quick_check正常、未登录profile401。未重算历史成绩和FSRS，未向真实库提交模拟答案；未做历史所有行哈希比较。
 
 2026-11-05：308032e已上线同题同词三次完整拼错专项规则。9项隔离后端检查和生产构建通过；服务health、新表、SQLite quick_check、HTTPS新资源与未登录401核对通过。备份 /var/lib/pels/before-word-practice-20261105-081606.zip，回滚 /opt/pels/.before-word-practice-20261105-081606。未向真实库提交模拟答题，未重放历史FSRS，未跑全套或iOS真机检查。
+
+2026-11-05 23:37：4a3b148已部署阿里云，包含手机计划/三标签档案、长期薄弱项、唯一general-mainline新学路线及词典受信等价进度显示。备份 /var/lib/pels/before-plan-archive-20261105-233736.zip；回滚 /opt/pels/.before-plan-archive-20261105-233736。七类原始学习表与部署前快照逐行保持，SQLite正常，课程设置核对general-mainline；service active、health、JS/CSS、未登录401及原作品集哈希通过。未用本地数据库覆盖云端，未向线上提交模拟答题。16项相关检查+1项等价筛选检查和构建通过；非全套/非iOS真机验收。
