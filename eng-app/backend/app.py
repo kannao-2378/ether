@@ -1,3 +1,4 @@
+import spelling_practice
 import curriculum_engine
 import composition_engine
 import sourced_transfer
@@ -119,6 +120,7 @@ def initialize(target,with_bulk=False):
         c.execute(text('CREATE INDEX IF NOT EXISTS answers_time ON answers(created_at)'))
         c.execute(text('CREATE INDEX IF NOT EXISTS answers_knowledge ON answers(knowledge_id)'))
         c.execute(text('CREATE INDEX IF NOT EXISTS checks_question ON spelling_checks(question_id)'))
+        spelling_practice.install(c)
         c.execute(text('CREATE TABLE IF NOT EXISTS input_corrections(question_id TEXT PRIMARY KEY, correction_count INTEGER NOT NULL, last_at TEXT NOT NULL)'))
         c.execute(text('CREATE INDEX IF NOT EXISTS feedback_question ON feedback_events(question_id)'))
         for kid, prompt, answer, explanation, example in SEEDS:
@@ -222,7 +224,7 @@ def test_action(action: str, data: dict):
             c.execute(text('DELETE FROM daily_tasks'))
     elif action in ('reset','prepare'):
         with test_engine.begin() as c:
-            for table in ('answers','questions','spelling_checks','feedback_events','review_queue','memory_states','consolidation_slots','daily_new_pacing','daily_tasks','daily_coverage','lesson_attempts','context_round_items','context_rounds','composition_evidence','knowledge_assessments','test_skips','daily_extensions','teaching_exposures','question_trials','composition_items','composition_cursors'):
+            for table in ('word_check_requests','word_spelling_difficulties','input_corrections','answers','questions','spelling_checks','feedback_events','review_queue','memory_states','consolidation_slots','daily_new_pacing','daily_tasks','daily_coverage','lesson_attempts','context_round_items','context_rounds','composition_evidence','knowledge_assessments','test_skips','daily_extensions','teaching_exposures','question_trials','composition_items','composition_cursors'):
                 c.execute(text('DELETE FROM '+table))
             c.execute(text("DELETE FROM app_settings WHERE key='sourced-transfer-pilot'"))
             for table in ('focus_requests','group_questions','daily_group_tasks','group_progress','group_usage','group_active_slots'):c.execute(text('DELETE FROM '+table))
@@ -684,6 +686,7 @@ def check_word(body: WordCheck):
         pending=not matching and any(len(words)>=len(given) and words[:len(given)-1]==given[:-1] and words[len(given)-1].startswith(given[-1]) for words in options)
         # Partial word success is not a completed answer or a memory success.
         if not matching and not pending:
+            spelling_practice.record(c,body,options,given,now())
             c.execute(text('INSERT INTO input_corrections VALUES(:q,1,:t) ON CONFLICT(question_id) DO UPDATE SET correction_count=correction_count+1,last_at=excluded.last_at'),dict(q=body.question_id,t=now().isoformat()))
         return dict(correct=bool(matching),pending=pending,complete=any(len(words)==len(given) for words in matching),answer_shapes=[list(map(len,words)) for words in matching] if matching else [])
 
@@ -746,6 +749,7 @@ def submit(body: Submission):
         inserted=c.execute(text('INSERT OR IGNORE INTO answers VALUES (:id,:question_id,:knowledge_id,:raw_answer,:correct,:revealed,:confidence,:created_at,:due_at,:feedback)'),result)
         if not inserted.rowcount:
             return dict(c.execute(text('SELECT * FROM answers WHERE question_id=:q'),dict(q=body.question_id)).mappings().one())
+        spelling_practice.enqueue(c,body.question_id,now())
         rebuild(c,row['knowledge_id'],incremental=True)
         combination=c.execute(text('SELECT structure_id,material_id FROM sentence_combinations WHERE knowledge_id=:k'),dict(k=row['knowledge_id'])).mappings().first()
         if combination:
@@ -766,7 +770,7 @@ def export():
     tables=('knowledge','knowledge_details','learning_courses','course_units','course_items','progress','questions','answers','spelling_checks','feedback_events','review_queue','memory_states','consolidation_slots','daily_new_pacing','daily_tasks','daily_coverage','course_links','transfer_materials','sentence_combinations','composition_evidence','knowledge_assessments','rule_readings','lesson_attempts','context_rounds','context_round_items','app_settings','test_skips','daily_extensions')
     with engine.begin() as c:
         tables=tables+tuple(name for name in ('content_packages','package_members','knowledge_components') if c.execute(text("SELECT 1 FROM sqlite_master WHERE name=:n AND type='table'"),dict(n=name)).first())
-        tables+=tuple(t for t in group_learning.TABLES if t not in tables)
+        tables+=tuple(t for t in group_learning.TABLES+spelling_practice.TABLES if t not in tables)
         data={table:[dict(r) for r in c.execute(text('SELECT * FROM '+table)).mappings()] for table in tables}
     return dict(format_version=1,mode='test' if testing.get() else 'real',exported_at=now().isoformat(),tables=data)
 

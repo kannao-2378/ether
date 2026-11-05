@@ -10,6 +10,7 @@ export function WordSpelling({question:q,inputRef,peek,english,draft,onDraft,onF
  const [active,setActive]=useState(0),[valid,setValid]=useState<number[]>([]),[wrong,setWrong]=useState(-1),[error,setError]=useState(false);
  const editor=useRef<HTMLInputElement|null>(null),slots=useRef<(HTMLSpanElement|null)[]>([]),container=useRef<HTMLDivElement|null>(null);
  const values=useRef(words),options=useRef(initial),verified=useRef<number[]>([]);
+ const editRevision=useRef(0),requestAttempt=useRef({key:'',id:''});
  const generation=useRef(0),busy=useRef(false),buffer=useRef(''),alive=useRef(true),ime=useRef(false);
  const onDraftRef=useRef(onDraft);onDraftRef.current=onDraft;
  useLayoutEffect(()=>{alive.current=true;if(values.current[0])void verify(0);return()=>{alive.current=false;generation.current++;};},[]);
@@ -27,8 +28,10 @@ export function WordSpelling({question:q,inputRef,peek,english,draft,onDraft,onF
   const word=values.current[i]||'';
   if(!word||!options.current.some(s=>s[i]===word.length))return;
   const token=++generation.current;busy.current=true;setError(false);
+  const attemptKey=i+':'+values.current.slice(0,i+1).join(' ')+':'+editRevision.current;
+  if(requestAttempt.current.key!==attemptKey)requestAttempt.current={key:attemptKey,id:globalThis.crypto?.randomUUID?.()||Math.random().toString(36).slice(2)};
   try{
-   const r=await learningFetch('/api/check-word',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:globalThis.crypto?.randomUUID?.()||Date.now()+'-'+Math.random(),question_id:q.question_id,word_index:i,answer:values.current.slice(0,i+1).join(' ')})});
+   const r=await learningFetch('/api/check-word',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:requestAttempt.current.id,question_id:q.question_id,word_index:i,answer:values.current.slice(0,i+1).join(' ')})});
    if(!r.ok)throw Error();const result=await r.json();
    if(!alive.current||token!==generation.current)return;
    busy.current=false;
@@ -44,6 +47,7 @@ export function WordSpelling({question:q,inputRef,peek,english,draft,onDraft,onF
   }
  }
  function edit(i:number,value:string){
+  editRevision.current++;
   generation.current++;busy.current=false;buffer.current='';setWrong(-1);setError(false);
   const compatible=initial.filter(s=>values.current.slice(0,i).every((w,j)=>s[j]===w.length));
   options.current=compatible.length?compatible:initial;setShapes(options.current);

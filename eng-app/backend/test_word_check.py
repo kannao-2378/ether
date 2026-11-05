@@ -41,3 +41,33 @@ class WordCheckTests(unittest.TestCase):
   r=self.check(q,'I want to have',3);self.assertTrue(r['correct']);self.assertFalse(r['complete'])
   self.assertEqual(r['answer_shapes'],[[1,4,2,4,1,4]])
   self.assertTrue(self.check(q,'i want to have a meal.',5)['complete'])
+
+ def test_three_full_errors_enqueue_only_the_word_after_submission(self):
+  q=self.question()
+  with self.db.begin() as c:
+   c.execute(text("INSERT INTO knowledge VALUES('test-want','想要','want','','')"))
+   c.execute(text("INSERT INTO progress(knowledge_id) VALUES('test-want')"))
+   c.execute(text('INSERT INTO knowledge_details VALUES(:k,:p,1,:t)'),dict(k='test-want',p='{"entry_type":"word"}',t=app.now().isoformat()))
+  for _ in range(3):self.check(q,'wont',0)
+  with self.db.connect() as c:
+   self.assertEqual(c.execute(text('SELECT error_count FROM word_spelling_difficulties WHERE question_id=:q'),dict(q=q)).scalar(),3)
+   self.assertEqual(c.execute(text('SELECT COUNT(*) FROM focus_requests')).scalar(),0)
+  app.submit(app.Submission(question_id=q,answer='want to',confidence='clear'))
+  with self.db.connect() as c:
+   self.assertEqual(app.assessment.calculate(c,'want-to')['independent_successes'],1)
+   gid=c.execute(text('SELECT practice_id FROM word_spelling_difficulties WHERE question_id=:q'),dict(q=q)).scalar()
+   self.assertTrue(gid)
+   self.assertEqual(c.execute(text('SELECT k.answer FROM group_members m JOIN knowledge k ON k.id=m.knowledge_id WHERE m.group_id=:g'),dict(g=gid)).scalars().all(),['want'])
+
+ def test_duplicate_request_and_incomplete_nonprefix_do_not_count(self):
+  q=self.question()
+  for _ in range(3):app.check_word(app.WordCheck(id='same-request',question_id=q,answer='wont',word_index=0))
+  self.check(q,'wo',0)
+  with self.db.connect() as c:
+   self.assertEqual(c.execute(text('SELECT error_count FROM word_spelling_difficulties WHERE question_id=:q'),dict(q=q)).scalar(),1)
+
+ def test_errors_in_different_word_slots_do_not_add_together(self):
+  q=self.question()
+  self.check(q,'wont',0);self.check(q,'wont',0);self.check(q,'want tx',1)
+  with self.db.connect() as c:
+   self.assertEqual(c.execute(text('SELECT error_count FROM word_spelling_difficulties WHERE question_id=:q ORDER BY word_index'),dict(q=q)).scalars().all(),[2,1])
