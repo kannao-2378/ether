@@ -203,7 +203,8 @@ def report(c,course='all'):
   missing=blockers(c,r['id'])
   required=c.execute(text("SELECT knowledge_id FROM curriculum_lessons WHERE goal_id=:g AND (knowledge_id=:g OR role IN ('phrase','sentence')) AND required=1"),dict(g=r['id'])).scalars().all()
   passed=bool(required) and all(known(c,k) for k in required)
-  state='recalled' if passed else 'blocked' if missing else 'learning' if r['introduced'] else 'ready'
+  introduced=r['introduced'] or c.execute(text('SELECT 1 FROM curriculum_aliases a JOIN progress p ON p.knowledge_id=a.alias_id WHERE a.knowledge_id=:k AND p.introduced=1 LIMIT 1'),dict(k=r['id'])).first() is not None
+  state='recalled' if passed else 'blocked' if missing else 'learning' if introduced else 'ready'
   item=dict(id=r['id'],english=r['answer'],chinese=r['prompt'],objective=r['objective'],state=state,blockers=missing);u['items'].append(item)
   if not current and state in ('learning','ready'):current=u['id']
  for u in units.values():u['recalled']=sum(i['state']=='recalled' for i in u['items']);u['total']=len(u['items'])

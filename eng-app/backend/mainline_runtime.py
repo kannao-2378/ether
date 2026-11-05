@@ -47,6 +47,8 @@ def install(c):
             old=c.execute(text("SELECT value FROM app_settings WHERE key='active-course'")).scalar()
             c.execute(text("INSERT OR IGNORE INTO app_settings VALUES('mainline-previous-course',:v)"),dict(v=old or json.dumps('all')))
             c.execute(text("INSERT INTO app_settings VALUES('active-course',:v) ON CONFLICT(key) DO UPDATE SET value=excluded.value"),dict(v=json.dumps(COURSE)))
+    # Production now has one learning route; keep legacy records for review only.
+    c.execute(text("INSERT INTO app_settings VALUES('active-course',:v) ON CONFLICT(key) DO UPDATE SET value=excluded.value"),dict(v=json.dumps(COURSE)))
     # Legacy grouping may discover incidental members after a new knowledge
     # count. Restrict only the new groups to the published lesson membership.
     c.execute(text('''DELETE FROM group_members WHERE group_id IN

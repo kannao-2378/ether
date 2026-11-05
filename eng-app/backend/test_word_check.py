@@ -71,3 +71,14 @@ class WordCheckTests(unittest.TestCase):
   self.check(q,'wont',0);self.check(q,'wont',0);self.check(q,'want tx',1)
   with self.db.connect() as c:
    self.assertEqual(c.execute(text('SELECT error_count FROM word_spelling_difficulties WHERE question_id=:q ORDER BY word_index'),dict(q=q)).scalars().all(),[2,1])
+ def test_dictionary_reuses_only_registered_equivalent_evidence(self):
+  q=self.question();app.submit(app.Submission(question_id=q,answer='want to',confidence='clear'))
+  with self.db.begin() as c:
+   c.execute(text("INSERT INTO knowledge VALUES('test-equivalent','想要做某事','want to','','')"))
+   c.execute(text("INSERT INTO progress(knowledge_id) VALUES('test-equivalent')"))
+   c.execute(text("INSERT INTO curriculum_aliases VALUES('test-equivalent','want-to')"))
+  rows=app.dictionary(q='want to',status='learned')['items']
+  item=next(r for r in rows if r['id']=='test-equivalent')
+  self.assertTrue(item['introduced']);self.assertEqual(item['evidence_id'],'want-to')
+  self.assertFalse(any(r['id']=='test-equivalent' for r in app.dictionary(q='want to',status='unseen')['items']))
+  with self.db.connect() as c:self.assertEqual(c.execute(text("SELECT attempts FROM progress WHERE knowledge_id='test-equivalent'")).scalar(),0)

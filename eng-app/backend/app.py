@@ -405,7 +405,7 @@ def dictionary(q: str='',kind: str='all',status: str='all',page: int=1):
     page=max(1,page)
     with engine.connect() as c:
         # Types are display metadata; mastery always comes from the shared progress row.
-        base="""FROM knowledge k JOIN progress p ON p.knowledge_id=k.id LEFT JOIN course_links l ON l.knowledge_id=k.id LEFT JOIN knowledge_details kd ON kd.knowledge_id=k.id
+        base="""FROM knowledge k JOIN progress p ON p.knowledge_id=COALESCE((SELECT ep.knowledge_id FROM progress ep WHERE ep.introduced=1 AND (ep.knowledge_id=k.id OR ep.knowledge_id IN (SELECT alias_id FROM curriculum_aliases WHERE knowledge_id=k.id)) ORDER BY julianday(ep.last_at) DESC LIMIT 1),k.id) LEFT JOIN course_links l ON l.knowledge_id=k.id LEFT JOIN knowledge_details kd ON kd.knowledge_id=k.id
           WHERE 1=1 AND (k.answer LIKE :q OR k.prompt LIKE :q)
           AND (:kind='all' OR COALESCE(json_extract(kd.payload,'$.entry_type'),CASE WHEN COALESCE(l.stage,1)>=3 THEN 'sentence' WHEN k.id LIKE 'word-%' OR k.id='eat-a-meal' THEN 'word' WHEN l.stage=2 OR k.id IN (SELECT material_id FROM transfer_materials) THEN 'phrase' ELSE 'collocation' END)=:kind)
           AND (:status='all' OR (:status='learned' AND p.introduced=1) OR (:status='unseen' AND p.introduced=0) OR (:status='recall' AND p.level>=3) OR (:status='delayed' AND p.level>=5))"""
@@ -415,7 +415,7 @@ def dictionary(q: str='',kind: str='all',status: str='all',page: int=1):
         rows=c.execute(text("SELECT k.*,p.*,COALESCE(json_extract(kd.payload,'$.entry_type'),CASE WHEN COALESCE(l.stage,1)>=3 THEN 'sentence' WHEN k.id LIKE 'word-%' OR k.id='eat-a-meal' THEN 'word' WHEN l.stage=2 OR k.id IN (SELECT material_id FROM transfer_materials) THEN 'phrase' ELSE 'collocation' END) AS entry_type "+base+' ORDER BY p.introduced DESC,k.rowid LIMIT 30 OFFSET :offset'),params).mappings().all()
         items=[]
         for row in rows:
-            item=dict(row);item['familiarity_level'],item['familiarity_label']=familiarity(item);item['assessment']=assessment.get(c,item['id']);items.append(item)
+            item=dict(row);item['familiarity_level'],item['familiarity_label']=familiarity(item);item['assessment']=assessment.get(c,item['knowledge_id']);item['evidence_id']=item['knowledge_id'];items.append(item)
         return dict(items=items,total=total,total_all=total_all,page=page,page_size=30,total_pages=(total+29)//30)
 
 @app.get('/api/lesson/want-01')
@@ -490,6 +490,7 @@ def save_settings(values: dict):
             if value not in ('oxford','windows'):raise HTTPException(422,'朗读音源无效')
             continue
         if key=='active-course':
+            if not testing.get() and os.environ.get('PELS_MAINLINE_ENABLED')=='1' and value!='general-mainline':raise HTTPException(422,'正式学习仅使用通用英语主线')
             if not isinstance(value,str):raise HTTPException(422,'课程选择无效')
             with engine.connect() as c:valid=value=='all' or bool(c.execute(text('SELECT 1 FROM learning_courses WHERE id=:c'),dict(c=value)).first())
             if not valid:raise HTTPException(422,'课程不存在')
