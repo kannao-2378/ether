@@ -74,6 +74,7 @@ class WordCheckTests(unittest.TestCase):
  def test_dictionary_reuses_only_registered_equivalent_evidence(self):
   q=self.question();app.submit(app.Submission(question_id=q,answer='want to',confidence='clear'))
   with self.db.begin() as c:
+   c.execute(text("UPDATE progress SET introduced=1 WHERE knowledge_id='want-to'"))
    c.execute(text("INSERT INTO knowledge VALUES('test-equivalent','想要做某事','want to','','')"))
    c.execute(text("INSERT INTO progress(knowledge_id) VALUES('test-equivalent')"))
    c.execute(text("INSERT INTO curriculum_aliases VALUES('test-equivalent','want-to')"))
