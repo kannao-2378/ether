@@ -143,3 +143,5 @@ curl -f http://127.0.0.1:8010/api/health
 2026-11-05：8006b40已静态上线。中文提示并排显示、触摸答案和播放保留输入焦点。首页和新JS/CSS可访问、health正常、原作品集校验一致。回滚目录 /opt/pels/.before-meaning-touch-20261105-074037；未重启后端、未写学习数据库。移动尺寸隔离检查通过，iOS真机待用户复测。
 
 2026-11-05：84cb491已上线，仅更新backend/app.py。6项隔离逐词检查通过（含自行纠正成功和提示仍不独立），未跑全套。部署前一致性备份 /var/lib/pels/before-input-correction-20261105-080816.zip；旧代码 /opt/pels/.app-before-input-correction-20261105-080816.py。health正常、input_corrections表存在、SQLite quick_check正常、未登录profile401。未重算历史成绩和FSRS，未向真实库提交模拟答案；未做历史所有行哈希比较。
+
+2026-11-05：308032e已上线同题同词三次完整拼错专项规则。9项隔离后端检查和生产构建通过；服务health、新表、SQLite quick_check、HTTPS新资源与未登录401核对通过。备份 /var/lib/pels/before-word-practice-20261105-081606.zip，回滚 /opt/pels/.before-word-practice-20261105-081606。未向真实库提交模拟答题，未重放历史FSRS，未跑全套或iOS真机检查。
