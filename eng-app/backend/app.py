@@ -119,6 +119,7 @@ def initialize(target,with_bulk=False):
         c.execute(text('CREATE INDEX IF NOT EXISTS answers_time ON answers(created_at)'))
         c.execute(text('CREATE INDEX IF NOT EXISTS answers_knowledge ON answers(knowledge_id)'))
         c.execute(text('CREATE INDEX IF NOT EXISTS checks_question ON spelling_checks(question_id)'))
+        c.execute(text('CREATE TABLE IF NOT EXISTS input_corrections(question_id TEXT PRIMARY KEY, correction_count INTEGER NOT NULL, last_at TEXT NOT NULL)'))
         c.execute(text('CREATE INDEX IF NOT EXISTS feedback_question ON feedback_events(question_id)'))
         for kid, prompt, answer, explanation, example in SEEDS:
             c.execute(text('INSERT OR IGNORE INTO knowledge VALUES (:id,:p,:a,:e,:x)'), dict(id=kid,p=prompt,a=answer,e=explanation,x=example))
@@ -683,7 +684,7 @@ def check_word(body: WordCheck):
         pending=not matching and any(len(words)>=len(given) and words[:len(given)-1]==given[:-1] and words[len(given)-1].startswith(given[-1]) for words in options)
         # Partial word success is not a completed answer or a memory success.
         if not matching and not pending:
-            c.execute(text('INSERT OR IGNORE INTO spelling_checks VALUES(:id,:q,:a,0,:t)'),dict(id=body.id,q=body.question_id,a=body.answer,t=now().isoformat()))
+            c.execute(text('INSERT INTO input_corrections VALUES(:q,1,:t) ON CONFLICT(question_id) DO UPDATE SET correction_count=correction_count+1,last_at=excluded.last_at'),dict(q=body.question_id,t=now().isoformat()))
         return dict(correct=bool(matching),pending=pending,complete=any(len(words)==len(given) for words in matching),answer_shapes=[list(map(len,words)) for words in matching] if matching else [])
 
 class Feedback(BaseModel):
@@ -717,7 +718,10 @@ def check_spelling(body: SpellingCheck):
         assessment=transfer.grade(row['id'],body.answer,row['answer'],(content.details(c,row['id']) or {}).get('accepted_answers'))
         correct=assessment['correct']
         if correct:transfer_evidence.expose(c,row['id'],now(),content.details(c,row['id']),source='checked answer')
-        c.execute(text('INSERT OR IGNORE INTO spelling_checks VALUES (:id,:q,:a,:c,:t)'),dict(id=body.id,q=body.question_id,a=body.answer,c=int(correct),t=now().isoformat()))
+        if correct:
+            c.execute(text('INSERT OR IGNORE INTO spelling_checks VALUES (:id,:q,:a,1,:t)'),dict(id=body.id,q=body.question_id,a=body.answer,t=now().isoformat()))
+        else:
+            c.execute(text('INSERT INTO input_corrections VALUES(:q,1,:t) ON CONFLICT(question_id) DO UPDATE SET correction_count=correction_count+1,last_at=excluded.last_at'),dict(q=body.question_id,t=now().isoformat()))
         return dict(correct=correct,analysis=assessment['analysis'],notices=assessment['notices'],**(dict(answer=row['answer'],explanation=row['explanation'],example=row['example']) if correct else {}))
 
 @app.post('/api/answers')

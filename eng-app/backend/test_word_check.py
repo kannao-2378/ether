@@ -22,8 +22,16 @@ class WordCheckTests(unittest.TestCase):
  def test_incomplete_word_is_not_an_error(self):
   q=self.question();r=self.check(q,'wan',0);self.assertTrue(r['pending']);self.assertFalse(r['correct'])
   with self.db.connect() as c:self.assertEqual(c.execute(text('SELECT COUNT(*) FROM spelling_checks')).scalar(),0)
- def test_wrong_word_then_correction_preserves_failure_evidence(self):
+ def test_self_correction_is_independent_without_hint(self):
   q=self.question();self.assertFalse(self.check(q,'wont',0)['correct']);self.assertTrue(self.check(q,'want to',1)['complete'])
+  app.submit(app.Submission(question_id=q,answer='want to',confidence='clear'))
+  with self.db.connect() as c:self.assertEqual(app.assessment.calculate(c,'want-to')['independent_successes'],1)
+  with self.db.connect() as c:
+   self.assertEqual(c.execute(text('SELECT COUNT(*) FROM spelling_checks WHERE correct=0')).scalar(),0)
+   self.assertEqual(c.execute(text('SELECT correction_count FROM input_corrections WHERE question_id=:q'),dict(q=q)).scalar(),1)
+ def test_hint_still_blocks_independent_success(self):
+  q=self.question();self.check(q,'wont',0)
+  with self.db.begin() as c:c.execute(text('UPDATE questions SET revealed=1 WHERE id=:q'),dict(q=q))
   app.submit(app.Submission(question_id=q,answer='want to',confidence='clear'))
   with self.db.connect() as c:self.assertEqual(app.assessment.calculate(c,'want-to')['independent_successes'],0)
  def test_cannot_skip_an_incorrect_previous_word(self):
