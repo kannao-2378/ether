@@ -44,6 +44,7 @@ UNITS=[
 
 def install(c):
  c.execute(text('CREATE TABLE IF NOT EXISTS knowledge_details(knowledge_id TEXT PRIMARY KEY,payload TEXT NOT NULL,version INTEGER NOT NULL,updated_at TEXT NOT NULL)'))
+ c.execute(text("CREATE INDEX IF NOT EXISTS idx_knowledge_details_kind ON knowledge_details(COALESCE(json_extract(payload,'$.entry_type'),'collocation'))"))
  c.execute(text('CREATE TABLE IF NOT EXISTS learning_courses(id TEXT PRIMARY KEY,title TEXT,goal TEXT,level TEXT)'))
  c.execute(text('CREATE TABLE IF NOT EXISTS course_units(id TEXT PRIMARY KEY,course_id TEXT,title TEXT,goal TEXT,position INTEGER)'))
  c.execute(text('CREATE TABLE IF NOT EXISTS course_items(knowledge_id TEXT PRIMARY KEY,unit_id TEXT,position INTEGER)'))
@@ -60,6 +61,7 @@ def install(c):
  # Idempotent metadata upgrades never rewrite knowledge answers or learner history.
  rows=c.execute(text("SELECT k.*,l.parent_id,COALESCE(l.stage,1) AS stage FROM knowledge k LEFT JOIN course_links l ON l.knowledge_id=k.id WHERE k.id NOT LIKE 'expr-%' AND k.id NOT LIKE 'lex-%' AND k.id NOT LIKE 'sent-%'")).mappings().all()
  for row in rows:
+  if row['id'].startswith('sentence-source-'):continue
   kid=row['id'];word=WORDS.get(kid);family=kid
   while family not in STRUCTURES:
    parent=c.execute(text('SELECT parent_id FROM course_links WHERE knowledge_id=:k'),dict(k=family)).scalar()

@@ -1,3 +1,4 @@
+import scheduler as memory_scheduler
 """Explicit learning families, daily group budgets and early registered transfer.
 
 Individual answers/FSRS cards are never rewritten to manufacture mastery.
@@ -332,7 +333,7 @@ def select(c,stamp,new_limit,review_limit,course='all',allow_repeat=False):
  import focus_training
  special=focus_training.select(c,stamp,allow_repeat=allow_repeat)
  if special:return special
- last_fuzzy=None if allow_repeat else recent_fuzzy(c,stamp)
+ last_fuzzy=None if allow_repeat or memory_scheduler.time_queue_enabled() else recent_fuzzy(c,stamp)
  day=day_of(stamp);seq=c.execute(text('SELECT COALESCE(MAX(rowid),0)+1 FROM answers')).scalar()
  # A persisted unfinished question always resumes before introducing anything else.
  pending_rows=c.execute(text('''SELECT k.*,q.id AS question_id,COALESCE(g.group_id,p.group_id) AS group_id,COALESCE(g.role,m.role,'base') AS role
@@ -375,10 +376,12 @@ def select(c,stamp,new_limit,review_limit,course='all',allow_repeat=False):
   if item:
    gap=(2 if hist[-1]['rating']=='forgot' else 4 if not independent(hist[-1]) else 8) if hist else 0
    due=hist[-1]['seq']+gap+1 if hist else 0
+   if memory_scheduler.time_queue_enabled():due=memory_scheduler.item_due(c,item['id'],stamp).timestamp()
    candidates.append((due,gid,item))
- ready=[r for r in candidates if r[0]<=seq]
+ ready=[r for r in candidates if r[0]<=(stamp.timestamp() if memory_scheduler.time_queue_enabled() else seq)]
  def result(gid,item):
   item=dict(item);item['group_id']=gid
+  if memory_scheduler.time_queue_enabled() and memory_scheduler.item_due(c,item['id'],stamp)>stamp:return None
   if not allow_repeat and not sourced_transfer.retry_ready(c,item['id'],stamp):return None
   if repeats_fuzzy(item,last_fuzzy):return None
   if item['role'] in ('phrase','sentence','transfer') and not requirements_met(c,item['id'],stamp=stamp):return None
@@ -394,6 +397,15 @@ def select(c,stamp,new_limit,review_limit,course='all',allow_repeat=False):
   kind=c.execute(text('SELECT kind FROM daily_group_tasks WHERE day=:d AND group_id=:g'),dict(d=day,g=gid)).scalar()
   c.execute(text('INSERT OR IGNORE INTO daily_tasks VALUES(:d,:k,:v)'),dict(d=day,k=item['id'],v=kind))
   return ('recall' if item['introduced'] or item['role']=='transfer' else 'learn'),item
+ # Reserve new-learning opportunities after two review answers, even with a backlog.
+ recent_kinds=c.execute(text("SELECT d.kind FROM answers a JOIN group_questions q ON q.question_id=a.question_id JOIN daily_group_tasks d ON d.group_id=q.group_id AND d.day=:d WHERE date(a.created_at,'+8 hours')=:d ORDER BY a.rowid DESC LIMIT 2"),dict(d=day)).scalars().all()
+ if len(recent_kinds)==2 and all(k=='review' for k in recent_kinds) and active_new<3 and pool_count(c,stamp)<12 and counts(c,stamp).get('new',0)<new_limit:
+  fresh=course_policy.unseen(c,course,1)
+  if fresh:
+   new_item,_=step(c,fresh[0]['id'],stamp)
+   if new_item:
+    choice=result(fresh[0]['id'],new_item)
+    if choice:return choice
  for _,gid,item in sorted(ready,key=lambda r:r[0]):
   choice=result(gid,item)
   if choice:return choice
@@ -415,9 +427,10 @@ def select(c,stamp,new_limit,review_limit,course='all',allow_repeat=False):
     choice=result(unseen,item)
     if choice:return choice
  # With too few groups, shorten the gap rather than inventing or pulling future reviews.
- for _,gid,item in sorted(candidates,key=lambda r:r[0]):
+ for _,gid,item in sorted(([] if memory_scheduler.time_queue_enabled() else candidates),key=lambda r:r[0]):
   choice=result(gid,item)
   if choice:return choice
+ if memory_scheduler.time_queue_enabled() and candidates:return 'timed-wait',None
  if last_fuzzy and (candidates or c.execute(text("SELECT 1 FROM focus_requests WHERE status IN ('pending','active') LIMIT 1")).first()):return 'paused',None
  return 'done',None
 

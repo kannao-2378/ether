@@ -121,6 +121,8 @@ def initialize(target,with_bulk=False):
         c.execute(text('CREATE INDEX IF NOT EXISTS answers_knowledge ON answers(knowledge_id)'))
         c.execute(text('CREATE INDEX IF NOT EXISTS checks_question ON spelling_checks(question_id)'))
         spelling_practice.install(c)
+        import shared_examples
+        shared_examples.install(c)
         c.execute(text('CREATE TABLE IF NOT EXISTS input_corrections(question_id TEXT PRIMARY KEY, correction_count INTEGER NOT NULL, last_at TEXT NOT NULL)'))
         c.execute(text('CREATE INDEX IF NOT EXISTS feedback_question ON feedback_events(question_id)'))
         for kid, prompt, answer, explanation, example in SEEDS:
@@ -224,7 +226,7 @@ def test_action(action: str, data: dict):
             c.execute(text('DELETE FROM daily_tasks'))
     elif action in ('reset','prepare'):
         with test_engine.begin() as c:
-            for table in ('word_check_requests','word_spelling_difficulties','input_corrections','answers','questions','spelling_checks','feedback_events','review_queue','memory_states','consolidation_slots','daily_new_pacing','daily_tasks','daily_coverage','lesson_attempts','context_round_items','context_rounds','composition_evidence','knowledge_assessments','test_skips','daily_extensions','teaching_exposures','question_trials','composition_items','composition_cursors'):
+            for table in ('shared_example_links','word_check_requests','word_spelling_difficulties','input_corrections','answers','questions','spelling_checks','feedback_events','review_queue','memory_states','consolidation_slots','daily_new_pacing','daily_tasks','daily_coverage','lesson_attempts','context_round_items','context_rounds','composition_evidence','knowledge_assessments','test_skips','daily_extensions','teaching_exposures','question_trials','composition_items','composition_cursors'):
                 c.execute(text('DELETE FROM '+table))
             c.execute(text("DELETE FROM app_settings WHERE key='sourced-transfer-pilot'"))
             for table in ('focus_requests','group_questions','daily_group_tasks','group_progress','group_usage','group_active_slots'):c.execute(text('DELETE FROM '+table))
@@ -278,7 +280,7 @@ def read_rule(rule_id: str):
 
 @app.get('/api/plan')
 def learning_plan():
-    d=dashboard();s=study_settings();zone=timezone(timedelta(hours=8));day=now().astimezone(zone).date().isoformat()
+    d=dashboard(summary_only=True);s=study_settings();zone=timezone(timedelta(hours=8));day=now().astimezone(zone).date().isoformat()
     with engine.connect() as c:
         admitted=group_learning.counts(c,now())
     with engine.connect() as c:curriculum=content.curriculum(c,include_items=False);packages=bulk_courses.summary(c)
@@ -286,7 +288,12 @@ def learning_plan():
         route=curriculum_engine.report(c,s['active-course'])
         preparation=sourced_transfer.report(c,now(),s)
         starter=starter_course.report(c) if testing.get() else None
-    return dict(date=day,route=route,starter_course=starter,transfer_preparation=preparation,curriculum=curriculum,packages=packages,new_limit=s['daily-new-limit'],review_limit=s['daily-review-limit'],new_admitted=admitted.get('new',0),review_admitted=admitted.get('review',0),new_breakdown=d.get('new_breakdown',{}),cross_day_due=d['cross_day_due'],same_day_practice=d['same_day_practice'],today_count=d['today_count'],rules=[rule_profile(r) for r in RULES],weak=[dict(id=i['id'],answer=i['answer'],prompt=i['prompt'],familiarity=familiarity(i)[1]) for i in d['items'] if i['introduced'] and i['level']<3][:10])
+    return dict(date=day,route=route,starter_course=starter,transfer_preparation=preparation,curriculum=curriculum,packages=packages,new_limit=s['daily-new-limit'],review_limit=s['daily-review-limit'],new_admitted=admitted.get('new',0),review_admitted=admitted.get('review',0),new_breakdown=d.get('new_breakdown',{}),cross_day_due=d['cross_day_due'],same_day_practice=d['same_day_practice'],today_count=d['today_count'],rules=[],weak=[])
+
+@app.get('/api/shared-examples/plan')
+def shared_examples_plan():
+    import shared_examples
+    with engine.connect() as c,selection_cache.scope():return shared_examples.plan(c)
 
 @app.get('/api/daily-activity')
 def daily_activity_report(day: str | None=None,planning: bool=False):
@@ -404,19 +411,30 @@ def cancel_focus(gid: str):
 def dictionary(q: str='',kind: str='all',status: str='all',page: int=1):
     page=max(1,page)
     with engine.connect() as c:
+        prefix="""WITH sources AS (
+          SELECT knowledge_id AS target,knowledge_id AS source,last_at FROM progress WHERE introduced=1
+          UNION ALL SELECT a.knowledge_id,p.knowledge_id,p.last_at FROM curriculum_aliases a JOIN progress p ON p.knowledge_id=a.alias_id WHERE p.introduced=1
+        ), ranked AS (SELECT target,source,ROW_NUMBER() OVER(PARTITION BY target ORDER BY julianday(last_at) DESC,target=source DESC) AS rn FROM sources) """
         # Types are display metadata; mastery always comes from the shared progress row.
-        base="""FROM knowledge k JOIN progress p ON p.knowledge_id=COALESCE((SELECT ep.knowledge_id FROM progress ep WHERE ep.introduced=1 AND (ep.knowledge_id=k.id OR ep.knowledge_id IN (SELECT alias_id FROM curriculum_aliases WHERE knowledge_id=k.id)) ORDER BY julianday(ep.last_at) DESC LIMIT 1),k.id) LEFT JOIN course_links l ON l.knowledge_id=k.id LEFT JOIN knowledge_details kd ON kd.knowledge_id=k.id
+        base="""FROM knowledge k LEFT JOIN ranked er ON er.target=k.id AND er.rn=1 JOIN progress p ON p.knowledge_id=COALESCE(er.source,k.id) LEFT JOIN course_links l ON l.knowledge_id=k.id LEFT JOIN knowledge_details kd ON kd.knowledge_id=k.id
           WHERE 1=1 AND (k.answer LIKE :q OR k.prompt LIKE :q)
           AND (:kind='all' OR COALESCE(json_extract(kd.payload,'$.entry_type'),CASE WHEN COALESCE(l.stage,1)>=3 THEN 'sentence' WHEN k.id LIKE 'word-%' OR k.id='eat-a-meal' THEN 'word' WHEN l.stage=2 OR k.id IN (SELECT material_id FROM transfer_materials) THEN 'phrase' ELSE 'collocation' END)=:kind)
-          AND (:status='all' OR (:status='learned' AND p.introduced=1) OR (:status='unseen' AND p.introduced=0) OR (:status='recall' AND p.level>=3) OR (:status='delayed' AND p.level>=5))"""
+          AND (:status='all' OR (:status='learned' AND p.introduced=1) OR (:status='unseen' AND p.introduced=0) OR (:status='recall' AND p.level>=3) OR (:status='delayed' AND p.level>=5) OR (:status='transferable' AND EXISTS(SELECT 1 FROM knowledge_assessments ka WHERE ka.knowledge_id=p.knowledge_id AND json_extract(ka.payload,'$.transfer_contexts')>=2 AND json_extract(ka.payload,'$.last_transfer_ok')=1)))"""
         params=dict(q='%'+q[:100]+'%',kind=kind,status=status,offset=(page-1)*30)
-        total=c.execute(text('SELECT COUNT(*) '+base),params).scalar()
+        total=c.execute(text('SELECT COUNT(*) FROM knowledge')).scalar() if not q and kind=='all' and status=='all' else c.execute(text(prefix+'SELECT COUNT(*) '+base),params).scalar()
+        type_counts=dict(c.execute(text("SELECT COALESCE(json_extract(payload,'$.entry_type'),'collocation'),COUNT(*) FROM knowledge_details GROUP BY 1")).all())
+        type_counts['collocation']=type_counts.get('collocation',0)+total-sum(type_counts.values())
         total_all=c.execute(text('SELECT COUNT(*) FROM knowledge')).scalar()
-        rows=c.execute(text("SELECT k.*,p.*,COALESCE(json_extract(kd.payload,'$.entry_type'),CASE WHEN COALESCE(l.stage,1)>=3 THEN 'sentence' WHEN k.id LIKE 'word-%' OR k.id='eat-a-meal' THEN 'word' WHEN l.stage=2 OR k.id IN (SELECT material_id FROM transfer_materials) THEN 'phrase' ELSE 'collocation' END) AS entry_type "+base+' ORDER BY p.introduced DESC,k.rowid LIMIT 30 OFFSET :offset'),params).mappings().all()
+        id_base="FROM knowledge k LEFT JOIN ranked er ON er.target=k.id AND er.rn=1 JOIN progress p ON p.knowledge_id=COALESCE(er.source,k.id)" if not q and kind=='all' and status=='all' else base
+        ids=c.execute(text(prefix+'SELECT k.id '+id_base+' ORDER BY p.introduced DESC,k.rowid LIMIT 30 OFFSET :offset'),params).scalars().all()
+        selected={f'pick{i}':kid for i,kid in enumerate(ids)}
+        params.update(selected)
+        page_base=base+' AND k.id IN ('+','.join(':'+key for key in selected)+')' if selected else base+' AND 0=1'
+        rows=c.execute(text(prefix+"SELECT k.*,p.*,COALESCE(json_extract(kd.payload,'$.entry_type'),CASE WHEN COALESCE(l.stage,1)>=3 THEN 'sentence' WHEN k.id LIKE 'word-%' OR k.id='eat-a-meal' THEN 'word' WHEN l.stage=2 OR k.id IN (SELECT material_id FROM transfer_materials) THEN 'phrase' ELSE 'collocation' END) AS entry_type "+page_base+' ORDER BY p.introduced DESC,k.rowid'),params).mappings().all()
         items=[]
         for row in rows:
             item=dict(row);item['familiarity_level'],item['familiarity_label']=familiarity(item);item['assessment']=assessment.get(c,item['knowledge_id']);item['evidence_id']=item['knowledge_id'];items.append(item)
-        return dict(items=items,total=total,total_all=total_all,page=page,page_size=30,total_pages=(total+29)//30)
+        return dict(items=items,total=total,total_all=total_all,type_counts=type_counts,page=page,page_size=30,total_pages=(total+29)//30)
 
 @app.get('/api/lesson/want-01')
 def lesson_state():
@@ -529,7 +547,7 @@ def dashboard(summary_only: bool = False):
         admitted=group_learning.counts(c,now())
         new_breakdown=group_learning.breakdown(c,now())
     today = now().date().isoformat()
-    summary = dict(due=(counts['cross_day'] or 0)+(counts['practice'] or 0), cross_day_due=counts['cross_day'] or 0, same_day_practice=counts['practice'] or 0, today_count=today_count, today_new=admitted.get('new',0),today_review=admitted.get('review',0),scheduler_version=5,new_breakdown=new_breakdown)
+    summary = dict(due=(counts['cross_day'] or 0)+(counts['practice'] or 0), cross_day_due=counts['cross_day'] or 0, same_day_practice=counts['practice'] or 0, today_count=today_count, today_new=admitted.get('new',0),today_review=admitted.get('review',0),scheduler_version=6 if os.environ.get('PELS_FSRS_TIME_QUEUE')=='1' else 5,new_breakdown=new_breakdown)
     return summary if summary_only else dict(items=items, history=answers, **summary)
 
 @app.post('/api/next')
@@ -539,8 +557,12 @@ def next_question(allow_repeat: bool=False):
         special=focus_training.select(c,now(),allow_repeat=allow_repeat)
         if not testing.get() or special or stage is None:
             if not starter_course.enabled(c):composition_engine.prepare(c,now())
+            if not testing.get():
+                import shared_examples
+                shared_examples.prepare(c,now())
             settings=study_settings(c)
             kind,item=special if special else group_learning.select(c,now(),settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course'],allow_repeat=allow_repeat)
+            if kind=='timed-wait':return dict(kind='done',reason='fsrs-wait',message='当前内容尚未到FSRS复习时间；进度已保存，到期后继续。')
             if kind=='paused':return dict(kind='done',reason='interleaving-needed',message='模糊的内容已保留待练，暂时没有其他内容可穿插。可以休息一下，或主动再练这一项。')
             if kind=='done':
                 plans=sourced_transfer.report(c,now(),settings)
@@ -772,6 +794,7 @@ def export():
     with engine.begin() as c:
         tables=tables+tuple(name for name in ('content_packages','package_members','knowledge_components') if c.execute(text("SELECT 1 FROM sqlite_master WHERE name=:n AND type='table'"),dict(n=name)).first())
         tables+=tuple(t for t in group_learning.TABLES+spelling_practice.TABLES if t not in tables)
+        tables+=('shared_example_links',)
         data={table:[dict(r) for r in c.execute(text('SELECT * FROM '+table)).mappings()] for table in tables}
     return dict(format_version=1,mode='test' if testing.get() else 'real',exported_at=now().isoformat(),tables=data)
 

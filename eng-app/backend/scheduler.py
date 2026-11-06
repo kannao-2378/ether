@@ -1,9 +1,15 @@
+import os
 """Version 5: question gaps within a day, FSRS-6 for long-term memory."""
 from datetime import datetime, timedelta, timezone
 from sqlalchemy import text
 from fsrs import Scheduler, Card, Rating
 
 FSRS = Scheduler(desired_retention=0.9, learning_steps=(), relearning_steps=(), maximum_interval=180, enable_fuzzing=False)
+FSRS_TIMED = Scheduler(desired_retention=0.9, maximum_interval=180, enable_fuzzing=False)
+def time_queue_enabled():return os.environ.get('PELS_FSRS_TIME_QUEUE')=='1'
+def item_due(c,kid,stamp):
+    row=c.execute(text('SELECT card_json FROM memory_states WHERE knowledge_id=:k'),dict(k=kid)).first()
+    return Card.from_json(row[0]).due if row else stamp
 CONSOLIDATION_LIMIT = 12
 
 def consolidation_pending(c, stamp):
@@ -62,7 +68,7 @@ def update_coverage(c, kid, stamp):
 def rebuild(c, kid, incremental=False):
     install_memory(c)
     memory=c.execute(text('SELECT * FROM memory_states WHERE knowledge_id=:k'),dict(k=kid)).mappings().first()
-    state=c.execute(text('SELECT p.* FROM progress p JOIN review_queue r ON r.knowledge_id=p.knowledge_id WHERE p.knowledge_id=:k AND r.version=5'),dict(k=kid)).mappings().first() if incremental else None
+    state=c.execute(text('SELECT p.* FROM progress p JOIN review_queue r ON r.knowledge_id=p.knowledge_id WHERE p.knowledge_id=:k AND r.version IN (5,6)'),dict(k=kid)).mappings().first() if incremental else None
     if not memory:state=None
     after=c.execute(text('SELECT rowid FROM answers WHERE id=:a'),dict(a=memory['last_answer'])).scalar() if state else None
     if state and after is None:state=None
@@ -84,7 +90,7 @@ def rebuild(c, kid, incremental=False):
         independent=bool(not a['skipped'] and a['correct'] and not a['revealed'] and not a['failed'] and a['rating']=='clear')
         rating=Rating.Again if not a['correct'] or a['revealed'] or a['failed'] or a['rating']=='forgot' else Rating.Hard if a['rating']=='hard' else Rating.Good
         if not a['skipped']:
-            card,_=FSRS.review_card(card,rating,review_datetime=stamp.astimezone(timezone.utc))
+            card,_=(FSRS_TIMED if time_queue_enabled() else FSRS).review_card(card,rating,review_datetime=stamp.astimezone(timezone.utc))
         delayed=bool(last and stamp-last>=timedelta(hours=24))
         if independent:
             streak+=1
@@ -100,11 +106,13 @@ def rebuild(c, kid, incremental=False):
         gap=2 if a['rating']=='forgot' else 4 if a['rating']=='hard' or not independent else 8
         due=(stamp+timedelta(days=interval)).isoformat() if interval else None
         target=a['seq']+gap+1
+        if time_queue_enabled():
+            due=card.due.isoformat();interval=max(0,(card.due-stamp).total_seconds()/86400);target=0;gap=0
         last=stamp
     if not rows:return
     c.execute(text("INSERT INTO memory_states VALUES(:k,:j,:a,'FSRS-6') ON CONFLICT(knowledge_id) DO UPDATE SET card_json=:j,last_answer=:a,algorithm='FSRS-6'"),dict(k=kid,j=card.to_json(),a=rows[-1]['id']))
     c.execute(text('''INSERT INTO review_queue (knowledge_id,due_sequence,due_at,gap,version)
-      VALUES (:k,:s,:d,:g,5) ON CONFLICT(knowledge_id) DO UPDATE SET due_sequence=:s,due_at=:d,gap=:g,version=5'''),dict(k=kid,s=target,d=due,g=gap))
+      VALUES (:k,:s,:d,:g,:v) ON CONFLICT(knowledge_id) DO UPDATE SET due_sequence=:s,due_at=:d,gap=:g,version=:v'''),dict(k=kid,s=target,d=due,g=gap,v=6 if time_queue_enabled() else 5))
     c.execute(text('''UPDATE progress SET attempts=:a,correct=:c,streak=:s,level=:l,interval_days=:i,due_at=:d,last_at=:t WHERE knowledge_id=:k'''),dict(k=kid,a=attempts+len(rows),c=correct+sum(a['correct'] for a in rows),s=streak,l=level,i=interval,d=due,t=last.isoformat()))
 
 def select_next(c, stamp, review_limit=30, new_limit=10, test_stage=None,active_course='all',exclude_context=False):

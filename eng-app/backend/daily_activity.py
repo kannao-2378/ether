@@ -41,5 +41,12 @@ def build(c,stamp,day,new_limit,review_limit,course='all',planning=False):
    if r:result['preview_review'].append(dict(r))
   result['review_waiting']=len(result['preview_review'])
   result['preview_review']=result['preview_review'][:max(0,review_limit-result['review'])]
-  result['preview_new']=[dict(r) for r in course_policy.unseen(c,course,max(0,new_limit-result['new']))]
+  remaining=max(0,new_limit-result['new'])
+  ready={r['id'] for r in course_policy.unseen(c,course,remaining)}
+  planned=c.execute(text("SELECT g.id,g.title,g.kind AS unit_type FROM curriculum_paths cp JOIN curriculum_goals cg ON cg.id=cp.goal_id JOIN learning_groups g ON g.id=cg.id JOIN progress p ON p.knowledge_id=g.root_id WHERE (:c='all' OR cp.course_id=:c) AND cg.status='ready' AND p.introduced=0 AND NOT EXISTS(SELECT 1 FROM daily_group_tasks d WHERE d.group_id=g.id) ORDER BY cp.unit_position,cg.difficulty,cp.position LIMIT :n"),dict(c=course,n=remaining)).mappings().all()
+  result['preview_new']=[dict(r,status='planned' if r['id'] in ready else 'waiting',prerequisites_ready=r['id'] in ready) for r in planned]
+  result['new_planned']=result['new']+len(planned)
+  result['review_planned']=result['review']+len(result['preview_review'])
+  result['new_wait_reason']='后续内容须先完成基础，按顺序逐步开始' if any(r['id'] not in ready for r in planned) else ''
+
  return result

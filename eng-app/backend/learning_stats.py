@@ -33,10 +33,13 @@ def build(c,stamp):
  total=c.execute(text('SELECT COUNT(*) FROM knowledge')).scalar()
  counts=[total,0,0,0];types={k:dict(total=0,touched=0,familiar=0,stable=0,transferable=0) for k in ('word','collocation','phrase','sentence','rule')};weak=[]
  entries=c.execute(text('''SELECT k.id,k.answer,k.prompt,p.*,COALESCE(json_extract(d.payload,'$.entry_type'),'collocation') AS kind
- FROM knowledge k JOIN progress p ON p.knowledge_id=k.id LEFT JOIN knowledge_details d ON d.knowledge_id=k.id''')).mappings()
+ FROM knowledge k JOIN progress p ON p.knowledge_id=k.id LEFT JOIN knowledge_details d ON d.knowledge_id=k.id WHERE p.introduced=1 OR p.attempts>0''')).mappings()
+ totals=dict(c.execute(text("SELECT COALESCE(json_extract(payload,'$.entry_type'),'collocation'),COUNT(*) FROM knowledge_details GROUP BY 1")).all())
+ totals['collocation']=totals.get('collocation',0)+total-sum(totals.values())
+ for kind,n in totals.items():types[kind if kind in types else 'collocation']['total']+=n
  touched=0
  for p in entries:
-  kind=p['kind'] if p['kind'] in types else 'collocation';types[kind]['total']+=1
+  kind=p['kind'] if p['kind'] in types else 'collocation'
   if not p['introduced'] and not p['attempts']:continue
   touched+=1;types[kind]['touched']+=1;e=assessment.get(c,p['id']);level=rank(p,e);counts[0]-=1;counts[level]+=1
   types[kind]['familiar']+=level>=2;types[kind]['stable']+=level>=3;types[kind]['transferable']+=assessment.transferable(e)

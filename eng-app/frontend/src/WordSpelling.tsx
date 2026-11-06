@@ -16,7 +16,7 @@ export function WordSpelling({question:q,inputRef,peek,english,draft,onDraft,onF
  useLayoutEffect(()=>{alive.current=true;if(values.current[0])void verify(0);return()=>{alive.current=false;generation.current++;};},[]);
  // Keep one actual editing node mounted: an asynchronous word check must not
  // blur one native iOS input and attempt to open another outside a user gesture.
- const position=()=>{const field=editor.current,slot=slots.current[active],box=container.current;if(!field||!slot||!box)return;const r=slot.getBoundingClientRect(),b=box.getBoundingClientRect();Object.assign(field.style,{left:(r.left-b.left)+'px',top:(r.top-b.top)+'px',width:r.width+'px',height:r.height+'px'});};
+ const position=()=>{const field=editor.current,slot=slots.current[active],box=container.current;if(!field||!slot||!box)return;const r=slot.getBoundingClientRect(),b=box.getBoundingClientRect();Object.assign(field.style,{left:(r.left-b.left)+'px',top:(r.top-b.top)+'px',width:r.width+'px',height:getComputedStyle(slot).lineHeight});};
  useLayoutEffect(()=>{inputRef.current=editor.current;position();});
  useLayoutEffect(()=>{const observer=new ResizeObserver(position);if(container.current)observer.observe(container.current);window.visualViewport?.addEventListener('resize',position);return()=>{observer.disconnect();window.visualViewport?.removeEventListener('resize',position);};},[active]);
  const lengths=shapes[0]||initial[0];

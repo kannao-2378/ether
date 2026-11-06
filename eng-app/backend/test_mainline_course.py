@@ -49,7 +49,7 @@ class MainlineCourseTests(unittest.TestCase):
 
     def test_activation_permissions_no_fake_grades_and_restart(self):
         self.assertEqual(self.client.post('/api/test/mainline-course',json={}).status_code,403)
-        r=self.activate();self.assertEqual(len(r['groups']),148);self.assertEqual(r['transfer_questions'],294)
+        r=self.activate();self.assertEqual(len(r['groups']),148);self.assertEqual(r['transfer_questions'],331)
         with self.db.connect() as c:
             self.assertEqual(c.execute(text('SELECT count(*) FROM answers')).scalar(),0)
             self.assertEqual(c.execute(text('SELECT count(*) FROM progress WHERE introduced=1 OR level>0')).scalar(),0)
@@ -83,7 +83,7 @@ class MainlineCourseTests(unittest.TestCase):
         self.activate();rng=random.Random(1104)
         with self.db.connect() as c:
             candidates=c.execute(text("SELECT DISTINCT l.knowledge_id FROM curriculum_lessons l JOIN curriculum_paths p ON p.goal_id=l.goal_id WHERE p.course_id=:c AND l.role='transfer'"),{'c':course.COURSE}).scalars().all()
-            self.assertEqual(len(candidates),294)
+            self.assertEqual(len(candidates),331)
             for kid in candidates:self.assertFalse(course.can_challenge(c,kid,app.now()))
         # An isolated synthetic prerequisite fixture exercises every compiled
         # dependency. It is not a claim of 148 lessons learned by a person.
@@ -112,7 +112,7 @@ class MainlineCourseTests(unittest.TestCase):
             self.assertGreater(c.execute(text('SELECT count(*) FROM memory_states')).scalar(),0)
         self.assertIn('transfer',modes)
         log=Path(app.DATA_DIR)/'mainline-validation.json' if hasattr(app,'DATA_DIR') else Path(self.tmp.name)/'mainline-validation.json'
-        log.write_text(json.dumps(dict(topics=148,context_gates_checked=294,sampled_answers=16,seed=1104,
+        log.write_text(json.dumps(dict(topics=148,context_gates_checked=331,sampled_answers=16,seed=1104,
             fixture='synthetic prerequisites in temporary database',real_data_used=False)),encoding='utf-8')
 
     def test_exit_preserves_answer_rows_and_original_course(self):

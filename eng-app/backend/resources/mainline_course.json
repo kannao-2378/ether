@@ -155,6 +155,11 @@
           "usage": "he、she、it等单数主体常和is搭配；不是所有动作句都需要is。"
         },
         {
+          "en": "ready",
+          "zh": "n. 预备好的状态, 现款",
+          "usage": "n. 预备好的状态, 现款"
+        },
+        {
           "en": "she",
           "zh": "她",
           "usage": "she用来指已经明确的女性。"
@@ -168,6 +173,11 @@
           "en": "teacher",
           "zh": "n. 教师, 老师, 导师",
           "usage": "n. 教师, 老师, 导师"
+        },
+        {
+          "en": "tired",
+          "zh": "a. 疲累的, 疲乏的, 厌倦的",
+          "usage": "a. 疲累的, 疲乏的, 厌倦的"
         },
         {
           "en": "you",
@@ -198,6 +208,46 @@
           ],
           "accepted_answers": [
             "She is busy."
+          ]
+        },
+        {
+          "en": "I am tired.",
+          "zh": "我累了。",
+          "requires": [
+            "mainline-U01-2"
+          ],
+          "accepted_answers": [
+            "I am tired."
+          ]
+        },
+        {
+          "en": "I am ready.",
+          "zh": "我准备好了。",
+          "requires": [
+            "mainline-U01-2"
+          ],
+          "accepted_answers": [
+            "I am ready."
+          ]
+        },
+        {
+          "en": "You are busy.",
+          "zh": "你很忙。",
+          "requires": [
+            "mainline-U01-2"
+          ],
+          "accepted_answers": [
+            "You are busy."
+          ]
+        },
+        {
+          "en": "She is a student.",
+          "zh": "她是一名学生。",
+          "requires": [
+            "mainline-U01-2"
+          ],
+          "accepted_answers": [
+            "She is a student."
           ]
         }
       ],
@@ -324,6 +374,11 @@
           "usage": "n. 苹果, 家伙"
         },
         {
+          "en": "bag",
+          "zh": "n. 袋子, 袋状物",
+          "usage": "n. 袋子, 袋状物"
+        },
+        {
           "en": "book",
           "zh": "n. 书, 书籍, 帐簿, 名册, 工作簿",
           "usage": "n. 书, 书籍, 帐簿, 名册, 工作簿"
@@ -339,9 +394,24 @@
           "usage": "he、she、it等单数主体常和is搭配；不是所有动作句都需要is。"
         },
         {
+          "en": "my",
+          "zh": "pron. 我的",
+          "usage": "pron. 我的"
+        },
+        {
           "en": "not",
           "zh": "adv. 不, 非, 未",
           "usage": "adv. 不, 非, 未"
+        },
+        {
+          "en": "room",
+          "zh": "n. 房间, 空位, 场所",
+          "usage": "n. 房间, 空位, 场所"
+        },
+        {
+          "en": "school",
+          "zh": "n. 学校, 鱼群, 门派, 学派",
+          "usage": "n. 学校, 鱼群, 门派, 学派"
         },
         {
           "en": "that",
@@ -352,6 +422,11 @@
           "en": "this",
           "zh": "pron. 这, 本",
           "usage": "pron. 这, 本"
+        },
+        {
+          "en": "your",
+          "zh": "pron. 你的, 你们的",
+          "usage": "pron. 你的, 你们的"
         }
       ],
       "requires": [
@@ -378,6 +453,46 @@
           "accepted_answers": [
             "This is not an apple."
           ]
+        },
+        {
+          "en": "Is this your bag?",
+          "zh": "这是你的包吗？",
+          "requires": [
+            "mainline-U01-4"
+          ],
+          "accepted_answers": [
+            "Is this your bag?"
+          ]
+        },
+        {
+          "en": "Is this my cup?",
+          "zh": "这是我的杯子吗？",
+          "requires": [
+            "mainline-U01-4"
+          ],
+          "accepted_answers": [
+            "Is this my cup?"
+          ]
+        },
+        {
+          "en": "Is this a school?",
+          "zh": "这是一所学校吗？",
+          "requires": [
+            "mainline-U01-4"
+          ],
+          "accepted_answers": [
+            "Is this a school?"
+          ]
+        },
+        {
+          "en": "Is this your room?",
+          "zh": "这是你的房间吗？",
+          "requires": [
+            "mainline-U01-4"
+          ],
+          "accepted_answers": [
+            "Is this your room?"
+          ]
         }
       ],
       "topic_id": "U01.4",
@@ -400,6 +515,21 @@
       "sentence_zh": "我喝水。",
       "materials": [
         {
+          "en": "after",
+          "zh": "prep. 在...之后, 由于",
+          "usage": "prep. 在...之后, 由于"
+        },
+        {
+          "en": "at",
+          "zh": "prep. 在, 向, 对",
+          "usage": "prep. 在, 向, 对"
+        },
+        {
+          "en": "day",
+          "zh": "n. 天, 日子, 白天, 工作日",
+          "usage": "n. 天, 日子, 白天, 工作日"
+        },
+        {
           "en": "drink",
           "zh": "n. 饮料, 酒",
           "usage": "n. 饮料, 酒"
@@ -410,9 +540,29 @@
           "usage": "v. 吃, 腐蚀"
         },
         {
+          "en": "every",
+          "zh": "a. 每一, 所有的",
+          "usage": "a. 每一, 所有的"
+        },
+        {
+          "en": "home",
+          "zh": "n. 家, 避难所, 故乡",
+          "usage": "n. 家, 避难所, 故乡"
+        },
+        {
           "en": "I",
           "zh": "我（说话的人）",
           "usage": "I指说话的人，书写通常大写。"
+        },
+        {
+          "en": "in",
+          "zh": "prep. 在...期间, 在...之内, 处于...之中, 从事于, 按照, 穿着",
+          "usage": "prep. 在...期间, 在...之内, 处于...之中, 从事于, 按照, 穿着"
+        },
+        {
+          "en": "morning",
+          "zh": "n. 早晨, 早上, 初期",
+          "usage": "n. 早晨, 早上, 初期"
         },
         {
           "en": "rice",
@@ -420,9 +570,29 @@
           "usage": "n. 米, 米饭, 稻"
         },
         {
+          "en": "the",
+          "zh": "双方能确定的那个／那些",
+          "usage": "the表示对方能够确定所指的对象，不只是中文那个。"
+        },
+        {
+          "en": "they",
+          "zh": "他们／她们／它们",
+          "usage": "they可指已经明确的多个人或事物。"
+        },
+        {
           "en": "water",
           "zh": "n. 水, 雨水, 海水, 水位, 水面, 流水",
           "usage": "n. 水, 雨水, 海水, 水位, 水面, 流水"
+        },
+        {
+          "en": "we",
+          "zh": "我们",
+          "usage": "we包含说话的人和其他人。"
+        },
+        {
+          "en": "work",
+          "zh": "n. 工作, 劳动, 职业, 行为, 功, 作品, 成果, 产品, 工程",
+          "usage": "n. 工作, 劳动, 职业, 行为, 功, 作品, 成果, 产品, 工程"
         },
         {
           "en": "you",
@@ -454,6 +624,46 @@
           "accepted_answers": [
             "I eat rice."
           ]
+        },
+        {
+          "en": "I drink water at home.",
+          "zh": "我在家喝水。",
+          "requires": [
+            "mainline-U02-1"
+          ],
+          "accepted_answers": [
+            "I drink water at home."
+          ]
+        },
+        {
+          "en": "You drink water every day.",
+          "zh": "你每天喝水。",
+          "requires": [
+            "mainline-U02-1"
+          ],
+          "accepted_answers": [
+            "You drink water every day."
+          ]
+        },
+        {
+          "en": "We drink water after work.",
+          "zh": "我们下班后喝水。",
+          "requires": [
+            "mainline-U02-1"
+          ],
+          "accepted_answers": [
+            "We drink water after work."
+          ]
+        },
+        {
+          "en": "They drink water in the morning.",
+          "zh": "他们早上喝水。",
+          "requires": [
+            "mainline-U02-1"
+          ],
+          "accepted_answers": [
+            "They drink water in the morning."
+          ]
         }
       ],
       "topic_id": "U02.1",
@@ -477,9 +687,24 @@
       "sentence_zh": "我读书。",
       "materials": [
         {
+          "en": "after",
+          "zh": "prep. 在...之后, 由于",
+          "usage": "prep. 在...之后, 由于"
+        },
+        {
+          "en": "at",
+          "zh": "prep. 在, 向, 对",
+          "usage": "prep. 在, 向, 对"
+        },
+        {
           "en": "books",
           "zh": "n. 书评；书籍（book的复数）",
           "usage": "n. 书评；书籍（book的复数）"
+        },
+        {
+          "en": "day",
+          "zh": "n. 天, 日子, 白天, 工作日",
+          "usage": "n. 天, 日子, 白天, 工作日"
         },
         {
           "en": "English",
@@ -487,9 +712,24 @@
           "usage": "这里English表示英语，语言名称通常首字母大写。"
         },
         {
+          "en": "every",
+          "zh": "a. 每一, 所有的",
+          "usage": "a. 每一, 所有的"
+        },
+        {
+          "en": "home",
+          "zh": "n. 家, 避难所, 故乡",
+          "usage": "n. 家, 避难所, 故乡"
+        },
+        {
           "en": "I",
           "zh": "我（说话的人）",
           "usage": "I指说话的人，书写通常大写。"
+        },
+        {
+          "en": "in",
+          "zh": "prep. 在...期间, 在...之内, 处于...之中, 从事于, 按照, 穿着",
+          "usage": "prep. 在...期间, 在...之内, 处于...之中, 从事于, 按照, 穿着"
         },
         {
           "en": "learn",
@@ -497,9 +737,34 @@
           "usage": "vt. 学习；认识到；得知"
         },
         {
+          "en": "morning",
+          "zh": "n. 早晨, 早上, 初期",
+          "usage": "n. 早晨, 早上, 初期"
+        },
+        {
           "en": "read",
           "zh": "v. 读, 阅读, 理解",
           "usage": "v. 读, 阅读, 理解"
+        },
+        {
+          "en": "the",
+          "zh": "双方能确定的那个／那些",
+          "usage": "the表示对方能够确定所指的对象，不只是中文那个。"
+        },
+        {
+          "en": "they",
+          "zh": "他们／她们／它们",
+          "usage": "they可指已经明确的多个人或事物。"
+        },
+        {
+          "en": "we",
+          "zh": "我们",
+          "usage": "we包含说话的人和其他人。"
+        },
+        {
+          "en": "work",
+          "zh": "n. 工作, 劳动, 职业, 行为, 功, 作品, 成果, 产品, 工程",
+          "usage": "n. 工作, 劳动, 职业, 行为, 功, 作品, 成果, 产品, 工程"
         },
         {
           "en": "you",
@@ -531,6 +796,46 @@
           "accepted_answers": [
             "I learn English."
           ]
+        },
+        {
+          "en": "I read books at home.",
+          "zh": "我在家读书。",
+          "requires": [
+            "mainline-U02-2"
+          ],
+          "accepted_answers": [
+            "I read books at home."
+          ]
+        },
+        {
+          "en": "You read books every day.",
+          "zh": "你每天读书。",
+          "requires": [
+            "mainline-U02-2"
+          ],
+          "accepted_answers": [
+            "You read books every day."
+          ]
+        },
+        {
+          "en": "We read books after work.",
+          "zh": "我们下班后读书。",
+          "requires": [
+            "mainline-U02-2"
+          ],
+          "accepted_answers": [
+            "We read books after work."
+          ]
+        },
+        {
+          "en": "They read books in the morning.",
+          "zh": "他们早上读书。",
+          "requires": [
+            "mainline-U02-2"
+          ],
+          "accepted_answers": [
+            "They read books in the morning."
+          ]
         }
       ],
       "topic_id": "U02.2",
@@ -554,6 +859,26 @@
       "sentence_zh": "我回家。",
       "materials": [
         {
+          "en": "after",
+          "zh": "prep. 在...之后, 由于",
+          "usage": "prep. 在...之后, 由于"
+        },
+        {
+          "en": "at",
+          "zh": "prep. 在, 向, 对",
+          "usage": "prep. 在, 向, 对"
+        },
+        {
+          "en": "day",
+          "zh": "n. 天, 日子, 白天, 工作日",
+          "usage": "n. 天, 日子, 白天, 工作日"
+        },
+        {
+          "en": "every",
+          "zh": "a. 每一, 所有的",
+          "usage": "a. 每一, 所有的"
+        },
+        {
           "en": "go",
           "zh": "vi. 去, 走, 达到, 运转, 查阅, 消失, 结束, 放弃, 花费, 流传, 趋于, 打算, 剩下",
           "usage": "vi. 去, 走, 达到, 运转, 查阅, 消失, 结束, 放弃, 花费, 流传, 趋于, 打算, 剩下"
@@ -569,14 +894,39 @@
           "usage": "I指说话的人，书写通常大写。"
         },
         {
+          "en": "night",
+          "zh": "n. 夜, 夜晚, 晚上, 黑暗, 夜晚的工作",
+          "usage": "n. 夜, 夜晚, 晚上, 黑暗, 夜晚的工作"
+        },
+        {
           "en": "school",
           "zh": "n. 学校, 鱼群, 门派, 学派",
           "usage": "n. 学校, 鱼群, 门派, 学派"
         },
         {
+          "en": "they",
+          "zh": "他们／她们／它们",
+          "usage": "they可指已经明确的多个人或事物。"
+        },
+        {
           "en": "to",
           "zh": "到；连接动作等（按结构理解）",
           "usage": "to school表示到学校；want to read里的to连接想做的动作，两种作用不同。"
+        },
+        {
+          "en": "together",
+          "zh": "adv. 一起, 共同, 彼此",
+          "usage": "adv. 一起, 共同, 彼此"
+        },
+        {
+          "en": "we",
+          "zh": "我们",
+          "usage": "we包含说话的人和其他人。"
+        },
+        {
+          "en": "work",
+          "zh": "n. 工作, 劳动, 职业, 行为, 功, 作品, 成果, 产品, 工程",
+          "usage": "n. 工作, 劳动, 职业, 行为, 功, 作品, 成果, 产品, 工程"
         },
         {
           "en": "you",
@@ -607,6 +957,46 @@
           ],
           "accepted_answers": [
             "I go to school."
+          ]
+        },
+        {
+          "en": "I go home after work.",
+          "zh": "我下班后回家。",
+          "requires": [
+            "mainline-U02-3"
+          ],
+          "accepted_answers": [
+            "I go home after work."
+          ]
+        },
+        {
+          "en": "You go home at night.",
+          "zh": "你晚上回家。",
+          "requires": [
+            "mainline-U02-3"
+          ],
+          "accepted_answers": [
+            "You go home at night."
+          ]
+        },
+        {
+          "en": "We go home together.",
+          "zh": "我们一起回家。",
+          "requires": [
+            "mainline-U02-3"
+          ],
+          "accepted_answers": [
+            "We go home together."
+          ]
+        },
+        {
+          "en": "They go home every day.",
+          "zh": "他们每天回家。",
+          "requires": [
+            "mainline-U02-3"
+          ],
+          "accepted_answers": [
+            "They go home every day."
           ]
         }
       ],
@@ -724,6 +1114,11 @@
           "usage": "a用于辅音发音开头的单数可数名词前，表示未特指的一个。"
         },
         {
+          "en": "bag",
+          "zh": "n. 袋子, 袋状物",
+          "usage": "n. 袋子, 袋状物"
+        },
+        {
           "en": "book",
           "zh": "n. 书, 书籍, 帐簿, 名册, 工作簿",
           "usage": "n. 书, 书籍, 帐簿, 名册, 工作簿"
@@ -747,6 +1142,16 @@
           "en": "I",
           "zh": "我（说话的人）",
           "usage": "I指说话的人，书写通常大写。"
+        },
+        {
+          "en": "job",
+          "zh": "n. 工作, 零活, 职业, 事情",
+          "usage": "n. 工作, 零活, 职业, 事情"
+        },
+        {
+          "en": "question",
+          "zh": "n. 问题, 询问",
+          "usage": "n. 问题, 询问"
         },
         {
           "en": "two",
@@ -784,6 +1189,46 @@
           "accepted_answers": [
             "I have two books."
           ]
+        },
+        {
+          "en": "I have a bag.",
+          "zh": "我有一个包。",
+          "requires": [
+            "mainline-U03-1"
+          ],
+          "accepted_answers": [
+            "I have a bag."
+          ]
+        },
+        {
+          "en": "I have a cup.",
+          "zh": "我有一个杯子。",
+          "requires": [
+            "mainline-U03-1"
+          ],
+          "accepted_answers": [
+            "I have a cup."
+          ]
+        },
+        {
+          "en": "I have a question.",
+          "zh": "我有一个问题。",
+          "requires": [
+            "mainline-U03-1"
+          ],
+          "accepted_answers": [
+            "I have a question."
+          ]
+        },
+        {
+          "en": "I have a job.",
+          "zh": "我有一份工作。",
+          "requires": [
+            "mainline-U03-1"
+          ],
+          "accepted_answers": [
+            "I have a job."
+          ]
         }
       ],
       "topic_id": "U03.1",
@@ -806,6 +1251,11 @@
       "sentence_zh": "这是我的书。",
       "materials": [
         {
+          "en": "bag",
+          "zh": "n. 袋子, 袋状物",
+          "usage": "n. 袋子, 袋状物"
+        },
+        {
           "en": "book",
           "zh": "n. 书, 书籍, 帐簿, 名册, 工作簿",
           "usage": "n. 书, 书籍, 帐簿, 名册, 工作簿"
@@ -821,6 +1271,11 @@
           "usage": "pron. 她的, 她"
         },
         {
+          "en": "here",
+          "zh": "adv. 在这里, 此时, 这里",
+          "usage": "adv. 在这里, 此时, 这里"
+        },
+        {
           "en": "is",
           "zh": "是／处于（第三人称单数）",
           "usage": "he、she、it等单数主体常和is搭配；不是所有动作句都需要is。"
@@ -829,6 +1284,16 @@
           "en": "my",
           "zh": "pron. 我的",
           "usage": "pron. 我的"
+        },
+        {
+          "en": "room",
+          "zh": "n. 房间, 空位, 场所",
+          "usage": "n. 房间, 空位, 场所"
+        },
+        {
+          "en": "small",
+          "zh": "a. 小的, 少的, 小型的, 低微的, 小气的, 细微的",
+          "usage": "a. 小的, 少的, 小型的, 低微的, 小气的, 细微的"
         },
         {
           "en": "that",
@@ -869,6 +1334,46 @@
           ],
           "accepted_answers": [
             "This is her book."
+          ]
+        },
+        {
+          "en": "My book is here.",
+          "zh": "我的书在这里。",
+          "requires": [
+            "mainline-U03-2"
+          ],
+          "accepted_answers": [
+            "My book is here."
+          ]
+        },
+        {
+          "en": "My bag is here.",
+          "zh": "我的包在这里。",
+          "requires": [
+            "mainline-U03-2"
+          ],
+          "accepted_answers": [
+            "My bag is here."
+          ]
+        },
+        {
+          "en": "My cup is here.",
+          "zh": "我的杯子在这里。",
+          "requires": [
+            "mainline-U03-2"
+          ],
+          "accepted_answers": [
+            "My cup is here."
+          ]
+        },
+        {
+          "en": "My room is small.",
+          "zh": "我的房间很小。",
+          "requires": [
+            "mainline-U03-2"
+          ],
+          "accepted_answers": [
+            "My room is small."
           ]
         }
       ],
@@ -1067,6 +1572,11 @@
           "usage": "I后说明身份或状态时可以用am，也可与doing组成正在做的表达。"
         },
         {
+          "en": "at",
+          "zh": "prep. 在, 向, 对",
+          "usage": "prep. 在, 向, 对"
+        },
+        {
           "en": "busy",
           "zh": "a. 忙碌的, 热闹的, 没空的",
           "usage": "a. 忙碌的, 热闹的, 没空的"
@@ -1087,14 +1597,39 @@
           "usage": "v. 吃, 腐蚀"
         },
         {
+          "en": "help",
+          "zh": "n. 帮忙, 帮助者, 补救办法, 有益的东西",
+          "usage": "n. 帮忙, 帮助者, 补救办法, 有益的东西"
+        },
+        {
+          "en": "here",
+          "zh": "adv. 在这里, 此时, 这里",
+          "usage": "adv. 在这里, 此时, 这里"
+        },
+        {
           "en": "I",
           "zh": "我（说话的人）",
           "usage": "I指说话的人，书写通常大写。"
         },
         {
+          "en": "need",
+          "zh": "n. 需要, 必须, 缺乏",
+          "usage": "n. 需要, 必须, 缺乏"
+        },
+        {
+          "en": "night",
+          "zh": "n. 夜, 夜晚, 晚上, 黑暗, 夜晚的工作",
+          "usage": "n. 夜, 夜晚, 晚上, 黑暗, 夜晚的工作"
+        },
+        {
           "en": "not",
           "zh": "adv. 不, 非, 未",
           "usage": "adv. 不, 非, 未"
+        },
+        {
+          "en": "read",
+          "zh": "v. 读, 阅读, 理解",
+          "usage": "v. 读, 阅读, 理解"
         },
         {
           "en": "rice",
@@ -1105,6 +1640,11 @@
           "en": "tea",
           "zh": "n. 茶, 茶叶",
           "usage": "n. 茶, 茶叶"
+        },
+        {
+          "en": "work",
+          "zh": "n. 工作, 劳动, 职业, 行为, 功, 作品, 成果, 产品, 工程",
+          "usage": "n. 工作, 劳动, 职业, 行为, 功, 作品, 成果, 产品, 工程"
         }
       ],
       "requires": [
@@ -1131,6 +1671,36 @@
           ],
           "accepted_answers": [
             "I am not busy."
+          ]
+        },
+        {
+          "en": "I do not read at night.",
+          "zh": "我晚上不读书。",
+          "requires": [
+            "mainline-U04-1"
+          ],
+          "accepted_answers": [
+            "I do not read at night."
+          ]
+        },
+        {
+          "en": "I do not work here.",
+          "zh": "我不在这里工作。",
+          "requires": [
+            "mainline-U04-1"
+          ],
+          "accepted_answers": [
+            "I do not work here."
+          ]
+        },
+        {
+          "en": "I do not need help.",
+          "zh": "我不需要帮助。",
+          "requires": [
+            "mainline-U04-1"
+          ],
+          "accepted_answers": [
+            "I do not need help."
           ]
         }
       ],
@@ -1175,9 +1745,24 @@
           "usage": "这里English表示英语，语言名称通常首字母大写。"
         },
         {
+          "en": "help",
+          "zh": "n. 帮忙, 帮助者, 补救办法, 有益的东西",
+          "usage": "n. 帮忙, 帮助者, 补救办法, 有益的东西"
+        },
+        {
+          "en": "here",
+          "zh": "adv. 在这里, 此时, 这里",
+          "usage": "adv. 在这里, 此时, 这里"
+        },
+        {
           "en": "learn",
           "zh": "vt. 学习；认识到；得知",
           "usage": "vt. 学习；认识到；得知"
+        },
+        {
+          "en": "need",
+          "zh": "n. 需要, 必须, 缺乏",
+          "usage": "n. 需要, 必须, 缺乏"
         },
         {
           "en": "read",
@@ -1188,6 +1773,11 @@
           "en": "tea",
           "zh": "n. 茶, 茶叶",
           "usage": "n. 茶, 茶叶"
+        },
+        {
+          "en": "work",
+          "zh": "n. 工作, 劳动, 职业, 行为, 功, 作品, 成果, 产品, 工程",
+          "usage": "n. 工作, 劳动, 职业, 行为, 功, 作品, 成果, 产品, 工程"
         },
         {
           "en": "you",
@@ -1219,6 +1809,26 @@
           "accepted_answers": [
             "Do you learn English?"
           ]
+        },
+        {
+          "en": "Do you work here?",
+          "zh": "你在这里工作吗？",
+          "requires": [
+            "mainline-U04-2"
+          ],
+          "accepted_answers": [
+            "Do you work here?"
+          ]
+        },
+        {
+          "en": "Do you need help?",
+          "zh": "你需要帮助吗？",
+          "requires": [
+            "mainline-U04-2"
+          ],
+          "accepted_answers": [
+            "Do you need help?"
+          ]
         }
       ],
       "topic_id": "U04.2",
@@ -1242,6 +1852,11 @@
       "sentence_zh": "我的书在哪里？",
       "materials": [
         {
+          "en": "bag",
+          "zh": "n. 袋子, 袋状物",
+          "usage": "n. 袋子, 袋状物"
+        },
+        {
           "en": "book",
           "zh": "n. 书, 书籍, 帐簿, 名册, 工作簿",
           "usage": "n. 书, 书籍, 帐簿, 名册, 工作簿"
@@ -1260,6 +1875,16 @@
           "en": "my",
           "zh": "pron. 我的",
           "usage": "pron. 我的"
+        },
+        {
+          "en": "school",
+          "zh": "n. 学校, 鱼群, 门派, 学派",
+          "usage": "n. 学校, 鱼群, 门派, 学派"
+        },
+        {
+          "en": "the",
+          "zh": "双方能确定的那个／那些",
+          "usage": "the表示对方能够确定所指的对象，不只是中文那个。"
         },
         {
           "en": "this",
@@ -1306,6 +1931,46 @@
           ],
           "accepted_answers": [
             "Where is your cup?"
+          ]
+        },
+        {
+          "en": "Where is my bag?",
+          "zh": "我的包在哪里？",
+          "requires": [
+            "mainline-U04-3"
+          ],
+          "accepted_answers": [
+            "Where is my bag?"
+          ]
+        },
+        {
+          "en": "Where is your book?",
+          "zh": "你的书在哪里？",
+          "requires": [
+            "mainline-U04-3"
+          ],
+          "accepted_answers": [
+            "Where is your book?"
+          ]
+        },
+        {
+          "en": "Where is the school?",
+          "zh": "学校在哪里？",
+          "requires": [
+            "mainline-U04-3"
+          ],
+          "accepted_answers": [
+            "Where is the school?"
+          ]
+        },
+        {
+          "en": "Where is my cup?",
+          "zh": "我的杯子在哪里？",
+          "requires": [
+            "mainline-U04-3"
+          ],
+          "accepted_answers": [
+            "Where is my cup?"
           ]
         }
       ],
@@ -16456,6 +17121,13 @@
       "source_asset_id": "lex-c9bc072f4fa81894",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
+    "ready": {
+      "zh": "n. 预备好的状态, 现款",
+      "pos": "adj. 形容词",
+      "usage": "n. 预备好的状态, 现款",
+      "source_asset_id": "lex-b24d6d33736ecd56",
+      "source": "ECDICT / packaged lexical resource (MIT)"
+    },
     "student": {
       "zh": "n. 学生, 研究者, 学者",
       "pos": "n. 名词",
@@ -16468,6 +17140,13 @@
       "pos": "n. 名词",
       "usage": "n. 教师, 老师, 导师",
       "source_asset_id": "lex-1057a9604e04b274",
+      "source": "ECDICT / packaged lexical resource (MIT)"
+    },
+    "tired": {
+      "zh": "a. 疲累的, 疲乏的, 厌倦的",
+      "pos": "adj. 形容词",
+      "usage": "a. 疲累的, 疲乏的, 厌倦的",
+      "source_asset_id": "lex-c405760daf9bc32b",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
     "apple": {
@@ -16505,11 +17184,67 @@
       "source_asset_id": "lex-1eb79602411ef02c",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
+    "bag": {
+      "zh": "n. 袋子, 袋状物",
+      "pos": "n. 名词",
+      "usage": "n. 袋子, 袋状物",
+      "source_asset_id": "lex-c018019b6a8b01ab",
+      "source": "ECDICT / packaged lexical resource (MIT)"
+    },
+    "my": {
+      "zh": "pron. 我的",
+      "pos": "pron. 代词",
+      "usage": "pron. 我的",
+      "source_asset_id": "lex-038468518ad8122e",
+      "source": "ECDICT / packaged lexical resource (MIT)"
+    },
     "not": {
       "zh": "adv. 不, 非, 未",
       "pos": "小品词",
       "usage": "adv. 不, 非, 未",
       "source_asset_id": "lex-254bb97b57f12e16",
+      "source": "ECDICT / packaged lexical resource (MIT)"
+    },
+    "room": {
+      "zh": "n. 房间, 空位, 场所",
+      "pos": "n. 名词",
+      "usage": "n. 房间, 空位, 场所",
+      "source_asset_id": "lex-1f1c5b2fad778434",
+      "source": "ECDICT / packaged lexical resource (MIT)"
+    },
+    "school": {
+      "zh": "n. 学校, 鱼群, 门派, 学派",
+      "pos": "n. 名词",
+      "usage": "n. 学校, 鱼群, 门派, 学派",
+      "source_asset_id": "lex-d64debd942d7dc26",
+      "source": "ECDICT / packaged lexical resource (MIT)"
+    },
+    "your": {
+      "zh": "pron. 你的, 你们的",
+      "pos": "pron. 代词",
+      "usage": "pron. 你的, 你们的",
+      "source_asset_id": "lex-4d040d3f6466018c",
+      "source": "ECDICT / packaged lexical resource (MIT)"
+    },
+    "after": {
+      "zh": "prep. 在...之后, 由于",
+      "pos": "prep. 介词",
+      "usage": "prep. 在...之后, 由于",
+      "source_asset_id": "lex-f39592393ef0859c",
+      "source": "ECDICT / packaged lexical resource (MIT)"
+    },
+    "at": {
+      "zh": "prep. 在, 向, 对",
+      "pos": "prep. 介词",
+      "usage": "prep. 在, 向, 对",
+      "source_asset_id": "lex-b1d6b91b67c2afa5",
+      "source": "ECDICT / packaged lexical resource (MIT)"
+    },
+    "day": {
+      "zh": "n. 天, 日子, 白天, 工作日",
+      "pos": "n. 名词",
+      "usage": "n. 天, 日子, 白天, 工作日",
+      "source_asset_id": "lex-944c27e5b97ab779",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
     "drink": {
@@ -16526,6 +17261,34 @@
       "source_asset_id": "lex-e57bd924047ef39d",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
+    "every": {
+      "zh": "a. 每一, 所有的",
+      "pos": "限定词",
+      "usage": "a. 每一, 所有的",
+      "source_asset_id": "lex-66a424a9a958b152",
+      "source": "ECDICT / packaged lexical resource (MIT)"
+    },
+    "home": {
+      "zh": "n. 家, 避难所, 故乡",
+      "pos": "n. 名词",
+      "usage": "n. 家, 避难所, 故乡",
+      "source_asset_id": "lex-4ea140588150773c",
+      "source": "ECDICT / packaged lexical resource (MIT)"
+    },
+    "in": {
+      "zh": "prep. 在...期间, 在...之内, 处于...之中, 从事于, 按照, 穿着",
+      "pos": "prep. 介词",
+      "usage": "prep. 在...期间, 在...之内, 处于...之中, 从事于, 按照, 穿着",
+      "source_asset_id": "lex-582967534d0f909d",
+      "source": "ECDICT / packaged lexical resource (MIT)"
+    },
+    "morning": {
+      "zh": "n. 早晨, 早上, 初期",
+      "pos": "n. 名词",
+      "usage": "n. 早晨, 早上, 初期",
+      "source_asset_id": "lex-c23b31a0179b550f",
+      "source": "ECDICT / packaged lexical resource (MIT)"
+    },
     "rice": {
       "zh": "n. 米, 米饭, 稻",
       "pos": "n. 名词",
@@ -16538,6 +17301,13 @@
       "pos": "n. 名词",
       "usage": "n. 水, 雨水, 海水, 水位, 水面, 流水",
       "source_asset_id": "lex-0f4168490e38b844",
+      "source": "ECDICT / packaged lexical resource (MIT)"
+    },
+    "work": {
+      "zh": "n. 工作, 劳动, 职业, 行为, 功, 作品, 成果, 产品, 工程",
+      "pos": "v. 动词",
+      "usage": "n. 工作, 劳动, 职业, 行为, 功, 作品, 成果, 产品, 工程",
+      "source_asset_id": "lex-00e13ed7af55b276",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
     "books": {
@@ -16568,18 +17338,18 @@
       "source_asset_id": "lex-4cd0e21a9a0795a1",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
-    "home": {
-      "zh": "n. 家, 避难所, 故乡",
+    "night": {
+      "zh": "n. 夜, 夜晚, 晚上, 黑暗, 夜晚的工作",
       "pos": "n. 名词",
-      "usage": "n. 家, 避难所, 故乡",
-      "source_asset_id": "lex-4ea140588150773c",
+      "usage": "n. 夜, 夜晚, 晚上, 黑暗, 夜晚的工作",
+      "source_asset_id": "lex-176473d7313395b6",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
-    "school": {
-      "zh": "n. 学校, 鱼群, 门派, 学派",
-      "pos": "n. 名词",
-      "usage": "n. 学校, 鱼群, 门派, 学派",
-      "source_asset_id": "lex-d64debd942d7dc26",
+    "together": {
+      "zh": "adv. 一起, 共同, 彼此",
+      "pos": "adv. 副词",
+      "usage": "adv. 一起, 共同, 彼此",
+      "source_asset_id": "lex-0c24734d7bf5954f",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
     "tea": {
@@ -16587,6 +17357,20 @@
       "pos": "n. 名词",
       "usage": "n. 茶, 茶叶",
       "source_asset_id": "lex-a9f74d1ec36ebdeb",
+      "source": "ECDICT / packaged lexical resource (MIT)"
+    },
+    "job": {
+      "zh": "n. 工作, 零活, 职业, 事情",
+      "pos": "n. 名词",
+      "usage": "n. 工作, 零活, 职业, 事情",
+      "source_asset_id": "lex-5e8c9902207afaeb",
+      "source": "ECDICT / packaged lexical resource (MIT)"
+    },
+    "question": {
+      "zh": "n. 问题, 询问",
+      "pos": "n. 名词",
+      "usage": "n. 问题, 询问",
+      "source_asset_id": "lex-1f5087db919ced5c",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
     "two": {
@@ -16603,18 +17387,18 @@
       "source_asset_id": "lex-354cbfc814262a7a",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
-    "my": {
-      "zh": "pron. 我的",
-      "pos": "pron. 代词",
-      "usage": "pron. 我的",
-      "source_asset_id": "lex-038468518ad8122e",
+    "here": {
+      "zh": "adv. 在这里, 此时, 这里",
+      "pos": "adv. 副词",
+      "usage": "adv. 在这里, 此时, 这里",
+      "source_asset_id": "lex-fcec91509759ad99",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
-    "your": {
-      "zh": "pron. 你的, 你们的",
-      "pos": "pron. 代词",
-      "usage": "pron. 你的, 你们的",
-      "source_asset_id": "lex-4d040d3f6466018c",
+    "small": {
+      "zh": "a. 小的, 少的, 小型的, 低微的, 小气的, 细微的",
+      "pos": "adj. 形容词",
+      "usage": "a. 小的, 少的, 小型的, 低微的, 小气的, 细微的",
+      "source_asset_id": "lex-81db8ebbbbc69c6c",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
     "help": {
@@ -16629,6 +17413,13 @@
       "pos": "pron. 代词",
       "usage": "pron. 我",
       "source_asset_id": "lex-2744ccd10c7533bd",
+      "source": "ECDICT / packaged lexical resource (MIT)"
+    },
+    "need": {
+      "zh": "n. 需要, 必须, 缺乏",
+      "pos": "v. 动词",
+      "usage": "n. 需要, 必须, 缺乏",
+      "source_asset_id": "lex-be8dff00b0d468b2",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
     "what": {
@@ -16673,13 +17464,6 @@
       "source_asset_id": "lex-8656aa55d393b032",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
-    "need": {
-      "zh": "n. 需要, 必须, 缺乏",
-      "pos": "v. 动词",
-      "usage": "n. 需要, 必须, 缺乏",
-      "source_asset_id": "lex-be8dff00b0d468b2",
-      "source": "ECDICT / packaged lexical resource (MIT)"
-    },
     "rest": {
       "zh": "n. 休息, 睡眠, 安息, 稍息, 静止, 支架, 休息处, 其余者, 剩余部分",
       "pos": "n. 名词",
@@ -16706,13 +17490,6 @@
       "pos": "v. 动词",
       "usage": "vt. 进入, 参加, 开始, 输入, 回车",
       "source_asset_id": "lex-e08d706b3e4ce964",
-      "source": "ECDICT / packaged lexical resource (MIT)"
-    },
-    "here": {
-      "zh": "adv. 在这里, 此时, 这里",
-      "pos": "adv. 副词",
-      "usage": "adv. 在这里, 此时, 这里",
-      "source_asset_id": "lex-fcec91509759ad99",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
     "please": {
@@ -16806,27 +17583,6 @@
       "source_asset_id": "lex-793080bb3a187fca",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
-    "at": {
-      "zh": "prep. 在, 向, 对",
-      "pos": "prep. 介词",
-      "usage": "prep. 在, 向, 对",
-      "source_asset_id": "lex-b1d6b91b67c2afa5",
-      "source": "ECDICT / packaged lexical resource (MIT)"
-    },
-    "in": {
-      "zh": "prep. 在...期间, 在...之内, 处于...之中, 从事于, 按照, 穿着",
-      "pos": "prep. 介词",
-      "usage": "prep. 在...期间, 在...之内, 处于...之中, 从事于, 按照, 穿着",
-      "source_asset_id": "lex-582967534d0f909d",
-      "source": "ECDICT / packaged lexical resource (MIT)"
-    },
-    "morning": {
-      "zh": "n. 早晨, 早上, 初期",
-      "pos": "n. 名词",
-      "usage": "n. 早晨, 早上, 初期",
-      "source_asset_id": "lex-c23b31a0179b550f",
-      "source": "ECDICT / packaged lexical resource (MIT)"
-    },
     "on": {
       "zh": "prep. 在...之上",
       "pos": "prep. 介词",
@@ -16918,27 +17674,6 @@
       "source_asset_id": "lex-543b1c4bd4f6b184",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
-    "day": {
-      "zh": "n. 天, 日子, 白天, 工作日",
-      "pos": "n. 名词",
-      "usage": "n. 天, 日子, 白天, 工作日",
-      "source_asset_id": "lex-944c27e5b97ab779",
-      "source": "ECDICT / packaged lexical resource (MIT)"
-    },
-    "every": {
-      "zh": "a. 每一, 所有的",
-      "pos": "限定词",
-      "usage": "a. 每一, 所有的",
-      "source_asset_id": "lex-66a424a9a958b152",
-      "source": "ECDICT / packaged lexical resource (MIT)"
-    },
-    "night": {
-      "zh": "n. 夜, 夜晚, 晚上, 黑暗, 夜晚的工作",
-      "pos": "n. 名词",
-      "usage": "n. 夜, 夜晚, 晚上, 黑暗, 夜晚的工作",
-      "source_asset_id": "lex-176473d7313395b6",
-      "source": "ECDICT / packaged lexical resource (MIT)"
-    },
     "sometimes": {
       "zh": "adv. 有时, 时常, 往往",
       "pos": "adv. 副词",
@@ -16979,27 +17714,6 @@
       "pos": "限定词",
       "usage": "a. 每个, 每一",
       "source_asset_id": "lex-bec1687971e36be5",
-      "source": "ECDICT / packaged lexical resource (MIT)"
-    },
-    "room": {
-      "zh": "n. 房间, 空位, 场所",
-      "pos": "n. 名词",
-      "usage": "n. 房间, 空位, 场所",
-      "source_asset_id": "lex-1f1c5b2fad778434",
-      "source": "ECDICT / packaged lexical resource (MIT)"
-    },
-    "small": {
-      "zh": "a. 小的, 少的, 小型的, 低微的, 小气的, 细微的",
-      "pos": "adj. 形容词",
-      "usage": "a. 小的, 少的, 小型的, 低微的, 小气的, 细微的",
-      "source_asset_id": "lex-81db8ebbbbc69c6c",
-      "source": "ECDICT / packaged lexical resource (MIT)"
-    },
-    "tired": {
-      "zh": "a. 疲累的, 疲乏的, 厌倦的",
-      "pos": "adj. 形容词",
-      "usage": "a. 疲累的, 疲乏的, 厌倦的",
-      "source_asset_id": "lex-c405760daf9bc32b",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
     "and": {
@@ -17049,13 +17763,6 @@
       "pos": "v. 动词",
       "usage": "v. 讲, 谈( speak的第三人称单数 ); 说; 演说; 从某种观点来说",
       "source_asset_id": "lex-d036316da91141d5",
-      "source": "ECDICT / packaged lexical resource (MIT)"
-    },
-    "bag": {
-      "zh": "n. 袋子, 袋状物",
-      "pos": "n. 名词",
-      "usage": "n. 袋子, 袋状物",
-      "source_asset_id": "lex-c018019b6a8b01ab",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
     "table": {
@@ -17245,13 +17952,6 @@
       "pos": "v. 动词",
       "usage": "n. 谈话, 交谈, 会谈, 讲话, 演讲, 空谈, 谣言, 方言, 语言",
       "source_asset_id": "lex-ce7611e7481e75f0",
-      "source": "ECDICT / packaged lexical resource (MIT)"
-    },
-    "after": {
-      "zh": "prep. 在...之后, 由于",
-      "pos": "prep. 介词",
-      "usage": "prep. 在...之后, 由于",
-      "source_asset_id": "lex-f39592393ef0859c",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
     "picture": {
@@ -17786,13 +18486,6 @@
       "source_asset_id": "lex-ba0f95091e1972cc",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
-    "work": {
-      "zh": "n. 工作, 劳动, 职业, 行为, 功, 作品, 成果, 产品, 工程",
-      "pos": "v. 动词",
-      "usage": "n. 工作, 劳动, 职业, 行为, 功, 作品, 成果, 产品, 工程",
-      "source_asset_id": "lex-00e13ed7af55b276",
-      "source": "ECDICT / packaged lexical resource (MIT)"
-    },
     "because": {
       "zh": "conj. 因为",
       "pos": "从属连词",
@@ -17819,13 +18512,6 @@
       "pos": "n. 名词",
       "usage": "n. 家庭, 家人, 族",
       "source_asset_id": "lex-d34a569ab7aaa54d",
-      "source": "ECDICT / packaged lexical resource (MIT)"
-    },
-    "job": {
-      "zh": "n. 工作, 零活, 职业, 事情",
-      "pos": "n. 名词",
-      "usage": "n. 工作, 零活, 职业, 事情",
-      "source_asset_id": "lex-5e8c9902207afaeb",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
     "order": {
@@ -18610,13 +19296,6 @@
       "pos": "adj. 形容词",
       "usage": "a. 正确的, 合适的",
       "source_asset_id": "lex-15a596e3c98c407e",
-      "source": "ECDICT / packaged lexical resource (MIT)"
-    },
-    "ready": {
-      "zh": "n. 预备好的状态, 现款",
-      "pos": "adj. 形容词",
-      "usage": "n. 预备好的状态, 现款",
-      "source_asset_id": "lex-b24d6d33736ecd56",
       "source": "ECDICT / packaged lexical resource (MIT)"
     },
     "explain": {
@@ -26315,7 +26994,7 @@
       "note": "核心例题只覆盖本目标的部分用法；不从同课拼写成绩推导整项目标掌握"
     }
   ],
-  "source_sha256": "9d8a537e5d250d202a49c7489ba58ee7c145f60543ced13788968688f436d439",
+  "source_sha256": "cb88bc87e46942d6bd07eb4b38f5aee617d6ea177b41fbeb80aef0db9a708611",
   "assessment_policy": {
     "fixed_answers_only": true,
     "automatic_full_objective_certification": false,
@@ -26325,7 +27004,7 @@
   "counts": {
     "topics": 148,
     "objectives": 729,
-    "context_questions": 294,
-    "reusable_words": 378
+    "context_questions": 331,
+    "reusable_words": 380
   }
 }

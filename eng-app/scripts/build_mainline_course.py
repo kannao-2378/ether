@@ -29,6 +29,15 @@ def build():
         tid,en,zh,usage,demo,dzh,a,az,b,bz,deps=fields
         if tid in records:raise ValueError('duplicate topic '+tid)
         records[tid]=dict(id=tid,en=en,zh=zh,usage=usage,demo=demo,dzh=dzh,tests=[(a,az),(b,bz)],deps=deps.split(',') if deps else [])
+    extra=ROOT/'backend/resources/mainline_extra_contexts.psv'
+    if extra.exists():
+        for line in extra.read_text(encoding='utf-8').splitlines():
+            if not line.strip() or line.startswith('#'):continue
+            parts=line.split('|');tid=parts[0]
+            if tid not in records or len(parts)%2!=1:raise ValueError('invalid extra context row '+tid)
+            for en,zh in zip(parts[1::2],parts[2::2]):
+                if en.strip().casefold().rstrip('.!?') in {e.strip().casefold().rstrip('.!?') for e,z in records[tid]['tests']} | {records[tid]['demo'].strip().casefold().rstrip('.!?'),records[tid]['en'].strip().casefold().rstrip('.!?')}:continue
+                records[tid]['tests'].append((en,zh))
     if set(records)!=set(topics):raise ValueError('topic coverage mismatch')
     ordered=[];visiting=set()
     def visit(tid):
@@ -78,7 +87,7 @@ def build():
         review=dict(status='authored_mainline_core',method='本项目原创课题讲解和有限答案练习；AI辅助语言核对、依赖和曝光检查；非官方教材、非全能力认证'),
         references=[dict(title='ECDICT · 部分词汇中文释义',url='https://github.com/skywind3000/ECDICT',license='MIT')],units=[dict(id=s['id'],title=s['name'],goal=s['description'],position=i+1) for i,s in enumerate(route['stages'])],
         goals=goals,word_notes=notes,mapped_objectives=mapping,objective_tasks=objective_tasks,
-        source_sha256=hashlib.sha256(SOURCE.read_bytes()).hexdigest(),
+        source_sha256=hashlib.sha256(SOURCE.read_bytes()+(extra.read_bytes() if extra.exists() else b'')).hexdigest(),
         assessment_policy=dict(fixed_answers_only=True,automatic_full_objective_certification=False,
             unseen_context_only_after_materials=True,fsrs_unchanged=True),
         counts=dict(topics=len(goals),objectives=len(objective_tasks),context_questions=sum(len(g['variants']) for g in goals),

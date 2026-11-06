@@ -49,3 +49,6 @@ and topic assignments have not received item-by-item expert review.
 ## Optional lookup reference
 
 `lookup-reference.sqlite3.gz` is a public, reproducible index of the ECDICT and Tatoeba snapshots described above. It is not user data or an automatically assigned course. ECDICT MIT text is included at `ecdict/LICENSE`; Tatoeba sentence/translation IDs are stored to support source attribution. Online supplemental examples retain their available author and license fields.
+
+## Official Tatoeba bulk exports (2026-11-06 local installation)
+Direct official eng/cmn detailed exports and eng-cmn links from https://downloads.tatoeba.org/exports/per_language/ . Standard Tatoeba text license CC BY 2.0 FR. Original sentence IDs, contributors, timestamps, English and Mandarin text and direct translation links retained in the independent shared corpus. Per-file hashes and retrieval metadata are in the local download manifest. This community corpus is not publisher-reviewed curriculum. No translations have been generated.

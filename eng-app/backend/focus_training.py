@@ -1,3 +1,4 @@
+import scheduler as memory_scheduler
 """User-selected, bounded practice batches using registered knowledge only."""
 import re,json,uuid
 from datetime import timedelta,datetime,timezone
@@ -90,12 +91,13 @@ def refresh(c,gid,stamp):
   c.execute(text('DELETE FROM group_active_slots WHERE group_id=:g'),dict(g=gid))
 
 def select(c,stamp,allow_repeat=False):
- last_fuzzy=None if allow_repeat else groups.recent_fuzzy(c,stamp)
+ last_fuzzy=None if allow_repeat or memory_scheduler.time_queue_enabled() else groups.recent_fuzzy(c,stamp)
  requests=c.execute(text("SELECT id FROM focus_requests WHERE status IN ('pending','active') ORDER BY rowid")).scalars().all()
  for gid in requests:
   item,_=step(c,gid,stamp)
   if item is None:refresh(c,gid,stamp);continue
   pending=c.execute(text('SELECT q.id FROM questions q JOIN group_questions g ON g.question_id=q.id LEFT JOIN answers a ON a.question_id=q.id WHERE g.group_id=:g AND q.knowledge_id=:k AND a.id IS NULL ORDER BY q.rowid LIMIT 1'),dict(g=gid,k=item['id'])).scalar()
+  if not pending and memory_scheduler.time_queue_enabled() and memory_scheduler.item_due(c,item['id'],stamp)>stamp:continue
   if not pending and groups.repeats_fuzzy(item,last_fuzzy):continue
   if not groups.acquire(c,gid,stamp):return None
   c.execute(text("UPDATE focus_requests SET status='active' WHERE id=:g"),dict(g=gid))
