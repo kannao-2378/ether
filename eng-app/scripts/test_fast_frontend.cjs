@@ -1,0 +1,21 @@
+const path=require('node:path'),fs=require('node:fs');
+const root=path.resolve(__dirname,'..'),out=path.join(root,'.tools/frontend-check');fs.mkdirSync(out,{recursive:true});
+const esbuild=require(path.join(root,'frontend/node_modules/esbuild'));
+for(const name of ['localWordCheck','readCache'])esbuild.buildSync({entryPoints:[path.join(root,'frontend/src',name+'.ts')],outfile:path.join(out,name+'.cjs'),bundle:true,platform:'node',format:'cjs'});
+const assert=require('node:assert/strict');global.window={addEventListener(){}};
+const {localWordCheck}=require(path.join(out,'localWordCheck.cjs'));const {cachedRead,clearReadCache,peekRead}=require(path.join(out,'readCache.cjs'));const [want,eat]=require('./fixtures/local-word-proofs.json');
+(async()=>{
+ assert.equal((await localWordCheck(want,0,'WANT')).correct,true);
+ assert.equal((await localWordCheck(want,0,'wont')).correct,false);
+ assert.equal((await localWordCheck(eat,3,'I want to hav')).pending,true);
+ assert.equal((await localWordCheck(eat,3,'I want to eat')).complete,true);
+ assert.equal((await localWordCheck(eat,3,'I want to have')).complete,false);
+ assert.equal((await localWordCheck(eat,5,'I want to have a meal.')).complete,true);
+ assert.equal(await localWordCheck(undefined,0,'want'),null);
+ let calls=0;const load=async()=>{calls++;await new Promise(r=>setTimeout(r,10));return new Response(JSON.stringify({n:calls}),{headers:{'Content-Type':'application/json'}})};
+ const [a,b]=await Promise.all([cachedRead('test',1000,load),cachedRead('test',1000,load)]);assert.equal(calls,1);assert.deepEqual(await a.json(),await b.json());
+ await cachedRead('test',1000,load);assert.equal(calls,1);assert.equal(peekRead('test').n,1);
+ clearReadCache();assert.equal(peekRead('test'),null);await cachedRead('test',1000,load);assert.equal(calls,2);
+ clearReadCache();const old=cachedRead('test',1000,load);clearReadCache();await old;assert.equal(peekRead('test'),null);
+ console.log('7 local-word cases and 4 cache/deduplication/invalidation cases passed');
+})().catch(e=>{console.error(e);process.exit(1)});

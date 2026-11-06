@@ -1,5 +1,0 @@
-export function CurriculumOutline({courses}:{courses:any[]}){
- const units=courses.flatMap(c=>c.units),total=courses.reduce((sum,c)=>sum+(c.total??c.units.reduce((n:number,u:any)=>n+u.total,0)),0);
- function openUnit(event:React.MouseEvent,id:string){event.preventDefault();const el=document.getElementById('course-unit-'+id) as HTMLDetailsElement|null;if(el){el.open=true;let parent=el.parentElement?.closest('details');while(parent){parent.open=true;parent=parent.parentElement?.closest('details');}el.scrollIntoView({behavior:'smooth',block:'start'});}}
- return <section className="curriculum-outline" aria-label="课程大纲与目录"><h3>课程目录</h3><div className="content-totals"><div><strong>{courses.length}</strong><span>门课程</span></div><div><strong>{units.length}</strong><span>个单元</span></div><div><strong>{total}</strong><span>项课程内容</span></div></div>{courses.map(c=><details className="outline-course" key={c.id}><summary>{c.title}<small>{c.total}</small></summary><ol>{c.units.map((u:any)=><li key={u.id}><a href={'#course-unit-'+u.id} onClick={e=>openUnit(e,u.id)}><span>{u.title}</span><small>{u.total} 项</small></a></li>)}</ol></details>)}</section>;
-}

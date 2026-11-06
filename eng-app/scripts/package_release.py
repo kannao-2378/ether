@@ -9,7 +9,7 @@ def package(target):
  if '/eng/assets/' not in (dist/'index.html').read_text(encoding='utf-8'):raise ValueError('Frontend must be built with --base=/eng/')
  paths=list((ROOT/'backend').glob('*.py'))
  paths=[p for p in paths if not p.name.startswith('test_')]
- paths+=[ROOT/'backend/requirements.txt',ROOT/'backend/requirements-production.txt',ROOT/'backend/resources/lookup-reference.sqlite3.gz',ROOT/'backend/resources/ecdict/LICENSE',ROOT/'backend/resources/compiled_courses.json',ROOT/'backend/resources/teaching_routes.json',ROOT/'backend/resources/transfer_practice.psv',ROOT/'backend/resources/composition_rules.json',ROOT/'backend/resources/sourced_transfer_pilot.json',ROOT/'backend/resources/THIRD_PARTY_NOTICES.md',ROOT/'scripts/create_auth_env.py']
+ paths+=[ROOT/'backend/requirements.txt',ROOT/'backend/requirements-production.txt',ROOT/'backend/resources/lookup-reference.sqlite3.gz',ROOT/'backend/resources/ecdict/LICENSE',ROOT/'backend/resources/compiled_courses.json',ROOT/'backend/resources/teaching_routes.json',ROOT/'backend/resources/transfer_practice.psv',ROOT/'backend/resources/composition_rules.json',ROOT/'backend/resources/sourced_transfer_pilot.json',ROOT/'backend/resources/THIRD_PARTY_NOTICES.md',ROOT/'scripts/create_auth_env.py',ROOT/'scripts/cleanup_deployment.py']
  paths+=list((ROOT/'deploy').glob('*'))
  paths += [ROOT/'backend/resources'/name for name in ('starter_course.json','mainline_course.json','mainline_lessons.psv','mainline_word_notes.json','mainline_pronunciation.json','mainline_extra_contexts.psv','course_expansion.json')]
  paths += [ROOT/'backend/resources/cmudict/LICENSE']
