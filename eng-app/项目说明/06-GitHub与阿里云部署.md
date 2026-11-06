@@ -151,3 +151,5 @@ curl -f http://127.0.0.1:8010/api/health
 2026-11-06 18:06：8b50cd5已实际部署，公共共享库SHA256为840bbe59005b56bcd5b0c23c2680983e48203481da514dc1e0f883bac54b2bdc。快照 /var/lib/pels/before-shared-performance-20261106-180645.zip，回滚 /opt/pels/.before-shared-performance-20261106-180645。七类原始学习表逐行保留、SQLite正常、service/health/新JS与CSS/未登录401/原作品集哈希通过。开启FSRS时间穿插，78092原始配对统一登记词典，新词均未学；新增内容不复制成绩。12项接入针对性检查及此前8项页面检查通过，非全套。
 
 2026-11-06 18:25：课程与查询最终运行版本8eb5576。快照 /var/lib/pels/before-course-query-20261106-182559.zip，回滚 /opt/pels/.before-course-query-20261106-182559。2718路线目标、七类学习表保留、SQLite、health、静态资源、未登录401和作品集哈希核对通过。未用本地数据库覆盖线上；未向线上提交模拟答题。
+
+2026-11-06 23:11：29cf493已部署页面缓存、轻量加载及浏览器逐词即时核对；快照/var/lib/pels/before-fast-pages-20261106-231131.zip，回滚/opt/pels/.before-fast-pages-20261106-231131。原始学习记录、2718路线目标、服务/HTTPS资源/认证隔离/原站哈希通过。性能只读复测与边界见36号说明，未向生产提交模拟答案。
