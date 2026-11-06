@@ -157,7 +157,11 @@ def initialize(target,with_bulk=False):
         composition_engine.install(c)
         sourced_transfer.install(c)
         starter_course.restore(c)
-        if os.environ.get('PELS_MAINLINE_ENABLED')=='1':mainline_runtime.install(c)
+        if os.environ.get('PELS_MAINLINE_ENABLED')=='1':
+            mainline_runtime.install(c)
+            if os.environ.get('PELS_COURSE_EXPANSION')=='1':
+                import course_expansion
+                course_expansion.install(c)
         # Only derived assessment caches are refreshed; raw answers and FSRS cards stay intact.
         for cached in c.execute(text('SELECT knowledge_id,payload FROM knowledge_assessments')).all():
             if json.loads(cached[1]).get('evidence_version')!=transfer_evidence.VERSION:
@@ -284,9 +288,12 @@ def learning_plan():
     with engine.connect() as c:
         admitted=group_learning.counts(c,now())
     with engine.connect() as c:curriculum=content.curriculum(c,include_items=False);packages=bulk_courses.summary(c)
-    with engine.connect() as c:
+    with engine.connect() as c,selection_cache.scope():
         route=curriculum_engine.report(c,s['active-course'])
         preparation=sourced_transfer.report(c,now(),s)
+        if os.environ.get('PELS_COURSE_EXPANSION')=='1':
+            import course_expansion
+            route['expansion']=course_expansion.summary()
         starter=starter_course.report(c) if testing.get() else None
     return dict(date=day,route=route,starter_course=starter,transfer_preparation=preparation,curriculum=curriculum,packages=packages,new_limit=s['daily-new-limit'],review_limit=s['daily-review-limit'],new_admitted=admitted.get('new',0),review_admitted=admitted.get('review',0),new_breakdown=d.get('new_breakdown',{}),cross_day_due=d['cross_day_due'],same_day_practice=d['same_day_practice'],today_count=d['today_count'],rules=[],weak=[])
 

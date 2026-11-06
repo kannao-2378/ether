@@ -92,10 +92,11 @@ class TeachingRegistryTests(unittest.TestCase):
   finally:app.testing.reset(token)
  def test_transfer_reuses_known_actions_and_blocks_unknown_radio(self):
   with self.db.begin() as c:
-   target=c.execute(text("SELECT knowledge_id FROM curriculum_lessons WHERE goal_id='listen-to' AND role='transfer'")).scalar()
+   target=c.execute(text("SELECT l.knowledge_id FROM curriculum_lessons l JOIN knowledge k ON k.id=l.knowledge_id WHERE l.goal_id='listen-to' AND l.role='transfer' AND lower(k.answer) LIKE '%radio%' ORDER BY l.position,l.knowledge_id LIMIT 1")).scalar()
    c.execute(text("UPDATE progress SET introduced=1,level=3 WHERE knowledge_id IN (SELECT knowledge_id FROM group_members WHERE group_id='listen-to')"))
-   c.execute(text("UPDATE progress SET level=0,introduced=0 WHERE knowledge_id='the-radio'"));self.assertFalse(groups.requirements_met(c,target))
-   c.execute(text("UPDATE progress SET level=3,introduced=1 WHERE knowledge_id='the-radio'"));self.assertTrue(groups.requirements_met(c,target))
+   c.execute(text("UPDATE progress SET introduced=1,level=3 WHERE knowledge_id IN (SELECT material_id FROM group_requirements WHERE knowledge_id=:k OR knowledge_id IN (SELECT knowledge_id FROM curriculum_aliases WHERE alias_id=:k))"),dict(k=target))
+   c.execute(text("UPDATE progress SET level=0,introduced=0 WHERE knowledge_id='the-radio' OR knowledge_id IN (SELECT id FROM knowledge WHERE lower(answer) IN ('radio','the radio'))"));self.assertFalse(groups.requirements_met(c,target))
+   c.execute(text("UPDATE progress SET level=3,introduced=1 WHERE knowledge_id='the-radio' OR knowledge_id IN (SELECT id FROM knowledge WHERE lower(answer) IN ('radio','the radio'))"));self.assertTrue(groups.requirements_met(c,target))
 
  def test_sandbox_skip_advances_without_independent_evidence(self):
   with self.db.begin() as c:c.execute(text('CREATE TABLE IF NOT EXISTS test_clock(id INTEGER PRIMARY KEY,days INTEGER,stage INTEGER)'));c.execute(text('INSERT OR REPLACE INTO test_clock VALUES(1,0,NULL)'))

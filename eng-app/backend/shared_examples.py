@@ -17,7 +17,7 @@ def plan(c,limit=20):
    if len(term)==1:known.update(term)
   exposed={r[0] for r in c.execute(text('SELECT answer_key FROM teaching_exposures'))}
   exposed.update(normalize(r[0]) for r in c.execute(text('SELECT k.answer FROM answers a JOIN knowledge k ON k.id=a.knowledge_id')))
-  goals=c.execute(text("""SELECT t.id,k.answer,k.prompt,p.unit_id,p.position FROM curriculum_goals t JOIN curriculum_paths p ON p.goal_id=t.id JOIN learning_groups g ON g.id=t.id JOIN knowledge k ON k.id=g.root_id WHERE p.course_id='general-mainline' AND t.status='ready' ORDER BY p.unit_position,p.position""")).mappings().all()
+  goals=c.execute(text("""SELECT t.id,k.answer,k.prompt,p.unit_id,p.position FROM curriculum_goals t JOIN curriculum_paths p ON p.goal_id=t.id JOIN learning_groups g ON g.id=t.id JOIN knowledge k ON k.id=g.root_id WHERE p.course_id='general-mainline' AND t.status='ready' AND t.id LIKE 'mainline-%' ORDER BY p.unit_position,p.position""")).mappings().all()
   import curriculum_engine as ce
   items=[];gaps=[];waiting=[]
   for g in goals:

@@ -167,8 +167,19 @@ def known(c,kid):
  row=c.execute(text("SELECT p.level FROM progress p WHERE p.introduced=1 AND (p.knowledge_id=:k OR p.knowledge_id IN (SELECT alias_id FROM curriculum_aliases WHERE knowledge_id=:k)) ORDER BY julianday(p.last_at) DESC,p.knowledge_id=:k DESC LIMIT 1"),dict(k=kid)).first()
  return bool(row and row[0]>=3)
 
-def blockers(c,gid):
- return [dict(id=r[0],english=r[1],reason='先掌握：'+r[1]) for r in c.execute(text('SELECT d.prerequisite_id,k.answer FROM curriculum_prerequisites d JOIN learning_groups g ON g.id=d.prerequisite_id JOIN knowledge k ON k.id=g.root_id WHERE d.goal_id=:g'),dict(g=gid)) if not known(c,r[0])]
+@memoized
+def blocker_map(c):
+ rows=c.execute(text("""WITH sources AS (
+ SELECT knowledge_id AS target,knowledge_id AS source,level,last_at FROM progress WHERE introduced=1
+ UNION ALL SELECT a.knowledge_id,p.knowledge_id,p.level,p.last_at FROM curriculum_aliases a JOIN progress p ON p.knowledge_id=a.alias_id WHERE p.introduced=1
+ ), ranked AS (SELECT *,ROW_NUMBER() OVER(PARTITION BY target ORDER BY julianday(last_at) DESC,target=source DESC) rn FROM sources)
+ SELECT d.goal_id,d.prerequisite_id,k.answer FROM curriculum_prerequisites d JOIN learning_groups g ON g.id=d.prerequisite_id JOIN knowledge k ON k.id=g.root_id
+ LEFT JOIN ranked p ON p.target=d.prerequisite_id AND p.rn=1 WHERE COALESCE(p.level,0)<3""")).all()
+ result={}
+ for gid,kid,en in rows:result.setdefault(gid,[]).append(dict(id=kid,english=en,reason='先掌握：'+en))
+ return result
+
+def blockers(c,gid):return blocker_map(c).get(gid,[])
 
 def candidates(c,course='all',limit=1):
  rows=c.execute(text("""SELECT DISTINCT g.id,g.title,g.kind AS unit_type,t.difficulty,p.course_id,p.unit_position,p.position FROM curriculum_goals t
@@ -177,6 +188,12 @@ def candidates(c,course='all',limit=1):
  WHERE t.status='ready' AND s.introduced=0
  AND NOT EXISTS(SELECT 1 FROM daily_group_tasks d WHERE d.group_id=g.id)
  ORDER BY p.course_id!='foundation',p.course_id,p.unit_position,t.difficulty,p.position,g.id"""),dict(c=course)).mappings().all()
+ # Breadth practice must not force hundreds of phrases before the next structure.
+ import os
+ if os.environ.get('PELS_COURSE_EXPANSION')=='1':
+  recent=c.execute(text("SELECT group_id FROM daily_group_tasks WHERE kind='new' ORDER BY rowid DESC LIMIT 4")).scalars().all()
+  breadth_first=len(recent)==4 and all(g.startswith('mainline-') for g in recent)
+  rows.sort(key=lambda r:(r['id'].startswith('mainline-') if breadth_first else not r['id'].startswith('mainline-')))
  result=[];seen=set()
  def add(gid):
   if gid in seen:return

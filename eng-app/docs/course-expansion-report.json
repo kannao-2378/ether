@@ -1,0 +1,3541 @@
+{
+  "counts": {
+    "input_expressions": 3000,
+    "lessons": 2570,
+    "word_forms": 3220,
+    "demonstrations": 2570,
+    "context_questions": 4052,
+    "gaps": 402,
+    "reused_core_expressions": 28,
+    "stages": {
+      "R01": 249,
+      "R02": 361,
+      "R03": 583,
+      "R05": 230,
+      "R04": 231,
+      "R06": 494,
+      "R07": 216,
+      "R08": 206
+    },
+    "domains": {
+      "travel": 298,
+      "daily": 151,
+      "self": 1075,
+      "relationships": 166,
+      "learning": 154,
+      "time": 357,
+      "work": 205,
+      "society": 68,
+      "design": 41,
+      "finance": 55
+    }
+  },
+  "gaps": [
+    {
+      "id": "expr-1409b49f94b8d694",
+      "english": "chinese characters",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "accepted",
+        "basic",
+        "chinese",
+        "components",
+        "hobbies",
+        "i'm",
+        "intellectual",
+        "it's",
+        "normally",
+        "pinyin",
+        "radicals",
+        "recognise",
+        "taiwan",
+        "unicode"
+      ]
+    },
+    {
+      "id": "expr-b58d82a2544b75aa",
+      "english": "watch tv",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "didn't",
+        "doesn't",
+        "felicja",
+        "let's",
+        "mary",
+        "nighttime",
+        "tom",
+        "tv",
+        "we're",
+        "you've"
+      ]
+    },
+    {
+      "id": "expr-caea094d741af3f9",
+      "english": "chinese food",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "biggest",
+        "china",
+        "chinese",
+        "doesn't",
+        "french",
+        "haven't",
+        "he's",
+        "i've",
+        "impression",
+        "japanese",
+        "tom",
+        "we've"
+      ]
+    },
+    {
+      "id": "expr-1b014f4e46071337",
+      "english": "compare to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-ce814bc362dadb0e",
+      "english": "wear out",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-316fdd2c1fdbdf2e",
+      "english": "rich in",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "arabia",
+        "c",
+        "culinary",
+        "fruits",
+        "india",
+        "japan",
+        "mineral",
+        "oil",
+        "oranges",
+        "saudi",
+        "vitamin"
+      ]
+    },
+    {
+      "id": "expr-c98e1ee7a8ab0f17",
+      "english": "long live",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "emperor",
+        "esperanto",
+        "france",
+        "india",
+        "quebec",
+        "revolution",
+        "soviet"
+      ]
+    },
+    {
+      "id": "expr-3f98fd4834b06337",
+      "english": "compare with",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "can't"
+      ]
+    },
+    {
+      "id": "expr-1d11b31a291438d5",
+      "english": "anything like",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't",
+        "i've",
+        "isn't",
+        "peter"
+      ]
+    },
+    {
+      "id": "expr-520309fbc8102052",
+      "english": "very often",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't",
+        "england",
+        "nap",
+        "qq",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-b92b2e9ae6edd472",
+      "english": "be afraid to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "didn't",
+        "don't",
+        "invest",
+        "john",
+        "mary",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-44179b8dd8caa750",
+      "english": "south of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "china",
+        "england",
+        "france",
+        "japan"
+      ]
+    },
+    {
+      "id": "expr-fc87a5781cbb895e",
+      "english": "dare to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "didn't",
+        "doesn't",
+        "don't",
+        "harsh",
+        "he's",
+        "score",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-d7ec1f10b8fd3d8c",
+      "english": "to the north",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "bordered",
+        "canada",
+        "hokkaido",
+        "honshu",
+        "laos",
+        "myanmar",
+        "north",
+        "sendai",
+        "states",
+        "thailand",
+        "united"
+      ]
+    },
+    {
+      "id": "expr-6dc115aa6c4aedf8",
+      "english": "for ages",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "haven't",
+        "they've",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-42b29ba6007f166c",
+      "english": "school day",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-5086e1b5eb7fa9e4",
+      "english": "get to sleep",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "can't",
+        "couldn't",
+        "i'm",
+        "i've",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-fb3fa99e0f10d548",
+      "english": "let alone",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "barely",
+        "boston",
+        "can't",
+        "chicago",
+        "don't",
+        "imane",
+        "intersex",
+        "italian",
+        "khelif",
+        "pc",
+        "reliable",
+        "tom",
+        "trans"
+      ]
+    },
+    {
+      "id": "expr-63db76e25f44806c",
+      "english": "head on",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "bumped",
+        "don't",
+        "mother's",
+        "pillow",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-ec153694483b2b7d",
+      "english": "set up",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "experimental",
+        "stadium",
+        "tent",
+        "we're"
+      ]
+    },
+    {
+      "id": "expr-764aa823916caad4",
+      "english": "fight with",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "attitude",
+        "booked",
+        "can't",
+        "defeatist",
+        "jonathan",
+        "ken",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-36ea1fc6f12b0fd6",
+      "english": "capital city",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "bangkok",
+        "finland",
+        "france",
+        "hanoi",
+        "karakorum",
+        "kiev",
+        "madrid",
+        "mongolia",
+        "paris",
+        "spain",
+        "thailand's",
+        "ukraine's",
+        "vietnam",
+        "what's"
+      ]
+    },
+    {
+      "id": "expr-a7d4905f93328287",
+      "english": "developed country",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "america",
+        "europe",
+        "northern",
+        "norway",
+        "states",
+        "united"
+      ]
+    },
+    {
+      "id": "expr-fad35def12ded9a9",
+      "english": "open on",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "bowl",
+        "cracked",
+        "doesn't",
+        "mary",
+        "rim",
+        "saturdays",
+        "sundays"
+      ]
+    },
+    {
+      "id": "expr-cc6b6ae7df2c4187",
+      "english": "right back",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't",
+        "he'd",
+        "i'll",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-a25e9fe3d5780a28",
+      "english": "hand on",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-7928cb2b45db3ca3",
+      "english": "chinese language",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "chinese",
+        "teacher's"
+      ]
+    },
+    {
+      "id": "expr-6e302933e92e1a7d",
+      "english": "for months",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i've",
+        "quran",
+        "you've"
+      ]
+    },
+    {
+      "id": "expr-2cd723e88a7f58aa",
+      "english": "check out",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "definitely",
+        "i'd",
+        "i'm",
+        "org",
+        "tatoeba"
+      ]
+    },
+    {
+      "id": "expr-595fdc3b57134cdc",
+      "english": "exist in",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "circumstances",
+        "create",
+        "didn't",
+        "doesn't",
+        "french",
+        "god"
+      ]
+    },
+    {
+      "id": "expr-fdce563a13e03486",
+      "english": "in addition to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "churchill",
+        "french",
+        "german",
+        "i'm"
+      ]
+    },
+    {
+      "id": "expr-fbeef318a1174982",
+      "english": "french fries",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't",
+        "french",
+        "i'm",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-0fdf13238fc8b255",
+      "english": "north pole",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "melts",
+        "north",
+        "pole",
+        "santa"
+      ]
+    },
+    {
+      "id": "expr-2f6f109ab8f8bc7d",
+      "english": "be to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "buddha",
+        "china",
+        "chinese",
+        "commit",
+        "frustrated",
+        "it'd",
+        "it'll",
+        "suicide",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-059a68d7eeccef41",
+      "english": "all in",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "boston",
+        "can't",
+        "drained",
+        "it's",
+        "spain"
+      ]
+    },
+    {
+      "id": "expr-29c8b44e2face6e6",
+      "english": "in years",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "boston",
+        "hasn't",
+        "haven't",
+        "mary",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-8cb82de5d76a2651",
+      "english": "only for",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "can't",
+        "i'm",
+        "ladies",
+        "mary",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-8550564c20d173d4",
+      "english": "be well",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "you'll"
+      ]
+    },
+    {
+      "id": "expr-4c1884658e9c051e",
+      "english": "in name",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "christian",
+        "tom",
+        "we're"
+      ]
+    },
+    {
+      "id": "expr-9066644a934104b3",
+      "english": "and so on",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "clerks",
+        "computing",
+        "it's"
+      ]
+    },
+    {
+      "id": "expr-106d7ef5d4bd6d25",
+      "english": "like a book",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-db68484463e9ff78",
+      "english": "that is to say",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-3cd4ccc8f59fe255",
+      "english": "even with",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "doesn't",
+        "he's",
+        "isn't"
+      ]
+    },
+    {
+      "id": "expr-6959ae6c3c0768d6",
+      "english": "go far",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "didn't",
+        "i'm",
+        "won't",
+        "ziri"
+      ]
+    },
+    {
+      "id": "expr-37aac8e72029d0aa",
+      "english": "leave off",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-34a100be61cf917e",
+      "english": "behind in",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "american",
+        "you're"
+      ]
+    },
+    {
+      "id": "expr-6b76aeb099be1205",
+      "english": "not ready",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "food's",
+        "i'm",
+        "we're"
+      ]
+    },
+    {
+      "id": "expr-fc366875ae999514",
+      "english": "for one thing",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "bigfoot",
+        "don't",
+        "i've"
+      ]
+    },
+    {
+      "id": "expr-78f27f87d1050789",
+      "english": "sit with",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "doesn't",
+        "sami",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-b4f80d8dfa1c6837",
+      "english": "travel in",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "hokkaido",
+        "japanese"
+      ]
+    },
+    {
+      "id": "expr-68693349ff276d8d",
+      "english": "try my best",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'll"
+      ]
+    },
+    {
+      "id": "expr-1ed270ea879ebfa6",
+      "english": "in the south",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "china",
+        "france",
+        "japan"
+      ]
+    },
+    {
+      "id": "expr-25df4a857f089828",
+      "english": "in the south of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "china",
+        "france",
+        "japan"
+      ]
+    },
+    {
+      "id": "expr-347e7eab8a731c40",
+      "english": "good guy",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "he's",
+        "i'm",
+        "tom",
+        "zhang"
+      ]
+    },
+    {
+      "id": "expr-117f78f437c25133",
+      "english": "play games",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't",
+        "tom",
+        "you're"
+      ]
+    },
+    {
+      "id": "expr-e4c98b0ffa9c55e0",
+      "english": "matter of fact",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "haven't",
+        "isn't",
+        "spanish",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-d9d9d999f6377e5d",
+      "english": "in march",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "april",
+        "flowers",
+        "it'll",
+        "march",
+        "usa",
+        "ziri"
+      ]
+    },
+    {
+      "id": "expr-b9eeea28548462a7",
+      "english": "throw away",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't",
+        "haven't"
+      ]
+    },
+    {
+      "id": "expr-901083e8f2af1049",
+      "english": "as a matter of fact",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "haven't",
+        "isn't",
+        "spanish",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-150469263234bb09",
+      "english": "sea level",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-660215c3f03a1cf3",
+      "english": "clothing store",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "mom's",
+        "tom's"
+      ]
+    },
+    {
+      "id": "expr-1f22f85156dd523d",
+      "english": "associate with",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "didn't",
+        "it'd",
+        "shouldn't",
+        "you'd"
+      ]
+    },
+    {
+      "id": "expr-11cc3cbc64035eec",
+      "english": "devoted to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "energies"
+      ]
+    },
+    {
+      "id": "expr-7cb2cc9f45c4ab52",
+      "english": "hot pot",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "let's",
+        "lively",
+        "taiwan"
+      ]
+    },
+    {
+      "id": "expr-cdbd074ecbf31bb5",
+      "english": "junior high",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "he's",
+        "i'm"
+      ]
+    },
+    {
+      "id": "expr-01df97a2d2f16027",
+      "english": "junior high school",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "he's",
+        "i'm"
+      ]
+    },
+    {
+      "id": "expr-9fc9b4d407118d9b",
+      "english": "in the midst of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "algeria"
+      ]
+    },
+    {
+      "id": "expr-9efb8d3af81950a6",
+      "english": "all sorts of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "antarctica",
+        "rumors",
+        "tokyo"
+      ]
+    },
+    {
+      "id": "expr-7c57980292b983ca",
+      "english": "nonstop flight",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'd",
+        "s",
+        "u",
+        "york"
+      ]
+    },
+    {
+      "id": "expr-fde35ab17a6720cc",
+      "english": "see to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'll"
+      ]
+    },
+    {
+      "id": "expr-d963508c3005bca6",
+      "english": "go on to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "won't"
+      ]
+    },
+    {
+      "id": "expr-aadd52bbb0f54198",
+      "english": "only that",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "weren't"
+      ]
+    },
+    {
+      "id": "expr-4a6be6ff712c2225",
+      "english": "off of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "can't",
+        "couldn't",
+        "fork"
+      ]
+    },
+    {
+      "id": "expr-53d7b6551e944e2d",
+      "english": "get about",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-eac7ab2bb3abfdcd",
+      "english": "of all time",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "greatest",
+        "mozart",
+        "who's"
+      ]
+    },
+    {
+      "id": "expr-c41164b839f196a3",
+      "english": "play at",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "didn't",
+        "highest"
+      ]
+    },
+    {
+      "id": "expr-d7350c2a242353c4",
+      "english": "for a little",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-fcce49c007307575",
+      "english": "drink in",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-ac4fae343601ee59",
+      "english": "in bad",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "children's",
+        "it's"
+      ]
+    },
+    {
+      "id": "expr-69db88dac68dda5f",
+      "english": "let up",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't",
+        "wouldn't"
+      ]
+    },
+    {
+      "id": "expr-21cc2dcea4096834",
+      "english": "my boy",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "can't",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-9afb0c88d19d8e6d",
+      "english": "for once",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "can't",
+        "i'm",
+        "wow"
+      ]
+    },
+    {
+      "id": "expr-6ddb40fbb4e28491",
+      "english": "give up on",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "can't",
+        "don't",
+        "won't"
+      ]
+    },
+    {
+      "id": "expr-10f4f7f284def9ca",
+      "english": "better off",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "dissatisfied",
+        "i'm",
+        "japanese",
+        "you'd",
+        "you're"
+      ]
+    },
+    {
+      "id": "expr-d7cf657732ec5796",
+      "english": "see things",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't",
+        "jealousy",
+        "using"
+      ]
+    },
+    {
+      "id": "expr-09f824d05f20755f",
+      "english": "ten to one",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "it'll",
+        "they'll"
+      ]
+    },
+    {
+      "id": "expr-9b8e26390a205a63",
+      "english": "of all things",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't",
+        "god"
+      ]
+    },
+    {
+      "id": "expr-834dcaea4878d988",
+      "english": "try out",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "couldn't",
+        "i'd"
+      ]
+    },
+    {
+      "id": "expr-7771948de25f146a",
+      "english": "look as if",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't",
+        "i'm",
+        "they're"
+      ]
+    },
+    {
+      "id": "expr-9a5ecd543061be13",
+      "english": "what is called",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-900fef79f0f97df1",
+      "english": "by the name of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "amy",
+        "kenchan"
+      ]
+    },
+    {
+      "id": "expr-c0306d5a60e03676",
+      "english": "in name only",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "christian",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-d58b23594a84459b",
+      "english": "better and better",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "people's"
+      ]
+    },
+    {
+      "id": "expr-140d69c273645c3a",
+      "english": "take a bus",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'd",
+        "let's"
+      ]
+    },
+    {
+      "id": "expr-23d71166b19b867c",
+      "english": "reading room",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't",
+        "geneva"
+      ]
+    },
+    {
+      "id": "expr-ff6a31c08add85e8",
+      "english": "old city",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "nara",
+        "rome"
+      ]
+    },
+    {
+      "id": "expr-cc545fa24da84753",
+      "english": "short for",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "domination",
+        "female",
+        "femdom",
+        "james",
+        "jim"
+      ]
+    },
+    {
+      "id": "expr-c5f58a8e9c8afbef",
+      "english": "stand to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "can't"
+      ]
+    },
+    {
+      "id": "expr-60ee28cb1622ca36",
+      "english": "in the front",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'd",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-2f1a4fdc68a96c60",
+      "english": "day after day",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "ken",
+        "master's"
+      ]
+    },
+    {
+      "id": "expr-354f8b1211e27959",
+      "english": "against time",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "neverending",
+        "we're"
+      ]
+    },
+    {
+      "id": "expr-f3d5a0349375f3ea",
+      "english": "in the road",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't",
+        "fork",
+        "there's",
+        "we've"
+      ]
+    },
+    {
+      "id": "expr-d0ef815280648850",
+      "english": "take the place of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "can't",
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-9a87610fd99a8cb6",
+      "english": "ask for help",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-ab3cbeae547cceb9",
+      "english": "meet up with",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-eff4a555ee13148b",
+      "english": "break in",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "didn't"
+      ]
+    },
+    {
+      "id": "expr-7c0233cb333e2bff",
+      "english": "a touch",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i've"
+      ]
+    },
+    {
+      "id": "expr-07e47d9053679919",
+      "english": "get caught",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't",
+        "we'll"
+      ]
+    },
+    {
+      "id": "expr-f360fc1dad8acc57",
+      "english": "small talk",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'd",
+        "places"
+      ]
+    },
+    {
+      "id": "expr-6be8ac7fbb4faf70",
+      "english": "one moment",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "father's"
+      ]
+    },
+    {
+      "id": "expr-1d58c5fe20f01f87",
+      "english": "run into",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't",
+        "japanese",
+        "lang",
+        "mr",
+        "you'll"
+      ]
+    },
+    {
+      "id": "expr-00c8f9c0c26e2b07",
+      "english": "more than once",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "he'd",
+        "i've"
+      ]
+    },
+    {
+      "id": "expr-1c4c2d9c521a17ad",
+      "english": "in a day or two",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "it'll",
+        "it's",
+        "tokyo"
+      ]
+    },
+    {
+      "id": "expr-a2ca3d88e000365d",
+      "english": "on the television",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "turned"
+      ]
+    },
+    {
+      "id": "expr-7373d69ef0e02de7",
+      "english": "chinese new year",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "chinese"
+      ]
+    },
+    {
+      "id": "expr-dcb30ce821d2045c",
+      "english": "go forward",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "you're"
+      ]
+    },
+    {
+      "id": "expr-e5f7f472ebcd0941",
+      "english": "young woman",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "carrying",
+        "you're"
+      ]
+    },
+    {
+      "id": "expr-62723f393e3bb686",
+      "english": "walk through",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-3fb6ea53925ea385",
+      "english": "by means of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "frank"
+      ]
+    },
+    {
+      "id": "expr-a39f395c6ee5cc45",
+      "english": "dinner table",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "india",
+        "year's"
+      ]
+    },
+    {
+      "id": "expr-a371c9cbf459ddb6",
+      "english": "any minute",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "john",
+        "sami",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-9bc72de0d7a2daf0",
+      "english": "speak the same language",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-846613a7fd834bd8",
+      "english": "get a move on",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "we'd",
+        "you'll"
+      ]
+    },
+    {
+      "id": "expr-bc205843a880860a",
+      "english": "in the form of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "catalonia",
+        "expressed"
+      ]
+    },
+    {
+      "id": "expr-0353699cc1f5f1d2",
+      "english": "hold back",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "can't",
+        "couldn't",
+        "jim",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-6eba569f29867950",
+      "english": "not absolutely",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'm",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-82741b0575563ea2",
+      "english": "count as",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "doesn't",
+        "i'm"
+      ]
+    },
+    {
+      "id": "expr-d9febf65bd137bb5",
+      "english": "evening dress",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "ladies"
+      ]
+    },
+    {
+      "id": "expr-7f4c4223dffcf8da",
+      "english": "sell well",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "doesn't",
+        "umbrellas"
+      ]
+    },
+    {
+      "id": "expr-b2e9e627049285e8",
+      "english": "lock up",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "didn't",
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-e77d444f44148c31",
+      "english": "with pleasure",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't",
+        "frank"
+      ]
+    },
+    {
+      "id": "expr-56b8ada0e77dff8c",
+      "english": "sign language",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "using"
+      ]
+    },
+    {
+      "id": "expr-14be9ca6ca843ff8",
+      "english": "most likely",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "we'll"
+      ]
+    },
+    {
+      "id": "expr-5f0b855f2f8148e7",
+      "english": "by birth",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "american",
+        "henry",
+        "james"
+      ]
+    },
+    {
+      "id": "expr-b5ed59d86e00a7dc",
+      "english": "also known as",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "changshan",
+        "china",
+        "chinese",
+        "qipao"
+      ]
+    },
+    {
+      "id": "expr-a7e61114386743d5",
+      "english": "on the east",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "japan",
+        "pacific"
+      ]
+    },
+    {
+      "id": "expr-5fdc77328e7288a6",
+      "english": "to the east of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "kyoto",
+        "nagoya"
+      ]
+    },
+    {
+      "id": "expr-d6f8012ccddf3f98",
+      "english": "ball game",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "it's",
+        "sheffield",
+        "wednesday"
+      ]
+    },
+    {
+      "id": "expr-ae39cafb5e13555a",
+      "english": "on the rise",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "chinese",
+        "islamophobia",
+        "myanmar",
+        "that's"
+      ]
+    },
+    {
+      "id": "expr-af17c499ff74e223",
+      "english": "on record",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "greatest"
+      ]
+    },
+    {
+      "id": "expr-fcb8b9f90006170c",
+      "english": "be involved in",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-8c19790fd66f4f06",
+      "english": "conference room",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-e74759ab04d0a80f",
+      "english": "fool around",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "it's"
+      ]
+    },
+    {
+      "id": "expr-b5003d2d349062cf",
+      "english": "second to none",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "french",
+        "yamada"
+      ]
+    },
+    {
+      "id": "expr-f00e175a82e6e869",
+      "english": "have a chat",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "let's",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-066b5b5ad80702e1",
+      "english": "american express",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "american",
+        "i'd"
+      ]
+    },
+    {
+      "id": "expr-a3f43d6e03d45f32",
+      "english": "most recent",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "isn't",
+        "what's"
+      ]
+    },
+    {
+      "id": "expr-3ca44ecbedecea0e",
+      "english": "mix up",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-c268238050cd0855",
+      "english": "on good terms with",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "he's",
+        "i'm",
+        "john",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-1fbed157c9c88003",
+      "english": "mess around",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-984f7217004c7f3a",
+      "english": "south korean",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "he's",
+        "i'm",
+        "korean",
+        "she's"
+      ]
+    },
+    {
+      "id": "expr-6c99add150f6a6b7",
+      "english": "switch on",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "can't"
+      ]
+    },
+    {
+      "id": "expr-960bae88494e31a2",
+      "english": "interfere with",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't",
+        "tom",
+        "won't"
+      ]
+    },
+    {
+      "id": "expr-c258446b17c39d8d",
+      "english": "in all directions",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "didn't"
+      ]
+    },
+    {
+      "id": "expr-e19a0f0613db4be4",
+      "english": "steal into",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "steal"
+      ]
+    },
+    {
+      "id": "expr-50fdf072d8a89ed7",
+      "english": "consult with",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "buying",
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-4219475c33ecedef",
+      "english": "television program",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "french",
+        "what's"
+      ]
+    },
+    {
+      "id": "expr-26e42315e850b9bb",
+      "english": "see the sights",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "england",
+        "tokyo"
+      ]
+    },
+    {
+      "id": "expr-256d8ff97a25c1d4",
+      "english": "under no circumstances",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "circumstances"
+      ]
+    },
+    {
+      "id": "expr-4aec66e47ab69c3b",
+      "english": "exposed to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "shouldn't"
+      ]
+    },
+    {
+      "id": "expr-47fa45a66ea48afd",
+      "english": "bless you",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "america",
+        "god",
+        "states",
+        "united"
+      ]
+    },
+    {
+      "id": "expr-8ec880b374f5f896",
+      "english": "in favour",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'll"
+      ]
+    },
+    {
+      "id": "expr-08f3c5cb7f412b97",
+      "english": "in honor",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "jones",
+        "mr"
+      ]
+    },
+    {
+      "id": "expr-e87773369b781314",
+      "english": "chicken farm",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "ken's"
+      ]
+    },
+    {
+      "id": "expr-3c72388342b0fe2c",
+      "english": "an arm and a leg",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-52255d53da45be7b",
+      "english": "a colony of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "britain",
+        "japan",
+        "taiwan",
+        "zimbabwe"
+      ]
+    },
+    {
+      "id": "expr-4881759660b286ac",
+      "english": "in honor of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "jones",
+        "mr"
+      ]
+    },
+    {
+      "id": "expr-2c229ad432e311d1",
+      "english": "basketball coach",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "mary's",
+        "that's",
+        "tom",
+        "tom's"
+      ]
+    },
+    {
+      "id": "expr-34ed41d1e73ef25f",
+      "english": "stay indoors",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "it's"
+      ]
+    },
+    {
+      "id": "expr-4205e2b09c17516c",
+      "english": "bank clerk",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'm"
+      ]
+    },
+    {
+      "id": "expr-206ebd4ad98b5f9c",
+      "english": "kitchen sink",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "baking",
+        "soda",
+        "tom",
+        "ziri"
+      ]
+    },
+    {
+      "id": "expr-0a34a83e111a71ae",
+      "english": "communist party",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "china",
+        "chinese"
+      ]
+    },
+    {
+      "id": "expr-1a6f11046adc480d",
+      "english": "stock exchange",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "paris"
+      ]
+    },
+    {
+      "id": "expr-5423c115cad2aec1",
+      "english": "transfer student",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "buzzed",
+        "it's",
+        "she's",
+        "that's"
+      ]
+    },
+    {
+      "id": "expr-e3be42efb21987d9",
+      "english": "high heels",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "heels",
+        "mary",
+        "she's"
+      ]
+    },
+    {
+      "id": "expr-fbef48f220077519",
+      "english": "night owl",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'm",
+        "you're"
+      ]
+    },
+    {
+      "id": "expr-39017231ca14e867",
+      "english": "pry into",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-7cee0d0e82231017",
+      "english": "cast a spell on",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "mary",
+        "tom",
+        "turned"
+      ]
+    },
+    {
+      "id": "expr-3aafe97d9be88eb4",
+      "english": "west coast",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "africa",
+        "coast"
+      ]
+    },
+    {
+      "id": "expr-bd0df038b7f002c0",
+      "english": "safety belt",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "airplanes",
+        "it's"
+      ]
+    },
+    {
+      "id": "expr-05024c3d3c76e426",
+      "english": "the latter",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-d452c4be93339272",
+      "english": "substitute for",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'll"
+      ]
+    },
+    {
+      "id": "expr-3dd5e5c2795e6d09",
+      "english": "head and shoulders above",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "french",
+        "john",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-0defe7e1943c3ed9",
+      "english": "a packet of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "biscuits",
+        "i'd"
+      ]
+    },
+    {
+      "id": "expr-fd5dfae97a2335f6",
+      "english": "in my estimation",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-a5af4651c062b33a",
+      "english": "active volcano",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "aso",
+        "intervals",
+        "mt"
+      ]
+    },
+    {
+      "id": "expr-69aff3a73a9a8ddf",
+      "english": "family reunion",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "australia",
+        "tom",
+        "year's"
+      ]
+    },
+    {
+      "id": "expr-7e1e0cf932585298",
+      "english": "physical labor",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'm",
+        "jim"
+      ]
+    },
+    {
+      "id": "expr-912c0027326dc763",
+      "english": "national anthem",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "canada",
+        "estonia",
+        "french"
+      ]
+    },
+    {
+      "id": "expr-8b67d95c0fb5ca22",
+      "english": "tour guide",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't",
+        "i'm",
+        "tokyo"
+      ]
+    },
+    {
+      "id": "expr-c1c0e5818ae8075e",
+      "english": "beat around the bush",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "baby's",
+        "don't",
+        "i'm",
+        "kid's",
+        "let's",
+        "you're"
+      ]
+    },
+    {
+      "id": "expr-5c97121af148e18d",
+      "english": "at regular intervals",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "intervals",
+        "it's"
+      ]
+    },
+    {
+      "id": "expr-54ccce9891b4b466",
+      "english": "ladies and gentlemen",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "ladies"
+      ]
+    },
+    {
+      "id": "expr-d065536dc2aa1636",
+      "english": "lunar calendar",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "china"
+      ]
+    },
+    {
+      "id": "expr-724b8ea2b57482a5",
+      "english": "fossil fuel",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "lignite"
+      ]
+    },
+    {
+      "id": "expr-3a19ad8c1e614e03",
+      "english": "serial killer",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "betty",
+        "mary",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-eab432e03473bcce",
+      "english": "chewing gum",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "chewing",
+        "i'm",
+        "isn't",
+        "she's",
+        "tom's"
+      ]
+    },
+    {
+      "id": "expr-9e172f15b6571b88",
+      "english": "lo mein",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "lo",
+        "mein",
+        "pilaf",
+        "there's"
+      ]
+    },
+    {
+      "id": "expr-a7029d0b608eaa55",
+      "english": "the many",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "edinburgh's",
+        "uk",
+        "waterfront"
+      ]
+    },
+    {
+      "id": "expr-da8df88c887c50d7",
+      "english": "but for",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-fc652b39c833527d",
+      "english": "be had",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "there's"
+      ]
+    },
+    {
+      "id": "expr-195d7175507e5fa5",
+      "english": "on the go",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-6eea70335bf094eb",
+      "english": "think with",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-7efbe2c7e534df9f",
+      "english": "know from",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "american"
+      ]
+    },
+    {
+      "id": "expr-250263346a6f93f4",
+      "english": "help in",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "clarifying"
+      ]
+    },
+    {
+      "id": "expr-7453d11dd7cd6475",
+      "english": "go in for",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-2b9faec26c083ecf",
+      "english": "this much",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "can't"
+      ]
+    },
+    {
+      "id": "expr-862ace360aede910",
+      "english": "can but",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-e0d4d850868964ad",
+      "english": "for want of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "flowers"
+      ]
+    },
+    {
+      "id": "expr-23c8e4ff594d4bd6",
+      "english": "want out",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'm"
+      ]
+    },
+    {
+      "id": "expr-d81d08a8f42ce498",
+      "english": "more like",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "anime",
+        "japanese",
+        "pornography",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-9a9da20492feca71",
+      "english": "here from",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "australia",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-7f3f0fc52edf1f67",
+      "english": "have it all",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "didn't",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-8132c4635d44a98e",
+      "english": "be about to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "edinburgh",
+        "waterfront"
+      ]
+    },
+    {
+      "id": "expr-3fcc84fe08d5f6c7",
+      "english": "to speak of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-1684ea020216321b",
+      "english": "be going to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "april",
+        "australia",
+        "i'll",
+        "i'm"
+      ]
+    },
+    {
+      "id": "expr-b4a1583a55704df6",
+      "english": "if you will",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-d6189ec6c1d01c76",
+      "english": "this life",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "can't"
+      ]
+    },
+    {
+      "id": "expr-ad8907ef7548b8bb",
+      "english": "in play",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-bed6f1dce6c7bccc",
+      "english": "all in all",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "it's"
+      ]
+    },
+    {
+      "id": "expr-dfa02abd7429cb07",
+      "english": "come in with",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "can't"
+      ]
+    },
+    {
+      "id": "expr-b42fa8fee08ce12c",
+      "english": "right on",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "june"
+      ]
+    },
+    {
+      "id": "expr-c47d3770603be234",
+      "english": "day out",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-ec7820cebc09eb71",
+      "english": "want out of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'm"
+      ]
+    },
+    {
+      "id": "expr-bafdc1c8122caba0",
+      "english": "call in",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "can't"
+      ]
+    },
+    {
+      "id": "expr-c53334768c46ca87",
+      "english": "in good time",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-fb31b7f3abdbd8cb",
+      "english": "all well",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-b3379489978ec4b5",
+      "english": "down with",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'm"
+      ]
+    },
+    {
+      "id": "expr-96a10e5aa22341dd",
+      "english": "be left",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "m"
+      ]
+    },
+    {
+      "id": "expr-1e6b7e0a46529e4c",
+      "english": "stop to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "let's"
+      ]
+    },
+    {
+      "id": "expr-cfe478b9088a9738",
+      "english": "back out",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "harry"
+      ]
+    },
+    {
+      "id": "expr-15e04bc430e42c42",
+      "english": "train on",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-bc7b88221c630318",
+      "english": "say when",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "can't",
+        "you're"
+      ]
+    },
+    {
+      "id": "expr-576c4c9621f088f0",
+      "english": "see to it that",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'll"
+      ]
+    },
+    {
+      "id": "expr-54c1be28047a5798",
+      "english": "in the back of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-7e3a30d65386dab3",
+      "english": "time off",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "didn't",
+        "i'd"
+      ]
+    },
+    {
+      "id": "expr-1fbb4deaccd4e4b9",
+      "english": "on leave",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "he's"
+      ]
+    },
+    {
+      "id": "expr-35c97b4aa6b6336a",
+      "english": "by way",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "mike"
+      ]
+    },
+    {
+      "id": "expr-cbffcccc5c55f65b",
+      "english": "have not been to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "zealand"
+      ]
+    },
+    {
+      "id": "expr-3ed1ace196bd6e27",
+      "english": "learn of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "mary's"
+      ]
+    },
+    {
+      "id": "expr-737502fad9fa8802",
+      "english": "all the better",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-7bc87c06821e7ed7",
+      "english": "come after",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "didn't",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-a40722cc6530e5f5",
+      "english": "with the help of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-d771184e3dbe1f66",
+      "english": "make up to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-9a626ce3a32799d9",
+      "english": "out of work",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "mike"
+      ]
+    },
+    {
+      "id": "expr-da7f01342b5b5ad2",
+      "english": "make do with",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-e540c4e68e51aabe",
+      "english": "think much of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-6f95ee4b6624f6ea",
+      "english": "on the back of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "mary",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-46fc9d4601dd26e6",
+      "english": "speak or",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "can't",
+        "italian"
+      ]
+    },
+    {
+      "id": "expr-f1d005d6b789dcd5",
+      "english": "at most",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-8ca293617f59e9a2",
+      "english": "on the way to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "higgins",
+        "i'm",
+        "mr",
+        "susie",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-d509c5b55a626121",
+      "english": "as best",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-06b9462c7fc90726",
+      "english": "read out",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-d43555ac52d12679",
+      "english": "be used to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "router"
+      ]
+    },
+    {
+      "id": "expr-c24c1b8756b605e6",
+      "english": "call by",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'll"
+      ]
+    },
+    {
+      "id": "expr-e10a8d8786e11d4c",
+      "english": "know little of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-82a1c1cb5e3cf28c",
+      "english": "in small",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-f4f4d779e31cf6d7",
+      "english": "live up to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "expectations",
+        "it's"
+      ]
+    },
+    {
+      "id": "expr-f08fa053b6cc66fb",
+      "english": "back out of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "harry"
+      ]
+    },
+    {
+      "id": "expr-e56da223eacea8f7",
+      "english": "there and back",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-fcbf958a0df20f40",
+      "english": "of family",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "year's"
+      ]
+    },
+    {
+      "id": "expr-0dded7d3439d04cf",
+      "english": "see much of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-021e1213e24b7a2c",
+      "english": "for the last time",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'm",
+        "i've",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-3bc2c64477262463",
+      "english": "one by one",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "drift",
+        "fluffy",
+        "mary"
+      ]
+    },
+    {
+      "id": "expr-4547b23c7341bb00",
+      "english": "in between",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "dania",
+        "fadil"
+      ]
+    },
+    {
+      "id": "expr-0ab9b43da7b8b81d",
+      "english": "understand about",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-7cf4b61c3c7daaf3",
+      "english": "still room",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-d4297736d1a22a2e",
+      "english": "by way of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "mike"
+      ]
+    },
+    {
+      "id": "expr-6ff694db11161295",
+      "english": "long after",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-4dd724178418675b",
+      "english": "get down to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "let's"
+      ]
+    },
+    {
+      "id": "expr-e67021fac30e8cc6",
+      "english": "drink up",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "we've"
+      ]
+    },
+    {
+      "id": "expr-873fd1eac28a65fe",
+      "english": "in question",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-000980d4465d6ef3",
+      "english": "out cold",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "tom",
+        "tom's"
+      ]
+    },
+    {
+      "id": "expr-2f0c3f280c5b6574",
+      "english": "back into",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "bedroom",
+        "flavio",
+        "mary",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-9efa6348a368cc5e",
+      "english": "in answer to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "advertisements",
+        "we've"
+      ]
+    },
+    {
+      "id": "expr-31d5dadf7610534d",
+      "english": "stop by",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'll"
+      ]
+    },
+    {
+      "id": "expr-72c7fbaabb9900c1",
+      "english": "talking of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "mr",
+        "tanaka"
+      ]
+    },
+    {
+      "id": "expr-cbf34ec349188b69",
+      "english": "just in time for",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "christmas",
+        "expects",
+        "november"
+      ]
+    },
+    {
+      "id": "expr-4d8661f4abb258c2",
+      "english": "let it go",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "couldn't"
+      ]
+    },
+    {
+      "id": "expr-61b12b487f3876cb",
+      "english": "learn about",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "documentation",
+        "it's"
+      ]
+    },
+    {
+      "id": "expr-7f0325da8ed97d75",
+      "english": "give way",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "mustn't"
+      ]
+    },
+    {
+      "id": "expr-074d233982dd2c2a",
+      "english": "wait up",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'll",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-5089a1e13d600b9c",
+      "english": "bring to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "hobbies"
+      ]
+    },
+    {
+      "id": "expr-fbd8c1b60fc3377c",
+      "english": "ask about",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't",
+        "there's"
+      ]
+    },
+    {
+      "id": "expr-dfb7efa96639d8cf",
+      "english": "this time of the day",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-56452bcadb4b215b",
+      "english": "day job",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-aed4b38514cd50af",
+      "english": "well water",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-e0f3f295b1547f3e",
+      "english": "live over",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-5605a1fb6b4f86a2",
+      "english": "high on",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'll"
+      ]
+    },
+    {
+      "id": "expr-5f2b795da84836a9",
+      "english": "start in",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "april"
+      ]
+    },
+    {
+      "id": "expr-b9cf0dccb69ba6dd",
+      "english": "country people",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "higher"
+      ]
+    },
+    {
+      "id": "expr-1f57ef4ca89491ab",
+      "english": "have a care",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-63f08751c8fd1f11",
+      "english": "take a train",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-ee75fc89fee2117d",
+      "english": "over again",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-319a2aa53aafbcdf",
+      "english": "let off",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "it's"
+      ]
+    },
+    {
+      "id": "expr-d836532e223c2f9c",
+      "english": "first off",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'd"
+      ]
+    },
+    {
+      "id": "expr-b636c3a3d27117c3",
+      "english": "over the years",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-0608b59e5a0062dc",
+      "english": "not a bit",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'm"
+      ]
+    },
+    {
+      "id": "expr-119f313fc20df350",
+      "english": "out of ten",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-f970bd75e5406d6f",
+      "english": "talk back",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "shouldn't"
+      ]
+    },
+    {
+      "id": "expr-7958e714dc293c36",
+      "english": "give way to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "mustn't"
+      ]
+    },
+    {
+      "id": "expr-d078ed3bef6fe4be",
+      "english": "best man",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "you're"
+      ]
+    },
+    {
+      "id": "expr-b6b0676267fe8ed1",
+      "english": "be tired of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-bd23d73c019e9d2f",
+      "english": "school bus",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-7010f402b1bb2c23",
+      "english": "be born",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "mother's"
+      ]
+    },
+    {
+      "id": "expr-bc044288b3a45c40",
+      "english": "be done for",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "there's"
+      ]
+    },
+    {
+      "id": "expr-c87542b12eca0284",
+      "english": "dinner time",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-a4cdb90a2c6c1f12",
+      "english": "go broke",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-298dba5a1bfcc4c5",
+      "english": "end in",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "there's"
+      ]
+    },
+    {
+      "id": "expr-eafbb1ea4e064e99",
+      "english": "start on",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-48420bb8c01db7bf",
+      "english": "hand up",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-c9cf0eaf56f2b442",
+      "english": "know for sure",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-56ccc7ccb4d92c02",
+      "english": "leave it at that",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "let's"
+      ]
+    },
+    {
+      "id": "expr-81b18cb37d995ffb",
+      "english": "mean much",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-018a3038cee6501a",
+      "english": "not long after",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-1a35ec5888ab709f",
+      "english": "in the news",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "dan",
+        "linda's"
+      ]
+    },
+    {
+      "id": "expr-f105ace21d0b8a0a",
+      "english": "be full",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "you'd"
+      ]
+    },
+    {
+      "id": "expr-1b836d86806e16bd",
+      "english": "first name",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "baby's",
+        "france"
+      ]
+    },
+    {
+      "id": "expr-75f3b59f18b04d68",
+      "english": "at war",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "algeria",
+        "japan",
+        "morocco",
+        "technically",
+        "we're"
+      ]
+    },
+    {
+      "id": "expr-269d7db61726f6ac",
+      "english": "old country",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "greece"
+      ]
+    },
+    {
+      "id": "expr-38f2797f853fd463",
+      "english": "walk home",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-c9d30748437e9029",
+      "english": "out of place",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-b98c5e15037ca28b",
+      "english": "fire out",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-8b0ed493e4e0fd8c",
+      "english": "listen in",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-894b6c18383b7c19",
+      "english": "well done",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "it's"
+      ]
+    },
+    {
+      "id": "expr-e587879f034a9474",
+      "english": "wait up for",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'll",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-2ed5e1047c9a6dd8",
+      "english": "stop off",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "let's"
+      ]
+    },
+    {
+      "id": "expr-11d658fbb6f52d86",
+      "english": "school of thought",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "buddhist"
+      ]
+    },
+    {
+      "id": "expr-d1289234bc0a9849",
+      "english": "be turned",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "turned"
+      ]
+    },
+    {
+      "id": "expr-0d90b44810158a65",
+      "english": "never mind",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "it's"
+      ]
+    },
+    {
+      "id": "expr-5b52a7980f8d77ee",
+      "english": "at the start",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-9e1dc5583a6ec776",
+      "english": "get tired of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't",
+        "what's"
+      ]
+    },
+    {
+      "id": "expr-2da232cdd447a03f",
+      "english": "right and left",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-72e6a65af8752ef0",
+      "english": "to start with",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-8153f86ceb46c3d2",
+      "english": "from then on",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "guangzhou"
+      ]
+    },
+    {
+      "id": "expr-b56af5e4bb4f725d",
+      "english": "light out",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "it's"
+      ]
+    },
+    {
+      "id": "expr-cc90fdfdb7b8db80",
+      "english": "at heart",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "mary"
+      ]
+    },
+    {
+      "id": "expr-2da1f9fd8f1b328b",
+      "english": "from way back",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "we're"
+      ]
+    },
+    {
+      "id": "expr-0fe5339a4a39d0a2",
+      "english": "call it a day",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "let's"
+      ]
+    },
+    {
+      "id": "expr-bffb8de97368e346",
+      "english": "happen on",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-dca1736735b01f26",
+      "english": "dog days",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "we've"
+      ]
+    },
+    {
+      "id": "expr-03d51cb03a2a6137",
+      "english": "walk into",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-ac2e119b4dc781bc",
+      "english": "stand in",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-7a71b3d0e9b852e4",
+      "english": "long since",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-593ccec706d54766",
+      "english": "wear to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-7ae59cf3618e2039",
+      "english": "not too bad",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "you're"
+      ]
+    },
+    {
+      "id": "expr-526915457e437cb4",
+      "english": "turn over",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'll"
+      ]
+    },
+    {
+      "id": "expr-577984a64fd74124",
+      "english": "company car",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-dcb6f7fefa2d0f80",
+      "english": "go a long way",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-5ec30afd23b8b669",
+      "english": "soon enough",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "we'll"
+      ]
+    },
+    {
+      "id": "expr-5db9aabf4a77060e",
+      "english": "do fine",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "he'll"
+      ]
+    },
+    {
+      "id": "expr-d35b24e88f04c5bc",
+      "english": "trip on",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-100ec274b38d0611",
+      "english": "test for",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'd"
+      ]
+    },
+    {
+      "id": "expr-1986e13225de86d3",
+      "english": "strong will",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "doesn't",
+        "you've"
+      ]
+    },
+    {
+      "id": "expr-8001d645145923dd",
+      "english": "sleep late",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-6fbec127c76d2fc2",
+      "english": "rest on",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'm",
+        "sunday"
+      ]
+    },
+    {
+      "id": "expr-014460ab44f57393",
+      "english": "say the word",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'll"
+      ]
+    },
+    {
+      "id": "expr-7bd92ea7e0f64878",
+      "english": "stand with",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "taiwan"
+      ]
+    },
+    {
+      "id": "expr-92776c8a55fde17b",
+      "english": "music teacher",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "vienna"
+      ]
+    },
+    {
+      "id": "expr-c83aa01b4b7591fc",
+      "english": "at war with",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "japan",
+        "we're"
+      ]
+    },
+    {
+      "id": "expr-f29f891332a44cd0",
+      "english": "go hungry",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'd"
+      ]
+    },
+    {
+      "id": "expr-53cc4ebb378f4560",
+      "english": "come near",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-469b24c5d96ee771",
+      "english": "live high",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'll"
+      ]
+    },
+    {
+      "id": "expr-780689c1d51fdcbb",
+      "english": "full house",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-06b415433bd5e988",
+      "english": "put a stop to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "let's"
+      ]
+    },
+    {
+      "id": "expr-4d6442d8d749b4da",
+      "english": "in the head",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-0890d4027a8baed7",
+      "english": "big boy",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "he's"
+      ]
+    },
+    {
+      "id": "expr-236a7b8e77d85bc3",
+      "english": "a bank of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-c82c668cee6525aa",
+      "english": "work against",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-00b9ad9eef5aeb5c",
+      "english": "day in and day out",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-3d67123aead035da",
+      "english": "get through with",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-fa7789930ddcff16",
+      "english": "change over",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-f9c1d992be071aa6",
+      "english": "just about enough",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i've"
+      ]
+    },
+    {
+      "id": "expr-ca8aeecadabb2efb",
+      "english": "nothing better than",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "there's"
+      ]
+    },
+    {
+      "id": "expr-05473bad8da218bd",
+      "english": "on the one hand",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-9c45657b236a716c",
+      "english": "in clear",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "fuji",
+        "mount"
+      ]
+    },
+    {
+      "id": "expr-7ff23b2ec22a68d1",
+      "english": "make a fire",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "ben"
+      ]
+    },
+    {
+      "id": "expr-24b09ad5e75ebe27",
+      "english": "have a wash",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-ddb75cf599c6cad9",
+      "english": "run down",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "won't"
+      ]
+    },
+    {
+      "id": "expr-2d255abf817e5efc",
+      "english": "from year to year",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-2d153b4ca20d9d24",
+      "english": "start over",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "let's"
+      ]
+    },
+    {
+      "id": "expr-9abb7396b481d1e7",
+      "english": "up in the air",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-0a6d74dbbe056c3d",
+      "english": "make a living",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "tokyo"
+      ]
+    },
+    {
+      "id": "expr-a018d5c59c296350",
+      "english": "key out",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "john"
+      ]
+    },
+    {
+      "id": "expr-f0025d862ee0a935",
+      "english": "in the case of",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-117b48570e0122b8",
+      "english": "cut off",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "internet",
+        "mary",
+        "pigtails"
+      ]
+    },
+    {
+      "id": "expr-53bd0e40b4d8ce42",
+      "english": "home town",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "moving"
+      ]
+    },
+    {
+      "id": "expr-2688fd781679bcc2",
+      "english": "to the minute",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "o'clock"
+      ]
+    },
+    {
+      "id": "expr-9074893457338fb6",
+      "english": "it seems as if",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'm"
+      ]
+    },
+    {
+      "id": "expr-e85f87752e51fbed",
+      "english": "in no hurry",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "mary",
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-d7909198f92f578a",
+      "english": "family doctor",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "you'd"
+      ]
+    },
+    {
+      "id": "expr-788d866a1189acbb",
+      "english": "get caught in",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't",
+        "we'll"
+      ]
+    },
+    {
+      "id": "expr-7b0121d7dbf6262e",
+      "english": "feel sorry for",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "don't"
+      ]
+    },
+    {
+      "id": "expr-3a6b243d2a00f923",
+      "english": "snow off",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-53058730eaf14809",
+      "english": "what it takes",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "tom"
+      ]
+    },
+    {
+      "id": "expr-aa8b804a83cbac86",
+      "english": "to make a fire",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "ben"
+      ]
+    },
+    {
+      "id": "expr-235a65865484ea2a",
+      "english": "love song",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": []
+    },
+    {
+      "id": "expr-fba2a244a10cafbb",
+      "english": "in hot water",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "melts"
+      ]
+    },
+    {
+      "id": "expr-d52c2b1d2db57066",
+      "english": "keep company",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "you'd"
+      ]
+    },
+    {
+      "id": "expr-98b95c1d901ec089",
+      "english": "find a way out",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "i'm",
+        "resulting"
+      ]
+    },
+    {
+      "id": "expr-b3cdda4f9f13e993",
+      "english": "move on to",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "let's",
+        "work's"
+      ]
+    },
+    {
+      "id": "expr-361507bf5f8b0d4c",
+      "english": "by sea",
+      "reason": "缺少词汇资料齐备的双语句",
+      "missing_words": [
+        "japan"
+      ]
+    }
+  ],
+  "policy": "项目规则：原资料难度带、句长和结构词；非CEFR认证，领域为原资料标签"
+}
