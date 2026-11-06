@@ -8,6 +8,7 @@ import selection_cache
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import json
+import hashlib
 import random
 import re
 import uuid
@@ -257,10 +258,20 @@ def group_mode(c,qid):
     return bool(c.execute(text("SELECT 1 FROM sqlite_master WHERE name='test_clock'")).first() and c.execute(text('SELECT stage FROM test_clock WHERE id=1')).scalar() is None)
 
 
-def answer_hint(c,item):
+def answer_hint(c,item,local_checks=True):
     options=transfer.answer_options(item['id'],item['answer'],(content.details(c,item['id']) or {}).get('accepted_answers'))
-    shapes=[list(map(len,transfer.normalize(a).split())) for a in options]
-    return dict(answer_length=len(normalize(item['answer'])),word_lengths=list(map(len,normalize(item['answer']).split())),answer_shapes=shapes)
+    normalized=[transfer.normalize(a) for a in options]
+    shapes=[list(map(len,a.split())) for a in normalized]
+    result=dict(answer_length=len(normalize(item['answer'])),word_lengths=list(map(len,normalize(item['answer']).split())),answer_shapes=shapes)
+    if local_checks and sum(map(len,normalized))<=600 and all(a.isascii() for a in normalized):
+        salt='word-check-v1:'+item['id']+':'
+        digest=lambda value:hashlib.sha256((salt+value).encode()).hexdigest()
+        variants=[]
+        for a in normalized:
+            words=a.split()
+            variants.append(dict(shape=list(map(len,words)),hashes=[digest(' '.join(words[:i+1])) for i in range(len(words))],pending=[[digest(' '.join(words[:i]+[word[:n]])) for n in range(1,len(word))] for i,word in enumerate(words)]))
+        result['word_validation']=dict(salt=salt,variants=variants)
+    return result
 
 
 def normalize(value):
@@ -283,7 +294,15 @@ def read_rule(rule_id: str):
     return rule_profile(rule_id)
 
 @app.get('/api/plan')
-def learning_plan():
+def learning_plan(compact: bool=False):
+    if compact:
+        s=study_settings()
+        with engine.connect() as c,selection_cache.scope():
+            route=curriculum_engine.report(c,s['active-course'])
+            if os.environ.get('PELS_COURSE_EXPANSION')=='1':
+                import course_expansion
+                route['expansion']=course_expansion.summary()
+        return dict(date=group_learning.day_of(now()),route=route,curriculum=[dict(id=s['active-course'],title='通用英语')],new_limit=s['daily-new-limit'],review_limit=s['daily-review-limit'])
     d=dashboard(summary_only=True);s=study_settings();zone=timezone(timedelta(hours=8));day=now().astimezone(zone).date().isoformat()
     with engine.connect() as c:
         admitted=group_learning.counts(c,now())
@@ -537,16 +556,19 @@ def save_settings(values: dict):
     return get_settings()
 
 @app.get('/api/dashboard')
-def dashboard(summary_only: bool = False):
+def dashboard(summary_only: bool = False, lightweight: bool = False):
     with engine.connect() as c,selection_cache.scope():
         if not summary_only:
-            items = [dict(r) for r in c.execute(text('SELECT k.*,p.*,COALESCE(l.stage,1) AS stage,l.parent_id,CASE WHEN l.parent_id IS NULL OR pp.level>=3 THEN 1 ELSE 0 END AS unlocked FROM knowledge k JOIN progress p ON k.id=p.knowledge_id LEFT JOIN course_links l ON l.knowledge_id=k.id LEFT JOIN progress pp ON pp.knowledge_id=l.parent_id')).mappings()]
+            item_filter=" WHERE p.introduced=1 OR k.id IN (SELECT knowledge_id FROM questions ORDER BY rowid DESC LIMIT 100)" if lightweight else ''
+            items = [dict(r) for r in c.execute(text('SELECT k.*,p.*,COALESCE(l.stage,1) AS stage,l.parent_id,CASE WHEN l.parent_id IS NULL OR pp.level>=3 THEN 1 ELSE 0 END AS unlocked FROM knowledge k JOIN progress p ON k.id=p.knowledge_id LEFT JOIN course_links l ON l.knowledge_id=k.id LEFT JOIN progress pp ON pp.knowledge_id=l.parent_id'+item_filter)).mappings()]
+            total_content=c.execute(text('SELECT COUNT(*) FROM knowledge')).scalar()
+            introduced_content=c.execute(text('SELECT COUNT(*) FROM progress WHERE introduced=1')).scalar()
             answers = [dict(r) for r in c.execute(text('SELECT a.*,COALESCE((SELECT confidence FROM feedback_events f WHERE f.question_id=a.question_id ORDER BY f.rowid DESC LIMIT 1),a.confidence) AS effective_confidence,k.prompt,k.answer,gq.group_id,lg.title AS group_title FROM answers a JOIN knowledge k ON k.id=a.knowledge_id LEFT JOIN group_questions gq ON gq.question_id=a.question_id LEFT JOIN learning_groups lg ON lg.id=gq.group_id ORDER BY a.created_at DESC LIMIT 100')).mappings()]
             hints={}
             for answer in answers:
                 answer['confidence']=answer.pop('effective_confidence')
                 kid=answer['knowledge_id']
-                if kid not in hints:hints[kid]=answer_hint(c,dict(id=kid,answer=answer['answer']))
+                if kid not in hints:hints[kid]=answer_hint(c,dict(id=kid,answer=answer['answer']),local_checks=False)
                 answer.update(hints[kid])
         counts=group_learning.due_counts(c,now())
         day_start=now().astimezone(timezone(timedelta(hours=8))).replace(hour=0,minute=0,second=0,microsecond=0).astimezone(timezone.utc).isoformat()
@@ -555,7 +577,7 @@ def dashboard(summary_only: bool = False):
         new_breakdown=group_learning.breakdown(c,now())
     today = now().date().isoformat()
     summary = dict(due=(counts['cross_day'] or 0)+(counts['practice'] or 0), cross_day_due=counts['cross_day'] or 0, same_day_practice=counts['practice'] or 0, today_count=today_count, today_new=admitted.get('new',0),today_review=admitted.get('review',0),scheduler_version=6 if os.environ.get('PELS_FSRS_TIME_QUEUE')=='1' else 5,new_breakdown=new_breakdown)
-    return summary if summary_only else dict(items=items, history=answers, **summary)
+    return summary if summary_only else dict(items=items, history=answers,total_content=total_content,introduced_content=introduced_content, **summary)
 
 @app.post('/api/next')
 def next_question(allow_repeat: bool=False):

@@ -14,6 +14,18 @@ class WordCheckTests(unittest.TestCase):
   with self.db.begin() as c:c.execute(text('INSERT INTO questions VALUES(:q,:k,:t,0)'),dict(q=q,k=kid,t=app.now().isoformat()))
   return q
  def check(self,q,answer,index):return app.check_word(app.WordCheck(id=str(uuid.uuid4()),question_id=q,answer=answer,word_index=index))
+ def test_local_word_validation_matches_server_and_pending(self):
+  import hashlib
+  with self.db.connect() as c:
+   hint=app.answer_hint(c,dict(id='want-to',answer='want to'));proof=hint['word_validation']
+   h=lambda value:hashlib.sha256((proof['salt']+value).encode()).hexdigest()
+   self.assertEqual(proof['variants'][0]['hashes'][0],h('want'))
+   self.assertEqual(proof['variants'][0]['hashes'][1],h('want to'))
+   self.assertIn(h('wan'),proof['variants'][0]['pending'][0])
+   self.assertNotIn('want',proof['variants'][0]['hashes'])
+   self.assertNotIn('word_validation',app.answer_hint(c,dict(id='want-to',answer='want to'),local_checks=False))
+  q=self.question();self.assertTrue(self.check(q,'WANT',0)['correct']);self.assertFalse(self.check(q,'wont',0)['correct'])
+
  def test_correct_word_does_not_reveal_answer_or_finish_question(self):
   q=self.question();r=self.check(q,'WANT',0)
   self.assertTrue(r['correct']);self.assertFalse(r['complete']);self.assertNotIn('answer',r)

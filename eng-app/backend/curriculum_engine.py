@@ -19,6 +19,8 @@ def install(c):
   "CREATE TABLE IF NOT EXISTS curriculum_lessons(goal_id TEXT,knowledge_id TEXT,role TEXT,position INTEGER,required INTEGER NOT NULL DEFAULT 1,PRIMARY KEY(goal_id,knowledge_id))",
   "CREATE TABLE IF NOT EXISTS curriculum_aliases(knowledge_id TEXT,alias_id TEXT,PRIMARY KEY(knowledge_id,alias_id))",
   "CREATE TABLE IF NOT EXISTS curriculum_versions(id TEXT PRIMARY KEY)",
+  "CREATE INDEX IF NOT EXISTS curriculum_lesson_item ON curriculum_lessons(knowledge_id,goal_id,role)",
+  "CREATE INDEX IF NOT EXISTS curriculum_alias_source ON curriculum_aliases(alias_id,knowledge_id)",
   "CREATE INDEX IF NOT EXISTS curriculum_path_order ON curriculum_paths(course_id,unit_position,position)"]:
   c.execute(text(sql))
  if 'authored' not in [r[1] for r in c.execute(text('PRAGMA table_info(curriculum_paths)'))]:c.execute(text('ALTER TABLE curriculum_paths ADD COLUMN authored INTEGER NOT NULL DEFAULT 0'))
@@ -230,21 +232,22 @@ def report(c,course='all'):
  return dict(units=list(units.values()),current_unit=current,ready_total=stats[0],draft_total=draft,unintroduced=stats[1],truncated=stats[0]>len(seen),recalled=sum(u['recalled'] for u in units.values()),note='回忆通过不等于长期稳固；未编排资料仍可在词典查看或加入专项。')
 
 
-def upgrades(c,stamp=None):
+def upgrades(c,stamp=None,exclude=()):
+ excluded=set(exclude)
  raw=c.execute(text("SELECT value FROM app_settings WHERE key='active-course'")).scalar()
  course=json.loads(raw) if raw else 'all'
  rows=c.execute(text("""SELECT g.id,l.knowledge_id FROM curriculum_goals t JOIN learning_groups g ON g.id=t.id
  JOIN progress root ON root.knowledge_id=g.root_id JOIN curriculum_lessons l ON l.goal_id=g.id
  JOIN progress p ON p.knowledge_id=l.knowledge_id
  WHERE t.status='ready' AND root.introduced=1 AND root.level>=3 AND p.introduced=0 AND l.role IN ('phrase','sentence') AND (:course='all' OR EXISTS(SELECT 1 FROM curriculum_paths route WHERE route.goal_id=g.id AND route.course_id=:course))"""),dict(course=course)).all()
- result=list(dict.fromkeys(g for g,k in rows if not blockers(c,g) and not known(c,k)))
+ result=list(dict.fromkeys(g for g,k in rows if g not in excluded and not blockers(c,g) and not known(c,k)))
  if stamp is not None:
   import group_learning,transfer_evidence
   candidates=c.execute(text("""SELECT DISTINCT g.id FROM curriculum_goals t JOIN learning_groups g ON g.id=t.id
    JOIN progress p ON p.knowledge_id=g.root_id JOIN curriculum_lessons l ON l.goal_id=g.id
    WHERE t.status='ready' AND p.introduced=1 AND p.level>=3 AND l.role='transfer' AND (:course='all' OR EXISTS(SELECT 1 FROM curriculum_paths route WHERE route.goal_id=g.id AND route.course_id=:course))"""),dict(course=course)).scalars()
   for gid in candidates:
-   if gid in result or blockers(c,gid):continue
+   if gid in excluded or gid in result or blockers(c,gid):continue
    item,_=group_learning.step(c,gid,stamp)
    if item and item['role']=='transfer' and transfer_evidence.classify(c,item['id'],'transfer')[0]=='transfer':result.append(gid)
  return result

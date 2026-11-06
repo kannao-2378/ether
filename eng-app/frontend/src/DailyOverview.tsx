@@ -1,10 +1,12 @@
+import {peekRead} from './readCache';
+import {isTestMode} from './testMode';
 import {useEffect,useState} from 'react';
 import {learningFetch} from './testMode';
 const ratings:Record<string,string>={clear:'认识',hard:'模糊',forgot:'忘记'};
 const states:Record<string,string>={completed:'今日完成',practiced:'已练 · 待巩固',started:'已开始',waiting:'等待',candidate:'候选',planned:'待安排'};
 export function DailyOverview({planning=false}:{planning?:boolean}){
  const [tab,setTab]=useState('review'),[expanded,setExpanded]=useState(false);
- const [data,setData]=useState<any>(null),[day,setDay]=useState(''),[error,setError]=useState('');
+ const [data,setData]=useState<any>(()=>peekRead((isTestMode()?'test:':'real:')+'/api/daily-activity?planning='+planning)),[day,setDay]=useState(''),[error,setError]=useState('');
  useEffect(()=>{let active=true;const load=()=>{setError('');learningFetch('/api/daily-activity?planning='+planning+(day?'&day='+day:'')).then(r=>{if(!r.ok)throw Error('当天记录读取失败');return r.json();}).then(d=>{if(active){setData(d);}}).catch(e=>{if(active)setError(e.message);});};load();window.addEventListener('settings-status',load);window.addEventListener('focus-updated',load);return()=>{active=false;window.removeEventListener('settings-status',load);window.removeEventListener('focus-updated',load);};},[day,planning]);
  const plannedRows=(kind:string)=>{const booked=(data.groups||[]).filter((g:any)=>g.kind===kind);const seen=new Set(booked.map((g:any)=>g.id));const preview=kind==='new'?data.preview_new:data.preview_review;return [...booked,...(preview||[]).filter((g:any)=>!seen.has(g.id)).map((g:any)=>({...g,status:g.status||(kind==='new'?'candidate':'planned')}))].sort((a:any,b:any)=>(({planned:0,started:0,waiting:0,practiced:1,completed:2,candidate:3} as Record<string,number>)[a.status]??0)-(({planned:0,started:0,waiting:0,practiced:1,completed:2,candidate:3} as Record<string,number>)[b.status]??0));};
  const list=(rows:any[],label:string,open=true)=><details className="daily-list" open={open}><summary>{label} · {rows.length}</summary><div className="plan-item-grid">{rows.length?rows.slice(0,expanded?rows.length:10).map((r:any)=><div className="daily-entry" key={r.id}><span>{r.title}</span>{r.status&&<small>{states[r.status]}</small>}</div>):<p>暂无已安排内容</p>}</div>{rows.length>10&&<button className="plan-expand" onClick={()=>setExpanded(!expanded)}>{expanded?'收起':'展开全部 '+rows.length+' 项'}</button>}</details>;

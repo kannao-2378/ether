@@ -1,11 +1,13 @@
 """Source-backed expression breadth, attached to the same prerequisite-aware route."""
 import json,hashlib
+from functools import lru_cache
 from pathlib import Path
 from datetime import datetime,timezone
 from sqlalchemy import text
 import curriculum_engine as ce
 RESOURCE=Path(__file__).parent/'resources/course_expansion.json'
 def load():return json.loads(RESOURCE.read_text(encoding='utf-8'))
+@lru_cache(maxsize=1)
 def summary():
  if not RESOURCE.exists():return None
  s=load();return dict(**s['counts'],policy=s['stage_policy'],source=s['source'])

@@ -1,10 +1,14 @@
+import {cachedRead,clearReadCache} from './readCache';
 import {useEffect,useState} from 'react';
 import {apiUrl,csrfHeaders,isPrivateMode} from './apiBase';
 export const isTestMode=()=>!isPrivateMode()&&sessionStorage.getItem('learning-test')==='1';
 export function learningFetch(input:string,init:RequestInit={}){
  const headers=new Headers(init.headers);if(isTestMode())headers.set('X-Learning-Test','1');
  if(!['GET','HEAD'].includes((init.method||'GET').toUpperCase()))for(const [k,v] of Object.entries(csrfHeaders()))headers.set(k,v);
- return fetch(apiUrl(input),{...init,headers,credentials:'same-origin'}).then(r=>{if(r.status===401&&!input.includes('/auth/'))window.dispatchEvent(new Event('login-required'));return r;});
+ const method=(init.method||'GET').toUpperCase();
+ const load=()=>fetch(apiUrl(input),{...init,headers,credentials:'same-origin'}).then(r=>{if(r.status===401&&!input.includes('/auth/'))window.dispatchEvent(new Event('login-required'));if(r.ok&&method!=='GET'&&method!=='HEAD'&&!['/api/check-word','/api/check'].includes(input))clearReadCache();return r;});
+ if(method==='GET'&&!init.signal){const ttl=input==='/api/settings'?1000:/^\/api\/(dictionary(?:\?|$)|plan\?compact=true|daily-activity(?:\?|$)|profile$)/.test(input)?20000:0;if(ttl)return cachedRead((isTestMode()?'test:':'real:')+input,ttl,load);}
+ return load();
 }
 export function TestModeSettings(){
  if(isPrivateMode())return null;

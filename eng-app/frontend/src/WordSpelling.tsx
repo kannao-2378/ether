@@ -1,3 +1,4 @@
+import {localWordCheck} from './localWordCheck';
 import {useLayoutEffect,useRef,useState,MutableRefObject} from 'react';
 import {learningFetch} from './testMode';
 
@@ -10,6 +11,7 @@ export function WordSpelling({question:q,inputRef,peek,english,draft,onDraft,onF
  const [active,setActive]=useState(0),[valid,setValid]=useState<number[]>([]),[wrong,setWrong]=useState(-1),[error,setError]=useState(false);
  const editor=useRef<HTMLInputElement|null>(null),slots=useRef<(HTMLSpanElement|null)[]>([]),container=useRef<HTMLDivElement|null>(null);
  const values=useRef(words),options=useRef(initial),verified=useRef<number[]>([]);
+ const reports=useRef<{body:any;done:boolean;work:Promise<void>}[]>([]);
  const editRevision=useRef(0),requestAttempt=useRef({key:'',id:''});
  const generation=useRef(0),busy=useRef(false),buffer=useRef(''),alive=useRef(true),ime=useRef(false);
  const onDraftRef=useRef(onDraft);onDraftRef.current=onDraft;
@@ -31,14 +33,26 @@ export function WordSpelling({question:q,inputRef,peek,english,draft,onDraft,onF
   const attemptKey=i+':'+values.current.slice(0,i+1).join(' ')+':'+editRevision.current;
   if(requestAttempt.current.key!==attemptKey)requestAttempt.current={key:attemptKey,id:globalThis.crypto?.randomUUID?.()||Math.random().toString(36).slice(2)};
   try{
-   const r=await learningFetch('/api/check-word',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:requestAttempt.current.id,question_id:q.question_id,word_index:i,answer:values.current.slice(0,i+1).join(' ')})});
-   if(!r.ok)throw Error();const result=await r.json();
+   const body={id:requestAttempt.current.id,question_id:q.question_id,word_index:i,answer:values.current.slice(0,i+1).join(' ')};
+   const send=()=>learningFetch('/api/check-word',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+   let result=await localWordCheck(q.word_validation,i,body.answer);
+   if(!result){const r=await send();if(!r.ok)throw Error();result=await r.json();}
+   else if(!result.correct&&!result.pending){
+    const entry={body,done:false,work:Promise.resolve()};reports.current.push(entry);
+    entry.work=send().then(r=>{if(!r.ok)throw Error();entry.done=true;}).catch(()=>{if(alive.current)setError(true);});
+   }
+   if(!result)throw Error();
    if(!alive.current||token!==generation.current)return;
    busy.current=false;
    if(!result.correct){setWrong(result.pending?-1:i);if(result.pending&&buffer.current){const pending=buffer.current;buffer.current='';feed(i,pending);}else buffer.current='';return;}
    options.current=result.answer_shapes;setShapes(result.answer_shapes);setWrong(-1);
    verified.current=[...verified.current.filter(n=>n<i),i];setValid(verified.current);
-   if(result.complete){buffer.current='';publish(values.current,true);return;}
+   if(result.complete){
+    await Promise.all(reports.current.map(r=>r.work));
+    for(const report of reports.current.filter(r=>!r.done)){const r=await learningFetch('/api/check-word',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(report.body)});if(!r.ok)throw Error();report.done=true;}
+    if(!alive.current||token!==generation.current)return;
+    buffer.current='';publish(values.current,true);return;
+   }
    const next=i+1;focusAt(next);
    if(buffer.current){const pending=buffer.current;buffer.current='';feed(next,pending);}
    else if(values.current[next])void verify(next);
