@@ -311,7 +311,7 @@ def daily_activity_report(day: str | None=None,planning: bool=False):
     except ValueError:raise HTTPException(400,'日期格式错误')
     if day>group_learning.day_of(stamp):raise HTTPException(400,'不能查询未来记录')
     settings=study_settings()
-    with engine.connect() as c:return daily_activity.build(c,stamp,day,settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course'],planning)
+    with engine.connect() as c,selection_cache.scope():return daily_activity.build(c,stamp,day,settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course'],planning)
 
 @app.get('/api/profile')
 def learning_profile_summary():
@@ -538,7 +538,7 @@ def save_settings(values: dict):
 
 @app.get('/api/dashboard')
 def dashboard(summary_only: bool = False):
-    with engine.connect() as c:
+    with engine.connect() as c,selection_cache.scope():
         if not summary_only:
             items = [dict(r) for r in c.execute(text('SELECT k.*,p.*,COALESCE(l.stage,1) AS stage,l.parent_id,CASE WHEN l.parent_id IS NULL OR pp.level>=3 THEN 1 ELSE 0 END AS unlocked FROM knowledge k JOIN progress p ON k.id=p.knowledge_id LEFT JOIN course_links l ON l.knowledge_id=k.id LEFT JOIN progress pp ON pp.knowledge_id=l.parent_id')).mappings()]
             answers = [dict(r) for r in c.execute(text('SELECT a.*,COALESCE((SELECT confidence FROM feedback_events f WHERE f.question_id=a.question_id ORDER BY f.rowid DESC LIMIT 1),a.confidence) AS effective_confidence,k.prompt,k.answer,gq.group_id,lg.title AS group_title FROM answers a JOIN knowledge k ON k.id=a.knowledge_id LEFT JOIN group_questions gq ON gq.question_id=a.question_id LEFT JOIN learning_groups lg ON lg.id=gq.group_id ORDER BY a.created_at DESC LIMIT 100')).mappings()]

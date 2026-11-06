@@ -231,16 +231,18 @@ def report(c,course='all'):
 
 
 def upgrades(c,stamp=None):
+ raw=c.execute(text("SELECT value FROM app_settings WHERE key='active-course'")).scalar()
+ course=json.loads(raw) if raw else 'all'
  rows=c.execute(text("""SELECT g.id,l.knowledge_id FROM curriculum_goals t JOIN learning_groups g ON g.id=t.id
  JOIN progress root ON root.knowledge_id=g.root_id JOIN curriculum_lessons l ON l.goal_id=g.id
  JOIN progress p ON p.knowledge_id=l.knowledge_id
- WHERE t.status='ready' AND root.introduced=1 AND root.level>=3 AND p.introduced=0 AND l.role IN ('phrase','sentence')""")).all()
+ WHERE t.status='ready' AND root.introduced=1 AND root.level>=3 AND p.introduced=0 AND l.role IN ('phrase','sentence') AND (:course='all' OR EXISTS(SELECT 1 FROM curriculum_paths route WHERE route.goal_id=g.id AND route.course_id=:course))"""),dict(course=course)).all()
  result=list(dict.fromkeys(g for g,k in rows if not blockers(c,g) and not known(c,k)))
  if stamp is not None:
   import group_learning,transfer_evidence
   candidates=c.execute(text("""SELECT DISTINCT g.id FROM curriculum_goals t JOIN learning_groups g ON g.id=t.id
    JOIN progress p ON p.knowledge_id=g.root_id JOIN curriculum_lessons l ON l.goal_id=g.id
-   WHERE t.status='ready' AND p.introduced=1 AND p.level>=3 AND l.role='transfer'""")).scalars()
+   WHERE t.status='ready' AND p.introduced=1 AND p.level>=3 AND l.role='transfer' AND (:course='all' OR EXISTS(SELECT 1 FROM curriculum_paths route WHERE route.goal_id=g.id AND route.course_id=:course))"""),dict(course=course)).scalars()
   for gid in candidates:
    if gid in result or blockers(c,gid):continue
    item,_=group_learning.step(c,gid,stamp)
