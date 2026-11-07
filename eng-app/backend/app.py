@@ -44,8 +44,18 @@ import response_cache
 DATA = Path(os.environ.get('PELS_DATA_DIR',str(Path(__file__).parent / 'data')))
 DATA.mkdir(parents=True,exist_ok=True)
 AUTH=PrivateAuth.from_env(DATA)
-real_engine=create_engine(f'sqlite:///{DATA / "learning.db"}')
-test_engine=create_engine(f'sqlite:///{DATA / "testing.db"}')
+def _sqlite_engine(path):
+ e=create_engine(f'sqlite:///{path}')
+ @event.listens_for(e,'connect')
+ def _tune(dbapi_con,con_record):
+  # Random index probes over a ~300MB db dominate every request; mmap and a
+  # larger page cache turn 1s scans into ~0.2s without changing semantics.
+  dbapi_con.execute('PRAGMA cache_size=-131072')
+  dbapi_con.execute('PRAGMA mmap_size=536870912')
+  dbapi_con.execute('PRAGMA temp_store=MEMORY')
+ return e
+real_engine=_sqlite_engine(DATA / 'learning.db')
+test_engine=_sqlite_engine(DATA / 'testing.db')
 testing=ContextVar('testing',default=False)
 class EngineRouter:
     def __getattr__(self,name):return getattr(test_engine if testing.get() else real_engine,name)
@@ -305,6 +315,13 @@ def read_rule(rule_id: str):
 
 @app.get('/api/plan')
 def learning_plan(compact: bool=False):
+    # The report walks ~200 goals with prerequisite lookups; cache the serialized
+    # body so plan pages render from cache between study writes.
+    mode=(str(engine.url.database),compact,bool(testing.get()))
+    def compute():return json.dumps(_learning_plan_payload(compact),ensure_ascii=False,separators=(',',':'))
+    return json.loads(response_cache.cached('plan',mode,120,compute))
+
+def _learning_plan_payload(compact: bool=False):
     if compact:
         s=study_settings()
         with engine.connect() as c,selection_cache.scope():
@@ -332,7 +349,7 @@ def shared_examples_plan():
     with engine.connect() as c,selection_cache.scope():return shared_examples.plan(c)
 
 @app.get('/api/daily-activity')
-def daily_activity_report(day: str | None=None,planning: bool=False):
+def daily_activity_report(day: str | None=None,planning: bool=False,summary: bool=False):
     stamp=now();day=day or group_learning.day_of(stamp)
     try:
         parsed=datetime.strptime(day,'%Y-%m-%d').date()
@@ -341,9 +358,11 @@ def daily_activity_report(day: str | None=None,planning: bool=False):
     if day>group_learning.day_of(stamp):raise HTTPException(400,'不能查询未来记录')
     settings=study_settings()
     # Planning previews recompute group scheduling; short TTL keeps plan pages instant.
+    # summary=True serves the study-page quota badge without the planning block.
+    effective_planning=planning and not summary
     def compute():
-        with engine.connect() as c,selection_cache.scope():return daily_activity.build(c,stamp,day,settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course'],planning)
-    return response_cache.cached('daily-activity',(str(engine.url.database),day,planning,settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course']),30,compute)
+        with engine.connect() as c,selection_cache.scope():return daily_activity.build(c,stamp,day,settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course'],effective_planning)
+    return response_cache.cached('daily-activity',(str(engine.url.database),day,effective_planning,settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course']),30,compute)
 
 @app.get('/api/profile')
 def learning_profile_summary():
@@ -389,7 +408,7 @@ def challenge(kid: str):
             c.execute(text('INSERT INTO questions VALUES(:q,:k,:t,0)'),dict(q=qid,k=kid,t=now().isoformat()))
         transfer_evidence.register(c,qid,kid)
         c.execute(text('UPDATE progress SET introduced=1 WHERE knowledge_id=:k'),dict(k=kid))
-        response_cache.bump('dashboard','daily-activity')
+        response_cache.bump('dashboard','daily-activity','blockers','plan','progress')
         return dict(kind='recall',question_id=qid,id=kid,prompt=item['prompt'],**answer_hint(c,item),challenge=True)
 
 class LookupQuery(BaseModel):
@@ -428,7 +447,7 @@ def import_lookup(body: LookupImport):
                 c.execute(text('UPDATE knowledge_assessments SET payload=:p WHERE knowledge_id=:k'),dict(k=cached[0],p=json.dumps(payload,ensure_ascii=False)))
         if body.train:result['focus']=focus_training.add(c,result['id'],now(),member_ids=result['imported_ids'])
         result['items']=[dict(c.execute(text('SELECT k.*,p.*,COALESCE(l.stage,1) AS stage FROM knowledge k JOIN progress p ON p.knowledge_id=k.id LEFT JOIN course_links l ON l.knowledge_id=k.id WHERE k.id=:k'),dict(k=kid)).mappings().one()) for kid in result['imported_ids']]
-    response_cache.bump('dictionary','dashboard','daily-activity','profile')
+    response_cache.bump('dictionary','dashboard','daily-activity','profile','blockers','plan','progress')
     return dict(saved=True,**result)
 
 @app.get('/api/focus/{kid}')
@@ -444,14 +463,14 @@ def add_focus(kid: str):
     with engine.begin() as c:
         try:result=focus_training.add(c,kid,now())
         except ValueError:raise HTTPException(404,'词条不存在')
-    response_cache.bump('daily-activity')
+    response_cache.bump('daily-activity','plan','progress')
     return result
 
 @app.post('/api/focus-cancel/{gid}')
 def cancel_focus(gid: str):
     with engine.begin() as c:
         if not focus_training.cancel(c,gid):raise HTTPException(409,'任务已经结束或不存在')
-    response_cache.bump('daily-activity')
+    response_cache.bump('daily-activity','plan','progress')
     return dict(saved=True)
 
 @app.get('/api/dictionary')
@@ -556,7 +575,7 @@ def add_daily_learning(body: ExtraLearning):
             extra=body.amount+max(0,admitted-settings['daily-new-limit'])
             c.execute(text('INSERT OR IGNORE INTO daily_extensions VALUES(:i,:d,:a,:e,:t)'),dict(i=body.id,d=day,a=body.amount,e=extra,t=stamp.isoformat()))
         limit=study_settings(c)['daily-new-limit']
-    response_cache.bump('dashboard','daily-activity')
+    response_cache.bump('dashboard','daily-activity','blockers','plan','progress')
     return dict(amount=body.amount,date=day,new_limit=limit)
 
 @app.post('/api/settings')
@@ -594,8 +613,12 @@ def _dashboard_payload(summary_only: bool = False, lightweight: bool = False):
         total_content=c.execute(text('SELECT COUNT(*) FROM knowledge')).scalar()
         introduced_content=c.execute(text('SELECT COUNT(*) FROM progress WHERE introduced=1')).scalar()
         if not summary_only:
-            item_filter=" WHERE p.introduced=1 OR k.id IN (SELECT knowledge_id FROM questions ORDER BY rowid DESC LIMIT 100)" if lightweight else ''
-            items = [dict(r) for r in c.execute(text('SELECT k.*,p.*,COALESCE(l.stage,1) AS stage,l.parent_id,CASE WHEN l.parent_id IS NULL OR pp.level>=3 THEN 1 ELSE 0 END AS unlocked FROM knowledge k JOIN progress p ON k.id=p.knowledge_id LEFT JOIN course_links l ON l.knowledge_id=k.id LEFT JOIN progress pp ON pp.knowledge_id=l.parent_id'+item_filter)).mappings()]
+            base='SELECT k.*,p.*,COALESCE(l.stage,1) AS stage,l.parent_id,CASE WHEN l.parent_id IS NULL OR pp.level>=3 THEN 1 ELSE 0 END AS unlocked FROM knowledge k JOIN progress p ON k.id=p.knowledge_id LEFT JOIN course_links l ON l.knowledge_id=k.id LEFT JOIN progress pp ON pp.knowledge_id=l.parent_id'
+            if lightweight:
+                # OR across 95k rows forces a full scan; UNION keeps both branches indexed.
+                items = [dict(r) for r in c.execute(text(base+' WHERE p.introduced=1 UNION '+base+' WHERE k.id IN (SELECT knowledge_id FROM questions ORDER BY rowid DESC LIMIT 100)')).mappings()]
+            else:
+                items = [dict(r) for r in c.execute(text(base)).mappings()]
             answers = [dict(r) for r in c.execute(text('SELECT a.*,COALESCE((SELECT confidence FROM feedback_events f WHERE f.question_id=a.question_id ORDER BY f.rowid DESC LIMIT 1),a.confidence) AS effective_confidence,k.prompt,k.answer,gq.group_id,lg.title AS group_title FROM answers a JOIN knowledge k ON k.id=a.knowledge_id LEFT JOIN group_questions gq ON gq.question_id=a.question_id LEFT JOIN learning_groups lg ON lg.id=gq.group_id ORDER BY a.created_at DESC LIMIT 100')).mappings()]
             hints={}
             for answer in answers:
@@ -722,7 +745,7 @@ def _select_next(c,allow_repeat=False):
 def next_question(allow_repeat: bool=False):
     with engine.begin() as c,selection_cache.scope():
         result=_select_next(c,allow_repeat)
-    response_cache.bump('dashboard','daily-activity')
+    response_cache.bump('dashboard','daily-activity','blockers','plan','progress')
     return result
 
 @app.post('/api/introduce/{kid}')
@@ -732,7 +755,7 @@ def introduce(kid: str):
         result = c.execute(text('UPDATE progress SET introduced=1,due_at=:t WHERE knowledge_id=:k AND introduced=0'),dict(k=kid,t=now().isoformat()))
         if not result.rowcount:
             raise HTTPException(409,'内容不存在或已经学习')
-    response_cache.bump('dashboard','daily-activity')
+    response_cache.bump('dashboard','daily-activity','blockers','plan','progress')
     return dict(saved=True)
 
 @app.post('/api/reveal/{qid}')
@@ -771,7 +794,7 @@ def skip_test_question(qid: str):
         c.execute(text('DELETE FROM group_usage WHERE question_id=:q'),dict(q=qid))
         if group_mode(c,qid):group_learning.refresh(c,kid,now(),qid)
         assessment.refresh(c,kid)
-    response_cache.bump('dashboard','daily-activity')
+    response_cache.bump('dashboard','daily-activity','blockers','plan','progress')
     return dict(saved=True,test_skip=True)
 
 class SpellingCheck(BaseModel):
@@ -818,7 +841,7 @@ def feedback(body: Feedback):
         assessment.refresh(c,kid)
         apply_retention_limit(c,kid)
         if group_mode(c,body.question_id):group_learning.refresh(c,kid,now(),body.question_id)
-    response_cache.bump('dashboard','daily-activity')
+    response_cache.bump('dashboard','daily-activity','blockers','plan','progress')
     return dict(saved=True)
 
 @app.post('/api/check')
@@ -871,7 +894,7 @@ def submit(body: Submission):
         scheduled=c.execute(text('SELECT due_at,due_sequence,gap FROM review_queue WHERE knowledge_id=:k'),dict(k=row['knowledge_id'])).mappings().first()
         result['due_at']=scheduled['due_at']
         c.execute(text('UPDATE answers SET due_at=:d WHERE question_id=:q'),dict(d=scheduled['due_at'],q=body.question_id))
-        response_cache.bump('dashboard','daily-activity')
+        response_cache.bump('dashboard','daily-activity','blockers','plan','progress')
         return dict(**result,expected=row['answer'])
 
 @app.get('/api/export')

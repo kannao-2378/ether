@@ -55,9 +55,10 @@ def prepare(c,stamp):
  if not admitted:return 0
  # Scanning the sentence bank is wasted work unless answers, progress, quota or today's groups changed.
  db=getattr(getattr(c,'engine',None),'url',None)
- progress=c.execute(text("SELECT COUNT(*),COALESCE(SUM(introduced),0),COALESCE(SUM(level),0),COALESCE(MAX(last_at),'') FROM progress")).one()
+ import response_cache
+ progress=response_cache.version('progress')
  fingerprint=(day,str(getattr(db,'database',None)),used,len(admitted),
-  c.execute(text('SELECT COALESCE(MAX(rowid),0) FROM answers')).scalar(),tuple(progress))
+  c.execute(text('SELECT COALESCE(MAX(rowid),0) FROM answers')).scalar(),progress)
  if _prepare_state['fingerprint']==fingerprint:return 0
  import hashlib,json,curriculum_engine as ce
  report=plan(c,1000);added=0

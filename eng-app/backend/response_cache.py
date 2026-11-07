@@ -30,5 +30,9 @@ def cached(domain,key,ttl,compute):
     value=compute()
     with _lock:
         if len(_store)>=_MAX_ENTRIES:_store.clear()
-        _store[(domain,key)]=(time.monotonic()+ttl,version,value)
+        _store[(domain,key)]=(time.monotonic()+ttl,value,version)
     return value
+
+def version(domain):
+    """Current invalidation counter of a domain, for cheap change detection."""
+    with _lock:return _versions.get(domain,0)

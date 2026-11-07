@@ -120,11 +120,32 @@ def candidates(cat,target,facts):
     dep=cat.resolve('goal:'+ref)
     if dep:yield emit('I '+head+' belong to this group','我'+meaning+'属于这个群体',[dict(deps=[group,dep])],target+'+outer')
 
-def prepare(c,stamp):
- """Materialize a small unseen reservoir; never update grades or mastered facts."""
+_composition_state={'fingerprint':None,'value':None}
+def _composition_inputs(c):
+ # Catalog+facts+signature cost ~150ms per /next; they only change with progress,
+ # new cards or rule edits. Version counter + rowid maxima detect inserts; the
+ # introduced-row aggregates also catch direct UPDATEs (tests, manual edits)
+ # that change review-fact visibility without bumping the version counter.
+ import response_cache
+ fp=(RULES.stat().st_mtime_ns,response_cache.version('progress'),
+  str(getattr(getattr(c,'engine',None),'url',None) and c.engine.url.database),
+  c.execute(text('SELECT COALESCE(MAX(rowid),0) FROM answers')).scalar(),
+  c.execute(text('SELECT COALESCE(MAX(rowid),0) FROM knowledge')).scalar(),
+  c.execute(text('SELECT COALESCE(MAX(rowid),0) FROM knowledge_details')).scalar(),
+  c.execute(text('SELECT COALESCE(MAX(rowid),0) FROM curriculum_lessons')).scalar(),
+  c.execute(text('SELECT COUNT(*),COALESCE(SUM(level),0) FROM progress WHERE introduced=1')).one(),
+  c.execute(text('SELECT COUNT(*),COALESCE(SUM(length(payload)),0) FROM knowledge_details WHERE knowledge_id IN (SELECT knowledge_id FROM progress WHERE introduced=1)')).one())
+ if _composition_state['fingerprint']==fp:return _composition_state['value']
  spec=json.loads(RULES.read_text(encoding='utf-8'));cat=Catalog(c,spec)
  facts={kind:cat.facts(kind) for kind in ('actions','objects','times','places')}
  signature=hashlib.sha256((RULES.read_text(encoding='utf-8')+json.dumps(facts,sort_keys=True)).encode()).hexdigest()
+ _composition_state['fingerprint']=fp;_composition_state['value']=(spec,cat,facts,signature)
+ return (spec,cat,facts,signature)
+
+def prepare(c,stamp):
+ """Materialize a small unseen reservoir; never update grades or mastered facts."""
+ spec,cat,facts,signature=_composition_inputs(c)
+ cat.c=c;cat.cache={}  # rebind resolve() to the current connection
  states={row[0]:row[1:] for row in c.execute(text('SELECT goal_id,signature,cursor,last_at FROM composition_cursors'))}
  checked=0;created=0
  ordered=sorted(cat.goals.items(),key=lambda item:states.get(item[1]['id'],('','', ''))[2])

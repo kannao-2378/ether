@@ -2,6 +2,7 @@ from selection_cache import memoized
 """One prerequisite-aware teaching registry for every course; learner evidence stays separate."""
 import json,hashlib,re
 import pronunciation_metadata
+import response_cache
 from pathlib import Path
 from datetime import datetime,timezone
 from sqlalchemy import text,bindparam
@@ -19,6 +20,7 @@ def install(c):
   "CREATE TABLE IF NOT EXISTS curriculum_lessons(goal_id TEXT,knowledge_id TEXT,role TEXT,position INTEGER,required INTEGER NOT NULL DEFAULT 1,PRIMARY KEY(goal_id,knowledge_id))",
   "CREATE TABLE IF NOT EXISTS curriculum_aliases(knowledge_id TEXT,alias_id TEXT,PRIMARY KEY(knowledge_id,alias_id))",
   "CREATE TABLE IF NOT EXISTS curriculum_versions(id TEXT PRIMARY KEY)",
+  "CREATE INDEX IF NOT EXISTS curriculum_goal_course ON curriculum_paths(goal_id,course_id)",
   "CREATE INDEX IF NOT EXISTS curriculum_lesson_item ON curriculum_lessons(knowledge_id,goal_id,role)",
   "CREATE INDEX IF NOT EXISTS curriculum_alias_source ON curriculum_aliases(alias_id,knowledge_id)",
   "CREATE INDEX IF NOT EXISTS curriculum_path_order ON curriculum_paths(course_id,unit_position,position)"]:
@@ -171,6 +173,18 @@ def known(c,kid):
 
 @memoized
 def blocker_map(c):
+ # The ranked-progress CTE costs ~100ms on real data. Write endpoints bump the
+ # 'blockers' domain; the data fingerprint additionally catches direct progress
+ # writes (tests, manual sqlite edits) that bypass bump. The SQL only reads
+ # introduced=1 rows, so the aggregate scans just the progress_due index slice.
+ db=str(getattr(getattr(c,'engine',None),'url',None) and c.engine.url.database)
+ fp=(c.execute(text('SELECT COUNT(*),COALESCE(SUM(level),0),COALESCE(SUM(julianday(last_at)),0) FROM progress WHERE introduced=1')).one(),
+  c.execute(text('SELECT COUNT(*),COALESCE(MAX(rowid),0) FROM curriculum_aliases')).one(),
+  c.execute(text('SELECT COUNT(*),COALESCE(MAX(rowid),0) FROM curriculum_prerequisites')).one(),
+  c.execute(text('SELECT COUNT(*),COALESCE(MAX(rowid),0) FROM knowledge')).one())
+ return response_cache.cached('blockers',(db,fp),3600,lambda:_blocker_rows(c))
+
+def _blocker_rows(c):
  rows=c.execute(text("""WITH sources AS (
  SELECT knowledge_id AS target,knowledge_id AS source,level,last_at FROM progress WHERE introduced=1
  UNION ALL SELECT a.knowledge_id,p.knowledge_id,p.level,p.last_at FROM curriculum_aliases a JOIN progress p ON p.knowledge_id=a.alias_id WHERE p.introduced=1
@@ -183,16 +197,36 @@ def blocker_map(c):
 
 def blockers(c,gid):return blocker_map(c).get(gid,[])
 
-def candidates(c,course='all',limit=1):
+# Cross-request cache for candidates(); the driving query costs ~1s on real data.
+# Output only depends on introduction flags and today's booked groups, which
+# these index-supported counters capture without a table scan.
+_candidates_cache={}
+def _candidates_fingerprint(c):
+ return (c.execute(text('SELECT COUNT(*) FROM progress')).scalar(),
+  c.execute(text('SELECT COUNT(*) FROM progress WHERE introduced=1')).scalar(),
+  c.execute(text('SELECT COUNT(*),COALESCE(MAX(rowid),0) FROM daily_group_tasks')).one())
+
+def _ordered_rows(c):
+ # Cache the course/limit-independent SQL rows; per-call Python filtering stays fresh.
+ db=str(getattr(getattr(c,'engine',None),'url',None) and c.engine.url.database)
+ fp=_candidates_fingerprint(c)
+ hit=_candidates_cache.get(db)
+ if hit and hit[0]==fp:return hit[1]
  rows=c.execute(text("""SELECT DISTINCT g.id,g.title,g.kind AS unit_type,t.difficulty,p.course_id,p.unit_position,p.position FROM curriculum_goals t
  JOIN learning_groups g ON g.id=t.id JOIN group_primary own ON own.knowledge_id=g.root_id AND own.group_id=g.id
  JOIN progress s ON s.knowledge_id=g.root_id JOIN curriculum_paths p ON p.goal_id=g.id
  WHERE t.status='ready' AND s.introduced=0
  AND NOT EXISTS(SELECT 1 FROM daily_group_tasks d WHERE d.group_id=g.id)
- ORDER BY p.course_id!='foundation',p.course_id,p.unit_position,t.difficulty,p.position,g.id"""),dict(c=course)).mappings().all()
+ ORDER BY p.course_id!='foundation',p.course_id,p.unit_position,t.difficulty,p.position,g.id""")).mappings().all()
+ _candidates_cache[db]=(fp,rows)
+ return rows
+
+def candidates(c,course='all',limit=1):
+ rows=_ordered_rows(c)
  # Breadth practice must not force hundreds of phrases before the next structure.
  import os
  if os.environ.get('PELS_COURSE_EXPANSION')=='1':
+  rows=list(rows)
   recent=c.execute(text("SELECT group_id FROM daily_group_tasks WHERE kind='new' ORDER BY rowid DESC LIMIT 4")).scalars().all()
   breadth_first=len(recent)==4 and all(g.startswith('mainline-') for g in recent)
   rows.sort(key=lambda r:(r['id'].startswith('mainline-') if breadth_first else not r['id'].startswith('mainline-')))
