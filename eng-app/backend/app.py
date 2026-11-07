@@ -1,4 +1,5 @@
 import spelling_practice
+import time
 import curriculum_engine
 import composition_engine
 import sourced_transfer
@@ -748,6 +749,39 @@ def next_question(allow_repeat: bool=False):
     response_cache.bump('dashboard','daily-activity','plan','progress')
     return result
 
+# Pre-computed 认识 transitions: the client warms this while the learner reads
+# the meaning card, so the real click only applies the deterministic write.
+_prepared_introduce={}
+_PREPARE_TTL=90
+
+@app.post('/api/prepare-introduce/{kid}')
+def prepare_introduce(kid: str):
+    """Rehearse the introduce+scheduler flow in a rolled-back transaction.
+
+    Applies the exact writes of /api/introduce plus _select_next, then rolls
+    everything back; the question the learner would see after clicking 认识 is
+    memoized for the real click. Reading time on the card absorbs the compute.
+    """
+    try:
+        with engine.connect() as c:
+            tx=c.begin()
+            try:
+                question=None
+                with selection_cache.scope():
+                    row=c.execute(text('SELECT 1 FROM progress WHERE knowledge_id=:k AND introduced=0'),dict(k=kid)).first()
+                    if row:
+                        transfer_evidence.expose(c,kid,now(),content.details(c,kid))
+                        c.execute(text('UPDATE progress SET introduced=1,due_at=:t WHERE knowledge_id=:k AND introduced=0'),dict(k=kid,t=now().isoformat()))
+                        question=_select_next(c)
+            finally:
+                tx.rollback()
+        if question is not None:
+            _prepared_introduce[(str(engine.url.database),kid)]=(time.monotonic(),question)
+            return dict(prepared=True)
+        return dict(prepared=False)
+    except Exception:
+        return dict(prepared=False)
+
 @app.post('/api/introduce/{kid}')
 def introduce(kid: str):
     with engine.begin() as c:
@@ -757,7 +791,12 @@ def introduce(kid: str):
             raise HTTPException(409,'内容不存在或已经学习')
     response_cache.bump('dashboard','daily-activity','plan','progress')
     # Inline the follow-up question so the client saves one serial round trip
-    # on the meaning-screen "认识" transition.
+    # on the meaning-screen "认识" transition; serve the rehearsal result when
+    # it is fresh enough that the scheduler outcome cannot have drifted.
+    key=(str(engine.url.database),kid)
+    hit=_prepared_introduce.pop(key,None)
+    if hit and time.monotonic()-hit[0]<=_PREPARE_TTL:
+        return dict(saved=True,next=hit[1])
     return dict(saved=True,next=next_question())
 
 @app.post('/api/reveal/{qid}')
