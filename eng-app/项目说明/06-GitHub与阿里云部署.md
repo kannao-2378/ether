@@ -1,5 +1,9 @@
 # GitHub与阿里云部署
 
+## 2026-11-07 手机白屏修复（4c765a3）
+
+ec28b31上线的前端dist是本地`npm run build`产物，未加`--base=/eng/`，index.html引用`/assets/...`导致手机新加载白屏（旧页面不刷新则继续用缓存旧JS，掩盖了问题）。用户手机复现：nginx日志显示iPhone五次下载index.html但无JS请求。已用`npx vite build --base=/eng/`重建并上线4c765a3，线上index.html引用`/eng/assets/index-3YACp4bf.js`，JS/CSS均200。仅更新静态文件，未重启后端、未写数据库。正式构建必须带`--base=/eng/`（见deploy/README.md），本次事故原因是未按该规范构建。
+
 ## 2026-11-07 前后端缓存秒开版本上线
 
 ec28b31已部署阿里云：服务端响应缓存（response_cache.py）、前端SWR读缓存、/api/next内联知识元数据。快照 /var/lib/pels/before-swr-cache-20261107-094827.zip（600权限）；回滚目录 /opt/pels/.before-swr-cache-20261107-094827（700）。整个backend与dist更新。
