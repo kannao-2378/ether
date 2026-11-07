@@ -49,7 +49,7 @@ function App({onLogout}:{onLogout?:()=>void}){
  useEffect(()=>{const reset=()=>setQ(null);window.addEventListener('focus-updated',reset);return()=>window.removeEventListener('focus-updated',reset);},[]);
  useEffect(()=>{refresh().catch(()=>setError('连接不到学习服务，请检查网络后重试。'));},[]);
  async function act(fn:()=>Promise<void>){if(actionLock.current)return;actionLock.current=true;setBusy(true);setError('');try{await fn();}catch(e){setError(e instanceof Error?e.message:'操作失败');}finally{actionLock.current=false;setBusy(false);}}
- async function next(remember=true,allowRepeat=false){if(q?.context_round_complete)await api('/context/new-round',{});const question=await api(allowRepeat?'/next?allow_repeat=true':'/next',{});if(remember&&q?.question_id&&q.kind!=='done')setPreviousItems(items=>[...items,{...q,confidence}]);applyQuestion(question);}
+ async function next(remember=true,allowRepeat=false,precomputed:any=null){if(q?.context_round_complete&&!precomputed)await api('/context/new-round',{});const question=precomputed||await api(allowRepeat?'/next?allow_repeat=true':'/next',{});if(remember&&q?.question_id&&q.kind!=='done')setPreviousItems(items=>[...items,{...q,confidence}]);applyQuestion(question);}
  useEffect(()=>{const enter=()=>{setPage('今日学习');void act(()=>next(false));};window.addEventListener('enter-next-stage',enter);return()=>window.removeEventListener('enter-next-stage',enter);});
  function previous(){
   if(busy||checking)return;speech.stop();setPeek(false);setError('');
@@ -65,7 +65,7 @@ function App({onLogout}:{onLogout?:()=>void}){
    if(reviewSpelling&&!checked?.correct)return;
    await act(async()=>{await api('/feedback',{question_id:previousItems[reviewIndex].question_id,confidence:value});setPreviousItems(items=>items.map((item,index)=>index===reviewIndex?{...item,confidence:value}:item));reviewNext();});return;
   }
-  if(q?.kind==='learn'){await act(async()=>{await api('/introduce/'+q.id,{});await next();});return;}
+  if(q?.kind==='learn'){await act(async()=>{const r=q?.context_round_complete?null:await api('/introduce/'+q.id,{});await next(true,false,r?.next||null);});return;}
   if(!checked?.correct)return;
   setConfidence(value);
   await act(async()=>{const saved=await api('/answers',{question_id:q.question_id,answer,confidence:value,hint_used:assistedQuestions.current.has(q.question_id)});if(saved.confidence!==value)await api('/feedback',{question_id:q.question_id,confidence:value});const completed={...q,confidence:value};setPreviousItems(items=>[...items.filter(i=>i.question_id!==q.question_id),completed]);await next();});
@@ -86,7 +86,7 @@ function App({onLogout}:{onLogout?:()=>void}){
   if(!isTestMode()||!q?.question_id||reviewIndex!==null)return;
   await act(async()=>{await api('/test/skip-question/'+q.question_id,{});await next();});
  }
- async function continueLearning(){await act(async()=>{if(q?.kind==='learn')await api('/introduce/'+q.id,{});await next();});}
+ async function continueLearning(){await act(async()=>{if(q?.kind!=='learn'){await next();return;}const r=q?.context_round_complete?null:await api('/introduce/'+q.id,{});await next(true,false,r?.next||null);});}
  async function revealAnswer(){
   if(q?.kind!=='recall'||result||hint)return;
   await act(async()=>{const revealed=await api('/reveal/'+q.question_id,{});setHint(revealed);});

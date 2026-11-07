@@ -756,7 +756,9 @@ def introduce(kid: str):
         if not result.rowcount:
             raise HTTPException(409,'内容不存在或已经学习')
     response_cache.bump('dashboard','daily-activity','plan','progress')
-    return dict(saved=True)
+    # Inline the follow-up question so the client saves one serial round trip
+    # on the meaning-screen "认识" transition.
+    return dict(saved=True,next=next_question())
 
 @app.post('/api/reveal/{qid}')
 def reveal(qid: str):
