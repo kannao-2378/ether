@@ -1,5 +1,11 @@
 # GitHub与阿里云部署
 
+## 2026-11-07 前后端缓存秒开版本上线
+
+ec28b31已部署阿里云：服务端响应缓存（response_cache.py）、前端SWR读缓存、/api/next内联知识元数据。快照 /var/lib/pels/before-swr-cache-20261107-094827.zip（600权限）；回滚目录 /opt/pels/.before-swr-cache-20261107-094827（700）。整个backend与dist更新。
+
+service active、health ok；HTTPS /eng/、新JS index-B0oDOtKy.js与CSS均200；未登录profile与词典/当日活动接口均401；原/kan/首页200。重启窗口内（约30秒应用启动）一次profile请求出现502，为启动瞬时现象，启动后直连复测正常。三个数据库quick_check均ok。改动与验证范围见38号说明；未向线上提交模拟答题。
+
 ## 2026-11-04 横线对齐静态修复
 
 091a9d9已更新线上静态页，资源index-Csh3I7s9.js / index-BxnF4cJo.css。固定格子绘制横线，清除活动编辑器残留46px最小高度和自身边框，避免空格子基线及活动线高低跳动。移动尺寸检查输入前后各格矩形不变、同行底边一致，原焦点/逐词验证检查保持通过。未改中文题目、排课或后端。
