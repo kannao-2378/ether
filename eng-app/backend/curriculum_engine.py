@@ -173,15 +173,17 @@ def known(c,kid):
 
 @memoized
 def blocker_map(c):
- # The ranked-progress CTE costs ~100ms on real data. Write endpoints bump the
- # 'blockers' domain; the data fingerprint additionally catches direct progress
- # writes (tests, manual sqlite edits) that bypass bump. The SQL only reads
- # introduced=1 rows, so the aggregate scans just the progress_due index slice.
+ # The ranked-progress CTE costs ~100ms on real data. The SQL only reads the
+ # "known" subset (introduced=1 AND level>=3) of progress rows, so the cache
+ # key aggregates exactly that slice: a learning submit (level below 3) or an
+ # introduce cannot change any blocker outcome and keeps the entry warm.
+ # Structure edits (publish/retire) are caught by table counters and rowid maxima.
  db=str(getattr(getattr(c,'engine',None),'url',None) and c.engine.url.database)
- fp=(c.execute(text('SELECT COUNT(*),COALESCE(SUM(level),0),COALESCE(SUM(julianday(last_at)),0) FROM progress WHERE introduced=1')).one(),
+ fp=(c.execute(text('SELECT COUNT(*),COALESCE(SUM(level),0),COALESCE(MAX(julianday(last_at)),0) FROM progress WHERE introduced=1 AND level>=3')).one(),
   c.execute(text('SELECT COUNT(*),COALESCE(MAX(rowid),0) FROM curriculum_aliases')).one(),
   c.execute(text('SELECT COUNT(*),COALESCE(MAX(rowid),0) FROM curriculum_prerequisites')).one(),
-  c.execute(text('SELECT COUNT(*),COALESCE(MAX(rowid),0) FROM knowledge')).one())
+  c.execute(text('SELECT COUNT(*),COALESCE(MAX(rowid),0) FROM knowledge')).one(),
+  c.execute(text("SELECT COUNT(*),COALESCE(SUM(status='ready'),0) FROM curriculum_goals")).one())
  return response_cache.cached('blockers',(db,fp),3600,lambda:_blocker_rows(c))
 
 def _blocker_rows(c):
@@ -198,12 +200,11 @@ def _blocker_rows(c):
 def blockers(c,gid):return blocker_map(c).get(gid,[])
 
 # Cross-request cache for candidates(); the driving query costs ~1s on real data.
-# Output only depends on introduction flags and today's booked groups, which
-# these index-supported counters capture without a table scan.
+# The root-introduced filter runs in Python against fresh progress rows, so the
+# cached SQL never goes stale on introduce() and needs no progress counter here.
 _candidates_cache={}
 def _candidates_fingerprint(c):
  return (c.execute(text('SELECT COUNT(*) FROM progress')).scalar(),
-  c.execute(text('SELECT COUNT(*) FROM progress WHERE introduced=1')).scalar(),
   c.execute(text('SELECT COUNT(*),COALESCE(MAX(rowid),0) FROM daily_group_tasks')).one())
 
 def _ordered_rows(c):
@@ -214,8 +215,8 @@ def _ordered_rows(c):
  if hit and hit[0]==fp:return hit[1]
  rows=c.execute(text("""SELECT DISTINCT g.id,g.title,g.kind AS unit_type,t.difficulty,p.course_id,p.unit_position,p.position FROM curriculum_goals t
  JOIN learning_groups g ON g.id=t.id JOIN group_primary own ON own.knowledge_id=g.root_id AND own.group_id=g.id
- JOIN progress s ON s.knowledge_id=g.root_id JOIN curriculum_paths p ON p.goal_id=g.id
- WHERE t.status='ready' AND s.introduced=0
+ JOIN curriculum_paths p ON p.goal_id=t.id
+ WHERE t.status='ready'
  AND NOT EXISTS(SELECT 1 FROM daily_group_tasks d WHERE d.group_id=g.id)
  ORDER BY p.course_id!='foundation',p.course_id,p.unit_position,t.difficulty,p.position,g.id""")).mappings().all()
  _candidates_cache[db]=(fp,rows)
@@ -234,6 +235,8 @@ def candidates(c,course='all',limit=1):
  def add(gid):
   if gid in seen:return
   seen.add(gid)
+  # Cached rows predate introduces; check the root's live flag so a just-introduced goal exits here.
+  if c.execute(text('SELECT 1 FROM progress WHERE knowledge_id=:k AND introduced=1'),dict(k=gid)).first():return
   for b in blockers(c,gid):
    dep=next((r for r in rows if r['id']==b['id']),None)
    if dep:add(dep['id'])

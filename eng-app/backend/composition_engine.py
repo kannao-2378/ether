@@ -122,19 +122,20 @@ def candidates(cat,target,facts):
 
 _composition_state={'fingerprint':None,'value':None}
 def _composition_inputs(c):
- # Catalog+facts+signature cost ~150ms per /next; they only change with progress,
- # new cards or rule edits. Version counter + rowid maxima detect inserts; the
- # introduced-row aggregates also catch direct UPDATEs (tests, manual edits)
- # that change review-fact visibility without bumping the version counter.
- import response_cache
- fp=(RULES.stat().st_mtime_ns,response_cache.version('progress'),
+ # Catalog+facts+signature cost ~150ms per /next. They depend on the "known"
+ # subset of progress (introduced=1 AND level>=3, via reviewed_facts and
+ # resolve()->known()), the curriculum structure and rule edits. Learning-phase
+ # submits (level below 3) and introduces leave every aggregate untouched and
+ # keep the cache warm; the known-set slice is index-supported and tiny.
+ fp=(RULES.stat().st_mtime_ns,
   str(getattr(getattr(c,'engine',None),'url',None) and c.engine.url.database),
   c.execute(text('SELECT COALESCE(MAX(rowid),0) FROM answers')).scalar(),
   c.execute(text('SELECT COALESCE(MAX(rowid),0) FROM knowledge')).scalar(),
   c.execute(text('SELECT COALESCE(MAX(rowid),0) FROM knowledge_details')).scalar(),
   c.execute(text('SELECT COALESCE(MAX(rowid),0) FROM curriculum_lessons')).scalar(),
-  c.execute(text('SELECT COUNT(*),COALESCE(SUM(level),0) FROM progress WHERE introduced=1')).one(),
-  c.execute(text('SELECT COUNT(*),COALESCE(SUM(length(payload)),0) FROM knowledge_details WHERE knowledge_id IN (SELECT knowledge_id FROM progress WHERE introduced=1)')).one())
+  c.execute(text('SELECT COUNT(*),COALESCE(SUM(level),0),COALESCE(MAX(julianday(last_at)),0) FROM progress WHERE introduced=1 AND level>=3')).one(),
+  c.execute(text('SELECT COUNT(*),COALESCE(SUM(length(payload)),0) FROM knowledge_details WHERE knowledge_id IN (SELECT knowledge_id FROM progress WHERE introduced=1 AND level>=3)')).one(),
+  c.execute(text("SELECT COUNT(*),COALESCE(SUM(status='ready'),0) FROM curriculum_goals")).one())
  if _composition_state['fingerprint']==fp:return _composition_state['value']
  spec=json.loads(RULES.read_text(encoding='utf-8'));cat=Catalog(c,spec)
  facts={kind:cat.facts(kind) for kind in ('actions','objects','times','places')}
