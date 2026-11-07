@@ -3,7 +3,9 @@ import {useEffect,useState} from 'react';
 import {useSharedSetting} from './sharedSetting';
 export function DailyLimits({showProgress=false}:{showProgress?:boolean}){
  const [progress,setProgress]=useState<any>(null);
- useEffect(()=>{if(!showProgress)return;let active=true;learningFetch('/api/daily-activity').then(r=>{if(!r.ok)throw Error();return r.json();}).then(d=>{if(active)setProgress(d);}).catch(()=>{});return()=>{active=false;};},[showProgress]);
+ useEffect(()=>{if(!showProgress)return;let active=true;
+  // Same URL as DailyOverview(planning): the shared read cache dedupes them into one request.
+  learningFetch('/api/daily-activity?planning=true').then(r=>{if(!r.ok)throw Error();return r.json();}).then(d=>{if(active)setProgress(d);}).catch(()=>{});return()=>{active=false;};},[showProgress]);
  const [message,setMessage]=useState('');
  useEffect(()=>{const show=(e:Event)=>setMessage((e as CustomEvent).detail);window.addEventListener('settings-status',show);return()=>window.removeEventListener('settings-status',show);},[]);
  const [review,setReview]=useSharedSetting('daily-review-limit',30);

@@ -44,11 +44,12 @@ function App({onLogout}:{onLogout?:()=>void}){
  const [page,setPage]=useState('今日学习'),[dashboard,setDashboard]=useState<any>(null),[q,setQ]=useState<any>(null),[answer,setAnswer]=useState(''),[confidence,setConfidence]=useState('clear'),[result,setResult]=useState<any>(null),[hint,setHint]=useState<any>(null),[error,setError]=useState(''),[busy,setBusy]=useState(false);
  async function refresh(){const d=await api('/dashboard?lightweight=true');setDashboard({...d,...latestSummary.current});setPreviousItems(items=>items.length?items:[...d.history].reverse().map((a:any)=>({...d.items.find((i:any)=>i.id===a.knowledge_id),kind:'recall',question_id:a.question_id,confidence:a.confidence,group_id:a.group_id,group_title:a.group_title})));}
  async function refreshSummary(){const revision=++summaryRevision.current;try{const d=await api('/dashboard?summary_only=true');if(revision!==summaryRevision.current)return;latestSummary.current=d;setDashboard((previous:any)=>previous?{...previous,...d}:previous);}catch{/* Statistics must not block typing; retry on the next question. */}}
+ function applyQuestion(question:any){speech.stop();setReviewIndex(null);setChecked(null);setCheckError('');checkKey.current='';setPeek(false);setQ(question);setAnswer('');setResult(null);setHint(null);setConfidence('clear');void refreshSummary();}
  useEffect(()=>{const add=(event:Event)=>{const items=(event as CustomEvent).detail;if(!Array.isArray(items))return;setDashboard((old:any)=>old?{...old,items:[...old.items.filter((i:any)=>!items.some((n:any)=>n.id===i.id)),...items]}:old);};window.addEventListener('dictionary-imported',add);return()=>window.removeEventListener('dictionary-imported',add);},[]);
  useEffect(()=>{const reset=()=>setQ(null);window.addEventListener('focus-updated',reset);return()=>window.removeEventListener('focus-updated',reset);},[]);
  useEffect(()=>{refresh().catch(()=>setError('连接不到学习服务，请检查网络后重试。'));},[]);
  async function act(fn:()=>Promise<void>){if(actionLock.current)return;actionLock.current=true;setBusy(true);setError('');try{await fn();}catch(e){setError(e instanceof Error?e.message:'操作失败');}finally{actionLock.current=false;setBusy(false);}}
- async function next(remember=true,allowRepeat=false){if(q?.context_round_complete)await api('/context/new-round',{});const question=await api(allowRepeat?'/next?allow_repeat=true':'/next',{});if(remember&&q?.question_id&&q.kind!=='done')setPreviousItems(items=>[...items,{...q,confidence}]);speech.stop();setReviewIndex(null);setChecked(null);setCheckError('');checkKey.current='';setPeek(false);setQ(question);setAnswer('');setResult(null);setHint(null);setConfidence('clear');void refreshSummary();}
+ async function next(remember=true,allowRepeat=false){if(q?.context_round_complete)await api('/context/new-round',{});const question=await api(allowRepeat?'/next?allow_repeat=true':'/next',{});if(remember&&q?.question_id&&q.kind!=='done')setPreviousItems(items=>[...items,{...q,confidence}]);applyQuestion(question);}
  useEffect(()=>{const enter=()=>{setPage('今日学习');void act(()=>next(false));};window.addEventListener('enter-next-stage',enter);return()=>window.removeEventListener('enter-next-stage',enter);});
  function previous(){
   if(busy||checking)return;speech.stop();setPeek(false);setError('');
@@ -67,7 +68,7 @@ function App({onLogout}:{onLogout?:()=>void}){
   if(q?.kind==='learn'){await act(async()=>{await api('/introduce/'+q.id,{});await next();});return;}
   if(!checked?.correct)return;
   setConfidence(value);
-  await act(async()=>{const saved=await api('/answers',{question_id:q.question_id,answer,confidence:value,hint_used:assistedQuestions.current.has(q.question_id)});if(saved.confidence!==value)await api('/feedback',{question_id:q.question_id,confidence:value});const completed={...q,confidence:value};setPreviousItems(items=>[...items.filter(i=>i.question_id!==q.question_id),completed]);const question=await api('/next',{});speech.stop();setQ(question);setAnswer('');setChecked(null);setResult(null);setHint(null);checkKey.current='';void refreshSummary();});
+  await act(async()=>{const saved=await api('/answers',{question_id:q.question_id,answer,confidence:value,hint_used:assistedQuestions.current.has(q.question_id)});if(saved.confidence!==value)await api('/feedback',{question_id:q.question_id,confidence:value});const completed={...q,confidence:value};setPreviousItems(items=>[...items.filter(i=>i.question_id!==q.question_id),completed]);await next();});
  }
  async function extendDaily(amount:number){
   if(busy||checking)return;

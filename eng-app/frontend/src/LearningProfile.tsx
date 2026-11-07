@@ -1,9 +1,10 @@
 import {MemoryCurve} from './MemoryCurve';
 import {useEffect,useState} from 'react';
-import {learningFetch} from './testMode';
+import {learningFetch,isTestMode} from './testMode';
+import {peekRead} from './readCache';
 const kinds:Record<string,string>={word:'单词',collocation:'搭配',phrase:'短语',sentence:'句子',rule:'规则'};
 export function LearningProfile(){
- const [data,setData]=useState<any>(null),[error,setError]=useState(''),[tab,setTab]=useState('progress'),[showWeak,setShowWeak]=useState(false);
+ const [data,setData]=useState<any>(()=>peekRead((isTestMode()?'test:':'real:')+'/api/profile')),[error,setError]=useState(''),[tab,setTab]=useState('progress'),[showWeak,setShowWeak]=useState(false);
  async function load(){setError('');try{const r=await learningFetch('/api/profile');if(!r.ok)throw Error('档案读取失败');setData(await r.json());}catch(e){setError((e as Error).message);}}
  useEffect(()=>{void load();},[]);
  const s=data?.summary,max=data?Math.max(1,...data.trend.map((d:any)=>d.attempts)):1;

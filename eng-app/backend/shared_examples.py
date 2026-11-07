@@ -43,6 +43,7 @@ def plan(c,limit=20):
 def install(c):
  c.execute(text('CREATE TABLE IF NOT EXISTS shared_example_links(knowledge_id TEXT PRIMARY KEY,goal_id TEXT,en_id INTEGER,zh_id INTEGER,created_at TEXT)'))
 
+_prepare_state={'fingerprint':None}
 def prepare(c,stamp):
  """Add at most two eligible references/day to already admitted mainline groups."""
  if not bank_path().exists():return 0
@@ -50,9 +51,15 @@ def prepare(c,stamp):
  day=stamp.astimezone(__import__('datetime').timezone(__import__('datetime').timedelta(hours=8))).date().isoformat()
  used=c.execute(text("SELECT COUNT(*) FROM shared_example_links WHERE date(created_at,'+8 hours')=:d"),dict(d=day)).scalar()
  if used>=2:return 0
- import hashlib,json,curriculum_engine as ce
  admitted=set(c.execute(text('SELECT group_id FROM daily_group_tasks WHERE day=:d'),dict(d=day)).scalars())
  if not admitted:return 0
+ # Scanning the sentence bank is wasted work unless answers, progress, quota or today's groups changed.
+ db=getattr(getattr(c,'engine',None),'url',None)
+ progress=c.execute(text("SELECT COUNT(*),COALESCE(SUM(introduced),0),COALESCE(SUM(level),0),COALESCE(MAX(last_at),'') FROM progress")).one()
+ fingerprint=(day,str(getattr(db,'database',None)),used,len(admitted),
+  c.execute(text('SELECT COALESCE(MAX(rowid),0) FROM answers')).scalar(),tuple(progress))
+ if _prepare_state['fingerprint']==fingerprint:return 0
+ import hashlib,json,curriculum_engine as ce
  report=plan(c,1000);added=0
  for row in report['items']:
   gid=row['goal_id']
@@ -87,4 +94,5 @@ def prepare(c,stamp):
   c.execute(text('INSERT INTO shared_example_links VALUES(:k,:g,:e,:z,:t)'),dict(k=kid,g=gid,e=row['en_id'],z=row['zh_id'],t=stamp.isoformat()))
   added+=1
   if used+added>=2:break
+ _prepare_state['fingerprint']=fingerprint
  return added

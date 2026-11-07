@@ -27,7 +27,8 @@ class Catalog:
   by_en={en.casefold():kid for kid,en in rows}
   self.goals={g['key']:dict(g,id=by_en[g['english'].casefold()]) for g in authored if g['english'].casefold() in by_en}
   self.materials={}
-  for kid,en in c.execute(text("SELECT k.id,k.answer FROM curriculum_lessons l JOIN knowledge k ON k.id=l.knowledge_id WHERE l.role IN ('word','sentence_word') ORDER BY k.rowid")):
+  self.reviewed_facts=list(c.execute(text("SELECT d.knowledge_id,d.payload FROM knowledge_details d JOIN progress p ON p.knowledge_id=d.knowledge_id WHERE p.introduced=1 AND p.level>=3 AND json_extract(d.payload,'$.composition.reviewed')=1")))
+  for kid,en in c.execute(text("SELECT DISTINCT k.id,k.answer FROM curriculum_lessons l JOIN knowledge k ON k.id=l.knowledge_id WHERE l.role IN ('word','sentence_word') ORDER BY k.rowid")):
    self.materials.setdefault(en.casefold(),[]).append(kid)
  def resolve(self,ref):
   if ref in self.cache:return self.cache[ref]
@@ -37,7 +38,7 @@ class Catalog:
   self.cache[ref]=found;return found
  def facts(self,kind):
   facts=list(self.spec[kind])
-  for kid,payload in self.c.execute(text("SELECT d.knowledge_id,d.payload FROM knowledge_details d JOIN progress p ON p.knowledge_id=d.knowledge_id WHERE p.introduced=1 AND p.level>=3 AND json_extract(d.payload,'$.composition.reviewed')=1")):
+  for kid,payload in self.reviewed_facts:
    fact=json.loads(payload)['composition']
    if fact.get('type')==kind[:-1] and fact.get('zh') and (fact.get('base') if kind=='actions' else fact.get('en')):
     facts.append(dict(fact,ref='id:'+kid))

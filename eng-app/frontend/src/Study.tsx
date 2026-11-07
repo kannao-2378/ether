@@ -22,10 +22,13 @@ export function Study(p:any){
  const item=p.current;
  useEffect(()=>{if(hasDesktopInput()&&q?.kind==='recall'&&!revealed&&!p.busy)input.current?.focus({preventScroll:true});setInputFocused(Boolean(input.current&&document.activeElement===input.current));},[q?.question_id,q?.kind,!!revealed,p.busy]);
  useEffect(()=>{
-  if(!q?.id)return;const controller=new AbortController();setMetadata(null);
+  if(!q?.id)return;
+  // /api/next inlines knowledge metadata; fetch only when it is missing.
+  if(q.knowledge){setMetadata(q.knowledge);return;}
+  const controller=new AbortController();setMetadata(null);
   learningFetch('/api/knowledge/'+encodeURIComponent(q.id),{signal:controller.signal}).then(r=>{if(!r.ok)throw Error();return r.json();}).then(data=>{if(!controller.signal.aborted)setMetadata(data);}).catch(()=>{});
   return()=>controller.abort();
- },[q?.id]);
+ },[q?.id,Boolean(q?.knowledge)]);
  const pronunciation=metadata&&metadata.id===q?.id?metadata.details:null;
  const isSentence=item?.stage>=3||pronunciation?.entry_type==='sentence';
  const english=q?.answer||p.checked?.answer||p.hint?.answer||p.result?.expected||item?.answer||(metadata&&metadata.id===q?.id?metadata.answer:'')||'';

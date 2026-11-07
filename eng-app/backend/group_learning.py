@@ -5,7 +5,7 @@ Individual answers/FSRS cards are never rewritten to manufacture mastery.
 """
 from datetime import datetime,timedelta,timezone
 import json,re
-import course_policy,curriculum_engine,transfer_evidence,composition_engine,sourced_transfer
+import course_policy,curriculum_engine,transfer_evidence,composition_engine,sourced_transfer,selection_cache
 from sqlalchemy import text
 ZONE=timezone(timedelta(hours=8));VERSION='families-v6'
 TABLES=('lookup_previews','focus_requests','learning_groups','group_members','group_primary','group_requirements','group_questions','daily_group_tasks','group_progress','group_usage','group_active_slots','group_install','group_migrations')+curriculum_engine.TABLES+transfer_evidence.TABLES+composition_engine.TABLES+sourced_transfer.TABLES
@@ -165,6 +165,7 @@ def admit(c,gid,kid,stamp,new_limit,review_limit):
  c.execute(text('INSERT INTO daily_group_tasks VALUES(:d,:g,:v,:k)'),dict(d=day,g=gid,v=kind,k=kid))
  return True
 
+@selection_cache.memoized
 def events(c,gid,day):
  return [dict(r) for r in c.execute(text("""SELECT a.*,a.rowid AS seq,COALESCE(q.role,m.role,'base') AS role,
  COALESCE((SELECT confidence FROM feedback_events f WHERE f.question_id=a.question_id ORDER BY f.rowid DESC LIMIT 1),a.confidence) AS rating,
@@ -188,6 +189,7 @@ def repeats_fuzzy(item,last):
  normalize=lambda value:' '.join(value.casefold().split()).rstrip('.!?。！？ ')
  return bool(last and normalize(item['answer'])==normalize(last['answer']))
 
+@selection_cache.memoized
 def members(c,gid):
  return [dict(r) for r in c.execute(text('SELECT k.*,p.*,m.role,m.position FROM group_members m JOIN knowledge k ON k.id=m.knowledge_id JOIN progress p ON p.knowledge_id=k.id WHERE m.group_id=:g ORDER BY m.position,k.rowid'),dict(g=gid)).mappings()]
 
@@ -287,7 +289,7 @@ def active_groups(c,stamp):
  UNION SELECT d.group_id FROM daily_group_tasks d LEFT JOIN group_progress gp ON gp.group_id=d.group_id
  WHERE d.group_id NOT LIKE 'focus-%' AND EXISTS(SELECT 1 FROM learning_groups lg JOIN group_primary own ON own.knowledge_id=lg.root_id AND own.group_id=lg.id WHERE lg.id=d.group_id) AND d.day<:day AND (gp.due_at IS NULL OR julianday(gp.due_at)<=julianday(:t))
  ORDER BY 1"""),dict(t=stamp.isoformat(),day=today)).scalars().all()
- return list(dict.fromkeys(list(rows)+curriculum_engine.upgrades(c,stamp)))
+ return list(dict.fromkeys(list(rows)+curriculum_engine.upgrades(c,stamp,exclude=rows)))
 
 def pool_count(c,stamp):
  c.execute(text("""DELETE FROM group_active_slots WHERE group_id IN (SELECT group_id FROM group_progress WHERE due_at IS NOT NULL AND julianday(due_at)>julianday(:t))"""),dict(t=stamp.isoformat()))
@@ -436,11 +438,16 @@ def select(c,stamp,new_limit,review_limit,course='all',allow_repeat=False):
 
 
 def due_counts(c,stamp):
+    # Two batched queries replace per-group lookups on the dashboard hot path.
     active=active_groups(c,stamp)
+    if not active:return dict(cross_day=0,practice=0)
+    params={f'g{i}':gid for i,gid in enumerate(active)}
+    clause=','.join(':'+k for k in params)
+    progress=dict(c.execute(text(f'SELECT group_id,due_at FROM group_progress WHERE group_id IN ({clause})'),params).all())
+    fallback=dict(c.execute(text(f"SELECT g.group_id,MIN(p.due_at) FROM group_primary g JOIN progress p ON p.knowledge_id=g.knowledge_id WHERE g.group_id IN ({clause}) AND p.introduced=1 GROUP BY g.group_id"),params).all())
     cross=0
     for gid in active:
-        due=c.execute(text('SELECT due_at FROM group_progress WHERE group_id=:g'),dict(g=gid)).scalar()
-        if due is None:
-            due=c.execute(text('SELECT MIN(p.due_at) FROM group_primary g JOIN progress p ON p.knowledge_id=g.knowledge_id WHERE g.group_id=:g AND p.introduced=1'),dict(g=gid)).scalar()
+        due=progress.get(gid)
+        if due is None:due=fallback.get(gid)
         if due and datetime.fromisoformat(due)<=stamp:cross+=1
     return dict(cross_day=cross,practice=len(active)-cross)

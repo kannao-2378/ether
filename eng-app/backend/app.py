@@ -36,9 +36,10 @@ import learning_stats as learning_profile_stats
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from pydantic import BaseModel, Field
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, event
+import response_cache
 
 DATA = Path(os.environ.get('PELS_DATA_DIR',str(Path(__file__).parent / 'data')))
 DATA.mkdir(parents=True,exist_ok=True)
@@ -105,6 +106,13 @@ def now():
     return stamp
 
 def initialize(target,with_bulk=False):
+    if not getattr(target,'_pels_configured',False):
+        def connection_options(dbapi,record):
+            dbapi.execute('PRAGMA busy_timeout=5000')
+            dbapi.execute('PRAGMA synchronous=NORMAL')
+        event.listen(target,'connect',connection_options)
+        target._pels_configured=True
+    with target.connect() as setup:setup.exec_driver_sql('PRAGMA journal_mode=WAL')
     with target.begin() as c:
         c.execute(text('CREATE TABLE IF NOT EXISTS knowledge (id TEXT PRIMARY KEY, prompt TEXT, answer TEXT, explanation TEXT, example TEXT)'))
         c.execute(text('CREATE TABLE IF NOT EXISTS progress (knowledge_id TEXT PRIMARY KEY, introduced INTEGER DEFAULT 0, attempts INTEGER DEFAULT 0, correct INTEGER DEFAULT 0, streak INTEGER DEFAULT 0, level INTEGER DEFAULT 0, interval_days REAL DEFAULT 0, due_at TEXT, last_at TEXT)'))
@@ -116,6 +124,7 @@ def initialize(target,with_bulk=False):
         c.execute(text('CREATE TABLE IF NOT EXISTS daily_coverage(day TEXT,knowledge_id TEXT,source_question_id TEXT,PRIMARY KEY(day,knowledge_id,source_question_id))'))
         c.execute(text('CREATE TABLE IF NOT EXISTS daily_tasks (day TEXT,knowledge_id TEXT,kind TEXT,PRIMARY KEY(day,knowledge_id))'))
         c.execute(text('CREATE TABLE IF NOT EXISTS review_queue (knowledge_id TEXT PRIMARY KEY, due_sequence INTEGER, due_at TEXT, gap INTEGER, version INTEGER)'))
+        c.execute(text('CREATE INDEX IF NOT EXISTS progress_attempts ON progress(attempts)'))
         c.execute(text('CREATE INDEX IF NOT EXISTS progress_due ON progress(introduced,due_at)'))
         c.execute(text('CREATE INDEX IF NOT EXISTS queue_due ON review_queue(due_at,due_sequence)'))
         c.execute(text('CREATE INDEX IF NOT EXISTS answers_time ON answers(created_at)'))
@@ -198,6 +207,7 @@ def test_status():
 @app.post('/api/test/{action}')
 def test_action(action: str, data: dict):
     if not testing.get():raise HTTPException(403,'仅允许在独立测试模式使用')
+    response_cache.bump()
     if action in ('starter-course','mainline-course'):
         try:
             with test_engine.begin() as c:result=starter_course.activate(c,test_only=True,pack='mainline' if action=='mainline-course' else 'starter')
@@ -303,7 +313,7 @@ def learning_plan(compact: bool=False):
                 import course_expansion
                 route['expansion']=course_expansion.summary()
         return dict(date=group_learning.day_of(now()),route=route,curriculum=[dict(id=s['active-course'],title='通用英语')],new_limit=s['daily-new-limit'],review_limit=s['daily-review-limit'])
-    d=dashboard(summary_only=True);s=study_settings();zone=timezone(timedelta(hours=8));day=now().astimezone(zone).date().isoformat()
+    d=_dashboard_payload(summary_only=True);s=study_settings();zone=timezone(timedelta(hours=8));day=now().astimezone(zone).date().isoformat()
     with engine.connect() as c:
         admitted=group_learning.counts(c,now())
     with engine.connect() as c:curriculum=content.curriculum(c,include_items=False);packages=bulk_courses.summary(c)
@@ -330,11 +340,17 @@ def daily_activity_report(day: str | None=None,planning: bool=False):
     except ValueError:raise HTTPException(400,'日期格式错误')
     if day>group_learning.day_of(stamp):raise HTTPException(400,'不能查询未来记录')
     settings=study_settings()
-    with engine.connect() as c,selection_cache.scope():return daily_activity.build(c,stamp,day,settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course'],planning)
+    # Planning previews recompute group scheduling; short TTL keeps plan pages instant.
+    def compute():
+        with engine.connect() as c,selection_cache.scope():return daily_activity.build(c,stamp,day,settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course'],planning)
+    return response_cache.cached('daily-activity',(str(engine.url.database),day,planning,settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course']),30,compute)
 
 @app.get('/api/profile')
 def learning_profile_summary():
-    with engine.connect() as c:return learning_profile_stats.build(c,now())
+    # Stats tolerate ~1 minute of staleness; answers refresh via TTL, imports via bump.
+    def compute():
+        with engine.connect() as c:return learning_profile_stats.build(c,now())
+    return response_cache.cached('profile',str(engine.url.database),60,compute)
 
 @app.get('/api/curriculum/units/{unit_id}')
 def curriculum_unit(unit_id: str,page: int=1):
@@ -373,6 +389,7 @@ def challenge(kid: str):
             c.execute(text('INSERT INTO questions VALUES(:q,:k,:t,0)'),dict(q=qid,k=kid,t=now().isoformat()))
         transfer_evidence.register(c,qid,kid)
         c.execute(text('UPDATE progress SET introduced=1 WHERE knowledge_id=:k'),dict(k=kid))
+        response_cache.bump('dashboard','daily-activity')
         return dict(kind='recall',question_id=qid,id=kid,prompt=item['prompt'],**answer_hint(c,item),challenge=True)
 
 class LookupQuery(BaseModel):
@@ -411,6 +428,7 @@ def import_lookup(body: LookupImport):
                 c.execute(text('UPDATE knowledge_assessments SET payload=:p WHERE knowledge_id=:k'),dict(k=cached[0],p=json.dumps(payload,ensure_ascii=False)))
         if body.train:result['focus']=focus_training.add(c,result['id'],now(),member_ids=result['imported_ids'])
         result['items']=[dict(c.execute(text('SELECT k.*,p.*,COALESCE(l.stage,1) AS stage FROM knowledge k JOIN progress p ON p.knowledge_id=k.id LEFT JOIN course_links l ON l.knowledge_id=k.id WHERE k.id=:k'),dict(k=kid)).mappings().one()) for kid in result['imported_ids']]
+    response_cache.bump('dictionary','dashboard','daily-activity','profile')
     return dict(saved=True,**result)
 
 @app.get('/api/focus/{kid}')
@@ -424,19 +442,28 @@ def focus_info(kid: str):
 @app.post('/api/focus/{kid}')
 def add_focus(kid: str):
     with engine.begin() as c:
-        try:return focus_training.add(c,kid,now())
+        try:result=focus_training.add(c,kid,now())
         except ValueError:raise HTTPException(404,'词条不存在')
+    response_cache.bump('daily-activity')
+    return result
 
 @app.post('/api/focus-cancel/{gid}')
 def cancel_focus(gid: str):
     with engine.begin() as c:
         if not focus_training.cancel(c,gid):raise HTTPException(409,'任务已经结束或不存在')
+    response_cache.bump('daily-activity')
     return dict(saved=True)
 
 @app.get('/api/dictionary')
 def dictionary(q: str='',kind: str='all',status: str='all',page: int=1):
     page=max(1,page)
-    with engine.connect() as c:
+    # Content is fixed; only mastery metadata moves, so a short server cache is safe.
+    def compute():
+        with engine.connect() as c:
+            return _dictionary_payload(c,q,kind,status,page)
+    return response_cache.cached('dictionary',(str(engine.url.database),q[:100],kind,status,page),60,compute)
+
+def _dictionary_payload(c,q,kind,status,page):
         prefix="""WITH sources AS (
           SELECT knowledge_id AS target,knowledge_id AS source,last_at FROM progress WHERE introduced=1
           UNION ALL SELECT a.knowledge_id,p.knowledge_id,p.last_at FROM curriculum_aliases a JOIN progress p ON p.knowledge_id=a.alias_id WHERE p.introduced=1
@@ -452,7 +479,12 @@ def dictionary(q: str='',kind: str='all',status: str='all',page: int=1):
         type_counts['collocation']=type_counts.get('collocation',0)+total-sum(type_counts.values())
         total_all=c.execute(text('SELECT COUNT(*) FROM knowledge')).scalar()
         id_base="FROM knowledge k LEFT JOIN ranked er ON er.target=k.id AND er.rn=1 JOIN progress p ON p.knowledge_id=COALESCE(er.source,k.id)" if not q and kind=='all' and status=='all' else base
-        ids=c.execute(text(prefix+'SELECT k.id '+id_base+' ORDER BY p.introduced DESC,k.rowid LIMIT 30 OFFSET :offset'),params).scalars().all()
+        if not q and kind=='all' and status=='all':
+            ids=c.execute(text(prefix+'SELECT k.id FROM ranked er JOIN knowledge k ON k.id=er.target WHERE er.rn=1 ORDER BY k.rowid LIMIT 30 OFFSET :offset'),params).scalars().all()
+            if len(ids)<30:
+                learned=c.execute(text(prefix+'SELECT COUNT(*) FROM ranked er JOIN knowledge k ON k.id=er.target WHERE er.rn=1')).scalar()
+                ids+=c.execute(text(prefix+"SELECT k.id FROM knowledge k JOIN progress p ON p.knowledge_id=k.id LEFT JOIN ranked er ON er.target=k.id AND er.rn=1 WHERE p.introduced=0 AND er.target IS NULL ORDER BY k.rowid LIMIT :remaining OFFSET :rest"),dict(remaining=30-len(ids),rest=max(0,params['offset']-learned))).scalars().all()
+        else:ids=c.execute(text(prefix+'SELECT k.id '+id_base+' ORDER BY p.introduced DESC,k.rowid LIMIT 30 OFFSET :offset'),params).scalars().all()
         selected={f'pick{i}':kid for i,kid in enumerate(ids)}
         params.update(selected)
         page_base=base+' AND k.id IN ('+','.join(':'+key for key in selected)+')' if selected else base+' AND 0=1'
@@ -524,6 +556,7 @@ def add_daily_learning(body: ExtraLearning):
             extra=body.amount+max(0,admitted-settings['daily-new-limit'])
             c.execute(text('INSERT OR IGNORE INTO daily_extensions VALUES(:i,:d,:a,:e,:t)'),dict(i=body.id,d=day,a=body.amount,e=extra,t=stamp.isoformat()))
         limit=study_settings(c)['daily-new-limit']
+    response_cache.bump('dashboard','daily-activity')
     return dict(amount=body.amount,date=day,new_limit=limit)
 
 @app.post('/api/settings')
@@ -553,16 +586,16 @@ def save_settings(values: dict):
     with engine.begin() as c:
         for key,value in values.items():
             c.execute(text('INSERT INTO app_settings VALUES (:k,:v) ON CONFLICT(key) DO UPDATE SET value=excluded.value'),dict(k=key,v=json.dumps(value)))
+    response_cache.bump()
     return get_settings()
 
-@app.get('/api/dashboard')
-def dashboard(summary_only: bool = False, lightweight: bool = False):
+def _dashboard_payload(summary_only: bool = False, lightweight: bool = False):
     with engine.connect() as c,selection_cache.scope():
+        total_content=c.execute(text('SELECT COUNT(*) FROM knowledge')).scalar()
+        introduced_content=c.execute(text('SELECT COUNT(*) FROM progress WHERE introduced=1')).scalar()
         if not summary_only:
             item_filter=" WHERE p.introduced=1 OR k.id IN (SELECT knowledge_id FROM questions ORDER BY rowid DESC LIMIT 100)" if lightweight else ''
             items = [dict(r) for r in c.execute(text('SELECT k.*,p.*,COALESCE(l.stage,1) AS stage,l.parent_id,CASE WHEN l.parent_id IS NULL OR pp.level>=3 THEN 1 ELSE 0 END AS unlocked FROM knowledge k JOIN progress p ON k.id=p.knowledge_id LEFT JOIN course_links l ON l.knowledge_id=k.id LEFT JOIN progress pp ON pp.knowledge_id=l.parent_id'+item_filter)).mappings()]
-            total_content=c.execute(text('SELECT COUNT(*) FROM knowledge')).scalar()
-            introduced_content=c.execute(text('SELECT COUNT(*) FROM progress WHERE introduced=1')).scalar()
             answers = [dict(r) for r in c.execute(text('SELECT a.*,COALESCE((SELECT confidence FROM feedback_events f WHERE f.question_id=a.question_id ORDER BY f.rowid DESC LIMIT 1),a.confidence) AS effective_confidence,k.prompt,k.answer,gq.group_id,lg.title AS group_title FROM answers a JOIN knowledge k ON k.id=a.knowledge_id LEFT JOIN group_questions gq ON gq.question_id=a.question_id LEFT JOIN learning_groups lg ON lg.id=gq.group_id ORDER BY a.created_at DESC LIMIT 100')).mappings()]
             hints={}
             for answer in answers:
@@ -576,12 +609,26 @@ def dashboard(summary_only: bool = False, lightweight: bool = False):
         admitted=group_learning.counts(c,now())
         new_breakdown=group_learning.breakdown(c,now())
     today = now().date().isoformat()
-    summary = dict(due=(counts['cross_day'] or 0)+(counts['practice'] or 0), cross_day_due=counts['cross_day'] or 0, same_day_practice=counts['practice'] or 0, today_count=today_count, today_new=admitted.get('new',0),today_review=admitted.get('review',0),scheduler_version=6 if os.environ.get('PELS_FSRS_TIME_QUEUE')=='1' else 5,new_breakdown=new_breakdown)
-    return summary if summary_only else dict(items=items, history=answers,total_content=total_content,introduced_content=introduced_content, **summary)
+    summary = dict(due=(counts['cross_day'] or 0)+(counts['practice'] or 0), cross_day_due=counts['cross_day'] or 0, same_day_practice=counts['practice'] or 0, today_count=today_count, today_new=admitted.get('new',0),today_review=admitted.get('review',0),total_content=total_content,introduced_content=introduced_content,scheduler_version=6 if os.environ.get('PELS_FSRS_TIME_QUEUE')=='1' else 5,new_breakdown=new_breakdown)
+    return summary if summary_only else dict(items=items, history=answers, **summary)
 
-@app.post('/api/next')
-def next_question(allow_repeat: bool=False):
-    with engine.begin() as c,selection_cache.scope():
+def dashboard(summary_only: bool = False, lightweight: bool = False):
+    return _dashboard_payload(summary_only,lightweight)
+
+@app.get('/api/dashboard')
+def dashboard_route(summary_only: bool = False, lightweight: bool = False):
+    # Counts must track every answer, so writes bump this domain; the TTL only
+    # absorbs repeated reads. The serialized body is cached to skip re-encoding.
+    mode=str(engine.url.database)
+    body=response_cache.cached('dashboard',(mode,summary_only,lightweight),10,
+        lambda:json.dumps(_dashboard_payload(summary_only,lightweight),ensure_ascii=False,separators=(',',':')))
+    return Response(content=body,media_type='application/json')
+
+def _knowledge_payload(c,item):
+    # Inline /api/knowledge metadata so the study page needs no extra roundtrip.
+    return dict(id=item['id'],answer=item.get('answer'),prompt=item.get('prompt'),explanation=item.get('explanation'),example=item.get('example'),details=content.details(c,item['id']))
+
+def _select_next(c,allow_repeat=False):
         stage=c.execute(text('SELECT stage FROM test_clock WHERE id=1')).scalar() if testing.get() else None
         special=focus_training.select(c,now(),allow_repeat=allow_repeat)
         if not testing.get() or special or stage is None:
@@ -605,7 +652,7 @@ def next_question(allow_repeat: bool=False):
                 return dict(kind='done',message='今日可安排的学习组已完成或达到上限。')
             if kind=='learn':
                 transfer_evidence.expose(c,item['id'],now(),content.details(c,item['id']))
-                return dict(kind='learn',**item)
+                return dict(kind='learn',**item,knowledge=_knowledge_payload(c,item))
             qid=item.get('question_id') or str(uuid.uuid4())
             if not item.get('question_id'):
                 c.execute(text('INSERT INTO questions(id,knowledge_id,created_at,revealed) VALUES(:q,:k,:t,0)'),dict(q=qid,k=item['id'],t=now().isoformat()))
@@ -613,7 +660,7 @@ def next_question(allow_repeat: bool=False):
                 transfer_evidence.register(c,qid,item['id'],item['role'])
             mode=c.execute(text('SELECT mode FROM question_trials WHERE question_id=:q'),dict(q=qid)).scalar() or 'recall'
             if item['role']=='transfer':c.execute(text('UPDATE progress SET introduced=1 WHERE knowledge_id=:k'),dict(k=item['id']))
-            return dict(kind='recall',question_id=qid,id=item['id'],prompt=item['prompt'],**answer_hint(c,item),group_id=item['group_id'],group_title=item.get('group_title',''),group_role=item['role'],exercise_mode=mode)
+            return dict(kind='recall',question_id=qid,id=item['id'],prompt=item['prompt'],**answer_hint(c,item),group_id=item['group_id'],group_title=item.get('group_title',''),group_role=item['role'],exercise_mode=mode,knowledge=_knowledge_payload(c,item))
 
         stage_filter=(' AND COALESCE((SELECT stage FROM course_links l WHERE l.knowledge_id=k.id),1)=:stage' if stage else '')+" AND NOT EXISTS(SELECT 1 FROM daily_coverage cv WHERE cv.knowledge_id=k.id AND cv.day=:day)"
         pending=c.execute(text('SELECT q.id AS question_id,k.* FROM questions q JOIN knowledge k ON q.knowledge_id=k.id LEFT JOIN answers a ON a.question_id=q.id WHERE a.id IS NULL'+stage_filter+' ORDER BY q.created_at LIMIT 1'),dict(stage=stage,day=now().astimezone(timezone(timedelta(hours=8))).date().isoformat())).mappings().first()
@@ -633,19 +680,19 @@ def next_question(allow_repeat: bool=False):
                 if not testing.get() and consolidation_count(c,now())>=CONSOLIDATION_LIMIT:
                     return None
                 if not testing.get() and not admit_pending(material['id'],'new'):return None
-                return dict(kind='learn',**dict(material),supplement=True)
+                return dict(kind='learn',**dict(material),supplement=True,knowledge=_knowledge_payload(c,material))
             if not testing.get() and not admit_pending(material['id'],'review'):return None
             existing=c.execute(text('SELECT q.id FROM questions q LEFT JOIN answers a ON a.question_id=q.id WHERE q.knowledge_id=:k AND a.id IS NULL LIMIT 1'),dict(k=material['id'])).scalar()
             qid=existing or str(uuid.uuid4())
             if not existing:c.execute(text('INSERT INTO questions(id,knowledge_id,created_at,revealed) VALUES(:q,:k,:t,0)'),dict(q=qid,k=material['id'],t=now().isoformat()))
-            return dict(kind='recall',question_id=qid,id=material['id'],prompt=material['prompt'],**answer_hint(c,material),supplement=True)
+            return dict(kind='recall',question_id=qid,id=material['id'],prompt=material['prompt'],**answer_hint(c,material),supplement=True,knowledge=_knowledge_payload(c,material))
         if pending:
             missing=None if testing.get() else transfer.missing_material(c,text,pending['id'])
             if missing:
                 material=material_question(missing)
                 if material:return material
             elif testing.get() or admit_pending(pending['id'],'review'):
-                return dict(kind='recall',question_id=pending['question_id'],id=pending['id'],prompt=pending['prompt'],**answer_hint(c,pending))
+                return dict(kind='recall',question_id=pending['question_id'],id=pending['id'],prompt=pending['prompt'],**answer_hint(c,pending),knowledge=_knowledge_payload(c,pending))
         if stage==4 and not bulk_courses.summary(c):
             item,message=context_engine.pick(c,now(),test=True)
             if item is None:return dict(kind='done',message=message,context_round_complete=True)
@@ -663,13 +710,20 @@ def next_question(allow_repeat: bool=False):
             item_stage=c.execute(text('SELECT stage FROM course_links WHERE knowledge_id=:k'),dict(k=item['id'])).scalar()
             if item_stage!=4:
                 transfer_evidence.expose(c,item['id'],now(),content.details(c,item['id']))
-                return dict(kind=kind,**item)
+                return dict(kind=kind,**item,knowledge=_knowledge_payload(c,item))
             c.execute(text('UPDATE progress SET introduced=1 WHERE knowledge_id=:k'),dict(k=item['id']))
         if kind=='done':return dict(kind='done',message='今日安排已完成或已达每日组数上限，剩余任务会保留。')
         qid = str(uuid.uuid4())
         c.execute(text('INSERT INTO questions (id,knowledge_id,created_at) VALUES (:q,:k,:t)'),dict(q=qid,k=item['id'],t=now().isoformat()))
         transfer_evidence.register(c,qid,item['id'])
-        return dict(kind='recall',question_id=qid,id=item['id'],prompt=item['prompt'],**answer_hint(c,item))
+        return dict(kind='recall',question_id=qid,id=item['id'],prompt=item['prompt'],**answer_hint(c,item),knowledge=_knowledge_payload(c,item))
+
+@app.post('/api/next')
+def next_question(allow_repeat: bool=False):
+    with engine.begin() as c,selection_cache.scope():
+        result=_select_next(c,allow_repeat)
+    response_cache.bump('dashboard','daily-activity')
+    return result
 
 @app.post('/api/introduce/{kid}')
 def introduce(kid: str):
@@ -678,6 +732,7 @@ def introduce(kid: str):
         result = c.execute(text('UPDATE progress SET introduced=1,due_at=:t WHERE knowledge_id=:k AND introduced=0'),dict(k=kid,t=now().isoformat()))
         if not result.rowcount:
             raise HTTPException(409,'内容不存在或已经学习')
+    response_cache.bump('dashboard','daily-activity')
     return dict(saved=True)
 
 @app.post('/api/reveal/{qid}')
@@ -716,6 +771,7 @@ def skip_test_question(qid: str):
         c.execute(text('DELETE FROM group_usage WHERE question_id=:q'),dict(q=qid))
         if group_mode(c,qid):group_learning.refresh(c,kid,now(),qid)
         assessment.refresh(c,kid)
+    response_cache.bump('dashboard','daily-activity')
     return dict(saved=True,test_skip=True)
 
 class SpellingCheck(BaseModel):
@@ -762,6 +818,7 @@ def feedback(body: Feedback):
         assessment.refresh(c,kid)
         apply_retention_limit(c,kid)
         if group_mode(c,body.question_id):group_learning.refresh(c,kid,now(),body.question_id)
+    response_cache.bump('dashboard','daily-activity')
     return dict(saved=True)
 
 @app.post('/api/check')
@@ -814,7 +871,7 @@ def submit(body: Submission):
         scheduled=c.execute(text('SELECT due_at,due_sequence,gap FROM review_queue WHERE knowledge_id=:k'),dict(k=row['knowledge_id'])).mappings().first()
         result['due_at']=scheduled['due_at']
         c.execute(text('UPDATE answers SET due_at=:d WHERE question_id=:q'),dict(d=scheduled['due_at'],q=body.question_id))
-
+        response_cache.bump('dashboard','daily-activity')
         return dict(**result,expected=row['answer'])
 
 @app.get('/api/export')
