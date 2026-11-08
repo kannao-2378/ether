@@ -4,6 +4,10 @@
 
 根据用户提供的阿里云日志，`GET /api/dashboard` 在 `backend/response_cache.py` 的 `cached()` 抛出 `IndexError: tuple index out of range`，而 `/api/settings` 持续返回200，`pels-english` 进程为active。根因是SWR后台刷新线程写入缓存元组时使用3项 `(ttl截止, value, version)`，而普通请求和过期判断需要4项 `(ttl截止, value, version, 创建时间)`；命中后台刷新的过期/失效缓存时读取 `hit[3]` 即500。修复已提交并推送 `42d155a`，部署到阿里云 `/opt/pels/backend` 并重启服务。部署前一致性快照 `/var/lib/pels/before-cache-fix-42d155a.zip`，旧后端保留在 `/opt/pels/.before-cache-fix-42d155a`。验证：服务active、本机health `{"status":"ok"}`、HTTPS `/eng/` 200、未登录profile 401；当前已登录浏览器重新连接后仪表盘正常显示。重启后首次health探测发生在应用启动完成前而失败，查看日志确认启动完成后复测通过。未改动真实学习数据、密码或Nginx；服务器Git工作区未提交的 `portfolio/index.html` 修改保持原样。验证范围：未运行测试。
 
+## 2026-11-08 知识说明即时显示（c175163）
+
+学习题的 `/next` 已预取完整知识资料，但Study没有把已取得的metadata传给KnowledgeContent，组件因此先显示“正在读取知识说明…”并等待第二个网络请求。现将metadata作为initial传入：本地资料立即渲染，`visible=true`请求仍在后台完成曝光记录及刷新。`npm run build -- --base=/eng/`（TypeScript检查和Vite生产构建）通过；静态资源部署到 `/var/www/pels-static/eng`，回滚副本 `/var/www/pels-static/.before-knowledge-fast-c175163`。HTTPS首页引用 `index-Dc6wchw4.js`，新JS/CSS均200，health 200，浏览器重新载入后学习页可用。只更新静态文件，未重启后端、未向真实学习库提交答题。
+
 ## 2026-11-07 手机白屏修复（4c765a3）
 
 ec28b31上线的前端dist是本地`npm run build`产物，未加`--base=/eng/`，index.html引用`/assets/...`导致手机新加载白屏（旧页面不刷新则继续用缓存旧JS，掩盖了问题）。用户手机复现：nginx日志显示iPhone五次下载index.html但无JS请求。已用`npx vite build --base=/eng/`重建并上线4c765a3，线上index.html引用`/eng/assets/index-3YACp4bf.js`，JS/CSS均200。仅更新静态文件，未重启后端、未写数据库。正式构建必须带`--base=/eng/`（见deploy/README.md），本次事故原因是未按该规范构建。
