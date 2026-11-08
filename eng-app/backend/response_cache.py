@@ -65,7 +65,8 @@ def _worker():
             except Exception:continue
             with _lock:
                 if len(_store)>=_MAX_ENTRIES:_store.clear()
-                _store[(domain,key)]=(time.monotonic()+ttl,value,version)
+                refreshed_at=time.monotonic()
+                _store[(domain,key)]=(refreshed_at+ttl,value,version,refreshed_at)
         finally:
             with _lock:_pending.discard((domain,key))
             _refresh_queue.task_done()

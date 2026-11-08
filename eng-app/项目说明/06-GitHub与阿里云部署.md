@@ -1,5 +1,9 @@
 # GitHub与阿里云部署
 
+## 2026-11-08 仪表盘接口500诊断与修复待部署
+
+根据用户提供的阿里云日志，`GET /api/dashboard` 在 `backend/response_cache.py` 的 `cached()` 抛出 `IndexError: tuple index out of range`，而 `/api/settings` 持续返回200，`pels-english` 进程为active。根因是SWR后台刷新线程写入缓存元组时使用3项 `(ttl截止, value, version)`，而普通请求和过期判断需要4项 `(ttl截止, value, version, 创建时间)`；命中后台刷新的过期/失效缓存时读取 `hit[3]` 即500。现已将后台线程统一为4项格式，修复同步到本地开发目录和发布克隆。当前仅完成代码与文档修改，尚未提交、推送或部署阿里云；因此线上服务仍需更新整个backend并重启后验证。没有改动或读取真实学习数据库。验证范围：未运行测试，未验证线上恢复。
+
 ## 2026-11-07 手机白屏修复（4c765a3）
 
 ec28b31上线的前端dist是本地`npm run build`产物，未加`--base=/eng/`，index.html引用`/assets/...`导致手机新加载白屏（旧页面不刷新则继续用缓存旧JS，掩盖了问题）。用户手机复现：nginx日志显示iPhone五次下载index.html但无JS请求。已用`npx vite build --base=/eng/`重建并上线4c765a3，线上index.html引用`/eng/assets/index-3YACp4bf.js`，JS/CSS均200。仅更新静态文件，未重启后端、未写数据库。正式构建必须带`--base=/eng/`（见deploy/README.md），本次事故原因是未按该规范构建。
