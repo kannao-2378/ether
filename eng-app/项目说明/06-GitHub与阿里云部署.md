@@ -171,3 +171,5 @@ curl -f http://127.0.0.1:8010/api/health
 2026-11-06 18:25：课程与查询最终运行版本8eb5576。快照 /var/lib/pels/before-course-query-20261106-182559.zip，回滚 /opt/pels/.before-course-query-20261106-182559。2718路线目标、七类学习表保留、SQLite、health、静态资源、未登录401和作品集哈希核对通过。未用本地数据库覆盖线上；未向线上提交模拟答题。
 
 2026-11-06 23:11：29cf493已部署页面缓存、轻量加载及浏览器逐词即时核对；快照/var/lib/pels/before-fast-pages-20261106-231131.zip，回滚/opt/pels/.before-fast-pages-20261106-231131。原始学习记录、2718路线目标、服务/HTTPS资源/认证隔离/原站哈希通过。性能只读复测与边界见36号说明，未向生产提交模拟答案。
+## 2026-11-08 自定课程替换版已部署（738b65a）
+用户要求将今日学习/学习计划切换至自定课程。部署前一致性快照：`/var/lib/pels/before-user-courses-738b65a.zip`；后端与静态页回滚副本：`/opt/pels/.before-user-courses-738b65a`。服务器工作区原有 `portfolio/index.html` 修改未覆盖。拉取738b65a并复制backend/scripts/deploy/dist后重启 `pels-english`；服务active，本机health 200。公网 `/eng/`、`/eng/api/health`、新JS/CSS均200；未登录 `/eng/api/profile` 返回401（预期鉴权行为）。最终使用 `admin@120.55.186.234` 和本机 `english_backup` SSH凭据；先前root账户尝试因账户不匹配被拒。未运行测试、未登录后导入课程或提交答题；验收范围仅部署、健康、静态资源与未登录鉴权，未做认证后浏览器学习流程和真实设备验证。
