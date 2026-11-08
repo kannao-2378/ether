@@ -1,8 +1,8 @@
 # GitHub与阿里云部署
 
-## 2026-11-08 仪表盘接口500诊断与修复待部署
+## 2026-11-08 仪表盘接口500修复上线（42d155a）
 
-根据用户提供的阿里云日志，`GET /api/dashboard` 在 `backend/response_cache.py` 的 `cached()` 抛出 `IndexError: tuple index out of range`，而 `/api/settings` 持续返回200，`pels-english` 进程为active。根因是SWR后台刷新线程写入缓存元组时使用3项 `(ttl截止, value, version)`，而普通请求和过期判断需要4项 `(ttl截止, value, version, 创建时间)`；命中后台刷新的过期/失效缓存时读取 `hit[3]` 即500。现已将后台线程统一为4项格式，修复同步到本地开发目录和发布克隆。当前仅完成代码与文档修改，尚未提交、推送或部署阿里云；因此线上服务仍需更新整个backend并重启后验证。没有改动或读取真实学习数据库。验证范围：未运行测试，未验证线上恢复。
+根据用户提供的阿里云日志，`GET /api/dashboard` 在 `backend/response_cache.py` 的 `cached()` 抛出 `IndexError: tuple index out of range`，而 `/api/settings` 持续返回200，`pels-english` 进程为active。根因是SWR后台刷新线程写入缓存元组时使用3项 `(ttl截止, value, version)`，而普通请求和过期判断需要4项 `(ttl截止, value, version, 创建时间)`；命中后台刷新的过期/失效缓存时读取 `hit[3]` 即500。修复已提交并推送 `42d155a`，部署到阿里云 `/opt/pels/backend` 并重启服务。部署前一致性快照 `/var/lib/pels/before-cache-fix-42d155a.zip`，旧后端保留在 `/opt/pels/.before-cache-fix-42d155a`。验证：服务active、本机health `{"status":"ok"}`、HTTPS `/eng/` 200、未登录profile 401；当前已登录浏览器重新连接后仪表盘正常显示。重启后首次health探测发生在应用启动完成前而失败，查看日志确认启动完成后复测通过。未改动真实学习数据、密码或Nginx；服务器Git工作区未提交的 `portfolio/index.html` 修改保持原样。验证范围：未运行测试。
 
 ## 2026-11-07 手机白屏修复（4c765a3）
 
