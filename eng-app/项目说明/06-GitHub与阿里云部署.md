@@ -1,5 +1,13 @@
 # GitHub与阿里云部署
 
+## 2026-11-08 自定课程页面读取修复（63bd522）
+
+`GET /api/user-courses/{course_id}` 曾排在固定路径 `/summary` 和 `/next` 前面，FastAPI 将它们当作课程ID，导致学习计划和今日学习返回“课程不存在”。现把详情路由移到固定路由之后。词典导入组件也改为进入页面时读取已导入课程、导入成功后刷新列表，并可展开查看课程 JSON。
+
+发布目录的 `Study` 已传 `initial` 资料，但 `KnowledgeContent` 类型接口未接收该参数；同步了对应组件实现。`npm run build -- --base=/eng/`（包含 TypeScript 检查）通过。63bd522已部署阿里云；数据快照 `/var/lib/pels/before-course-visibility-63bd522.zip`，旧后端 `/opt/pels/.before-course-visibility-63bd522/backend/app.py`，旧静态页 `/var/www/pels-static/.before-course-visibility-63bd522/eng`。本次不改学习数据库。
+
+部署后 `pels-english` active，本机health、公网 `/eng/`、`/eng/api/health` 及新JS/CSS均通过（200）。未运行测试，也未做已登录浏览器中的业务流程验收。服务器Git工作区原有 `portfolio/index.html` 修改保持不动。
+
 ## 2026-11-08 foundation 30组课程导入（d7179e1）
 
 将 `backend/resources/foundation_30_groups_course.json` 的生成器字段适配到自定课程格式，修复导入写库参数名错误，并随提交保存原始课程资源。整份校验通过：30组、205词、595个学习项。原课程 JSON 未改写；来源题目缺少 `needs_review` 时按待复核处理。
