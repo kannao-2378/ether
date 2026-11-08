@@ -1,0 +1,10 @@
+import {useState} from 'react';
+import {learningFetch} from './testMode';
+
+async function call(path:string,body?:unknown){const r=await learningFetch(path,body===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const d=await r.json().catch(()=>null);if(!r.ok)throw Error(typeof d?.detail==='string'?d.detail:`请求失败（${r.status}）`);return d;}
+export function UserCourseImport(){
+ const [source,setSource]=useState(''),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState(''),[imported,setImported]=useState<any>(null);
+ async function loadFile(file?:File){if(!file)return;try{setSource(await file.text());setMessage(`已读取 ${file.name}`);setError('');}catch{setError('无法读取该文件。');}}
+ async function importCourse(){setBusy(true);setError('');setMessage('');setImported(null);try{let value;try{value=JSON.parse(source);}catch(e){throw Error(`JSON格式错误：${e instanceof Error?e.message:'无法解析'}`);}const d=await call('/api/user-courses/import',{course:value});setMessage(`已导入「${d.title}」：${d.groups}组、${d.items}项。`);setImported({id:d.id,title:d.title,course:value});}catch(e){setError(e instanceof Error?e.message:'导入失败');}finally{setBusy(false);}}
+ return <section className="user-course-panel"><h2>导入自定课程</h2><p>选择 JSON 文件或直接粘贴。系统会校验整份30组课程；任何错误都会拒绝整份导入并报告组号和字段。</p><label className="user-course-file">选择 JSON 文件<input type="file" accept=".json,application/json" onChange={e=>void loadFile(e.target.files?.[0])}/></label><label>粘贴课程 JSON<textarea rows={9} value={source} onChange={e=>setSource(e.target.value)} placeholder={'{"title":"我的课程","groups":[...]}'} /></label><div className="user-study-actions"><button disabled={busy||!source.trim()} onClick={()=>void importCourse()}>{busy?'正在校验…':'校验并导入整份课程'}</button><button onClick={()=>window.dispatchEvent(new Event('enter-next-stage'))}>开始今日学习</button></div>{message&&<p role="status">{message}</p>}{imported&&<details><summary>查看已导入课程内容</summary><pre className="user-course-error">{JSON.stringify(imported.course,null,2)}</pre></details>}{error&&<pre role="alert" className="user-course-error">{error}</pre>}</section>;
+}

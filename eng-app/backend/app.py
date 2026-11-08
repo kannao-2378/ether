@@ -6,6 +6,7 @@ import curriculum_engine
 import composition_engine
 import sourced_transfer
 import starter_course
+import user_courses
 import mainline_runtime
 import selection_cache
 from datetime import datetime, timedelta, timezone
@@ -76,11 +77,31 @@ class _SwrScopeMiddleware:
     """
     def __init__(self,app):self.app=app
     async def __call__(self,scope,receive,send):
-        if scope['type']!='http' or testing.get():return await self.app(scope,receive,send)
+        if scope['type']!='http':return await self.app(scope,receive,send)
+        _mark_foreground()
+        if testing.get():return await self.app(scope,receive,send)
         token=response_cache.begin_http()
         try:await self.app(scope,receive,send)
-        finally:response_cache.end_http(token)
+        finally:
+            response_cache.end_http(token)
+            _mark_foreground()
 app.add_middleware(_SwrScopeMiddleware)
+
+_foreground_until=0.0
+_foreground_lock=threading.Lock()
+
+def _mark_foreground():
+    """Reserve the moments around user-facing requests for the user."""
+    global _foreground_until
+    with _foreground_lock:_foreground_until=max(_foreground_until,time.monotonic()+0.3)
+
+def _wait_foreground_gap():
+    """Block until no user-facing request finished recently (rehearsals only)."""
+    while True:
+        with _foreground_lock:until=_foreground_until
+        remaining=until-time.monotonic()
+        if remaining<=0:return
+        time.sleep(min(0.05,max(0.01,remaining)))
 
 @app.get('/api/health')
 def health():return dict(status='ok')
@@ -149,6 +170,7 @@ def initialize(target,with_bulk=False):
         c.execute(text('CREATE TABLE IF NOT EXISTS answers (id TEXT PRIMARY KEY, question_id TEXT UNIQUE, knowledge_id TEXT, raw_answer TEXT, correct INTEGER, revealed INTEGER, confidence TEXT, created_at TEXT, due_at TEXT, feedback TEXT)'))
         c.execute(text('CREATE TABLE IF NOT EXISTS spelling_checks (id TEXT PRIMARY KEY, question_id TEXT, raw_answer TEXT, correct INTEGER, created_at TEXT)'))
         c.execute(text('CREATE TABLE IF NOT EXISTS app_settings (key TEXT PRIMARY KEY, value TEXT NOT NULL)'))
+        courses_cleared = c.execute(text("SELECT value FROM app_settings WHERE key='courses-cleared-v1'")).scalar() == '1'
         c.execute(text('CREATE TABLE IF NOT EXISTS feedback_events (id TEXT PRIMARY KEY, question_id TEXT, confidence TEXT, created_at TEXT)'))
         c.execute(text('CREATE TABLE IF NOT EXISTS daily_coverage(day TEXT,knowledge_id TEXT,source_question_id TEXT,PRIMARY KEY(day,knowledge_id,source_question_id))'))
         c.execute(text('CREATE TABLE IF NOT EXISTS daily_tasks (day TEXT,knowledge_id TEXT,kind TEXT,PRIMARY KEY(day,knowledge_id))'))
@@ -164,14 +186,16 @@ def initialize(target,with_bulk=False):
         shared_examples.install(c)
         c.execute(text('CREATE TABLE IF NOT EXISTS input_corrections(question_id TEXT PRIMARY KEY, correction_count INTEGER NOT NULL, last_at TEXT NOT NULL)'))
         c.execute(text('CREATE INDEX IF NOT EXISTS feedback_question ON feedback_events(question_id)'))
-        for kid, prompt, answer, explanation, example in SEEDS:
-            c.execute(text('INSERT OR IGNORE INTO knowledge VALUES (:id,:p,:a,:e,:x)'), dict(id=kid,p=prompt,a=answer,e=explanation,x=example))
-            c.execute(text('INSERT OR IGNORE INTO progress (knowledge_id) VALUES (:id)'),dict(id=kid))
-        install(c,text)
+        if not courses_cleared:
+            for kid, prompt, answer, explanation, example in SEEDS:
+                c.execute(text('INSERT OR IGNORE INTO knowledge VALUES (:id,:p,:a,:e,:x)'), dict(id=kid,p=prompt,a=answer,e=explanation,x=example))
+                c.execute(text('INSERT OR IGNORE INTO progress (knowledge_id) VALUES (:id)'),dict(id=kid))
+            install(c,text)
         lesson.install(c,text)
-        transfer.install(c,text)
-        combinations.install(c,text)
-        context_engine.install(c,text)
+        if not courses_cleared:
+            transfer.install(c,text)
+            combinations.install(c,text)
+            context_engine.install(c,text)
         c.execute(text('CREATE TABLE IF NOT EXISTS rule_readings(rule_id TEXT PRIMARY KEY,read_at TEXT)'))
         c.execute(text('CREATE TABLE IF NOT EXISTS test_skips(question_id TEXT PRIMARY KEY,created_at TEXT)'))
         c.execute(text('CREATE TABLE IF NOT EXISTS daily_new_pacing(day TEXT PRIMARY KEY,last_sequence INTEGER NOT NULL)'))
@@ -180,6 +204,7 @@ def initialize(target,with_bulk=False):
         install_memory(c)
         assessment.install(c)
         transfer_evidence.install(c)
+        user_courses.install(c)
         for old in c.execute(text('SELECT DISTINCT a.knowledge_id FROM answers a LEFT JOIN review_queue r ON r.knowledge_id=a.knowledge_id WHERE r.version IS NULL OR r.version<5')).scalars().all():
             rebuild(c,old)
             if not assessment.get(c,old)['stable']:
@@ -188,19 +213,20 @@ def initialize(target,with_bulk=False):
                     due=(datetime.fromisoformat(item['last_at'])+timedelta(days=7)).isoformat()
                     c.execute(text('UPDATE progress SET interval_days=7,due_at=:d WHERE knowledge_id=:k'),dict(k=old,d=due))
                     c.execute(text('UPDATE review_queue SET due_at=:d WHERE knowledge_id=:k'),dict(k=old,d=due))
-        content.install(c)
-        if with_bulk:bulk_courses.install(c)
-        word_lookup.install(c)
-        focus_training.install(c)
-        group_learning.install(c)
-        composition_engine.install(c)
-        sourced_transfer.install(c)
-        starter_course.restore(c)
-        if os.environ.get('PELS_MAINLINE_ENABLED')=='1':
-            mainline_runtime.install(c)
-            if os.environ.get('PELS_COURSE_EXPANSION')=='1':
-                import course_expansion
-                course_expansion.install(c)
+        if not courses_cleared:
+            content.install(c)
+            if with_bulk:bulk_courses.install(c)
+            word_lookup.install(c)
+            focus_training.install(c)
+            group_learning.install(c)
+            composition_engine.install(c)
+            sourced_transfer.install(c)
+            starter_course.restore(c)
+            if os.environ.get('PELS_MAINLINE_ENABLED')=='1':
+                mainline_runtime.install(c)
+                if os.environ.get('PELS_COURSE_EXPANSION')=='1':
+                    import course_expansion
+                    course_expansion.install(c)
         # Only derived assessment caches are refreshed; raw answers and FSRS cards stay intact.
         for cached in c.execute(text('SELECT knowledge_id,payload FROM knowledge_assessments')).all():
             if json.loads(cached[1]).get('evidence_version')!=transfer_evidence.VERSION:
@@ -270,8 +296,9 @@ def test_action(action: str, data: dict):
             c.execute(text('DELETE FROM daily_tasks'))
     elif action in ('reset','prepare'):
         with test_engine.begin() as c:
-            for table in ('shared_example_links','word_check_requests','word_spelling_difficulties','input_corrections','answers','questions','spelling_checks','feedback_events','review_queue','memory_states','consolidation_slots','daily_new_pacing','daily_tasks','daily_coverage','lesson_attempts','context_round_items','context_rounds','composition_evidence','knowledge_assessments','test_skips','daily_extensions','teaching_exposures','question_trials','composition_items','composition_cursors'):
+            for table in ('shared_example_links','word_check_requests','word_spelling_difficulties','input_corrections','answers','questions','spelling_checks','feedback_events','review_queue','memory_states','consolidation_slots','daily_new_pacing','daily_tasks','daily_coverage','lesson_attempts','context_round_items','context_rounds','composition_evidence','knowledge_assessments','test_skips','daily_extensions','teaching_exposures','question_trials','composition_items','composition_cursors','user_courses','user_course_groups','user_course_items','user_learning_state','user_learning_events','user_learning_meta'):
                 c.execute(text('DELETE FROM '+table))
+            c.execute(text("INSERT OR IGNORE INTO user_learning_meta VALUES('event_no',0)"))
             c.execute(text("DELETE FROM app_settings WHERE key='sourced-transfer-pilot'"))
             for table in ('focus_requests','group_questions','daily_group_tasks','group_progress','group_usage','group_active_slots'):c.execute(text('DELETE FROM '+table))
             c.execute(text('UPDATE test_clock SET days=0,stage=1 WHERE id=1'))
@@ -769,6 +796,69 @@ def next_question(allow_repeat: bool=False):
     response_cache.bump('dashboard','daily-activity','plan','progress')
     return result
 
+class UserCourseImport(BaseModel):
+    course: dict
+
+@app.post('/api/user-courses/import')
+def import_user_course(body: UserCourseImport):
+    with engine.begin() as c:
+        try: result=user_courses.import_course(c,body.course,now())
+        except ValueError as e: raise HTTPException(422,str(e))
+    response_cache.bump('dictionary','plan','dashboard',hard=True)
+    return dict(saved=True,**result)
+
+@app.get('/api/user-courses')
+def list_user_courses():
+    with engine.connect() as c:
+        return [dict(r) for r in c.execute(text("SELECT c.id,c.title,c.created_at,COUNT(DISTINCT g.id) groups,COUNT(DISTINCT i.id) items FROM user_courses c LEFT JOIN user_course_groups g ON g.course_id=c.id LEFT JOIN user_course_items i ON i.course_id=c.id GROUP BY c.id ORDER BY c.created_at DESC")).mappings()]
+
+@app.get('/api/user-courses/summary')
+def user_course_summary():
+    day=user_courses.local_day(now()).isoformat()
+    with engine.connect() as c:
+        states=c.execute(text('SELECT status,COUNT(*) n FROM user_learning_state GROUP BY status')).mappings().all()
+        total=c.execute(text('SELECT COUNT(*) FROM user_course_items')).scalar() or 0
+        due=c.execute(text('SELECT COUNT(*) FROM user_learning_state WHERE status!=\'done\' AND (due_day IS NULL OR due_day<=:d)'),dict(d=day)).scalar() or 0
+        overdue=c.execute(text('SELECT COUNT(*) FROM user_learning_state WHERE due_day<:d'),dict(d=day)).scalar() or 0
+        courses=c.execute(text('SELECT id,title,created_at FROM user_courses ORDER BY created_at')).mappings().all()
+        today=c.execute(text('SELECT COUNT(*) FROM user_learning_events WHERE day=:d'),dict(d=day)).scalar() or 0
+    return dict(day=day,total=total,due=due,overdue=overdue,today_done=today,courses=[dict(x) for x in courses],states={r['status']:r['n'] for r in states})
+
+@app.get('/api/user-courses/{course_id}')
+def get_user_course(course_id:str):
+    with engine.connect() as c:
+        row=c.execute(text('SELECT title,source_json FROM user_courses WHERE id=:id'),dict(id=course_id)).mappings().first()
+        if not row:raise HTTPException(404,'课程不存在')
+        return dict(title=row['title'],course=json.loads(row['source_json']))
+
+@app.get('/api/user-courses/next')
+def user_course_next():
+    with engine.connect() as c:
+        row=user_courses.next_item(c,now())
+        if not row:return dict(kind='done',message='今天的自定课程内容已完成；未完成项会继续保留。')
+        return dict(kind=row['item_type'],item_id=row['id'],group=row['group_position']+1,position=row['item_position']+1,prompt=row['prompt'],status=row['status'])
+
+@app.get('/api/user-courses/reveal/{item_id}')
+def user_course_reveal(item_id:str):
+    with engine.connect() as c:
+        row=c.execute(text('SELECT answer,accepted_answers,payload FROM user_course_items WHERE id=:id'),dict(id=item_id)).mappings().first()
+        if not row:raise HTTPException(404,'学习内容不存在')
+        return dict(answer=row['answer'],accepted_answers=json.loads(row['accepted_answers']),details=json.loads(row['payload']))
+
+class UserCourseAnswer(BaseModel):
+    item_id:str
+    answer:str
+    confidence:str
+
+@app.post('/api/user-courses/answer')
+def user_course_answer(body: UserCourseAnswer):
+    with engine.begin() as c:
+        try:result=user_courses.submit(c,body.item_id,body.answer,body.confidence,now())
+        except ValueError as e:raise HTTPException(400,str(e))
+        nxt=user_courses.next_item(c,now())
+    response_cache.bump('dictionary','plan','dashboard')
+    return dict(saved=True,**result,next=(dict(kind=nxt['item_type'],item_id=nxt['id'],group=nxt['group_position']+1,prompt=nxt['prompt']) if nxt else None))
+
 # Pre-computed 认识 transitions: the client warms this while the learner reads
 # the meaning card, so the real click only applies the deterministic write.
 _prepared_introduce={}
@@ -981,6 +1071,8 @@ def _rehearse_submission(question_id,answer):
     db=str(engine.url.database)
     with engine.connect() as c:
         for confidence in ('clear','hard','forgot'):
+            # Yield the SQLite writer lock to foreground learner requests.
+            _wait_foreground_gap()
             tx=c.begin()
             try:
                 with selection_cache.scope():
@@ -1061,7 +1153,7 @@ def export():
     with engine.begin() as c:
         tables=tables+tuple(name for name in ('content_packages','package_members','knowledge_components') if c.execute(text("SELECT 1 FROM sqlite_master WHERE name=:n AND type='table'"),dict(n=name)).first())
         tables+=tuple(t for t in group_learning.TABLES+spelling_practice.TABLES if t not in tables)
-        tables+=('shared_example_links',)
+        tables+=('shared_example_links','user_courses','user_course_groups','user_course_items','user_learning_state','user_learning_events','user_learning_meta')
         data={table:[dict(r) for r in c.execute(text('SELECT * FROM '+table)).mappings()] for table in tables}
     return dict(format_version=1,mode='test' if testing.get() else 'real',exported_at=now().isoformat(),tables=data)
 
