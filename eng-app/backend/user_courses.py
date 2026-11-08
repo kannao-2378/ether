@@ -26,6 +26,45 @@ def _used(items,vocab):
  if not isinstance(items,list) or not all(_str(x) for x in items):return False
  known={x['en'].strip().casefold() for x in vocab if isinstance(x,dict) and _str(x.get('en'))} if isinstance(vocab,list) else set()
  return all(x.strip().casefold() in known for x in items)
+
+def normalize_course(data):
+ """Adapt the authored foundation-course format while retaining its source fields."""
+ if not isinstance(data,dict) or not isinstance(data.get('groups'),list):return data
+ groups=data['groups']
+ if not data.get('course_title') and not any(isinstance(g,dict) and isinstance(g.get('vocabulary'),list) and g['vocabulary'] and isinstance(g['vocabulary'][0],dict) and 'english' in g['vocabulary'][0] for g in groups):return data
+ normalized=[]
+ for g in groups:
+  if not isinstance(g,dict): normalized.append(g); continue
+  raw_words=g.get('vocabulary') if isinstance(g.get('vocabulary'),list) else []
+  names=[w.get('english','').strip() for w in raw_words if isinstance(w,dict) and _str(w.get('english'))]
+  known={x.casefold() for x in names}
+  def used(values):
+   if not isinstance(values,list):return []
+   return [v for v in values if _str(v) and v.strip().casefold() in known]
+  words=[]
+  for w in raw_words:
+   if not isinstance(w,dict):words.append(w);continue
+   pron={str(p.get('accent','')).upper():p.get('ipa') for p in (w.get('pronunciations') or []) if isinstance(p,dict)}
+   syll=w.get('syllables') if isinstance(w.get('syllables'),dict) else {}
+   root=w.get('word_root')
+   root_affixes=[{'part':k,'value':v} for k,v in root.items() if _str(v)] if isinstance(root,dict) else (root if isinstance(root,list) else [])
+   ex=w.get('example_sentence') if isinstance(w.get('example_sentence'),dict) else {}
+   spell=[x.strip() for x in (w.get('accepted_spellings') or []) if _str(x)]
+   pos=w.get('part_of_speech')
+   words.append({**w,'en':w.get('english'),'zh':'；'.join(w.get('chinese_meanings',[])) if isinstance(w.get('chinese_meanings'),list) else w.get('chinese_meanings'),'part_of_speech':'；'.join(pos) if isinstance(pos,list) else pos,'ipa_us':pron.get('US') or None,'ipa_uk':pron.get('UK') or None,'syllables':syll.get('breakdown') or [],'stress':syll.get('stress_index'),'root_affixes':root_affixes,'collocations':w.get('common_collocations') or [],'examples':[{'en':ex['english'],'zh':ex['chinese']}] if _str(ex.get('english')) and _str(ex.get('chinese')) else [],'mnemonic':w.get('memory_association') or None,'spelling':'；'.join(spell) or None,'accepted_answers_en':spell or ([w.get('english')] if _str(w.get('english')) else []),'vocabulary_used':[w.get('english')] if _str(w.get('english')) else [],'needs_review':w.get('needs_review') if isinstance(w.get('needs_review'),bool) else True})
+  t=g.get('target') if isinstance(g.get('target'),dict) else {}
+  example=t.get('correct_example_en')
+  in_example=[]
+  if _str(example):
+   lower=example.casefold()
+   in_example=[name for name in names if re.search(r'(?<![A-Za-z])'+re.escape(name)+r'(?![A-Za-z])',lower,re.I)]
+  target={**t,'type':g.get('group_type'),'en':example or t.get('english'),'zh':t.get('chinese'),'accepted_answers_en':[example] if _str(example) else [],'vocabulary_used':in_example,'needs_review':t.get('needs_review') if isinstance(t.get('needs_review'),bool) else True}
+  def case(item):
+   if not isinstance(item,dict):return item
+   return {**item,'source_vocabulary_used':item.get('vocabulary_used'),'vocabulary_used':used(item.get('vocabulary_used')),'needs_review':item.get('needs_review') if isinstance(item.get('needs_review'),bool) else True}
+  normalized.append({**g,'vocabulary':words,'target':target,'required_sentences':[case(x) for x in (g.get('sentences_to_memorize') or [])],'transfer_cases':[case(x) for x in (g.get('transfer_cases') or [])]})
+ return {**data,'title':data.get('course_title'),'groups':normalized,'source_format':data.get('format_version','foundation_30_groups_course')}
+
 def validate(data):
  errors=[]
  if not isinstance(data,dict): return ['根字段：必须是JSON对象']
@@ -90,6 +129,7 @@ def _items(g):
  return out
 
 def import_course(c,data,stamp):
+ data=normalize_course(data)
  errors=validate(data)
  if errors: raise ValueError('\n'.join(errors[:100]))
  cid=str(uuid.uuid4());title=data['title'].strip()
@@ -97,7 +137,7 @@ def import_course(c,data,stamp):
  for gi,g in enumerate(data['groups']):
   gid=str(uuid.uuid4());c.execute(text('INSERT INTO user_course_groups VALUES(:id,:c,:p,:j)'),dict(id=gid,c=cid,p=gi,j=json.dumps(g,ensure_ascii=False)))
   for ii,(kind,prompt,answer,accepted,payload) in enumerate(_items(g)):
-   iid=str(uuid.uuid4());c.execute(text('INSERT INTO user_course_items VALUES(:id,:c,:g,:gp,:ip,:kind,:p,:a,:aa,:j)'),dict(id=iid,c=cid,g=gid,gp=gi,ip=ii,kind=kind,prompt=prompt,answer=answer,aa=json.dumps(accepted,ensure_ascii=False),j=json.dumps(payload,ensure_ascii=False)))
+   iid=str(uuid.uuid4());c.execute(text('INSERT INTO user_course_items VALUES(:id,:c,:g,:gp,:ip,:kind,:p,:a,:aa,:j)'),dict(id=iid,c=cid,g=gid,gp=gi,ip=ii,kind=kind,p=prompt,a=answer,aa=json.dumps(accepted,ensure_ascii=False),j=json.dumps(payload,ensure_ascii=False)))
    c.execute(text('INSERT INTO user_learning_state(item_id) VALUES(:id)'),dict(id=iid))
  return {'id':cid,'title':title,'groups':30,'items':sum(len(_items(g)) for g in data['groups'])}
 
