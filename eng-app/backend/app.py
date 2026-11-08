@@ -1,5 +1,7 @@
 import spelling_practice
 import time
+import queue
+import threading
 import curriculum_engine
 import composition_engine
 import sourced_transfer
@@ -63,6 +65,22 @@ class EngineRouter:
 engine=EngineRouter()
 app = FastAPI(title='Personal English Learning System',docs_url=None if AUTH.enabled else '/docs',openapi_url=None if AUTH.enabled else '/openapi.json')
 app.add_middleware(CORSMiddleware, allow_origins=[AUTH.origin] if AUTH.enabled else ['http://localhost:5173', 'http://127.0.0.1:5173'], allow_credentials=AUTH.enabled,allow_methods=['*'], allow_headers=['*'])
+
+class _SwrScopeMiddleware:
+    """Mark HTTP tasks so read routes may serve stale-while-revalidate entries.
+
+    Runs inside database_mode, so testing mode is already routed here; test-mode
+    requests skip SWR entirely because a background refresh thread would compute
+    against the real database. Pure ASGI middleware keeps the contextvar visible
+    to sync endpoints.
+    """
+    def __init__(self,app):self.app=app
+    async def __call__(self,scope,receive,send):
+        if scope['type']!='http' or testing.get():return await self.app(scope,receive,send)
+        token=response_cache.begin_http()
+        try:await self.app(scope,receive,send)
+        finally:response_cache.end_http(token)
+app.add_middleware(_SwrScopeMiddleware)
 
 @app.get('/api/health')
 def health():return dict(status='ok')
@@ -320,7 +338,9 @@ def learning_plan(compact: bool=False):
     # body so plan pages render from cache between study writes.
     mode=(str(engine.url.database),compact,bool(testing.get()))
     def compute():return json.dumps(_learning_plan_payload(compact),ensure_ascii=False,separators=(',',':'))
-    return json.loads(response_cache.cached('plan',mode,120,compute))
+    # swr: answer bumps serve the previous snapshot instantly while a background
+    # thread recomputes; rare structural writes (settings, imports) hard-invalidate.
+    return json.loads(response_cache.cached('plan',mode,120,compute,swr=True))
 
 def _learning_plan_payload(compact: bool=False):
     if compact:
@@ -363,14 +383,14 @@ def daily_activity_report(day: str | None=None,planning: bool=False,summary: boo
     effective_planning=planning and not summary
     def compute():
         with engine.connect() as c,selection_cache.scope():return daily_activity.build(c,stamp,day,settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course'],effective_planning)
-    return response_cache.cached('daily-activity',(str(engine.url.database),day,effective_planning,settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course']),30,compute)
+    return response_cache.cached('daily-activity',(str(engine.url.database),day,effective_planning,settings['daily-new-limit'],settings['daily-review-limit'],settings['active-course']),30,compute,swr=True)
 
 @app.get('/api/profile')
 def learning_profile_summary():
     # Stats tolerate ~1 minute of staleness; answers refresh via TTL, imports via bump.
     def compute():
         with engine.connect() as c:return learning_profile_stats.build(c,now())
-    return response_cache.cached('profile',str(engine.url.database),60,compute)
+    return response_cache.cached('profile',str(engine.url.database),60,compute,swr=True)
 
 @app.get('/api/curriculum/units/{unit_id}')
 def curriculum_unit(unit_id: str,page: int=1):
@@ -448,7 +468,7 @@ def import_lookup(body: LookupImport):
                 c.execute(text('UPDATE knowledge_assessments SET payload=:p WHERE knowledge_id=:k'),dict(k=cached[0],p=json.dumps(payload,ensure_ascii=False)))
         if body.train:result['focus']=focus_training.add(c,result['id'],now(),member_ids=result['imported_ids'])
         result['items']=[dict(c.execute(text('SELECT k.*,p.*,COALESCE(l.stage,1) AS stage FROM knowledge k JOIN progress p ON p.knowledge_id=k.id LEFT JOIN course_links l ON l.knowledge_id=k.id WHERE k.id=:k'),dict(k=kid)).mappings().one()) for kid in result['imported_ids']]
-    response_cache.bump('dictionary','dashboard','daily-activity','profile','plan','progress')
+    response_cache.bump('dictionary','dashboard','daily-activity','profile','plan','progress',hard=True)
     return dict(saved=True,**result)
 
 @app.get('/api/focus/{kid}')
@@ -464,14 +484,14 @@ def add_focus(kid: str):
     with engine.begin() as c:
         try:result=focus_training.add(c,kid,now())
         except ValueError:raise HTTPException(404,'词条不存在')
-    response_cache.bump('daily-activity','plan','progress')
+    response_cache.bump('daily-activity','plan','progress',hard=True)
     return result
 
 @app.post('/api/focus-cancel/{gid}')
 def cancel_focus(gid: str):
     with engine.begin() as c:
         if not focus_training.cancel(c,gid):raise HTTPException(409,'任务已经结束或不存在')
-    response_cache.bump('daily-activity','plan','progress')
+    response_cache.bump('daily-activity','plan','progress',hard=True)
     return dict(saved=True)
 
 @app.get('/api/dictionary')
@@ -481,7 +501,7 @@ def dictionary(q: str='',kind: str='all',status: str='all',page: int=1):
     def compute():
         with engine.connect() as c:
             return _dictionary_payload(c,q,kind,status,page)
-    return response_cache.cached('dictionary',(str(engine.url.database),q[:100],kind,status,page),60,compute)
+    return response_cache.cached('dictionary',(str(engine.url.database),q[:100],kind,status,page),60,compute,swr=True)
 
 def _dictionary_payload(c,q,kind,status,page):
         prefix="""WITH sources AS (
@@ -576,7 +596,7 @@ def add_daily_learning(body: ExtraLearning):
             extra=body.amount+max(0,admitted-settings['daily-new-limit'])
             c.execute(text('INSERT OR IGNORE INTO daily_extensions VALUES(:i,:d,:a,:e,:t)'),dict(i=body.id,d=day,a=body.amount,e=extra,t=stamp.isoformat()))
         limit=study_settings(c)['daily-new-limit']
-    response_cache.bump('dashboard','daily-activity','plan','progress')
+    response_cache.bump('dashboard','daily-activity','plan','progress',hard=True)
     return dict(amount=body.amount,date=day,new_limit=limit)
 
 @app.post('/api/settings')
@@ -645,7 +665,7 @@ def dashboard_route(summary_only: bool = False, lightweight: bool = False):
     # absorbs repeated reads. The serialized body is cached to skip re-encoding.
     mode=str(engine.url.database)
     body=response_cache.cached('dashboard',(mode,summary_only,lightweight),10,
-        lambda:json.dumps(_dashboard_payload(summary_only,lightweight),ensure_ascii=False,separators=(',',':')))
+        lambda:json.dumps(_dashboard_payload(summary_only,lightweight),ensure_ascii=False,separators=(',',':')),swr=True)
     return Response(content=body,media_type='application/json')
 
 def _knowledge_payload(c,item):
@@ -792,11 +812,15 @@ def introduce(kid: str):
     response_cache.bump('dashboard','daily-activity','plan','progress')
     # Inline the follow-up question so the client saves one serial round trip
     # on the meaning-screen "认识" transition; serve the rehearsal result when
-    # it is fresh enough that the scheduler outcome cannot have drifted.
+    # it is fresh enough that the scheduler outcome cannot have drifted. The
+    # question-exists guard keeps a rolled-back, freshly generated question id
+    # from 404ing the next /api/check.
     key=(str(engine.url.database),kid)
     hit=_prepared_introduce.pop(key,None)
     if hit and time.monotonic()-hit[0]<=_PREPARE_TTL:
-        return dict(saved=True,next=hit[1])
+        nxt=hit[1]
+        if nxt.get('kind')!='recall' or not nxt.get('question_id') or _question_exists(nxt['question_id']):
+            return dict(saved=True,next=nxt)
     return dict(saved=True,next=next_question())
 
 @app.post('/api/reveal/{qid}')
@@ -898,45 +922,138 @@ def check_spelling(body: SpellingCheck):
             c.execute(text('INSERT OR IGNORE INTO spelling_checks VALUES (:id,:q,:a,1,:t)'),dict(id=body.id,q=body.question_id,a=body.answer,t=now().isoformat()))
         else:
             c.execute(text('INSERT INTO input_corrections VALUES(:q,1,:t) ON CONFLICT(question_id) DO UPDATE SET correction_count=correction_count+1,last_at=excluded.last_at'),dict(q=body.question_id,t=now().isoformat()))
-        return dict(correct=correct,analysis=assessment['analysis'],notices=assessment['notices'],**(dict(answer=row['answer'],explanation=row['explanation'],example=row['example']) if correct else {}))
+        response=dict(correct=correct,analysis=assessment['analysis'],notices=assessment['notices'],**(dict(answer=row['answer'],explanation=row['explanation'],example=row['example']) if correct else {}))
+    # A correct check means the learner will submit a confidence next; rehearse
+    # all three outcomes in the background so the real submit can inline the
+    # follow-up question instead of re-running the scheduler on the hot path.
+    if correct and not testing.get():
+        _enqueue_submit_rehearsal(body.question_id,body.answer)
+    return response
+
+# Pre-computed submissions: /api/check warms every confidence outcome while the
+# learner reads the feedback buttons, so the real /api/answers click only applies
+# the deterministic write and serves the rehearsed next question.
+_prepared_submit={}
+_prepare_queue=queue.Queue()
+_prepare_worker_started=False
+
+def _submit_rehearsal_worker():
+    while True:
+        question_id,answer=_prepare_queue.get()
+        try:_rehearse_submission(question_id,answer)
+        except Exception:pass
+        finally:_prepare_queue.task_done()
+
+def _enqueue_submit_rehearsal(question_id,answer):
+    global _prepare_worker_started
+    if 'PYTEST_CURRENT_TEST' in os.environ:return
+    if not _prepare_worker_started:
+        _prepare_worker_started=True
+        threading.Thread(target=_submit_rehearsal_worker,daemon=True,name='submit-rehearsal').start()
+    _prepare_queue.put((question_id,answer))
+
+def _question_exists(question_id):
+    with engine.connect() as c:
+        return bool(c.execute(text('SELECT 1 FROM questions WHERE id=:q'),dict(q=question_id)).first())
+
+def _rehearsed_next(question_id,confidence):
+    """Serve a rehearsed next question if fresh and anchored in the database.
+
+    The rehearsal rolls back its transaction, so a freshly generated question
+    row would not exist; serving its id would 404 the next /api/check. In that
+    case (and after TTL) we fall back to a real scheduler run, which also
+    re-applies the scheduler's admission writes.
+    """
+    key=(str(engine.url.database),question_id,confidence)
+    hit=_prepared_submit.pop(key,None)
+    if hit and time.monotonic()-hit[0]<=_PREPARE_TTL:
+        nxt=hit[1]
+        if nxt.get('kind')!='recall' or not nxt.get('question_id') or _question_exists(nxt['question_id']):
+            return nxt
+    return None
+
+def _rehearse_submission(question_id,answer):
+    """Replay submit+scheduler for each confidence in rolled-back transactions.
+
+    hint_used mirrors the real client: assisted questions are exactly those the
+    learner revealed, which is what questions.revealed stores.
+    """
+    db=str(engine.url.database)
+    with engine.connect() as c:
+        for confidence in ('clear','hard','forgot'):
+            tx=c.begin()
+            try:
+                with selection_cache.scope():
+                    # Any earlier SELECT would autobegin and make begin() fail,
+                    # so read the hint state inside the transaction.
+                    revealed=c.execute(text('SELECT revealed FROM questions WHERE id=:q'),dict(q=question_id)).scalar()
+                    if revealed is None:return
+                    applied,result=_apply_submission(c,Submission(question_id=question_id,answer=answer,confidence=confidence,hint_used=bool(revealed)))
+                    if applied:
+                        _prepared_submit[(db,question_id,confidence)]=(time.monotonic(),_select_next(c))
+            except Exception:
+                pass
+            finally:
+                tx.rollback()
+
+def _apply_submission(c,body):
+    """Apply one /api/answers submission on connection c; returns (applied,result).
+
+    Raises the same 404/422 as the route. applied=False means an answer row for
+    this question already existed, so nothing was written.
+    """
+    existing=c.execute(text('SELECT * FROM answers WHERE question_id=:q'),dict(q=body.question_id)).mappings().first()
+    if existing:
+        return False,dict(existing)
+    row=c.execute(text('SELECT q.*,k.answer,p.streak,p.interval_days,p.last_at,p.level FROM questions q JOIN knowledge k ON k.id=q.knowledge_id JOIN progress p ON p.knowledge_id=k.id WHERE q.id=:q'),dict(q=body.question_id)).mappings().first()
+    if not row:
+        raise HTTPException(404,'题目不存在')
+    c.execute(text('''INSERT OR IGNORE INTO group_questions SELECT :q,p.group_id,m.role FROM group_primary p
+      JOIN group_members m ON m.group_id=p.group_id AND m.knowledge_id=p.knowledge_id WHERE p.knowledge_id=:k'''),dict(q=body.question_id,k=row['knowledge_id']))
+    if body.hint_used:
+        c.execute(text('UPDATE questions SET revealed=1 WHERE id=:q'),dict(q=body.question_id))
+        row=dict(row,revealed=1)
+    correct=transfer.grade(row['knowledge_id'],body.answer,row['answer'],(content.details(c,row['knowledge_id']) or {}).get('accepted_answers'))['correct']
+    if not correct:raise HTTPException(422,'请先完成正确拼写，再提交记忆反馈')
+    due=now()
+    feedback='拼写结果与记忆反馈已保存。'
+    result=dict(id=str(uuid.uuid4()),question_id=body.question_id,knowledge_id=row['knowledge_id'],raw_answer=body.answer,correct=int(correct),revealed=row['revealed'],confidence=body.confidence,created_at=now().isoformat(),due_at=due.isoformat(),feedback=feedback)
+    inserted=c.execute(text('INSERT OR IGNORE INTO answers VALUES (:id,:question_id,:knowledge_id,:raw_answer,:correct,:revealed,:confidence,:created_at,:due_at,:feedback)'),result)
+    if not inserted.rowcount:
+        return False,dict(c.execute(text('SELECT * FROM answers WHERE question_id=:q'),dict(q=body.question_id)).mappings().one())
+    spelling_practice.enqueue(c,body.question_id,now())
+    rebuild(c,row['knowledge_id'],incremental=True)
+    combination=c.execute(text('SELECT structure_id,material_id FROM sentence_combinations WHERE knowledge_id=:k'),dict(k=row['knowledge_id'])).mappings().first()
+    if combination:
+        errors=c.execute(text('SELECT COUNT(*) FROM spelling_checks WHERE question_id=:q AND correct=0'),dict(q=body.question_id)).scalar()
+        c.execute(text('INSERT OR IGNORE INTO composition_evidence VALUES(:q,:s,:m,:i,:t)'),dict(q=body.question_id,s=combination['structure_id'],m=combination['material_id'],i=int(correct and not row['revealed'] and not errors and body.confidence=='clear' and bool(c.execute(text("SELECT 1 FROM question_trials WHERE question_id=:q AND mode IN ('transfer','transfer-review')"),dict(q=body.question_id)).first())),t=now().isoformat()))
+    update_coverage(c,row['knowledge_id'],now())
+    assessment.refresh(c,row['knowledge_id'])
+    apply_retention_limit(c,row['knowledge_id'])
+    if group_mode(c,body.question_id):group_learning.refresh(c,row['knowledge_id'],now(),body.question_id)
+    scheduled=c.execute(text('SELECT due_at,due_sequence,gap FROM review_queue WHERE knowledge_id=:k'),dict(k=row['knowledge_id'])).mappings().first()
+    result['due_at']=scheduled['due_at']
+    c.execute(text('UPDATE answers SET due_at=:d WHERE question_id=:q'),dict(d=scheduled['due_at'],q=body.question_id))
+    return True,dict(**result,expected=row['answer'])
 
 @app.post('/api/answers')
 def submit(body: Submission):
     with engine.begin() as c:
-        existing=c.execute(text('SELECT * FROM answers WHERE question_id=:q'),dict(q=body.question_id)).mappings().first()
-        if existing:
-            return dict(existing)
-        row=c.execute(text('SELECT q.*,k.answer,p.streak,p.interval_days,p.last_at,p.level FROM questions q JOIN knowledge k ON k.id=q.knowledge_id JOIN progress p ON p.knowledge_id=k.id WHERE q.id=:q'),dict(q=body.question_id)).mappings().first()
-        if not row:
-            raise HTTPException(404,'题目不存在')
-        c.execute(text('''INSERT OR IGNORE INTO group_questions SELECT :q,p.group_id,m.role FROM group_primary p
-          JOIN group_members m ON m.group_id=p.group_id AND m.knowledge_id=p.knowledge_id WHERE p.knowledge_id=:k'''),dict(q=body.question_id,k=row['knowledge_id']))
-        if body.hint_used:
-            c.execute(text('UPDATE questions SET revealed=1 WHERE id=:q'),dict(q=body.question_id))
-            row=dict(row,revealed=1)
-        correct=transfer.grade(row['knowledge_id'],body.answer,row['answer'],(content.details(c,row['knowledge_id']) or {}).get('accepted_answers'))['correct']
-        if not correct:raise HTTPException(422,'请先完成正确拼写，再提交记忆反馈')
-        due=now()
-        feedback='拼写结果与记忆反馈已保存。'
-        result=dict(id=str(uuid.uuid4()),question_id=body.question_id,knowledge_id=row['knowledge_id'],raw_answer=body.answer,correct=int(correct),revealed=row['revealed'],confidence=body.confidence,created_at=now().isoformat(),due_at=due.isoformat(),feedback=feedback)
-        inserted=c.execute(text('INSERT OR IGNORE INTO answers VALUES (:id,:question_id,:knowledge_id,:raw_answer,:correct,:revealed,:confidence,:created_at,:due_at,:feedback)'),result)
-        if not inserted.rowcount:
-            return dict(c.execute(text('SELECT * FROM answers WHERE question_id=:q'),dict(q=body.question_id)).mappings().one())
-        spelling_practice.enqueue(c,body.question_id,now())
-        rebuild(c,row['knowledge_id'],incremental=True)
-        combination=c.execute(text('SELECT structure_id,material_id FROM sentence_combinations WHERE knowledge_id=:k'),dict(k=row['knowledge_id'])).mappings().first()
-        if combination:
-            errors=c.execute(text('SELECT COUNT(*) FROM spelling_checks WHERE question_id=:q AND correct=0'),dict(q=body.question_id)).scalar()
-            c.execute(text('INSERT OR IGNORE INTO composition_evidence VALUES(:q,:s,:m,:i,:t)'),dict(q=body.question_id,s=combination['structure_id'],m=combination['material_id'],i=int(correct and not row['revealed'] and not errors and body.confidence=='clear' and bool(c.execute(text("SELECT 1 FROM question_trials WHERE question_id=:q AND mode IN ('transfer','transfer-review')"),dict(q=body.question_id)).first())),t=now().isoformat()))
-        update_coverage(c,row['knowledge_id'],now())
-        assessment.refresh(c,row['knowledge_id'])
-        apply_retention_limit(c,row['knowledge_id'])
-        if group_mode(c,body.question_id):group_learning.refresh(c,row['knowledge_id'],now(),body.question_id)
-        scheduled=c.execute(text('SELECT due_at,due_sequence,gap FROM review_queue WHERE knowledge_id=:k'),dict(k=row['knowledge_id'])).mappings().first()
-        result['due_at']=scheduled['due_at']
-        c.execute(text('UPDATE answers SET due_at=:d WHERE question_id=:q'),dict(d=scheduled['due_at'],q=body.question_id))
-        response_cache.bump('dashboard','daily-activity','plan','progress')
-        return dict(**result,expected=row['answer'])
+        applied,result=_apply_submission(c,body)
+    if not applied:
+        return result
+    response_cache.bump('dashboard','daily-activity','plan','progress')
+    # Inline next only for real HTTP requests; direct function calls (tests,
+    # skip_test_question) keep the exact pre-round-6 behavior.
+    if not response_cache.http_active():
+        return result
+    # Inline the follow-up question so the client saves one serial round trip on
+    # the confidence click; serve the rehearsal result when it is fresh enough
+    # that the scheduler outcome cannot have drifted.
+    rehearsed=_rehearsed_next(body.question_id,body.confidence)
+    if rehearsed is not None:
+        return dict(**result,next=rehearsed)
+    return dict(**result,next=next_question())
 
 @app.get('/api/export')
 def export():

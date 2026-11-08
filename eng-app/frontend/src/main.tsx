@@ -68,7 +68,7 @@ function App({onLogout}:{onLogout?:()=>void}){
   if(q?.kind==='learn'){await act(async()=>{const r=q?.context_round_complete?null:await api('/introduce/'+q.id,{});await next(true,false,r?.next||null);});return;}
   if(!checked?.correct)return;
   setConfidence(value);
-  await act(async()=>{const saved=await api('/answers',{question_id:q.question_id,answer,confidence:value,hint_used:assistedQuestions.current.has(q.question_id)});if(saved.confidence!==value)await api('/feedback',{question_id:q.question_id,confidence:value});const completed={...q,confidence:value};setPreviousItems(items=>[...items.filter(i=>i.question_id!==q.question_id),completed]);await next();});
+  await act(async()=>{const saved=await api('/answers',{question_id:q.question_id,answer,confidence:value,hint_used:assistedQuestions.current.has(q.question_id)});if(saved.confidence!==value)await api('/feedback',{question_id:q.question_id,confidence:value});const completed={...q,confidence:value};setPreviousItems(items=>[...items.filter(i=>i.question_id!==q.question_id),completed]);await next(true,false,q?.context_round_complete?null:(saved.next||null));});
  }
  async function extendDaily(amount:number){
   if(busy||checking)return;
