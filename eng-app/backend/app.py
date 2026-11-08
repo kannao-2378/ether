@@ -824,13 +824,6 @@ def user_course_summary():
         today=c.execute(text('SELECT COUNT(*) FROM user_learning_events WHERE day=:d'),dict(d=day)).scalar() or 0
     return dict(day=day,total=total,due=due,overdue=overdue,today_done=today,courses=[dict(x) for x in courses],states={r['status']:r['n'] for r in states})
 
-@app.get('/api/user-courses/{course_id}')
-def get_user_course(course_id:str):
-    with engine.connect() as c:
-        row=c.execute(text('SELECT title,source_json FROM user_courses WHERE id=:id'),dict(id=course_id)).mappings().first()
-        if not row:raise HTTPException(404,'课程不存在')
-        return dict(title=row['title'],course=json.loads(row['source_json']))
-
 @app.get('/api/user-courses/next')
 def user_course_next():
     with engine.connect() as c:
@@ -858,6 +851,13 @@ def user_course_answer(body: UserCourseAnswer):
         nxt=user_courses.next_item(c,now())
     response_cache.bump('dictionary','plan','dashboard')
     return dict(saved=True,**result,next=(dict(kind=nxt['item_type'],item_id=nxt['id'],group=nxt['group_position']+1,prompt=nxt['prompt']) if nxt else None))
+
+@app.get('/api/user-courses/{course_id}')
+def get_user_course(course_id:str):
+    with engine.connect() as c:
+        row=c.execute(text('SELECT title,source_json FROM user_courses WHERE id=:id'),dict(id=course_id)).mappings().first()
+        if not row:raise HTTPException(404,'课程不存在')
+        return dict(title=row['title'],course=json.loads(row['source_json']))
 
 # Pre-computed 认识 transitions: the client warms this while the learner reads
 # the meaning card, so the real click only applies the deterministic write.

@@ -3,15 +3,20 @@ import {learningFetch} from './testMode';
 import {MeaningLines} from './MeaningLines';
 const labels:Record<string,string>={word:'单词',collocation:'固定搭配',phrase:'短语',sentence:'句子',rule:'规则'};
 const extensionTranslation=(e:any)=>e.zh||(/^相关(?:表达|用法)/.test(e.note||'')?'':(e.note||'').replace(/^对应中文[：:]\s*/,''));
-export function KnowledgeContent({id,speak,study=false,onLoaded}:{id:string;speak:(s:string)=>void;study?:boolean;onLoaded?:(data:any)=>void}){
+export function KnowledgeContent({id,speak,study=false,onLoaded,initial}:{id:string;speak:(s:string)=>void;study?:boolean;onLoaded?:(data:any)=>void;initial?:any}){
  const [data,setData]=useState<any>(null),[error,setError]=useState(''),[revision,retry]=useState(0);
  useEffect(()=>{const controller=new AbortController();setError('');learningFetch('/api/knowledge/'+encodeURIComponent(id)+'?visible=true',{signal:controller.signal}).then(async r=>{if(!r.ok)throw Error('内容读取失败');return r.json();}).then(data=>{if(!controller.signal.aborted){setData(data);onLoaded?.(data);}}).catch(e=>{if(e.name!=='AbortError')setError('内容读取失败，请重试。');});return()=>controller.abort();},[id,revision,onLoaded]);
  if(error)return <div className="knowledge-content"><button onClick={()=>retry(v=>v+1)}>{error}</button></div>;
- if(data?.id!==id)return <p className="knowledge-loading" role="status">正在读取知识说明…</p>;
- const d=data.details||{};
+ // /next (and the inlined rehearsed next) already carries the full knowledge
+ // payload; render it immediately while the visible-explanation fetch runs in
+ // the background. It is itself a write transaction, so during scheduler
+ // rehearsals it can take a moment without delaying the card.
+ const current=data?.id===id?data:(initial?.id===id?initial:null);
+ if(!current)return <p className="knowledge-loading" role="status">正在读取知识说明…</p>;
+ const d=current.details||{};
  return <article className="knowledge-content" aria-label="知识说明">
-  {!study&&<div className="knowledge-meta">{!study&&<span className="content-kind">{labels[d.entry_type]||'知识点'}</span>}{!study&&d.ipa_us&&<button className="phonetic-link" aria-label={'朗读 '+data.answer} onClick={()=>speak(d.speech_text||data.answer)}>{d.ipa_us}</button>}{!study&&<button aria-label="朗读当前内容" onClick={()=>speak(d.speech_text||data.answer)}>▶ 发音</button>}</div>}
-  {!study&&<MeaningLines meaning={data.prompt} pos={d.pos} type={d.entry_type}/>}
+  {!study&&<div className="knowledge-meta">{!study&&<span className="content-kind">{labels[d.entry_type]||'知识点'}</span>}{!study&&d.ipa_us&&<button className="phonetic-link" aria-label={'朗读 '+current.answer} onClick={()=>speak(d.speech_text||current.answer)}>{d.ipa_us}</button>}{!study&&<button aria-label="朗读当前内容" onClick={()=>speak(d.speech_text||current.answer)}>▶ 发音</button>}</div>}
+  {!study&&<MeaningLines meaning={current.prompt} pos={d.pos} type={d.entry_type}/>}
   {!study&&(d.syllables||d.stress)&&<p className="pronunciation-note">音节：{d.syllables} · {d.stress}</p>}
   {!study&&!d.ipa_us&&d.pronunciation_parts?.length>0&&<p className="pronunciation-note">核心词读音：{d.pronunciation_parts.map((p:any)=><span key={p.en}>{p.en} <button className="phonetic-link" aria-label={'朗读 '+p.en} onClick={()=>speak(p.en)}>{p.ipa}</button> · {p.syllables}（{p.stress}） </span>)}</p>}
   {d.use_when&&<p className="knowledge-inline-field"><strong>什么时候用：</strong>{d.use_when}</p>}
